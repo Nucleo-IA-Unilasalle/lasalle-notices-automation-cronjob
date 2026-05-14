@@ -1,0 +1,60 @@
+name: Pipeline - Scrape
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: pipeline-scrape
+  cancel-in-progress: false
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      RENDER_APP_URL: ${{ secrets.RENDER_APP_URL }}
+      PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}
+      PIPELINE_STEP: scrape
+      CURL_MAX_TIME_SECONDS: "2400"
+    steps:
+      - name: Trigger pipeline step
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          URL="${RENDER_APP_URL}/api/pipeline/${PIPELINE_STEP}"
+          MAX_ATTEMPTS=4
+          SLEEP_SECONDS=120
+
+          for attempt in $(seq 1 "$MAX_ATTEMPTS"); do
+            echo "Attempt ${attempt}/${MAX_ATTEMPTS}: POST ${URL}"
+
+            http_code=$(curl -sS -o response.json -w "%{http_code}" \
+              -X POST \
+              -H "Authorization: Bearer ${PIPELINE_SECRET}" \
+              --connect-timeout 30 \
+              --max-time "${CURL_MAX_TIME_SECONDS}" \
+              "$URL" || echo "000")
+
+            echo "HTTP ${http_code}"
+            cat response.json || true
+            echo
+
+            if [ "$http_code" = "200" ]; then
+              exit 0
+            fi
+
+            if [ "$http_code" = "401" ] || [ "$http_code" = "403" ] || [ "$http_code" = "404" ]; then
+              echo "Non-retryable status ${http_code}"
+              exit 1
+            fi
+
+            if [ "$attempt" = "$MAX_ATTEMPTS" ]; then
+              echo "Exhausted retries"
+              exit 1
+            fi
+
+            sleep "$SLEEP_SECONDS"
+          done
