@@ -2,7 +2,7 @@ name: Pipeline - AI
 
 on:
   schedule:
-    - cron: '0 1/6 * * *'
+    - cron: '43 10 * * 1,3,5'
   workflow_dispatch:
 
 concurrency:
