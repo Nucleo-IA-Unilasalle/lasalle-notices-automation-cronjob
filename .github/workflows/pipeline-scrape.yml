@@ -2,7 +2,7 @@ name: Pipeline - Scrape
 
 on:
   schedule:
-    - cron: '17 9 * * 1,3,5'
+    - cron: '17 */3 * * *'
   workflow_dispatch:
 
 concurrency:
@@ -24,7 +24,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          URL="${RENDER_APP_URL}/api/pipeline/${PIPELINE_STEP}"
+          URL="${RENDER_APP_URL}/api/pipeline/${PIPELINE_STEP}?mode=bs4&sources=pncp"
           MAX_ATTEMPTS=4
           SLEEP_SECONDS=120
 
@@ -42,7 +42,7 @@ jobs:
             cat response.json || true
             echo
 
-            if [ "$http_code" = "200" ]; then
+            if [ "$http_code" = "200" ] || [ "$http_code" = "202" ] || [ "$http_code" = "409" ]; then
               exit 0
             fi
 
