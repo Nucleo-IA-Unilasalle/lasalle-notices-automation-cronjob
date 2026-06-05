@@ -1,30 +1,30 @@
-name: Pipeline - Sync
+name: Pipeline - Ingest
 
 on:
   schedule:
-    - cron: '25 1/3 * * *'
+    - cron: '55 */3 * * *'
   workflow_dispatch:
 
 concurrency:
-  group: pipeline-sync
+  group: pipeline-ingest
   cancel-in-progress: false
 
 jobs:
   trigger:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 50
     env:
       RENDER_APP_URL: ${{ secrets.RENDER_APP_URL }}
       PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}
-      PIPELINE_STEP: sync
-      CURL_MAX_TIME_SECONDS: "600"
+      PIPELINE_STEP: ingest
+      CURL_MAX_TIME_SECONDS: "2400"
     steps:
       - name: Trigger pipeline step
         shell: bash
         run: |
           set -euo pipefail
 
-          URL="${RENDER_APP_URL}/api/pipeline/${PIPELINE_STEP}"
+          URL="${RENDER_APP_URL}/api/pipeline/${PIPELINE_STEP}?source=pncp&candidate_limit=100&download_limit=20"
           MAX_ATTEMPTS=4
           SLEEP_SECONDS=120
 
