@@ -2,7 +2,11 @@ name: Pipeline - AI
 
 on:
   schedule:
-    - cron: '43 10 * * *'
+    # Hourly trigger; a Pacific local-time gate below restricts actual Render calls
+    # to the 08:15–19:15 America/Los_Angeles window (12 daytime invocations).
+    # With AI_EDITAIS_PER_MINUTE=3 and 12 triggers, capacity is 36 model attempts —
+    # enough to meet AI_EDITAIS_PER_DAY=20 even with ordinary failures and 429 pauses.
+    - cron: '15 * * * *'
   workflow_dispatch:
 
 concurrency:
@@ -12,21 +16,62 @@ concurrency:
 jobs:
   trigger:
     runs-on: ubuntu-latest
-    timeout-minutes: 50
+    timeout-minutes: 15
     env:
       RENDER_APP_URL: ${{ secrets.RENDER_APP_URL }}
       PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}
       PIPELINE_STEP: ai
-      CURL_MAX_TIME_SECONDS: "2400"
+      CURL_MAX_TIME_SECONDS: "600"
+      # Mirror deployed backend throughput values used to justify trigger capacity.
+      # Update these whenever the backend AI_EDITAIS_PER_DAY / AI_EDITAIS_PER_MINUTE
+      # deployment variables change.
+      AI_EDITAIS_PER_DAY: "20"
+      AI_EDITAIS_PER_MINUTE: "3"
+      # Permitted Pacific local-time window (inclusive, 24-hour).
+      PACIFIC_WINDOW_START: "8"
+      PACIFIC_WINDOW_END: "19"
     steps:
+      - name: Check Pacific daytime window
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          PACIFIC_HOUR_RAW="$(TZ=America/Los_Angeles date +%H)"
+          PACIFIC_HOUR=$((10#$PACIFIC_HOUR_RAW))
+          PACIFIC_TIME="$(TZ=America/Los_Angeles date '+%H:%M %Z')"
+
+          echo "Pacific local time: ${PACIFIC_TIME}"
+          echo "Permitted window: ${PACIFIC_WINDOW_START}:00 – ${PACIFIC_WINDOW_END}:59 America/Los_Angeles"
+          echo "Mirrored backend limits: AI_EDITAIS_PER_DAY=${AI_EDITAIS_PER_DAY}, AI_EDITAIS_PER_MINUTE=${AI_EDITAIS_PER_MINUTE}"
+
+          if [ "$PACIFIC_HOUR" -lt "$PACIFIC_WINDOW_START" ] || [ "$PACIFIC_HOUR" -gt "$PACIFIC_WINDOW_END" ]; then
+            echo "Outside daytime Pacific processing window — skipping Render trigger."
+            exit 0
+          fi
+
+          echo "Inside daytime Pacific window — proceeding to trigger Render."
+
       - name: Trigger pipeline step
         shell: bash
         run: |
           set -euo pipefail
 
+          PACIFIC_HOUR_RAW="$(TZ=America/Los_Angeles date +%H)"
+          PACIFIC_HOUR=$((10#$PACIFIC_HOUR_RAW))
+
+          # Re-check window in this step so the job exits cleanly when outside it.
+          if [ "$PACIFIC_HOUR" -lt "$PACIFIC_WINDOW_START" ] || [ "$PACIFIC_HOUR" -gt "$PACIFIC_WINDOW_END" ]; then
+            exit 0
+          fi
+
+          PACIFIC_TRIGGER_TIME="$(TZ=America/Los_Angeles date '+%H:%M %Z')"
           URL="${RENDER_APP_URL}/api/pipeline/${PIPELINE_STEP}"
           MAX_ATTEMPTS=4
           SLEEP_SECONDS=120
+
+          echo "Initiating AI trigger at Pacific time: ${PACIFIC_TRIGGER_TIME}"
+          echo "Mirrored backend limits: AI_EDITAIS_PER_DAY=${AI_EDITAIS_PER_DAY}, AI_EDITAIS_PER_MINUTE=${AI_EDITAIS_PER_MINUTE}"
+          echo "Endpoint: POST ${URL}"
 
           for attempt in $(seq 1 "$MAX_ATTEMPTS"); do
             echo "Attempt ${attempt}/${MAX_ATTEMPTS}: POST ${URL}"
@@ -42,7 +87,9 @@ jobs:
             cat response.json || true
             echo
 
+            # Accepted, completed, or another run already holds the pipeline lock.
             if [ "$http_code" = "200" ] || [ "$http_code" = "202" ] || [ "$http_code" = "409" ]; then
+              echo "Outcome: operational success (HTTP ${http_code})"
               exit 0
             fi
 
@@ -52,9 +99,10 @@ jobs:
             fi
 
             if [ "$attempt" = "$MAX_ATTEMPTS" ]; then
-              echo "Exhausted retries"
+              echo "Exhausted retries after ${MAX_ATTEMPTS} attempts"
               exit 1
             fi
 
+            echo "Retrying in ${SLEEP_SECONDS}s…"
             sleep "$SLEEP_SECONDS"
           done
