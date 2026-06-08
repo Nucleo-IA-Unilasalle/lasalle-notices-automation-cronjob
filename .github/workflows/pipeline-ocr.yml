@@ -1,14 +1,10 @@
-name: Pipeline - AI
+name: Pipeline - OCR
 
 on:
   schedule:
     # Hourly trigger; a Pacific local-time gate below restricts actual Render calls
-    # to the 08:15–19:15 America/Los_Angeles window (12 daytime invocations).
-    # Pipeline order: discovery → ingest → OCR → AI (model-only) → backfill.
-    # AI fires at :15, one hour after OCR at :45, so OCR output is available.
-    # With AI_EDITAIS_PER_MINUTE=3 and 12 triggers, capacity is 36 model attempts —
-    # enough to meet AI_EDITAIS_PER_DAY=20 even with ordinary failures and 429 pauses.
-    - cron: '15 * * * *'
+    # to the 08:45–19:45 America/Los_Angeles window (12 daytime invocations).
+    - cron: '45 * * * *'
   workflow_dispatch:
 
 concurrency:
@@ -22,13 +18,8 @@ jobs:
     env:
       RENDER_APP_URL: ${{ secrets.RENDER_APP_URL }}
       PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}
-      PIPELINE_STEP: ai
+      PIPELINE_STEP: ocr
       CURL_MAX_TIME_SECONDS: "600"
-      # Mirror deployed backend throughput values used to justify trigger capacity.
-      # Update these whenever the backend AI_EDITAIS_PER_DAY / AI_EDITAIS_PER_MINUTE
-      # deployment variables change.
-      AI_EDITAIS_PER_DAY: "20"
-      AI_EDITAIS_PER_MINUTE: "3"
       # Permitted Pacific local-time window (inclusive, 24-hour).
       PACIFIC_WINDOW_START: "8"
       PACIFIC_WINDOW_END: "19"
@@ -44,7 +35,6 @@ jobs:
 
           echo "Pacific local time: ${PACIFIC_TIME}"
           echo "Permitted window: ${PACIFIC_WINDOW_START}:00 – ${PACIFIC_WINDOW_END}:59 America/Los_Angeles"
-          echo "Mirrored backend limits: AI_EDITAIS_PER_DAY=${AI_EDITAIS_PER_DAY}, AI_EDITAIS_PER_MINUTE=${AI_EDITAIS_PER_MINUTE}"
 
           if [ "$PACIFIC_HOUR" -lt "$PACIFIC_WINDOW_START" ] || [ "$PACIFIC_HOUR" -gt "$PACIFIC_WINDOW_END" ]; then
             echo "Outside daytime Pacific processing window — skipping Render trigger."
@@ -71,8 +61,7 @@ jobs:
           MAX_ATTEMPTS=4
           SLEEP_SECONDS=120
 
-          echo "Initiating AI trigger at Pacific time: ${PACIFIC_TRIGGER_TIME}"
-          echo "Mirrored backend limits: AI_EDITAIS_PER_DAY=${AI_EDITAIS_PER_DAY}, AI_EDITAIS_PER_MINUTE=${AI_EDITAIS_PER_MINUTE}"
+          echo "Initiating OCR trigger at Pacific time: ${PACIFIC_TRIGGER_TIME}"
           echo "Endpoint: POST ${URL}"
 
           for attempt in $(seq 1 "$MAX_ATTEMPTS"); do

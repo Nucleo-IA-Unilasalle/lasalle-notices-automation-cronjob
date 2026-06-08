@@ -3,8 +3,10 @@ name: Pipeline - Run
 on:
   workflow_dispatch:
 
+# Full pipeline run: the backend now runs OCR before AI internally,
+# so the pipeline order is discovery → ingest → OCR → AI → backfill.
 concurrency:
-  group: pipeline-run
+  group: pipeline-trigger
   cancel-in-progress: false
 
 jobs:

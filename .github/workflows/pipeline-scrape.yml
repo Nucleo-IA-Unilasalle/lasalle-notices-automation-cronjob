@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: pipeline-scrape
+  group: pipeline-trigger
   cancel-in-progress: false
 
 jobs:

@@ -2,11 +2,11 @@ name: PNCP discovery
 
 on:
   schedule:
-    - cron: "03 * * * *"
+    - cron: "05 * * * *"
   workflow_dispatch:
 
 concurrency:
-  group: pncp-discovery
+  group: pipeline-trigger
   cancel-in-progress: false
 
 jobs:
