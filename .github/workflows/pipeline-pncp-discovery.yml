@@ -25,6 +25,14 @@ jobs:
       - name: Install dependencies
         run: python -m pip install requests
 
+      - name: Restore PNCP dedup cache
+        uses: actions/cache@v4
+        with:
+          path: .cache/pncp_submitted_urls.json
+          key: pncp-dedup-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            pncp-dedup-${{ runner.os }}-
+
       - name: Discover PNCP candidates
         run: python scripts/discover_pncp_candidates.py
         env:
