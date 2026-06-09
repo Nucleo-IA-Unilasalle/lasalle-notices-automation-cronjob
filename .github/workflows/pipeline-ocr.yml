@@ -2,8 +2,7 @@ name: Pipeline - OCR
 
 on:
   schedule:
-    # Hourly trigger; a Pacific local-time gate below restricts actual Render calls
-    # to the 08:45–19:45 America/Los_Angeles window (12 daytime invocations).
+    # OCR is not model-quota-bound, so run it hourly throughout the day.
     - cron: '45 * * * *'
   workflow_dispatch:
 
@@ -20,48 +19,16 @@ jobs:
       PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}
       PIPELINE_STEP: ocr
       CURL_MAX_TIME_SECONDS: "600"
-      # Permitted Pacific local-time window (inclusive, 24-hour).
-      PACIFIC_WINDOW_START: "8"
-      PACIFIC_WINDOW_END: "19"
     steps:
-      - name: Check Pacific daytime window
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          PACIFIC_HOUR_RAW="$(TZ=America/Los_Angeles date +%H)"
-          PACIFIC_HOUR=$((10#$PACIFIC_HOUR_RAW))
-          PACIFIC_TIME="$(TZ=America/Los_Angeles date '+%H:%M %Z')"
-
-          echo "Pacific local time: ${PACIFIC_TIME}"
-          echo "Permitted window: ${PACIFIC_WINDOW_START}:00 – ${PACIFIC_WINDOW_END}:59 America/Los_Angeles"
-
-          if [ "$PACIFIC_HOUR" -lt "$PACIFIC_WINDOW_START" ] || [ "$PACIFIC_HOUR" -gt "$PACIFIC_WINDOW_END" ]; then
-            echo "Outside daytime Pacific processing window — skipping Render trigger."
-            exit 0
-          fi
-
-          echo "Inside daytime Pacific window — proceeding to trigger Render."
-
       - name: Trigger pipeline step
         shell: bash
         run: |
           set -euo pipefail
 
-          PACIFIC_HOUR_RAW="$(TZ=America/Los_Angeles date +%H)"
-          PACIFIC_HOUR=$((10#$PACIFIC_HOUR_RAW))
-
-          # Re-check window in this step so the job exits cleanly when outside it.
-          if [ "$PACIFIC_HOUR" -lt "$PACIFIC_WINDOW_START" ] || [ "$PACIFIC_HOUR" -gt "$PACIFIC_WINDOW_END" ]; then
-            exit 0
-          fi
-
-          PACIFIC_TRIGGER_TIME="$(TZ=America/Los_Angeles date '+%H:%M %Z')"
           URL="${RENDER_APP_URL}/api/pipeline/${PIPELINE_STEP}"
           MAX_ATTEMPTS=4
           SLEEP_SECONDS=120
 
-          echo "Initiating OCR trigger at Pacific time: ${PACIFIC_TRIGGER_TIME}"
           echo "Endpoint: POST ${URL}"
 
           for attempt in $(seq 1 "$MAX_ATTEMPTS"); do
@@ -78,8 +45,7 @@ jobs:
             cat response.json || true
             echo
 
-            # Accepted, completed, or another run already holds the pipeline lock.
-            if [ "$http_code" = "200" ] || [ "$http_code" = "202" ] || [ "$http_code" = "409" ]; then
+            if [ "$http_code" = "200" ] || [ "$http_code" = "202" ]; then
               echo "Outcome: operational success (HTTP ${http_code})"
               exit 0
             fi

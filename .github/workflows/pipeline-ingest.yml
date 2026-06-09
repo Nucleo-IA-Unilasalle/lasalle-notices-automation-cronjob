@@ -17,18 +17,42 @@ jobs:
       - name: Trigger PNCP ingestion
         shell: bash
         run: |
-          set +e
-          status="$(
-            curl -sS -o response.json -w "%{http_code}" -X POST \
-              "${RENDER_APP_URL}/api/pipeline/ingest?source=pncp&candidate_limit=100&download_limit=5" \
-              -H "Authorization: Bearer ${PIPELINE_SECRET}"
-          )"
-          cat response.json || true
-          echo "HTTP status: ${status}"
-          if [[ "${status}" == "200" || "${status}" == "202" || "${status}" == "409" ]]; then
-            exit 0
-          fi
-          exit 1
+          set -euo pipefail
+
+          URL="${RENDER_APP_URL}/api/pipeline/ingest?source=pncp&candidate_limit=100&download_limit=5"
+          MAX_ATTEMPTS=4
+          SLEEP_SECONDS=120
+
+          for attempt in $(seq 1 "$MAX_ATTEMPTS"); do
+            echo "Attempt ${attempt}/${MAX_ATTEMPTS}: POST ${URL}"
+
+            http_code=$(curl -sS -o response.json -w "%{http_code}" \
+              -X POST \
+              -H "Authorization: Bearer ${PIPELINE_SECRET}" \
+              --connect-timeout 30 \
+              --max-time 600 \
+              "$URL" || echo "000")
+
+            echo "HTTP ${http_code}"
+            cat response.json || true
+            echo
+
+            if [ "$http_code" = "200" ] || [ "$http_code" = "202" ]; then
+              exit 0
+            fi
+
+            if [ "$http_code" = "401" ] || [ "$http_code" = "403" ] || [ "$http_code" = "404" ]; then
+              echo "Non-retryable status ${http_code}"
+              exit 1
+            fi
+
+            if [ "$attempt" = "$MAX_ATTEMPTS" ]; then
+              echo "Exhausted retries"
+              exit 1
+            fi
+
+            sleep "$SLEEP_SECONDS"
+          done
         env:
           RENDER_APP_URL: ${{ secrets.RENDER_APP_URL }}
           PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}

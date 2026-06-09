@@ -42,7 +42,7 @@ jobs:
             cat response.json || true
             echo
 
-            if [ "$http_code" = "200" ] || [ "$http_code" = "202" ] || [ "$http_code" = "207" ] || [ "$http_code" = "409" ]; then
+            if [ "$http_code" = "200" ] || [ "$http_code" = "202" ] || [ "$http_code" = "207" ]; then
               exit 0
             fi
 

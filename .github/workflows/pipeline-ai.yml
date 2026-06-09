@@ -89,8 +89,7 @@ jobs:
             cat response.json || true
             echo
 
-            # Accepted, completed, or another run already holds the pipeline lock.
-            if [ "$http_code" = "200" ] || [ "$http_code" = "202" ] || [ "$http_code" = "409" ]; then
+            if [ "$http_code" = "200" ] || [ "$http_code" = "202" ]; then
               echo "Outcome: operational success (HTTP ${http_code})"
               exit 0
             fi
