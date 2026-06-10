@@ -2,64 +2,58 @@ name: Pipeline - OCR
 
 on:
   schedule:
-    # OCR is not model-quota-bound, so run it hourly throughout the day.
     - cron: '45 * * * *'
   workflow_dispatch:
 
 concurrency:
-  group: pipeline-trigger
+  group: pipeline-ocr
   cancel-in-progress: false
 
 jobs:
-  trigger:
+  ocr-worker:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 60
     env:
       RENDER_APP_URL: ${{ secrets.RENDER_APP_URL }}
       PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}
-      PIPELINE_STEP: ocr
-      CURL_MAX_TIME_SECONDS: "600"
+      OCR_WORKER_MAX_CLAIMS: "5"
+      OCR_WORKER_RENEW_INTERVAL_SECONDS: "60"
+      SCRAPE_MAX_PDF_BYTES: "15000000"
+      AI_SOURCE_RESOLUTION_TIMEOUT_SECONDS: "60"
+      KREUZBERG_PADDLE_LANGUAGE: "latin"
+      KREUZBERG_PADDLE_MODEL_TIER: "mobile"
+      KREUZBERG_USE_GPU: "false"
+      KREUZBERG_FORCE_OCR_DEFAULT: "false"
+      KREUZBERG_EXTRACTION_TIMEOUT_SECONDS: "300"
     steps:
-      - name: Trigger pipeline step
-        shell: bash
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: requirements-ocr-worker.txt
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/paddleocr
+            ~/.paddleocr
+            ~/.paddlehub
+            ~/.cache/kreuzberg
+          key: ocr-models-${{ runner.os }}-${{ hashFiles('requirements-ocr-worker.txt') }}
+
+      - name: Install OCR worker dependencies
+        run: pip install -r requirements-ocr-worker.txt
+
+      - name: Show OCR cache directories
         run: |
-          set -euo pipefail
+          echo "HOME=$HOME"
+          ls -la ~/.cache || true
+          ls -la ~/.cache/paddleocr || true
+          ls -la ~/.paddleocr || true
+          ls -la ~/.paddlehub || true
+          ls -la ~/.cache/kreuzberg || true
 
-          URL="${RENDER_APP_URL}/api/pipeline/${PIPELINE_STEP}"
-          MAX_ATTEMPTS=4
-          SLEEP_SECONDS=120
-
-          echo "Endpoint: POST ${URL}"
-
-          for attempt in $(seq 1 "$MAX_ATTEMPTS"); do
-            echo "Attempt ${attempt}/${MAX_ATTEMPTS}: POST ${URL}"
-
-            http_code=$(curl -sS -o response.json -w "%{http_code}" \
-              -X POST \
-              -H "Authorization: Bearer ${PIPELINE_SECRET}" \
-              --connect-timeout 30 \
-              --max-time "${CURL_MAX_TIME_SECONDS}" \
-              "$URL" || echo "000")
-
-            echo "HTTP ${http_code}"
-            cat response.json || true
-            echo
-
-            if [ "$http_code" = "200" ] || [ "$http_code" = "202" ]; then
-              echo "Outcome: operational success (HTTP ${http_code})"
-              exit 0
-            fi
-
-            if [ "$http_code" = "401" ] || [ "$http_code" = "403" ] || [ "$http_code" = "404" ]; then
-              echo "Non-retryable status ${http_code}"
-              exit 1
-            fi
-
-            if [ "$attempt" = "$MAX_ATTEMPTS" ]; then
-              echo "Exhausted retries after ${MAX_ATTEMPTS} attempts"
-              exit 1
-            fi
-
-            echo "Retrying in ${SLEEP_SECONDS}s…"
-            sleep "$SLEEP_SECONDS"
-          done
+      - name: Run OCR worker
+        run: python scripts/ocr_worker/run_ocr_worker.py --limit 5
