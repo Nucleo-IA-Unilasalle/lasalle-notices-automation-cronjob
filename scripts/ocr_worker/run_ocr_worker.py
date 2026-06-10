@@ -5,6 +5,7 @@ import asyncio
 import logging
 import os
 import threading
+import time
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Callable
@@ -20,6 +21,9 @@ from url_validation import is_safe_url
 logger = logging.getLogger(__name__)
 
 _REDIRECT_STATUS_CODES = {301, 302, 303, 307, 308}
+
+_CLAIM_MAX_ATTEMPTS = 4
+_CLAIM_RETRY_SLEEP_SECONDS = 120
 
 
 class ClaimOwnershipLost(RuntimeError):
@@ -99,26 +103,60 @@ class OCRWorkerApi:
         self._session.close()
 
     def claim(self, limit: int) -> list[WorkerClaim]:
-        try:
-            response = self._session.post(
-                f"{self._base_url}/api/pipeline/ocr/claim?limit={limit}",
-                headers=self._auth_headers(),
-                timeout=60,
-            )
-            response.raise_for_status()
-        except requests.RequestException as exc:
-            raise RenderCommunicationError(f"Failed to claim OCR work: {exc}") from exc
+        last_exc: Exception | None = None
+        for attempt in range(1, _CLAIM_MAX_ATTEMPTS + 1):
+            try:
+                response = self._session.post(
+                    f"{self._base_url}/api/pipeline/ocr/claim?limit={limit}",
+                    headers=self._auth_headers(),
+                    timeout=60,
+                )
+                if response.status_code in {401, 403, 404}:
+                    raise RenderCommunicationError(
+                        f"Non-retryable HTTP {response.status_code} on claim"
+                    )
+                response.raise_for_status()
+            except requests.ReadTimeout as exc:
+                last_exc = exc
+                logger.warning(
+                    "Claim attempt %d/%d timed out (Render cold start?)",
+                    attempt, _CLAIM_MAX_ATTEMPTS,
+                )
+                if attempt < _CLAIM_MAX_ATTEMPTS:
+                    time.sleep(_CLAIM_RETRY_SLEEP_SECONDS)
+                    continue
+                raise RenderCommunicationError(
+                    f"Failed to claim OCR work after {_CLAIM_MAX_ATTEMPTS} attempts: {exc}"
+                ) from exc
+            except requests.ConnectionError as exc:
+                last_exc = exc
+                logger.warning(
+                    "Claim attempt %d/%d connection error",
+                    attempt, _CLAIM_MAX_ATTEMPTS,
+                )
+                if attempt < _CLAIM_MAX_ATTEMPTS:
+                    time.sleep(_CLAIM_RETRY_SLEEP_SECONDS)
+                    continue
+                raise RenderCommunicationError(
+                    f"Failed to claim OCR work after {_CLAIM_MAX_ATTEMPTS} attempts: {exc}"
+                ) from exc
+            except requests.RequestException as exc:
+                raise RenderCommunicationError(f"Failed to claim OCR work: {exc}") from exc
 
-        return [
-            WorkerClaim(
-                edital_id=item["edital_id"],
-                source_url=item["source_url"],
-                original_filename=item.get("original_filename"),
-                claim_token=item["claim_token"],
-                expires_at=datetime.fromisoformat(item["expires_at"].replace("Z", "+00:00")),
-            )
-            for item in response.json()["claims"]
-        ]
+            return [
+                WorkerClaim(
+                    edital_id=item["edital_id"],
+                    source_url=item["source_url"],
+                    original_filename=item.get("original_filename"),
+                    claim_token=item["claim_token"],
+                    expires_at=datetime.fromisoformat(item["expires_at"].replace("Z", "+00:00")),
+                )
+                for item in response.json()["claims"]
+            ]
+
+        raise RenderCommunicationError(
+            f"Failed to claim OCR work after {_CLAIM_MAX_ATTEMPTS} attempts: {last_exc}"
+        )
 
     def renew(self, claim: WorkerClaim) -> datetime:
         try:
