@@ -19,6 +19,7 @@ _REDIRECT_STATUS_CODES = frozenset({301, 302, 303, 307, 308})
 _DEFAULT_CONNECT_TIMEOUT = 30
 _DEFAULT_READ_TIMEOUT = 120
 _DEFAULT_MAX_ATTEMPTS = 4
+_DEFAULT_MAX_REDIRECTS = 5
 _DEFAULT_BACKOFF_SEQUENCE = (5, 15, 45)
 _RETRY_AFTER_CAP = 120
 
@@ -59,12 +60,13 @@ def download_pncp_pdf(
     connect_timeout: int = _DEFAULT_CONNECT_TIMEOUT,
     read_timeout: int = _DEFAULT_READ_TIMEOUT,
     max_attempts: int = _DEFAULT_MAX_ATTEMPTS,
+    max_redirects: int = _DEFAULT_MAX_REDIRECTS,
 ) -> DownloadResult:
     if not is_safe_url(url):
         raise DownloadError(f"Unsafe URL rejected: {url}")
 
     current_url = url
-    last_error: str | None = None
+    redirect_count = 0
 
     with requests.Session() as session:
         for attempt in range(1, max_attempts + 1):
@@ -77,7 +79,6 @@ def download_pncp_pdf(
                     stream=True,
                 )
             except (requests.ConnectionError, requests.Timeout) as exc:
-                last_error = f"Network error: {exc}"
                 if attempt < max_attempts:
                     _backoff_sleep(attempt, None)
                     continue
@@ -94,6 +95,11 @@ def download_pncp_pdf(
                     )
 
                 if response.status_code in _REDIRECT_STATUS_CODES:
+                    redirect_count += 1
+                    if redirect_count > max_redirects:
+                        raise DownloadError(
+                            f"Too many redirects ({redirect_count}) downloading {url}"
+                        )
                     location = response.headers.get("Location")
                     if not location:
                         raise DownloadError(
@@ -147,5 +153,3 @@ def download_pncp_pdf(
             finally:
                 if response is not None:
                     response.close()
-
-    raise DownloadError(f"Download failed after {max_attempts} attempts for {url}")

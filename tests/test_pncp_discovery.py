@@ -513,8 +513,6 @@ class TestDocumentPriority:
 # Download, validate, and OCR processing
 # ---------------------------------------------------------------------------
 
-_FAKE_PDF = b"%PDF-1.4 fake content here"
-
 
 class TestDownloadPncpPdf:
     def test_valid_pdf_returns_bytes_and_hash(self) -> None:
