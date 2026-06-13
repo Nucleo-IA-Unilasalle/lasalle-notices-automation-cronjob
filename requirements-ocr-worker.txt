@@ -1,5 +1,5 @@
-kreuzberg[paddleocr]>=1.0.0
-pdfminer.six==20250506
+paddleocr>=3.7.0
+paddlepaddle>=3.0.0
 pypdf==5.1.0
 python-magic==0.4.27
 requests==2.32.4

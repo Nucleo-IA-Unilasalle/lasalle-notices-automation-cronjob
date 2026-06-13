@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import json
 import os
 import sys
@@ -9,6 +10,8 @@ from typing import Any
 from urllib.parse import urlencode
 
 import requests
+
+from pncp_http import DownloadError, download_pncp_pdf
 
 
 RENDER_SUBMIT_BATCH_SIZE = int(os.environ.get("RENDER_SUBMIT_BATCH_SIZE", "30"))
@@ -635,6 +638,54 @@ def main() -> int:
     print(f"PNCP dedup cache saved: {len(cache)} entries at {PNCP_DEDUP_CACHE_PATH}")
     print(f"Render candidate submission: {result}")
     return 0
+
+
+def process_candidate(
+    candidate: dict[str, Any],
+    *,
+    extractor: Any,
+    max_bytes: int,
+    connect_timeout: int = 30,
+    read_timeout: int = 120,
+    max_attempts: int = 4,
+) -> dict[str, Any] | None:
+    url = candidate["url"]
+    metadata = candidate.get("metadata", {})
+    try:
+        dl = download_pncp_pdf(
+            url,
+            max_bytes=max_bytes,
+            connect_timeout=connect_timeout,
+            read_timeout=read_timeout,
+            max_attempts=max_attempts,
+        )
+    except DownloadError as exc:
+        print(f"warning: download failed for {url}: {exc}", file=sys.stderr)
+        return None
+
+    pdf_bytes = dl.content
+    try:
+        markdown = asyncio.run(extractor.extract(pdf_bytes))
+    except Exception as exc:
+        print(f"warning: OCR failed for {url}: {exc}", file=sys.stderr)
+        pdf_bytes = None
+        return None
+    finally:
+        pdf_bytes = None
+
+    now_iso = datetime.now(timezone.utc).isoformat()
+    return {
+        "url": url,
+        "kind": candidate.get("kind", "pdf"),
+        "metadata": metadata,
+        "worker_result": {
+            "ocr_markdown": markdown,
+            "content_hash": dl.content_hash,
+            "content_length": dl.content_length,
+            "validated_at": now_iso,
+            "validation_outcome": "valid_pdf",
+        },
+    }
 
 
 if __name__ == "__main__":

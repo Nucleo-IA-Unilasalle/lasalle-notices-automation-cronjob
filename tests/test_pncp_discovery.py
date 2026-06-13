@@ -20,7 +20,9 @@ from discover_pncp_candidates import (
     build_candidate,
     fetch_pncp_records,
     pncp_document_priority,
+    process_candidate,
 )
+from pncp_http import DownloadResult, DownloadError, download_pncp_pdf
 
 
 # ---------------------------------------------------------------------------
@@ -505,3 +507,346 @@ class TestDocumentPriority:
     def test_unknown_type_lowest_priority(self) -> None:
         doc = _make_doc(tipo="Unknown Document Type")
         assert pncp_document_priority(doc) == 100
+
+
+# ---------------------------------------------------------------------------
+# Download, validate, and OCR processing
+# ---------------------------------------------------------------------------
+
+_FAKE_PDF = b"%PDF-1.4 fake content here"
+
+
+class TestDownloadPncpPdf:
+    def test_valid_pdf_returns_bytes_and_hash(self) -> None:
+        import hashlib
+        with patch("pncp_http.requests.Session") as MockSession:
+            session = MockSession.return_value.__enter__.return_value
+            resp = MagicMock()
+            resp.status_code = 200
+            resp.headers = {"Content-Type": "application/pdf"}
+            resp.iter_content.return_value = [b"%PDF-1.4 test"]
+            resp.close.return_value = None
+            session.get.return_value = resp
+            result = download_pncp_pdf("https://example.com/doc.pdf", max_bytes=5_000_000)
+            assert result.content == b"%PDF-1.4 test"
+            assert result.content_hash == hashlib.sha256(b"%PDF-1.4 test").hexdigest()
+            assert result.content_length == len(b"%PDF-1.4 test")
+
+    def test_html_response_raises_error(self) -> None:
+        with patch("pncp_http.requests.Session") as MockSession:
+            session = MockSession.return_value.__enter__.return_value
+            resp = MagicMock()
+            resp.status_code = 200
+            resp.headers = {"Content-Type": "text/html"}
+            resp.iter_content.return_value = [b"<html>"]
+            resp.close.return_value = None
+            session.get.return_value = resp
+            with pytest.raises(DownloadError, match="not a valid PDF"):
+                download_pncp_pdf("https://example.com/page.html", max_bytes=5_000_000)
+
+    def test_404_raises_permanent_failure(self) -> None:
+        with patch("pncp_http.requests.Session") as MockSession:
+            session = MockSession.return_value.__enter__.return_value
+            resp = MagicMock()
+            resp.status_code = 404
+            resp.headers = {}
+            resp.close.return_value = None
+            session.get.return_value = resp
+            with pytest.raises(DownloadError, match="(?i)permanent"):
+                download_pncp_pdf("https://example.com/missing.pdf", max_bytes=5_000_000)
+
+    def test_410_raises_permanent_failure(self) -> None:
+        with patch("pncp_http.requests.Session") as MockSession:
+            session = MockSession.return_value.__enter__.return_value
+            resp = MagicMock()
+            resp.status_code = 410
+            resp.headers = {}
+            resp.close.return_value = None
+            session.get.return_value = resp
+            with pytest.raises(DownloadError, match="(?i)permanent"):
+                download_pncp_pdf("https://example.com/gone.pdf", max_bytes=5_000_000)
+
+    def test_422_raises_permanent_failure(self) -> None:
+        with patch("pncp_http.requests.Session") as MockSession:
+            session = MockSession.return_value.__enter__.return_value
+            resp = MagicMock()
+            resp.status_code = 422
+            resp.headers = {}
+            resp.close.return_value = None
+            session.get.return_value = resp
+            with pytest.raises(DownloadError, match="(?i)permanent"):
+                download_pncp_pdf("https://example.com/bad.pdf", max_bytes=5_000_000)
+
+    def test_429_retries(self) -> None:
+        with patch("pncp_http.requests.Session") as MockSession:
+            session = MockSession.return_value.__enter__.return_value
+            resp_429 = MagicMock()
+            resp_429.status_code = 429
+            resp_429.headers = {}
+            resp_429.close.return_value = None
+            resp_ok = MagicMock()
+            resp_ok.status_code = 200
+            resp_ok.headers = {"Content-Type": "application/pdf"}
+            resp_ok.iter_content.return_value = [b"%PDF-1.4 retry"]
+            resp_ok.close.return_value = None
+            session.get.side_effect = [resp_429, resp_ok]
+            with patch("pncp_http.time.sleep"):
+                result = download_pncp_pdf("https://example.com/doc.pdf", max_bytes=5_000_000)
+                assert result.content == b"%PDF-1.4 retry"
+
+    def test_503_retries(self) -> None:
+        with patch("pncp_http.requests.Session") as MockSession:
+            session = MockSession.return_value.__enter__.return_value
+            resp_503 = MagicMock()
+            resp_503.status_code = 503
+            resp_503.headers = {}
+            resp_503.close.return_value = None
+            resp_ok = MagicMock()
+            resp_ok.status_code = 200
+            resp_ok.headers = {"Content-Type": "application/pdf"}
+            resp_ok.iter_content.return_value = [b"%PDF-1.4 ok"]
+            resp_ok.close.return_value = None
+            session.get.side_effect = [resp_503, resp_ok]
+            with patch("pncp_http.time.sleep"):
+                result = download_pncp_pdf("https://example.com/doc.pdf", max_bytes=5_000_000)
+                assert result.content == b"%PDF-1.4 ok"
+
+    def test_network_error_retries(self) -> None:
+        import requests as req_lib
+        with patch("pncp_http.requests.Session") as MockSession:
+            session = MockSession.return_value.__enter__.return_value
+            resp_ok = MagicMock()
+            resp_ok.status_code = 200
+            resp_ok.headers = {"Content-Type": "application/pdf"}
+            resp_ok.iter_content.return_value = [b"%PDF-1.4 ok"]
+            resp_ok.close.return_value = None
+            session.get.side_effect = [
+                req_lib.ConnectionError("network down"),
+                resp_ok,
+            ]
+            with patch("pncp_http.time.sleep"):
+                result = download_pncp_pdf("https://example.com/doc.pdf", max_bytes=5_000_000)
+                assert result.content == b"%PDF-1.4 ok"
+
+    def test_max_retries_exhausted(self) -> None:
+        with patch("pncp_http.requests.Session") as MockSession:
+            session = MockSession.return_value.__enter__.return_value
+            resp = MagicMock()
+            resp.status_code = 503
+            resp.headers = {}
+            resp.close.return_value = None
+            session.get.return_value = resp
+            with patch("pncp_http.time.sleep"):
+                with pytest.raises(DownloadError, match="attempts"):
+                    download_pncp_pdf(
+                        "https://example.com/doc.pdf",
+                        max_bytes=5_000_000,
+                        max_attempts=4,
+                    )
+
+    def test_retry_after_header_honored(self) -> None:
+        with patch("pncp_http.requests.Session") as MockSession:
+            session = MockSession.return_value.__enter__.return_value
+            resp_429 = MagicMock()
+            resp_429.status_code = 429
+            resp_429.headers = {"Retry-After": "5"}
+            resp_429.close.return_value = None
+            resp_ok = MagicMock()
+            resp_ok.status_code = 200
+            resp_ok.headers = {"Content-Type": "application/pdf"}
+            resp_ok.iter_content.return_value = [b"%PDF-1.4"]
+            resp_ok.close.return_value = None
+            session.get.side_effect = [resp_429, resp_ok]
+            with patch("pncp_http.time.sleep") as mock_sleep:
+                download_pncp_pdf("https://example.com/doc.pdf", max_bytes=5_000_000)
+                mock_sleep.assert_called_with(5)
+
+    def test_retry_after_capped_at_120(self) -> None:
+        with patch("pncp_http.requests.Session") as MockSession:
+            session = MockSession.return_value.__enter__.return_value
+            resp_429 = MagicMock()
+            resp_429.status_code = 429
+            resp_429.headers = {"Retry-After": "300"}
+            resp_429.close.return_value = None
+            resp_ok = MagicMock()
+            resp_ok.status_code = 200
+            resp_ok.headers = {"Content-Type": "application/pdf"}
+            resp_ok.iter_content.return_value = [b"%PDF-1.4"]
+            resp_ok.close.return_value = None
+            session.get.side_effect = [resp_429, resp_ok]
+            with patch("pncp_http.time.sleep") as mock_sleep:
+                download_pncp_pdf("https://example.com/doc.pdf", max_bytes=5_000_000)
+                mock_sleep.assert_called_with(120)
+
+    def test_unsafe_url_rejected(self) -> None:
+        with pytest.raises(DownloadError, match="Unsafe"):
+            download_pncp_pdf("http://127.0.0.1/secret.pdf", max_bytes=5_000_000)
+
+    def test_oversized_response_rejected(self) -> None:
+        with patch("pncp_http.requests.Session") as MockSession:
+            session = MockSession.return_value.__enter__.return_value
+            resp = MagicMock()
+            resp.status_code = 200
+            resp.headers = {"Content-Type": "application/pdf"}
+            resp.iter_content.return_value = [b"X" * 100]
+            resp.close.return_value = None
+            session.get.return_value = resp
+            with pytest.raises(DownloadError, match="exceeded"):
+                download_pncp_pdf("https://example.com/big.pdf", max_bytes=50)
+
+    def test_non_pdf_bytes_rejected(self) -> None:
+        with patch("pncp_http.requests.Session") as MockSession:
+            session = MockSession.return_value.__enter__.return_value
+            resp = MagicMock()
+            resp.status_code = 200
+            resp.headers = {"Content-Type": "application/pdf"}
+            resp.iter_content.return_value = [b"NOT_PDF_CONTENT"]
+            resp.close.return_value = None
+            session.get.return_value = resp
+            with pytest.raises(DownloadError, match="not a valid PDF"):
+                download_pncp_pdf("https://example.com/fake.pdf", max_bytes=5_000_000)
+
+    def test_redirect_validates_new_url(self) -> None:
+        with patch("pncp_http.requests.Session") as MockSession:
+            session = MockSession.return_value.__enter__.return_value
+            resp_redirect = MagicMock()
+            resp_redirect.status_code = 302
+            resp_redirect.headers = {"Location": "http://127.0.0.1/evil.pdf"}
+            resp_redirect.close.return_value = None
+            session.get.return_value = resp_redirect
+            with pytest.raises(DownloadError, match="(?i)unsafe"):
+                download_pncp_pdf("https://example.com/redir.pdf", max_bytes=5_000_000)
+
+
+class TestProcessCandidate:
+    def test_valid_pdf_produces_worker_result(self) -> None:
+        import hashlib
+        candidate = {
+            "url": "https://example.com/doc.pdf",
+            "kind": "pdf",
+            "metadata": {"numeroControlePNCP": "2026-0001"},
+        }
+        pdf_bytes = b"%PDF-1.4 test content"
+        result_hash = hashlib.sha256(pdf_bytes).hexdigest()
+
+        async def fake_extract(data: bytes) -> str:
+            return "# Edital\nTest content"
+
+        mock_extractor = MagicMock()
+        mock_extractor.extract = fake_extract
+
+        with patch("discover_pncp_candidates.download_pncp_pdf") as mock_dl:
+            mock_dl.return_value = DownloadResult(
+                content=pdf_bytes,
+                content_hash=result_hash,
+                content_length=len(pdf_bytes),
+            )
+            result = process_candidate(candidate, extractor=mock_extractor, max_bytes=5_000_000)
+
+        assert result is not None
+        assert result["worker_result"]["ocr_markdown"] == "# Edital\nTest content"
+        assert result["worker_result"]["content_hash"] == result_hash
+        assert result["worker_result"]["content_length"] == len(pdf_bytes)
+        assert result["worker_result"]["validation_outcome"] == "valid_pdf"
+        assert "validated_at" in result["worker_result"]
+
+    def test_download_failure_returns_none(self) -> None:
+        candidate = {
+            "url": "https://example.com/missing.pdf",
+            "kind": "pdf",
+            "metadata": {"numeroControlePNCP": "2026-0002"},
+        }
+
+        async def fake_extract(data: bytes) -> str:
+            return "never called"
+
+        mock_extractor = MagicMock()
+        mock_extractor.extract = fake_extract
+
+        with patch("discover_pncp_candidates.download_pncp_pdf") as mock_dl:
+            mock_dl.side_effect = DownloadError("HTTP 404 permanent")
+            result = process_candidate(candidate, extractor=mock_extractor, max_bytes=5_000_000)
+
+        assert result is None
+
+    def test_ocr_failure_returns_none(self) -> None:
+        import hashlib
+        candidate = {
+            "url": "https://example.com/doc.pdf",
+            "kind": "pdf",
+            "metadata": {"numeroControlePNCP": "2026-0003"},
+        }
+        pdf_bytes = b"%PDF-1.4 content"
+
+        async def failing_extract(data: bytes) -> str:
+            raise RuntimeError("OCR crashed")
+
+        mock_extractor = MagicMock()
+        mock_extractor.extract = failing_extract
+
+        with patch("discover_pncp_candidates.download_pncp_pdf") as mock_dl:
+            mock_dl.return_value = DownloadResult(
+                content=pdf_bytes,
+                content_hash=hashlib.sha256(pdf_bytes).hexdigest(),
+                content_length=len(pdf_bytes),
+            )
+            result = process_candidate(candidate, extractor=mock_extractor, max_bytes=5_000_000)
+
+        assert result is None
+
+    def test_bytes_released_after_result(self) -> None:
+        import gc
+        candidate = {
+            "url": "https://example.com/doc.pdf",
+            "kind": "pdf",
+            "metadata": {"numeroControlePNCP": "2026-0004"},
+        }
+        pdf_bytes = b"%PDF-1.4 content"
+
+        async def fake_extract(data: bytes) -> str:
+            return "markdown"
+
+        mock_extractor = MagicMock()
+        mock_extractor.extract = fake_extract
+
+        with patch("discover_pncp_candidates.download_pncp_pdf") as mock_dl:
+            mock_dl.return_value = DownloadResult(
+                content=pdf_bytes,
+                content_hash="abc",
+                content_length=len(pdf_bytes),
+            )
+            result = process_candidate(candidate, extractor=mock_extractor, max_bytes=5_000_000)
+
+        assert result is not None
+        assert "content" not in result
+        gc.collect()
+
+    def test_metadata_preserved_in_result(self) -> None:
+        import hashlib
+        candidate = {
+            "url": "https://example.com/doc.pdf",
+            "kind": "pdf",
+            "metadata": {
+                "numeroControlePNCP": "2026-0005",
+                "anoCompra": 2026,
+                "titulo": "Edital Teste",
+            },
+        }
+        pdf_bytes = b"%PDF-1.4"
+
+        async def fake_extract(data: bytes) -> str:
+            return "markdown"
+
+        mock_extractor = MagicMock()
+        mock_extractor.extract = fake_extract
+
+        with patch("discover_pncp_candidates.download_pncp_pdf") as mock_dl:
+            mock_dl.return_value = DownloadResult(
+                content=pdf_bytes,
+                content_hash=hashlib.sha256(pdf_bytes).hexdigest(),
+                content_length=len(pdf_bytes),
+            )
+            result = process_candidate(candidate, extractor=mock_extractor, max_bytes=5_000_000)
+
+        assert result["metadata"]["numeroControlePNCP"] == "2026-0005"
+        assert result["metadata"]["titulo"] == "Edital Teste"
