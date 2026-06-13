@@ -544,6 +544,18 @@ class TestDownloadPncpPdf:
             with pytest.raises(DownloadError, match="not a valid PDF"):
                 download_pncp_pdf("https://example.com/page.html", max_bytes=5_000_000)
 
+    def test_json_response_raises_error(self) -> None:
+        with patch("pncp_http.requests.Session") as MockSession:
+            session = MockSession.return_value.__enter__.return_value
+            resp = MagicMock()
+            resp.status_code = 200
+            resp.headers = {"Content-Type": "application/json"}
+            resp.iter_content.return_value = [b'{"error": "not a pdf"}']
+            resp.close.return_value = None
+            session.get.return_value = resp
+            with pytest.raises(DownloadError, match="not a valid PDF"):
+                download_pncp_pdf("https://example.com/data.json", max_bytes=5_000_000)
+
     def test_404_raises_permanent_failure(self) -> None:
         with patch("pncp_http.requests.Session") as MockSession:
             session = MockSession.return_value.__enter__.return_value
@@ -607,6 +619,40 @@ class TestDownloadPncpPdf:
             resp_ok.iter_content.return_value = [b"%PDF-1.4 ok"]
             resp_ok.close.return_value = None
             session.get.side_effect = [resp_503, resp_ok]
+            with patch("pncp_http.time.sleep"):
+                result = download_pncp_pdf("https://example.com/doc.pdf", max_bytes=5_000_000)
+                assert result.content == b"%PDF-1.4 ok"
+
+    def test_408_retries(self) -> None:
+        with patch("pncp_http.requests.Session") as MockSession:
+            session = MockSession.return_value.__enter__.return_value
+            resp_408 = MagicMock()
+            resp_408.status_code = 408
+            resp_408.headers = {}
+            resp_408.close.return_value = None
+            resp_ok = MagicMock()
+            resp_ok.status_code = 200
+            resp_ok.headers = {"Content-Type": "application/pdf"}
+            resp_ok.iter_content.return_value = [b"%PDF-1.4 ok"]
+            resp_ok.close.return_value = None
+            session.get.side_effect = [resp_408, resp_ok]
+            with patch("pncp_http.time.sleep"):
+                result = download_pncp_pdf("https://example.com/doc.pdf", max_bytes=5_000_000)
+                assert result.content == b"%PDF-1.4 ok"
+
+    def test_425_retries(self) -> None:
+        with patch("pncp_http.requests.Session") as MockSession:
+            session = MockSession.return_value.__enter__.return_value
+            resp_425 = MagicMock()
+            resp_425.status_code = 425
+            resp_425.headers = {}
+            resp_425.close.return_value = None
+            resp_ok = MagicMock()
+            resp_ok.status_code = 200
+            resp_ok.headers = {"Content-Type": "application/pdf"}
+            resp_ok.iter_content.return_value = [b"%PDF-1.4 ok"]
+            resp_ok.close.return_value = None
+            session.get.side_effect = [resp_425, resp_ok]
             with patch("pncp_http.time.sleep"):
                 result = download_pncp_pdf("https://example.com/doc.pdf", max_bytes=5_000_000)
                 assert result.content == b"%PDF-1.4 ok"
@@ -750,7 +796,7 @@ class TestProcessCandidate:
         assert result["worker_result"]["validation_outcome"] == "valid_pdf"
         assert "validated_at" in result["worker_result"]
 
-    def test_download_failure_returns_none(self) -> None:
+    def test_download_failure_returns_error(self) -> None:
         candidate = {
             "url": "https://example.com/missing.pdf",
             "kind": "pdf",
@@ -767,9 +813,11 @@ class TestProcessCandidate:
             mock_dl.side_effect = DownloadError("HTTP 404 permanent")
             result = process_candidate(candidate, extractor=mock_extractor, max_bytes=5_000_000)
 
-        assert result is None
+        assert "error" in result
+        assert "download" in result["error"]
+        assert result["url"] == "https://example.com/missing.pdf"
 
-    def test_ocr_failure_returns_none(self) -> None:
+    def test_ocr_failure_returns_error(self) -> None:
         import hashlib
         candidate = {
             "url": "https://example.com/doc.pdf",
@@ -792,7 +840,9 @@ class TestProcessCandidate:
             )
             result = process_candidate(candidate, extractor=mock_extractor, max_bytes=5_000_000)
 
-        assert result is None
+        assert "error" in result
+        assert "ocr" in result["error"]
+        assert result["url"] == "https://example.com/doc.pdf"
 
     def test_bytes_released_after_result(self) -> None:
         import gc

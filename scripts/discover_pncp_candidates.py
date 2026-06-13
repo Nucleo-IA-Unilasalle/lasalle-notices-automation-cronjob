@@ -648,9 +648,11 @@ def process_candidate(
     connect_timeout: int = 30,
     read_timeout: int = 120,
     max_attempts: int = 4,
-) -> dict[str, Any] | None:
+) -> dict[str, Any]:
     url = candidate["url"]
     metadata = candidate.get("metadata", {})
+    error_context = {"url": url, "metadata": metadata}
+
     try:
         dl = download_pncp_pdf(
             url,
@@ -661,15 +663,14 @@ def process_candidate(
         )
     except DownloadError as exc:
         print(f"warning: download failed for {url}: {exc}", file=sys.stderr)
-        return None
+        return {**error_context, "error": f"download: {exc}"}
 
     pdf_bytes = dl.content
     try:
         markdown = asyncio.run(extractor.extract(pdf_bytes))
     except Exception as exc:
         print(f"warning: OCR failed for {url}: {exc}", file=sys.stderr)
-        pdf_bytes = None
-        return None
+        return {**error_context, "error": f"ocr: {exc}"}
     finally:
         pdf_bytes = None
 
