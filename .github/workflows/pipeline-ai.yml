@@ -16,6 +16,9 @@ jobs:
   trigger:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    if: >
+      github.event_name != 'workflow_run' ||
+      github.event.workflow_run.conclusion == 'success'
     env:
       RENDER_APP_URL: ${{ secrets.RENDER_APP_URL }}
       PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}
@@ -26,7 +29,7 @@ jobs:
       PACIFIC_WINDOW_START: "8"
       PACIFIC_WINDOW_END: "19"
     steps:
-      - name: Check Pacific daytime window
+      - name: Check Pacific daytime window and trigger
         shell: bash
         run: |
           set -euo pipefail
@@ -46,26 +49,11 @@ jobs:
 
           echo "Inside daytime Pacific window — proceeding to trigger Render."
 
-      - name: Trigger pipeline step
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          PACIFIC_HOUR_RAW="$(TZ=America/Los_Angeles date +%H)"
-          PACIFIC_HOUR=$((10#$PACIFIC_HOUR_RAW))
-
-          # Re-check window in this step so the job exits cleanly when outside it.
-          if [ "$PACIFIC_HOUR" -lt "$PACIFIC_WINDOW_START" ] || [ "$PACIFIC_HOUR" -gt "$PACIFIC_WINDOW_END" ]; then
-            exit 0
-          fi
-
-          PACIFIC_TRIGGER_TIME="$(TZ=America/Los_Angeles date '+%H:%M %Z')"
           URL="${RENDER_APP_URL}/api/pipeline/${PIPELINE_STEP}"
           MAX_ATTEMPTS=4
           SLEEP_SECONDS=120
 
-          echo "Initiating AI trigger at Pacific time: ${PACIFIC_TRIGGER_TIME}"
-          echo "Mirrored backend limits: AI_EDITAIS_PER_DAY=${AI_EDITAIS_PER_DAY}, AI_EDITAIS_PER_MINUTE=${AI_EDITAIS_PER_MINUTE}"
+          echo "Initiating AI trigger at Pacific time: ${PACIFIC_TIME}"
           echo "Endpoint: POST ${URL}"
 
           for attempt in $(seq 1 "$MAX_ATTEMPTS"); do
