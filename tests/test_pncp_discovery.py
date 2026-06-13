@@ -898,3 +898,332 @@ class TestProcessCandidate:
 
         assert result["metadata"]["numeroControlePNCP"] == "2026-0005"
         assert result["metadata"]["titulo"] == "Edital Teste"
+
+
+# ---------------------------------------------------------------------------
+# Submission: only valid results submitted
+# ---------------------------------------------------------------------------
+
+class TestSubmissionFiltering:
+    def test_only_valid_results_submitted(self) -> None:
+        from discover_pncp_candidates import submit_candidates
+        valid = {
+            "url": "https://example.com/good.pdf",
+            "kind": "pdf",
+            "metadata": {"numeroControlePNCP": "V-001", "sequencialDocumento": 1},
+            "worker_result": {
+                "ocr_markdown": "# Edital",
+                "content_hash": "abc",
+                "content_length": 100,
+                "validated_at": "2026-06-12T12:00:00Z",
+                "validation_outcome": "valid_pdf",
+            },
+        }
+        error_item = {
+            "url": "https://example.com/bad.pdf",
+            "metadata": {"numeroControlePNCP": "E-001"},
+            "error": "download: HTTP 404",
+        }
+
+        mock_resp = MagicMock()
+        mock_resp.status_code = 200
+        mock_resp.json.return_value = {
+            "inserted": 1,
+            "updated": 0,
+            "reactivated": 0,
+            "duplicates": 0,
+            "outcomes": {"V-001:1": "inserted"},
+        }
+        with patch.dict(os.environ, {"RENDER_APP_URL": "https://render.example.com", "PIPELINE_SECRET": "tok"}):
+            with patch("discover_pncp_candidates.requests.post", return_value=mock_resp) as mock_post:
+                result = submit_candidates([valid, error_item])
+
+        sent_body = mock_post.call_args[1]["json"]
+        assert len(sent_body["candidates"]) == 1
+        assert sent_body["candidates"][0]["url"] == "https://example.com/good.pdf"
+        assert result["total"] == 2
+        assert result["submitted"] == 1
+
+
+class TestSubmissionContract:
+    def test_request_includes_worker_result_no_pdf_bytes(self) -> None:
+        from discover_pncp_candidates import submit_candidates
+        candidate = {
+            "url": "https://example.com/doc.pdf",
+            "kind": "pdf",
+            "metadata": {"numeroControlePNCP": "C-001", "sequencialDocumento": 1},
+            "worker_result": {
+                "ocr_markdown": "# Edital",
+                "content_hash": "sha256hash",
+                "content_length": 12345,
+                "validated_at": "2026-06-12T12:00:00Z",
+                "validation_outcome": "valid_pdf",
+            },
+        }
+
+        mock_resp = MagicMock()
+        mock_resp.status_code = 200
+        mock_resp.json.return_value = {"inserted": 1, "outcomes": {}}
+
+        with patch.dict(os.environ, {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "t"}):
+            with patch("discover_pncp_candidates.requests.post", return_value=mock_resp) as mock_post:
+                submit_candidates([candidate])
+
+        body = mock_post.call_args[1]["json"]
+        assert body["source"] == "pncp"
+        c = body["candidates"][0]
+        assert c["url"] == "https://example.com/doc.pdf"
+        assert c["kind"] == "pdf"
+        assert c["metadata"]["numeroControlePNCP"] == "C-001"
+        assert c["worker_result"]["ocr_markdown"] == "# Edital"
+        assert c["worker_result"]["content_hash"] == "sha256hash"
+        assert "content" not in c
+        assert "pdf_bytes" not in c
+
+    def test_markdown_respects_configured_size_limit(self) -> None:
+        from discover_pncp_candidates import submit_candidates, RENDER_SUBMIT_BATCH_SIZE
+        candidate = {
+            "url": "https://example.com/doc.pdf",
+            "kind": "pdf",
+            "metadata": {"numeroControlePNCP": "M-001", "sequencialDocumento": 1},
+            "worker_result": {
+                "ocr_markdown": "x" * 1_000_001,
+                "content_hash": "h",
+                "content_length": 100,
+                "validated_at": "2026-06-12T12:00:00Z",
+                "validation_outcome": "valid_pdf",
+            },
+        }
+
+        mock_resp = MagicMock()
+        mock_resp.status_code = 200
+        mock_resp.json.return_value = {"inserted": 1, "outcomes": {}}
+
+        with patch.dict(os.environ, {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "t"}):
+            with patch("discover_pncp_candidates.requests.post", return_value=mock_resp) as mock_post:
+                submit_candidates([candidate])
+
+        body = mock_post.call_args[1]["json"]
+        md = body["candidates"][0]["worker_result"]["ocr_markdown"]
+        assert len(md) <= 1_000_000
+
+
+class TestSubmissionRetryBehavior:
+    def test_transient_errors_retry(self) -> None:
+        from discover_pncp_candidates import submit_candidates
+        candidate = {
+            "url": "https://example.com/doc.pdf",
+            "kind": "pdf",
+            "metadata": {"numeroControlePNCP": "R-001", "sequencialDocumento": 1},
+            "worker_result": {
+                "ocr_markdown": "# Edital",
+                "content_hash": "h",
+                "content_length": 100,
+                "validated_at": "2026-06-12T12:00:00Z",
+                "validation_outcome": "valid_pdf",
+            },
+        }
+
+        resp_503 = MagicMock()
+        resp_503.status_code = 503
+        resp_503.json.return_value = {}
+        resp_ok = MagicMock()
+        resp_ok.status_code = 200
+        resp_ok.json.return_value = {"inserted": 1, "outcomes": {}}
+
+        with patch.dict(os.environ, {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "t"}):
+            with patch("discover_pncp_candidates.requests.post", side_effect=[resp_503, resp_ok]) as mock_post:
+                with patch("discover_pncp_candidates.time.sleep"):
+                    result = submit_candidates([candidate])
+
+        assert mock_post.call_count == 2
+        assert result["submitted"] == 1
+
+    def test_auth_failure_stops_immediately(self) -> None:
+        from discover_pncp_candidates import submit_candidates
+        candidate = {
+            "url": "https://example.com/doc.pdf",
+            "kind": "pdf",
+            "metadata": {"numeroControlePNCP": "A-001", "sequencialDocumento": 1},
+            "worker_result": {
+                "ocr_markdown": "# Edital",
+                "content_hash": "h",
+                "content_length": 100,
+                "validated_at": "2026-06-12T12:00:00Z",
+                "validation_outcome": "valid_pdf",
+            },
+        }
+
+        import requests as _requests
+        resp_401 = MagicMock()
+        resp_401.status_code = 401
+        resp_401.json.return_value = {"error": "unauthorized"}
+        resp_401.raise_for_status.side_effect = _requests.HTTPError(response=resp_401)
+
+        with patch.dict(os.environ, {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "t"}):
+            with patch("discover_pncp_candidates.requests.post", return_value=resp_401) as mock_post:
+                result = submit_candidates([candidate])
+
+        assert mock_post.call_count == 1
+        assert result["submitted"] == 0
+        assert result["failed_batches"] == 1
+
+
+class TestSubmissionTerminalOutcomes:
+    def test_inserted_response_succeeds(self) -> None:
+        from discover_pncp_candidates import submit_candidates
+        candidate = {
+            "url": "https://example.com/doc.pdf",
+            "kind": "pdf",
+            "metadata": {"numeroControlePNCP": "I-001", "sequencialDocumento": 1},
+            "worker_result": {
+                "ocr_markdown": "# Edital",
+                "content_hash": "h",
+                "content_length": 100,
+                "validated_at": "2026-06-12T12:00:00Z",
+                "validation_outcome": "valid_pdf",
+            },
+        }
+
+        mock_resp = MagicMock()
+        mock_resp.status_code = 200
+        mock_resp.json.return_value = {
+            "inserted": 1,
+            "updated": 0,
+            "reactivated": 0,
+            "duplicates": 0,
+            "outcomes": {"I-001:1": "inserted"},
+        }
+
+        with patch.dict(os.environ, {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "t"}):
+            with patch("discover_pncp_candidates.requests.post", return_value=mock_resp):
+                result = submit_candidates([candidate])
+
+        assert result["submitted"] == 1
+        assert result["last_result"]["outcomes"]["I-001:1"] == "inserted"
+
+    def test_duplicate_response_succeeds(self) -> None:
+        from discover_pncp_candidates import submit_candidates
+        candidate = {
+            "url": "https://example.com/doc.pdf",
+            "kind": "pdf",
+            "metadata": {"numeroControlePNCP": "D-001", "sequencialDocumento": 1},
+            "worker_result": {
+                "ocr_markdown": "# Edital",
+                "content_hash": "h",
+                "content_length": 100,
+                "validated_at": "2026-06-12T12:00:00Z",
+                "validation_outcome": "valid_pdf",
+            },
+        }
+
+        mock_resp = MagicMock()
+        mock_resp.status_code = 200
+        mock_resp.json.return_value = {
+            "inserted": 0,
+            "updated": 0,
+            "reactivated": 0,
+            "duplicates": 1,
+            "outcomes": {"D-001:1": "duplicate"},
+        }
+
+        with patch.dict(os.environ, {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "t"}):
+            with patch("discover_pncp_candidates.requests.post", return_value=mock_resp):
+                result = submit_candidates([candidate])
+
+        assert result["submitted"] == 1
+
+    def test_successful_items_not_retried_after_partial_batch(self) -> None:
+        from discover_pncp_candidates import submit_candidates
+        c1 = {
+            "url": "https://example.com/a.pdf",
+            "kind": "pdf",
+            "metadata": {"numeroControlePNCP": "P-001", "sequencialDocumento": 1},
+            "worker_result": {
+                "ocr_markdown": "# A",
+                "content_hash": "h1",
+                "content_length": 10,
+                "validated_at": "2026-06-12T12:00:00Z",
+                "validation_outcome": "valid_pdf",
+            },
+        }
+        c2 = {
+            "url": "https://example.com/b.pdf",
+            "kind": "pdf",
+            "metadata": {"numeroControlePNCP": "P-002", "sequencialDocumento": 1},
+            "worker_result": {
+                "ocr_markdown": "# B",
+                "content_hash": "h2",
+                "content_length": 20,
+                "validated_at": "2026-06-12T12:00:00Z",
+                "validation_outcome": "valid_pdf",
+            },
+        }
+
+        mock_resp = MagicMock()
+        mock_resp.status_code = 200
+        mock_resp.json.return_value = {
+            "inserted": 1,
+            "updated": 0,
+            "reactivated": 0,
+            "duplicates": 0,
+            "outcomes": {"P-001:1": "inserted", "P-002:1": "duplicate"},
+        }
+
+        with patch.dict(os.environ, {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "t"}):
+            with patch("discover_pncp_candidates.requests.post", return_value=mock_resp) as mock_post:
+                result = submit_candidates([c1, c2])
+
+        assert mock_post.call_count == 1
+        assert result["submitted"] == 2
+
+    def test_response_has_identity_keyed_outcomes_and_counts(self) -> None:
+        from discover_pncp_candidates import submit_candidates
+        c1 = {
+            "url": "https://example.com/a.pdf",
+            "kind": "pdf",
+            "metadata": {"numeroControlePNCP": "K-001", "sequencialDocumento": 1},
+            "worker_result": {
+                "ocr_markdown": "# A",
+                "content_hash": "h1",
+                "content_length": 10,
+                "validated_at": "2026-06-12T12:00:00Z",
+                "validation_outcome": "valid_pdf",
+            },
+        }
+        c2 = {
+            "url": "https://example.com/b.pdf",
+            "kind": "pdf",
+            "metadata": {"numeroControlePNCP": "K-002", "sequencialDocumento": 1},
+            "worker_result": {
+                "ocr_markdown": "# B",
+                "content_hash": "h2",
+                "content_length": 20,
+                "validated_at": "2026-06-12T12:00:00Z",
+                "validation_outcome": "valid_pdf",
+            },
+        }
+
+        mock_resp = MagicMock()
+        mock_resp.status_code = 200
+        mock_resp.json.return_value = {
+            "inserted": 1,
+            "updated": 1,
+            "reactivated": 0,
+            "duplicates": 0,
+            "outcomes": {
+                "K-001:1": "inserted",
+                "K-002:1": "updated",
+            },
+        }
+
+        with patch.dict(os.environ, {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "t"}):
+            with patch("discover_pncp_candidates.requests.post", return_value=mock_resp):
+                result = submit_candidates([c1, c2])
+
+        lr = result["last_result"]
+        assert "outcomes" in lr
+        assert lr["outcomes"]["K-001:1"] == "inserted"
+        assert lr["outcomes"]["K-002:1"] == "updated"
+        assert lr["inserted"] == 1
+        assert lr["updated"] == 1

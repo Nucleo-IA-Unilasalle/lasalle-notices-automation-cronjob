@@ -18,11 +18,7 @@ RENDER_SUBMIT_BATCH_SIZE = int(os.environ.get("RENDER_SUBMIT_BATCH_SIZE", "30"))
 RENDER_SUBMIT_TIMEOUT = int(os.environ.get("RENDER_SUBMIT_TIMEOUT", "90"))
 RENDER_SUBMIT_MAX_ATTEMPTS = int(os.environ.get("RENDER_SUBMIT_MAX_ATTEMPTS", "4"))
 RENDER_SUBMIT_BACKOFF_BASE = float(os.environ.get("RENDER_SUBMIT_BACKOFF_BASE", "5"))
-
-PNCP_DEDUP_CACHE_PATH = os.environ.get(
-    "PNCP_DEDUP_CACHE_PATH", ".cache/pncp_submitted_urls.json"
-)
-PNCP_DEDUP_CACHE_TTL_DAYS = int(os.environ.get("PNCP_DEDUP_CACHE_TTL_DAYS", "7"))
+RENDER_SUBMIT_MAX_MARKDOWN_CHARS = int(os.environ.get("RENDER_SUBMIT_MAX_MARKDOWN_CHARS", "1000000"))
 
 
 DEFAULT_HEADERS = {
@@ -348,61 +344,6 @@ def select_pncp_documents(documents: list[dict[str, Any]]) -> list[dict[str, Any
     return selected
 
 
-def load_dedup_cache() -> dict[str, str]:
-    try:
-        with open(PNCP_DEDUP_CACHE_PATH, "r", encoding="utf-8") as handle:
-            payload = json.load(handle)
-    except (FileNotFoundError, json.JSONDecodeError, OSError) as exc:
-        if not isinstance(exc, FileNotFoundError):
-            print(f"warning: discarding corrupt PNCP dedup cache: {exc}", file=sys.stderr)
-        return {}
-    if not isinstance(payload, dict):
-        print("warning: PNCP dedup cache root was not an object; discarding", file=sys.stderr)
-        return {}
-    return {str(key): str(value) for key, value in payload.items()}
-
-
-def save_dedup_cache(cache: dict[str, str]) -> None:
-    os.makedirs(os.path.dirname(PNCP_DEDUP_CACHE_PATH) or ".", exist_ok=True)
-    tmp_path = f"{PNCP_DEDUP_CACHE_PATH}.tmp"
-    with open(tmp_path, "w", encoding="utf-8") as handle:
-        json.dump(cache, handle, indent=2, sort_keys=True)
-    os.replace(tmp_path, PNCP_DEDUP_CACHE_PATH)
-
-
-def filter_cached_candidates(
-    candidates: list[dict[str, Any]], cache: dict[str, str]
-) -> tuple[list[dict[str, Any]], int]:
-    now = datetime.now(timezone.utc)
-    ttl = timedelta(days=PNCP_DEDUP_CACHE_TTL_DAYS)
-    kept: list[dict[str, Any]] = []
-    skipped = 0
-    for candidate in candidates:
-        url = str(candidate.get("url") or "")
-        cached_at_raw = cache.get(url)
-        if cached_at_raw:
-            try:
-                cached_at = datetime.fromisoformat(cached_at_raw)
-            except ValueError:
-                cached_at = None
-            if cached_at is None or (now - cached_at) <= ttl:
-                skipped += 1
-                continue
-        kept.append(candidate)
-    return kept, skipped
-
-
-def record_submitted_urls(
-    cache: dict[str, str], candidates: list[dict[str, Any]]
-) -> dict[str, str]:
-    now_iso = datetime.now(timezone.utc).isoformat()
-    for candidate in candidates:
-        url = str(candidate.get("url") or "")
-        if url:
-            cache[url] = now_iso
-    return cache
-
-
 def build_candidate(record: dict[str, Any], document: dict[str, Any]) -> dict[str, Any] | None:
     url = document.get("url")
     if not isinstance(url, str) or not url.strip():
@@ -495,6 +436,16 @@ def _is_retryable_response(response: requests.Response) -> bool:
     return response.status_code in (408, 425, 429, 500, 502, 503, 504)
 
 
+def _truncate_markdown(candidate: dict[str, Any]) -> dict[str, Any]:
+    wr = candidate.get("worker_result")
+    if not wr:
+        return candidate
+    md = wr.get("ocr_markdown", "")
+    if len(md) > RENDER_SUBMIT_MAX_MARKDOWN_CHARS:
+        candidate = {**candidate, "worker_result": {**wr, "ocr_markdown": md[:RENDER_SUBMIT_MAX_MARKDOWN_CHARS]}}
+    return candidate
+
+
 def _post_batch(
     render_url: str,
     token: str,
@@ -555,14 +506,20 @@ def _post_batch(
 
 
 def submit_candidates(
-    candidates: list[dict[str, Any]], cache: dict[str, str] | None = None
+    candidates: list[dict[str, Any]],
 ) -> dict[str, Any]:
     render_url = os.environ["RENDER_APP_URL"].rstrip("/")
     token = os.environ["PIPELINE_SECRET"]
 
+    valid = [
+        _truncate_markdown(c)
+        for c in candidates
+        if c.get("worker_result") and not c.get("error")
+    ]
+
     batches = [
-        candidates[i : i + RENDER_SUBMIT_BATCH_SIZE]
-        for i in range(0, len(candidates), RENDER_SUBMIT_BATCH_SIZE)
+        valid[i : i + RENDER_SUBMIT_BATCH_SIZE]
+        for i in range(0, len(valid), RENDER_SUBMIT_BATCH_SIZE)
     ]
     total_batches = len(batches)
 
@@ -575,14 +532,13 @@ def submit_candidates(
         if error is None:
             submitted += len(batch)
             last_result = result
-            if cache is not None:
-                record_submitted_urls(cache, batch)
             print(
                 f"Render submit batch {index}/{total_batches}: "
                 f"{len(batch)} candidates accepted"
             )
         else:
             failed_batches.append(f"batch {index}/{total_batches} ({len(batch)}): {error}")
+            break
 
     summary = {
         "total": len(candidates),
@@ -593,11 +549,11 @@ def submit_candidates(
     }
 
     if submitted == 0 and failed_batches:
-        raise RuntimeError(
-            f"All {len(failed_batches)} Render submit batches failed: "
-            + "; ".join(failed_batches)
+        print(
+            f"error: {len(failed_batches)}/{total_batches} Render submit batches failed",
+            file=sys.stderr,
         )
-    if failed_batches:
+    elif failed_batches:
         print(
             f"warning: {len(failed_batches)}/{total_batches} Render submit batches failed",
             file=sys.stderr,
@@ -618,24 +574,13 @@ def main() -> int:
     print(f"PNCP discovery stats: {stats}")
     print(f"PNCP candidates discovered: {len(candidates)}")
 
-    cache = load_dedup_cache()
-    print(f"PNCP dedup cache loaded: {len(cache)} entries")
-
-    candidates, cached_skipped = filter_cached_candidates(candidates, cache)
-    if cached_skipped:
-        print(f"PNCP candidates skipped (already submitted within TTL): {cached_skipped}")
-    print(f"PNCP candidates to submit: {len(candidates)}")
-
-    stats["cached_skipped"] = cached_skipped
     stats["to_submit"] = len(candidates)
 
     if not candidates:
         print("No new candidates to submit")
         return 0
 
-    result = submit_candidates(candidates, cache)
-    save_dedup_cache(cache)
-    print(f"PNCP dedup cache saved: {len(cache)} entries at {PNCP_DEDUP_CACHE_PATH}")
+    result = submit_candidates(candidates)
     print(f"Render candidate submission: {result}")
     return 0
 
