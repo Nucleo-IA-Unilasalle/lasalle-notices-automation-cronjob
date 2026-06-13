@@ -1,8 +1,6 @@
 name: Pipeline - OCR
 
 on:
-  schedule:
-    - cron: '45 * * * *'
   workflow_dispatch:
 
 concurrency:
@@ -21,7 +19,7 @@ jobs:
       SCRAPE_MAX_PDF_BYTES: "15000000"
       AI_SOURCE_RESOLUTION_TIMEOUT_SECONDS: "60"
       KREUZBERG_PADDLE_LANGUAGE: "latin"
-      KREUZBERG_PADDLE_MODEL_TIER: "mobile"
+      KREUZBERG_PADDLE_MODEL_TIER: "tiny"
       KREUZBERG_USE_GPU: "false"
       KREUZBERG_FORCE_OCR_DEFAULT: "false"
       KREUZBERG_EXTRACTION_TIMEOUT_SECONDS: "300"
@@ -40,7 +38,6 @@ jobs:
             ~/.cache/paddleocr
             ~/.paddleocr
             ~/.paddlehub
-            ~/.cache/kreuzberg
           key: ocr-models-${{ runner.os }}-${{ hashFiles('requirements-ocr-worker.txt') }}
 
       - name: Install OCR worker dependencies
@@ -53,7 +50,6 @@ jobs:
           ls -la ~/.cache/paddleocr || true
           ls -la ~/.paddleocr || true
           ls -la ~/.paddlehub || true
-          ls -la ~/.cache/kreuzberg || true
 
       - name: Run OCR worker
         run: python scripts/ocr_worker/run_ocr_worker.py --limit 5

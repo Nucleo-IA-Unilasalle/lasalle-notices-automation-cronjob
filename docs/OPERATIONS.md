@@ -1,0 +1,79 @@
+# Operations Guide
+
+## Pipeline overview
+
+The combined PNCP pipeline runs hourly via `pipeline-pncp-discovery.yml`:
+
+1. **Discover** — queries PNCP API for active procurement records across modalities 6 (Pregão Eletrônico), 8 (Dispensa de Licitação), and 4 (Concorrência Eletrônica)
+2. **Download** — fetches each candidate PDF with bounded HTTP, SSRF protection, and retry
+3. **Validate** — confirms PDF magic bytes and structure
+4. **OCR** — extracts text to markdown using PaddleOCR (latin language, tiny model tier)
+5. **Submit** — sends candidates with metadata, markdown, and content hash to Render `/api/pipeline/candidates`
+
+After successful discovery, Render AI processing is triggered via `pipeline-ai.yml` (with daytime Pacific gate).
+
+## Schedule
+
+| Workflow | Schedule | Notes |
+|----------|----------|-------|
+| PNCP discovery | `05 * * * *` (hourly at :05) | Combined pipeline |
+| AI processing | `15 * * * *` (hourly at :15) + after PNCP discovery | Pacific daytime gate (08:00–19:00) |
+
+## Monitoring
+
+### GitHub Actions
+
+- Check workflow run status in the Actions tab
+- Key metrics logged: discovery stats, candidates found, OCR successes/failures, submission results
+- Cache file `.cache/pncp-last-successful-update.json` tracks the update checkpoint
+
+### Render
+
+- Monitor `/api/pipeline/candidates` endpoint health
+- Check AI processing logs for model inference outcomes
+- Verify direct URL serving for processed notices
+
+## Cache and checkpoint
+
+The PNCP update checkpoint (`.cache/pncp-last-successful-update.json`) is cached between runs using GitHub Actions cache with key pattern `pncp-update-checkpoint-${{ runner.os }}-*`. This ensures the `/atualizacao` endpoint queries only new or updated records since the last successful run.
+
+## Rollback procedures
+
+### Rollback to legacy Render pipeline
+
+If the combined GitHub Actions pipeline fails:
+
+1. **Ingest**: Trigger `pipeline-ingest.yml` manually (workflow_dispatch) to run Render-side download
+2. **OCR**: Trigger `pipeline-ocr.yml` manually to run Render-side OCR worker
+3. **Scrape**: Trigger `pipeline-scrape.yml` manually for legacy scrape path
+4. **Full run**: Trigger `pipeline-run.yml` manually for complete Render pipeline
+
+### Disable combined pipeline
+
+To pause the hourly combined pipeline:
+
+1. Disable the `pipeline-pncp-discovery.yml` schedule in GitHub Actions
+2. Manually trigger legacy workflows as needed
+
+## Environment variables
+
+### GitHub Actions (PNCP discovery)
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `RENDER_APP_URL` | (required) | Render service base URL |
+| `PIPELINE_SECRET` | (required) | Bearer token for Render API |
+| `PNCP_UPDATE_CHECKPOINT_PATH` | `.cache/pncp-last-successful-update.json` | Checkpoint file path |
+| `SCRAPE_MAX_PDF_BYTES` | `15000000` | Max PDF download size |
+| `KREUZBERG_PADDLE_LANGUAGE` | `latin` | OCR language |
+| `KREUZBERG_PADDLE_MODEL_TIER` | `tiny` | OCR model tier |
+| `KREUZBERG_EXTRACTION_TIMEOUT_SECONDS` | `300` | OCR timeout |
+
+### GitHub Actions (AI processing)
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `PACIFIC_WINDOW_START` | `8` | Earliest Pacific hour for AI triggers |
+| `PACIFIC_WINDOW_END` | `19` | Latest Pacific hour for AI triggers |
+| `AI_EDITAIS_PER_DAY` | `20` | Backend daily AI capacity |
+| `AI_EDITAIS_PER_MINUTE` | `3` | Backend per-minute AI capacity |
