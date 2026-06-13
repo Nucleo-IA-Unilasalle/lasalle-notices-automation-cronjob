@@ -441,6 +441,7 @@ def build_candidate(record: dict[str, Any], document: dict[str, Any]) -> dict[st
 def discover_candidates() -> tuple[dict[str, int], list[dict[str, Any]]]:
     stats = {
         "records": 0,
+        "pre_download_rejected": 0,
         "document_lookups": 0,
         "candidates": 0,
         "document_failures": 0,
@@ -456,6 +457,10 @@ def discover_candidates() -> tuple[dict[str, int], list[dict[str, Any]]]:
         if stats["document_lookups"] >= PNCP_MAX_DOCUMENT_LOOKUPS_PER_RUN:
             print(f"warning: stopping after document lookup cap {PNCP_MAX_DOCUMENT_LOOKUPS_PER_RUN}", file=sys.stderr)
             break
+
+        if not validate_pncp_record_for_download(record):
+            stats["pre_download_rejected"] += 1
+            continue
 
         documents, failed = fetch_pncp_documents(record)
         stats["document_lookups"] += 1
