@@ -542,6 +542,7 @@ def submit_candidates(
 
     summary = {
         "total": len(candidates),
+        "filtered_out": len(candidates) - len(valid),
         "submitted": submitted,
         "failed_batches": len(failed_batches),
         "errors": failed_batches,
@@ -574,13 +575,38 @@ def main() -> int:
     print(f"PNCP discovery stats: {stats}")
     print(f"PNCP candidates discovered: {len(candidates)}")
 
-    stats["to_submit"] = len(candidates)
-
     if not candidates:
         print("No new candidates to submit")
         return 0
 
-    result = submit_candidates(candidates)
+    from ocr_worker.ocr_extraction_config import OCRExtractionConfig
+    from ocr_worker.pdf_markdown_extractor import PDFMarkdownExtractor
+
+    ocr_config = OCRExtractionConfig(
+        language=os.getenv("KREUZBERG_PADDLE_LANGUAGE", "latin"),
+        model_tier=os.getenv("KREUZBERG_PADDLE_MODEL_TIER", "tiny"),
+        use_gpu=os.getenv("KREUZBERG_USE_GPU", "false").lower() == "true",
+        force_ocr=os.getenv("KREUZBERG_FORCE_OCR_DEFAULT", "false").lower() == "true",
+        extraction_timeout_seconds=int(os.getenv("KREUZBERG_EXTRACTION_TIMEOUT_SECONDS", "300")),
+    )
+    extractor = PDFMarkdownExtractor(ocr_config=ocr_config)
+    max_pdf_bytes = int(os.getenv("SCRAPE_MAX_PDF_BYTES", "15000000"))
+
+    processed: list[dict[str, Any]] = []
+    for candidate in candidates:
+        result = process_candidate(
+            candidate,
+            extractor=extractor,
+            max_bytes=max_pdf_bytes,
+        )
+        processed.append(result)
+
+    stats["processed"] = len(processed)
+    stats["ocr_successes"] = sum(1 for r in processed if r.get("worker_result"))
+    stats["ocr_failures"] = sum(1 for r in processed if r.get("error"))
+    print(f"PNCP processing stats: {stats}")
+
+    result = submit_candidates(processed)
     print(f"Render candidate submission: {result}")
     return 0
 
