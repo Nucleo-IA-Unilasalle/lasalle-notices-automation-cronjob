@@ -33,8 +33,17 @@ DEFAULT_HEADERS = {
 
 PNCP_API_URL = "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao"
 PNCP_PROPOSTA_URL = "https://pncp.gov.br/api/consulta/v1/contratacoes/proposta"
+PNCP_ATUALIZACAO_URL = "https://pncp.gov.br/api/consulta/v1/contratacoes/atualizacao"
 PNCP_DOCS_BASE_URL = "https://pncp.gov.br/api/pncp/v1"
-PNCP_DEFAULT_MODALITY_CODES = ("5", "6", "10")
+PNCP_DEFAULT_MODALITY_CODES = ("6", "8", "4")
+PNCP_MODALITY_NAMES = {
+    "6": "Pregão Eletrônico",
+    "8": "Dispensa de Licitação",
+    "4": "Concorrência Eletrônica",
+}
+PNCP_UPDATE_CHECKPOINT_PATH = os.environ.get(
+    "PNCP_UPDATE_CHECKPOINT_PATH", ".cache/pncp_update_checkpoint.json"
+)
 PNCP_PREFERRED_DOCUMENT_TYPES = (
     "edital",
     "aviso de contratação direta",
@@ -98,19 +107,139 @@ def fetch_pncp_search_pages(base_url: str, base_params: dict[str, str | int]) ->
     return records
 
 
+BRASILIA_OFFSET = timezone(timedelta(hours=-3))
+_UPDATE_FORMAT = "%Y%m%d%H%M%S"
+_ATUALIZACAO_INITIAL_HOURS = 48
+_ATUALIZACAO_OVERLAP_HOURS = 2
+
+
+def parse_pncp_datetime(value: str | None) -> datetime | None:
+    if not value or not isinstance(value, str):
+        return None
+    value = value.strip()
+    if not value:
+        return None
+    try:
+        dt = datetime.fromisoformat(value)
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=BRASILIA_OFFSET)
+        return dt
+    except (ValueError, TypeError):
+        pass
+    if len(value) == 14 and value.isdigit():
+        try:
+            naive = datetime.strptime(value, _UPDATE_FORMAT)
+            return naive.replace(tzinfo=BRASILIA_OFFSET)
+        except ValueError:
+            pass
+    return None
+
+
+def _normalize_to_utc(dt: datetime) -> datetime:
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=BRASILIA_OFFSET)
+    return dt.astimezone(timezone.utc)
+
+
+def is_pncp_record_actionable(record: dict[str, Any]) -> bool:
+    status = record.get("situacaoCompraId")
+    try:
+        status_int = int(status) if status is not None else None
+    except (TypeError, ValueError):
+        status_int = None
+    if status_int is not None and status_int != 1:
+        return False
+    encerramento_raw = record.get("dataEncerramentoProposta")
+    encerramento = parse_pncp_datetime(encerramento_raw)
+    if encerramento is None:
+        return False
+    now_utc = datetime.now(timezone.utc)
+    if _normalize_to_utc(encerramento) <= now_utc:
+        return False
+    abertura_raw = record.get("dataAberturaProposta")
+    if abertura_raw:
+        abertura = parse_pncp_datetime(abertura_raw)
+        if abertura is not None and _normalize_to_utc(abertura) > now_utc:
+            return False
+    return True
+
+
+def validate_pncp_record_for_download(record: dict[str, Any]) -> bool:
+    control = str(record.get("numeroControlePNCP") or "").strip()
+    if not control:
+        return False
+    if record.get("sequencialCompra") is None:
+        return False
+    if record.get("anoCompra") is None:
+        return False
+    return True
+
+
+def _load_update_checkpoint() -> datetime | None:
+    try:
+        with open(PNCP_UPDATE_CHECKPOINT_PATH, "r", encoding="utf-8") as handle:
+            payload = json.load(handle)
+    except (FileNotFoundError, json.JSONDecodeError, OSError):
+        return None
+    if not isinstance(payload, dict):
+        return None
+    raw = payload.get("last_successful_update")
+    if not isinstance(raw, str):
+        return None
+    return parse_pncp_datetime(raw)
+
+
+def _save_update_checkpoint(checkpoint_dt: datetime) -> None:
+    os.makedirs(os.path.dirname(PNCP_UPDATE_CHECKPOINT_PATH) or ".", exist_ok=True)
+    normalized = _normalize_to_utc(checkpoint_dt)
+    payload = {
+        "last_successful_update": normalized.isoformat(),
+    }
+    tmp_path = f"{PNCP_UPDATE_CHECKPOINT_PATH}.tmp"
+    with open(tmp_path, "w", encoding="utf-8") as handle:
+        json.dump(payload, handle, indent=2)
+    os.replace(tmp_path, PNCP_UPDATE_CHECKPOINT_PATH)
+
+
+def _deduplicate_records(raw_records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    best_by_control: dict[str, dict[str, Any]] = {}
+    for record in raw_records:
+        control = str(record.get("numeroControlePNCP") or "")
+        if not control:
+            continue
+        existing = best_by_control.get(control)
+        if existing is None:
+            best_by_control[control] = record
+            continue
+        new_global = str(record.get("dataAtualizacaoGlobal") or "")
+        old_global = str(existing.get("dataAtualizacaoGlobal") or "")
+        if new_global > old_global:
+            best_by_control[control] = record
+            continue
+        if new_global == old_global:
+            new_upd = str(record.get("dataAtualizacao") or "")
+            old_upd = str(existing.get("dataAtualizacao") or "")
+            if new_upd > old_upd:
+                best_by_control[control] = record
+    return list(best_by_control.values())
+
+
 def fetch_pncp_records() -> list[dict[str, Any]]:
-    today = datetime.now(timezone.utc).date()
+    now_utc = datetime.now(timezone.utc)
+    today = now_utc.date()
     publication_start = (today - timedelta(days=PNCP_LOOKBACK_DAYS)).strftime("%Y%m%d")
     today_str = today.strftime("%Y%m%d")
     proposal_end = (today + timedelta(days=PNCP_PROPOSTA_FORWARD_DAYS)).strftime("%Y%m%d")
 
     raw_records: list[dict[str, Any]] = []
+
     raw_records.extend(
         fetch_pncp_search_pages(
             PNCP_PROPOSTA_URL,
             {"dataInicial": today_str, "dataFinal": proposal_end},
         )
     )
+
     for modality_code in PNCP_DEFAULT_MODALITY_CODES:
         raw_records.extend(
             fetch_pncp_search_pages(
@@ -123,15 +252,37 @@ def fetch_pncp_records() -> list[dict[str, Any]]:
             )
         )
 
-    records: list[dict[str, Any]] = []
-    seen_control_numbers: set[str] = set()
-    for record in raw_records:
-        control_number = str(record.get("numeroControlePNCP") or "")
-        if control_number and control_number in seen_control_numbers:
-            continue
-        if control_number:
-            seen_control_numbers.add(control_number)
-        records.append(record)
+    checkpoint = _load_update_checkpoint()
+    if checkpoint is not None:
+        overlap_start = _normalize_to_utc(checkpoint) - timedelta(hours=_ATUALIZACAO_OVERLAP_HOURS)
+    else:
+        overlap_start = now_utc - timedelta(hours=_ATUALIZACAO_INITIAL_HOURS)
+    overlap_start_str = overlap_start.strftime("%Y%m%d%H%M%S")
+    now_str = now_utc.strftime("%Y%m%d%H%M%S")
+
+    for modality_code in PNCP_DEFAULT_MODALITY_CODES:
+        raw_records.extend(
+            fetch_pncp_search_pages(
+                PNCP_ATUALIZACAO_URL,
+                {
+                    "dataInicial": overlap_start_str,
+                    "dataFinal": now_str,
+                    "codigoModalidadeContratacao": modality_code,
+                },
+            )
+        )
+
+    proposta_modalities = {int(c) for c in PNCP_DEFAULT_MODALITY_CODES}
+    proposta_records = [
+        r for r in raw_records
+        if r.get("modalidadeId") in proposta_modalities
+    ]
+    deduplicated = _deduplicate_records(proposta_records)
+
+    records = [r for r in deduplicated if is_pncp_record_actionable(r)]
+
+    _save_update_checkpoint(now_utc)
+
     return records
 
 
@@ -260,15 +411,27 @@ def build_candidate(record: dict[str, Any], document: dict[str, Any]) -> dict[st
         "numeroControlePNCP": record.get("numeroControlePNCP"),
         "anoCompra": record.get("anoCompra"),
         "sequencialCompra": record.get("sequencialCompra"),
-        "cnpj": orgao.get("cnpj") if isinstance(orgao, dict) else None,
+        "numeroCompra": record.get("numeroCompra"),
+        "sequencialDocumento": document.get("sequencialDocumento"),
         "tipoDocumentoNome": document.get("tipoDocumentoNome"),
         "titulo": document.get("titulo") or "",
-        "sequencialDocumento": document.get("sequencialDocumento"),
         "priority": pncp_document_priority(document),
-        "objetoCompra": record.get("objetoCompra") or "",
-        "modalidadeNome": record.get("modalidadeNome") or "",
-        "dataEncerramentoProposta": record.get("dataEncerramentoProposta"),
         "dataPublicacaoPncp": record.get("dataPublicacaoPncp"),
+        "dataAberturaProposta": record.get("dataAberturaProposta"),
+        "dataEncerramentoProposta": record.get("dataEncerramentoProposta"),
+        "situacaoCompraId": record.get("situacaoCompraId"),
+        "situacaoCompraNome": record.get("situacaoCompraNome"),
+        "dataAtualizacaoGlobal": record.get("dataAtualizacaoGlobal"),
+        "dataAtualizacao": record.get("dataAtualizacao"),
+        "modalidadeId": record.get("modalidadeId"),
+        "modalidadeNome": record.get("modalidadeNome"),
+        "srp": record.get("srp"),
+        "objetoCompra": record.get("objetoCompra") or "",
+        "processo": record.get("processo") or "",
+        "informacaoComplementar": record.get("informacaoComplementar") or "",
+        "linkSistemaOrigem": record.get("linkSistemaOrigem"),
+        "linkProcessoEletronico": record.get("linkProcessoEletronico"),
+        "cnpj": orgao.get("cnpj") if isinstance(orgao, dict) else None,
         "municipioNome": unidade.get("municipioNome") if isinstance(unidade, dict) else None,
         "ufSigla": unidade.get("ufSigla") if isinstance(unidade, dict) else None,
     }
