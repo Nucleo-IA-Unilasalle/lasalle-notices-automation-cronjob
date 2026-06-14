@@ -11,7 +11,7 @@ class OCRExtractionConfig:
     """Configuration required by OCR extraction without loading full app state."""
 
     language: Literal["latin", "en", "es", "fr", "pt", "de", "it"] = "latin"
-    model_tier: Literal["mobile", "server"] = "mobile"
+    model_tier: Literal["tiny", "small", "medium"] = "tiny"
     use_gpu: bool = False
     force_ocr: bool = False
     extraction_timeout_seconds: int = 300

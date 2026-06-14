@@ -71,7 +71,7 @@ class WorkerSettings:
         download_timeout_seconds = int(os.getenv("AI_SOURCE_RESOLUTION_TIMEOUT_SECONDS", "60"))
         ocr_config = OCRExtractionConfig(
             language=os.getenv("KREUZBERG_PADDLE_LANGUAGE", "latin"),
-            model_tier=os.getenv("KREUZBERG_PADDLE_MODEL_TIER", "mobile"),
+            model_tier=os.getenv("KREUZBERG_PADDLE_MODEL_TIER", "tiny"),
             use_gpu=os.getenv("KREUZBERG_USE_GPU", "false").lower() == "true",
             force_ocr=os.getenv("KREUZBERG_FORCE_OCR_DEFAULT", "false").lower() == "true",
             extraction_timeout_seconds=int(os.getenv("KREUZBERG_EXTRACTION_TIMEOUT_SECONDS", "300")),

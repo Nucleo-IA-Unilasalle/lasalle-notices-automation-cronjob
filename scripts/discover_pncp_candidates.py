@@ -223,7 +223,7 @@ def _deduplicate_records(raw_records: list[dict[str, Any]]) -> list[dict[str, An
     return list(best_by_control.values())
 
 
-def fetch_pncp_records() -> list[dict[str, Any]]:
+def fetch_pncp_records() -> tuple[list[dict[str, Any]], datetime]:
     now_utc = datetime.now(timezone.utc)
     today = now_utc.date()
     publication_start = (today - timedelta(days=PNCP_LOOKBACK_DAYS)).strftime("%Y%m%d")
@@ -280,9 +280,7 @@ def fetch_pncp_records() -> list[dict[str, Any]]:
 
     records = [r for r in deduplicated if is_pncp_record_actionable(r)]
 
-    _save_update_checkpoint(now_utc)
-
-    return records
+    return records, now_utc
 
 
 def fetch_pncp_documents(record: dict[str, Any]) -> tuple[list[dict[str, Any]], bool]:
@@ -382,7 +380,7 @@ def build_candidate(record: dict[str, Any], document: dict[str, Any]) -> dict[st
     return {"url": url.strip(), "kind": "pdf", "metadata": metadata}
 
 
-def discover_candidates() -> tuple[dict[str, int], list[dict[str, Any]]]:
+def discover_candidates() -> tuple[dict[str, int], list[dict[str, Any]], datetime]:
     stats = {
         "records": 0,
         "pre_download_rejected": 0,
@@ -394,7 +392,7 @@ def discover_candidates() -> tuple[dict[str, int], list[dict[str, Any]]]:
     seen_urls: set[str] = set()
     consecutive_failures = 0
 
-    records = fetch_pncp_records()
+    records, discovery_time = fetch_pncp_records()
     stats["records"] = len(records)
 
     for record in records:
@@ -429,7 +427,7 @@ def discover_candidates() -> tuple[dict[str, int], list[dict[str, Any]]]:
             candidates.append(candidate)
 
     stats["candidates"] = len(candidates)
-    return stats, candidates
+    return stats, candidates, discovery_time
 
 
 def _is_retryable_response(response: requests.Response) -> bool:
@@ -571,7 +569,7 @@ def main() -> int:
         print("error: PIPELINE_SECRET is required", file=sys.stderr)
         return 2
 
-    stats, candidates = discover_candidates()
+    stats, candidates, discovery_time = discover_candidates()
     print(f"PNCP discovery stats: {stats}")
     print(f"PNCP candidates discovered: {len(candidates)}")
 
@@ -608,6 +606,10 @@ def main() -> int:
 
     result = submit_candidates(processed)
     print(f"Render candidate submission: {result}")
+
+    if result.get("failed_batches", 0) == 0:
+        _save_update_checkpoint(discovery_time)
+
     return 0
 
 

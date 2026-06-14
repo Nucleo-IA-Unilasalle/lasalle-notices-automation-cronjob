@@ -17,6 +17,7 @@ from discover_pncp_candidates import (
     PNCP_DOCUMENT_TYPE_PRIORITIES,
     PNCP_MAX_PAGES_PER_QUERY,
     PNCP_PAGE_SIZE,
+    _save_update_checkpoint,
     build_candidate,
     fetch_pncp_records,
     pncp_document_priority,
@@ -193,7 +194,7 @@ class TestPropostaEndpoint:
             with patch("discover_pncp_candidates._load_update_checkpoint", return_value=None):
                 with patch("discover_pncp_candidates._save_update_checkpoint"):
                     with patch("discover_pncp_candidates.fetch_pncp_documents", return_value=([], False)):
-                        records = fetch_pncp_records()
+                        records, _ = fetch_pncp_records()
             modality_ids = {r["modalidadeId"] for r in records}
             assert modality_ids.issubset({6, 8, 4})
 
@@ -280,23 +281,108 @@ class TestAtualizacaoCheckpoint:
 # ---------------------------------------------------------------------------
 
 class TestCheckpointAdvancement:
-    def test_checkpoint_advanced_only_on_clean_run(self) -> None:
+    def test_checkpoint_not_saved_when_no_candidates(self) -> None:
+        from discover_pncp_candidates import main
         with patch("discover_pncp_candidates.fetch_pncp_search_pages", return_value=[]):
-            with patch("discover_pncp_candidates._load_update_checkpoint", return_value=None) as mock_load:
-                with patch("discover_pncp_candidates._save_update_checkpoint") as mock_save:
-                    with patch("discover_pncp_candidates.fetch_pncp_documents", return_value=([], False)):
-                        fetch_pncp_records()
-            assert mock_save.called
-
-    def test_failed_run_does_not_advance_checkpoint(self) -> None:
-        with patch("discover_pncp_candidates.fetch_pncp_search_pages", side_effect=Exception("network")):
             with patch("discover_pncp_candidates._load_update_checkpoint", return_value=None):
                 with patch("discover_pncp_candidates._save_update_checkpoint") as mock_save:
-                    try:
-                        fetch_pncp_records()
-                    except Exception:
-                        pass
-            mock_save.assert_not_called()
+                    with patch.dict(os.environ, {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "t"}):
+                        result = main()
+        assert result == 0
+        mock_save.assert_not_called()
+
+    def test_failed_run_does_not_advance_checkpoint(self) -> None:
+        from discover_pncp_candidates import main
+        with patch("discover_pncp_candidates.fetch_json", side_effect=Exception("network")):
+            with patch("discover_pncp_candidates._load_update_checkpoint", return_value=None):
+                with patch("discover_pncp_candidates._save_update_checkpoint") as mock_save:
+                    with patch.dict(os.environ, {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "t"}):
+                        result = main()
+        assert result == 0
+        mock_save.assert_not_called()
+
+    def test_submission_batch_failure_prevents_checkpoint(self) -> None:
+        from discover_pncp_candidates import main
+        candidate = {
+            "url": "https://example.com/doc.pdf",
+            "kind": "pdf",
+            "metadata": {"numeroControlePNCP": "X-001", "sequencialDocumento": 1},
+            "worker_result": {
+                "ocr_markdown": "# Edital",
+                "content_hash": "h",
+                "content_length": 100,
+                "validated_at": "2026-06-12T12:00:00Z",
+                "validation_outcome": "valid_pdf",
+            },
+        }
+        import sys
+        ocr_mod = MagicMock()
+        config_mod = MagicMock()
+        sys.modules["ocr_worker.ocr_extraction_config"] = config_mod
+        sys.modules["ocr_worker.pdf_markdown_extractor"] = ocr_mod
+        try:
+            with patch("discover_pncp_candidates.discover_candidates") as mock_disc:
+                mock_disc.return_value = (
+                    {"records": 1, "candidates": 1},
+                    [candidate],
+                    datetime(2026, 6, 12, 12, 0, tzinfo=timezone.utc),
+                )
+                with patch("discover_pncp_candidates.submit_candidates") as mock_submit:
+                    mock_submit.return_value = {
+                        "total": 1,
+                        "submitted": 0,
+                        "failed_batches": 1,
+                        "errors": ["batch 1: HTTP 503"],
+                    }
+                    with patch.dict(os.environ, {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "t"}):
+                        with patch("discover_pncp_candidates._save_update_checkpoint") as mock_save:
+                            main()
+                    mock_save.assert_not_called()
+        finally:
+            sys.modules.pop("ocr_worker.ocr_extraction_config", None)
+            sys.modules.pop("ocr_worker.pdf_markdown_extractor", None)
+
+    def test_checkpoint_saved_after_successful_pipeline(self) -> None:
+        from discover_pncp_candidates import main
+        candidate = {
+            "url": "https://example.com/doc.pdf",
+            "kind": "pdf",
+            "metadata": {"numeroControlePNCP": "OK-001", "sequencialDocumento": 1},
+            "worker_result": {
+                "ocr_markdown": "# Edital",
+                "content_hash": "h",
+                "content_length": 100,
+                "validated_at": "2026-06-12T12:00:00Z",
+                "validation_outcome": "valid_pdf",
+            },
+        }
+        import sys
+        ocr_mod = MagicMock()
+        config_mod = MagicMock()
+        sys.modules["ocr_worker.ocr_extraction_config"] = config_mod
+        sys.modules["ocr_worker.pdf_markdown_extractor"] = ocr_mod
+        try:
+            with patch("discover_pncp_candidates.discover_candidates") as mock_disc:
+                mock_disc.return_value = (
+                    {"records": 1, "candidates": 1},
+                    [candidate],
+                    datetime(2026, 6, 12, 12, 0, tzinfo=timezone.utc),
+                )
+                with patch("discover_pncp_candidates.process_candidate", return_value=candidate):
+                    with patch("discover_pncp_candidates.submit_candidates") as mock_submit:
+                        mock_submit.return_value = {
+                            "total": 1,
+                            "submitted": 1,
+                            "failed_batches": 0,
+                            "errors": [],
+                        }
+                        with patch.dict(os.environ, {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "t"}):
+                            with patch("discover_pncp_candidates._save_update_checkpoint") as mock_save:
+                                main()
+                        mock_save.assert_called_once()
+        finally:
+            sys.modules.pop("ocr_worker.ocr_extraction_config", None)
+            sys.modules.pop("ocr_worker.pdf_markdown_extractor", None)
 
 
 # ---------------------------------------------------------------------------
@@ -312,7 +398,7 @@ class TestDeduplication:
             with patch("discover_pncp_candidates._load_update_checkpoint", return_value=None):
                 with patch("discover_pncp_candidates._save_update_checkpoint"):
                     with patch("discover_pncp_candidates.fetch_pncp_documents", return_value=([], False)):
-                        records = fetch_pncp_records()
+                        records, _ = fetch_pncp_records()
         dup_records = [r for r in records if r["numeroControlePNCP"] == "DUP-001"]
         assert len(dup_records) == 1
         assert dup_records[0]["dataAtualizacaoGlobal"] == "20260612100000"
@@ -335,7 +421,7 @@ class TestDeduplication:
             with patch("discover_pncp_candidates._load_update_checkpoint", return_value=None):
                 with patch("discover_pncp_candidates._save_update_checkpoint"):
                     with patch("discover_pncp_candidates.fetch_pncp_documents", return_value=([], False)):
-                        records = fetch_pncp_records()
+                        records, _ = fetch_pncp_records()
         dup_records = [r for r in records if r["numeroControlePNCP"] == "DUP-002"]
         assert len(dup_records) == 1
         assert dup_records[0]["dataAtualizacao"] == "20260612120000"
