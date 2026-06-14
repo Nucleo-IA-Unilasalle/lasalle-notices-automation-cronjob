@@ -6,9 +6,14 @@ import asyncio
 import os
 import tempfile
 
-from ocr_extraction_config import OCRExtractionConfig
-from markdown_converter import MarkdownConversionError, MarkdownConverter
-from pdf_optimizer import PDFCompressionError, PDFOptimizer
+if __package__:
+    from .markdown_converter import MarkdownConversionError, MarkdownConverter
+    from .ocr_extraction_config import OCRExtractionConfig
+    from .pdf_optimizer import PDFCompressionError, PDFOptimizer
+else:
+    from markdown_converter import MarkdownConversionError, MarkdownConverter
+    from ocr_extraction_config import OCRExtractionConfig
+    from pdf_optimizer import PDFCompressionError, PDFOptimizer
 
 
 class PDFMarkdownExtractor:

@@ -13,10 +13,16 @@ from urllib.parse import urljoin
 
 import requests
 
-from ocr_extraction_config import OCRExtractionConfig
-from pdf_markdown_extractor import PDFMarkdownExtractor
-from file_validation import FileValidationError, validate_pdf
-from url_validation import is_safe_url
+if __package__:
+    from .file_validation import FileValidationError, validate_pdf
+    from .ocr_extraction_config import OCRExtractionConfig
+    from .pdf_markdown_extractor import PDFMarkdownExtractor
+    from .url_validation import is_safe_url
+else:
+    from file_validation import FileValidationError, validate_pdf
+    from ocr_extraction_config import OCRExtractionConfig
+    from pdf_markdown_extractor import PDFMarkdownExtractor
+    from url_validation import is_safe_url
 
 logger = logging.getLogger(__name__)
 

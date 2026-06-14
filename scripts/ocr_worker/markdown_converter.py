@@ -7,7 +7,10 @@ import os
 import re
 from typing import Callable, Optional
 
-from ocr_extraction_config import OCRExtractionConfig
+if __package__:
+    from .ocr_extraction_config import OCRExtractionConfig
+else:
+    from ocr_extraction_config import OCRExtractionConfig
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +35,10 @@ class MarkdownConverter:
         if ocr_extractor is not None:
             self._ocr_extractor = ocr_extractor
         else:
-            from kreuzberg_extractor import extract_file_sync
+            if __package__:
+                from .kreuzberg_extractor import extract_file_sync
+            else:
+                from kreuzberg_extractor import extract_file_sync
 
             self._ocr_extractor = lambda path, **kw: extract_file_sync(path, **kw)
 
