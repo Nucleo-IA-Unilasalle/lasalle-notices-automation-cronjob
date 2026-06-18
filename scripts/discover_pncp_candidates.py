@@ -76,6 +76,15 @@ def fetch_json(url: str, *, timeout: int = 30) -> Any:
     for attempt in range(1, PNCP_FETCH_MAX_ATTEMPTS + 1):
         try:
             response = requests.get(url, headers=DEFAULT_HEADERS, timeout=timeout)
+            if response.status_code in (408, 425, 429, 500, 502, 503, 504):
+                if attempt < PNCP_FETCH_MAX_ATTEMPTS:
+                    retry_after = response.headers.get("Retry-After")
+                    try:
+                        sleep_seconds = float(retry_after) if retry_after else PNCP_FETCH_BACKOFF_SECONDS * attempt
+                    except (TypeError, ValueError):
+                        sleep_seconds = PNCP_FETCH_BACKOFF_SECONDS * attempt
+                    time.sleep(sleep_seconds)
+                    continue
             response.raise_for_status()
             return response.json()
         except (requests.Timeout, requests.ConnectionError):

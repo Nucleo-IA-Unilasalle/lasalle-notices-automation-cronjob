@@ -118,6 +118,31 @@ class TestPncpHttpFetch:
         assert mock_get.call_count == 2
         mock_sleep.assert_called_once()
 
+    def test_fetch_json_retries_rate_limit_response(self) -> None:
+        import requests
+        from discover_pncp_candidates import fetch_json
+
+        rate_limited = MagicMock()
+        rate_limited.status_code = 429
+        rate_limited.headers = {"Retry-After": "1"}
+        rate_limited.raise_for_status.side_effect = requests.HTTPError(response=rate_limited)
+
+        response = MagicMock()
+        response.status_code = 200
+        response.raise_for_status.return_value = None
+        response.json.return_value = {"data": [{"id": 1}]}
+
+        with patch(
+            "discover_pncp_candidates.requests.get",
+            side_effect=[rate_limited, response],
+        ) as mock_get:
+            with patch("discover_pncp_candidates.time.sleep") as mock_sleep:
+                payload = fetch_json("https://pncp.gov.br/api/test")
+
+        assert payload == {"data": [{"id": 1}]}
+        assert mock_get.call_count == 2
+        mock_sleep.assert_called_once_with(1.0)
+
 
 # ---------------------------------------------------------------------------
 # Modality code constants
