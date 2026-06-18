@@ -73,7 +73,12 @@ def fetch_json(url: str, *, timeout: int = 30) -> Any:
     return response.json()
 
 
-def fetch_pncp_search_pages(base_url: str, base_params: dict[str, str | int]) -> list[dict[str, Any]]:
+def fetch_pncp_search_pages(
+    base_url: str,
+    base_params: dict[str, str | int],
+    *,
+    stats: dict[str, int] | None = None,
+) -> list[dict[str, Any]]:
     records: list[dict[str, Any]] = []
     page = 1
 
@@ -84,6 +89,8 @@ def fetch_pncp_search_pages(base_url: str, base_params: dict[str, str | int]) ->
             payload = fetch_json(url)
         except Exception as exc:
             print(f"warning: skipping PNCP search page {page} from {base_url}: {exc}", file=sys.stderr)
+            if stats is not None:
+                stats["search_failures"] = stats.get("search_failures", 0) + 1
             break
 
         if not isinstance(payload, dict):
@@ -236,7 +243,7 @@ def _deduplicate_records(raw_records: list[dict[str, Any]]) -> list[dict[str, An
     return list(best_by_control.values())
 
 
-def fetch_pncp_records() -> tuple[list[dict[str, Any]], datetime]:
+def fetch_pncp_records(stats: dict[str, int] | None = None) -> tuple[list[dict[str, Any]], datetime]:
     now_utc = datetime.now(timezone.utc)
     today = now_utc.date()
     publication_start = (today - timedelta(days=PNCP_LOOKBACK_DAYS)).strftime("%Y%m%d")
@@ -249,6 +256,7 @@ def fetch_pncp_records() -> tuple[list[dict[str, Any]], datetime]:
         fetch_pncp_search_pages(
             PNCP_PROPOSTA_URL,
             {"dataInicial": today_str, "dataFinal": proposal_end},
+            stats=stats,
         )
     )
 
@@ -261,6 +269,7 @@ def fetch_pncp_records() -> tuple[list[dict[str, Any]], datetime]:
                     "dataFinal": today_str,
                     "codigoModalidadeContratacao": modality_code,
                 },
+                stats=stats,
             )
         )
 
@@ -281,6 +290,7 @@ def fetch_pncp_records() -> tuple[list[dict[str, Any]], datetime]:
                     "dataFinal": now_str,
                     "codigoModalidadeContratacao": modality_code,
                 },
+                stats=stats,
             )
         )
 
@@ -400,12 +410,13 @@ def discover_candidates() -> tuple[dict[str, int], list[dict[str, Any]], datetim
         "document_lookups": 0,
         "candidates": 0,
         "document_failures": 0,
+        "search_failures": 0,
     }
     candidates: list[dict[str, Any]] = []
     seen_urls: set[str] = set()
     consecutive_failures = 0
 
-    records, discovery_time = fetch_pncp_records()
+    records, discovery_time = fetch_pncp_records(stats=stats)
     stats["records"] = len(records)
 
     for record in records:
@@ -586,6 +597,14 @@ def main() -> int:
     stats, candidates, discovery_time = discover_candidates()
     print(f"PNCP discovery stats: {stats}")
     print(f"PNCP candidates discovered: {len(candidates)}")
+
+    if not candidates and stats.get("search_failures", 0) > 0:
+        print(
+            "error: PNCP search failed and produced no candidates; "
+            "treating as workflow failure instead of no eligible notices",
+            file=sys.stderr,
+        )
+        return 1
 
     if not candidates:
         print("No new candidates to submit")

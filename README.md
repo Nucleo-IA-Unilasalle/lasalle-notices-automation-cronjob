@@ -43,7 +43,7 @@ The pipeline is split between GitHub Actions (discovery, download, OCR, submissi
 - `PNCP_MIN_NOTICE_YEAR=2026` — do not process notices before 2026
 - `FLAGS_use_mkldnn=0` — disables Paddle oneDNN on CPU runners; required to avoid the current PaddleOCR runtime failure seen in GitHub Actions
 
-The workflow fails if discovered candidates all fail download/OCR or if no discovered candidate is submitted to Render, so the PNCP checkpoint is not advanced over unprocessed notices.
+The workflow fails if PNCP search fails and produces no candidates, if discovered candidates all fail download/OCR, or if no discovered candidate is submitted to Render, so the PNCP checkpoint is not advanced over unprocessed notices.
 
 ## Local development
 

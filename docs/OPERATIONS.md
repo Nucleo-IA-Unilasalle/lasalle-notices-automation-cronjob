@@ -11,7 +11,7 @@ The combined PNCP pipeline runs hourly via `pipeline-pncp-discovery.yml`:
 5. **OCR** - extracts text to markdown using PaddleOCR (latin language, tiny model tier)
 6. **Submit** - sends candidates with metadata, markdown, and content hash to Render `/api/pipeline/candidates`
 
-The workflow fails instead of advancing the PNCP checkpoint when eligible candidates are discovered but all fail download/OCR or none are submitted to Render.
+The workflow fails instead of advancing the PNCP checkpoint when PNCP search fails and produces no candidates, when eligible candidates are discovered but all fail download/OCR, or when none are submitted to Render.
 
 After successful discovery, Render AI processing is triggered via `pipeline-ai.yml` (with daytime Pacific gate).
 

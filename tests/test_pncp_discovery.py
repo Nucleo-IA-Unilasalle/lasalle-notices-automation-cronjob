@@ -298,7 +298,7 @@ class TestCheckpointAdvancement:
                 with patch("discover_pncp_candidates._save_update_checkpoint") as mock_save:
                     with patch.dict(os.environ, {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "t"}):
                         result = main()
-        assert result == 0
+        assert result == 1
         mock_save.assert_not_called()
 
     def test_submission_batch_failure_prevents_checkpoint(self) -> None:
