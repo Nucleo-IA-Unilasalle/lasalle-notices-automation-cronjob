@@ -342,6 +342,45 @@ class TestCheckpointAdvancement:
             sys.modules.pop("ocr_worker.ocr_extraction_config", None)
             sys.modules.pop("ocr_worker.pdf_markdown_extractor", None)
 
+    def test_all_ocr_failures_fail_run_and_do_not_advance_checkpoint(self) -> None:
+        from discover_pncp_candidates import main
+
+        candidate = {
+            "url": "https://example.com/doc.pdf",
+            "kind": "pdf",
+            "metadata": {"numeroControlePNCP": "OCR-001", "sequencialDocumento": 1},
+        }
+        failed_result = {
+            "url": "https://example.com/doc.pdf",
+            "metadata": candidate["metadata"],
+            "error": "ocr: Paddle runtime failure",
+        }
+
+        import sys
+        ocr_mod = MagicMock()
+        config_mod = MagicMock()
+        sys.modules["ocr_worker.ocr_extraction_config"] = config_mod
+        sys.modules["ocr_worker.pdf_markdown_extractor"] = ocr_mod
+        try:
+            with patch("discover_pncp_candidates.discover_candidates") as mock_disc:
+                mock_disc.return_value = (
+                    {"records": 1, "candidates": 1},
+                    [candidate],
+                    datetime(2026, 6, 12, 12, 0, tzinfo=timezone.utc),
+                )
+                with patch("discover_pncp_candidates.process_candidate", return_value=failed_result):
+                    with patch("discover_pncp_candidates.submit_candidates") as mock_submit:
+                        with patch.dict(os.environ, {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "t"}):
+                            with patch("discover_pncp_candidates._save_update_checkpoint") as mock_save:
+                                result = main()
+
+            assert result == 1
+            mock_submit.assert_not_called()
+            mock_save.assert_not_called()
+        finally:
+            sys.modules.pop("ocr_worker.ocr_extraction_config", None)
+            sys.modules.pop("ocr_worker.pdf_markdown_extractor", None)
+
     def test_checkpoint_saved_after_successful_pipeline(self) -> None:
         from discover_pncp_candidates import main
         candidate = {
@@ -425,6 +464,23 @@ class TestDeduplication:
         dup_records = [r for r in records if r["numeroControlePNCP"] == "DUP-002"]
         assert len(dup_records) == 1
         assert dup_records[0]["dataAtualizacao"] == "20260612120000"
+
+
+# ---------------------------------------------------------------------------
+# 2026 eligibility filter
+# ---------------------------------------------------------------------------
+
+class TestEligibilityYearFilter:
+    def test_fetch_records_excludes_pre_2026_notices(self) -> None:
+        old = _make_record(control="OLD-2025", ano=2025, data_abertura=None)
+        current = _make_record(control="NEW-2026", ano=2026, data_abertura=None)
+
+        with patch("discover_pncp_candidates.fetch_pncp_search_pages") as mock_search:
+            mock_search.return_value = [old, current]
+            with patch("discover_pncp_candidates._load_update_checkpoint", return_value=None):
+                records, _ = fetch_pncp_records()
+
+        assert [record["numeroControlePNCP"] for record in records] == ["NEW-2026"]
 
 
 # ---------------------------------------------------------------------------

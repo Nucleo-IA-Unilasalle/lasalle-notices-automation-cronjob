@@ -41,9 +41,11 @@ jobs:
           RENDER_APP_URL: ${{ secrets.RENDER_APP_URL }}
           PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}
           PNCP_UPDATE_CHECKPOINT_PATH: .cache/pncp-last-successful-update.json
+          PNCP_MIN_NOTICE_YEAR: "2026"
           SCRAPE_MAX_PDF_BYTES: "15000000"
           KREUZBERG_PADDLE_LANGUAGE: "latin"
           KREUZBERG_PADDLE_MODEL_TIER: "tiny"
           KREUZBERG_USE_GPU: "false"
           KREUZBERG_FORCE_OCR_DEFAULT: "false"
           KREUZBERG_EXTRACTION_TIMEOUT_SECONDS: "300"
+          FLAGS_use_mkldnn: "0"

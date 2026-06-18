@@ -9,6 +9,7 @@ The pipeline is split between GitHub Actions (discovery, download, OCR, submissi
 ### GitHub Actions responsibilities
 
 - **Discover** active PNCP procurement records (modalities 6/8/4) via `/publicacao`, `/proposta`, and `/atualizacao` endpoints
+- **Filter** notices explicitly to `anoCompra >= 2026` before download/OCR/submission
 - **Download** each candidate PDF once with bounded HTTP (SSRF protection, size limits, retry)
 - **Validate** PDFs via magic-byte and structure checks
 - **OCR** extracted PDFs to markdown using PaddleOCR
@@ -36,6 +37,13 @@ The pipeline is split between GitHub Actions (discovery, download, OCR, submissi
 
 - `RENDER_APP_URL` — Render service base URL
 - `PIPELINE_SECRET` — Bearer token for Render API authentication
+
+## Important runtime settings
+
+- `PNCP_MIN_NOTICE_YEAR=2026` — do not process notices before 2026
+- `FLAGS_use_mkldnn=0` — disables Paddle oneDNN on CPU runners; required to avoid the current PaddleOCR runtime failure seen in GitHub Actions
+
+The workflow fails if discovered candidates all fail download/OCR or if no discovered candidate is submitted to Render, so the PNCP checkpoint is not advanced over unprocessed notices.
 
 ## Local development
 

@@ -64,6 +64,7 @@ PNCP_MAX_PAGES_PER_QUERY = int(os.environ.get("PNCP_MAX_PAGES_PER_QUERY", "20"))
 PNCP_PAGE_SIZE = int(os.environ.get("PNCP_PAGE_SIZE", "50"))
 PNCP_MAX_DOCUMENT_LOOKUPS_PER_RUN = int(os.environ.get("PNCP_MAX_DOCUMENT_LOOKUPS_PER_RUN", "100"))
 PNCP_MAX_CONSECUTIVE_DOCUMENT_FAILURES = int(os.environ.get("PNCP_MAX_CONSECUTIVE_DOCUMENT_FAILURES", "10"))
+PNCP_MIN_NOTICE_YEAR = int(os.environ.get("PNCP_MIN_NOTICE_YEAR", "2026"))
 
 
 def fetch_json(url: str, *, timeout: int = 30) -> Any:
@@ -141,6 +142,18 @@ def _normalize_to_utc(dt: datetime) -> datetime:
 
 
 def is_pncp_record_actionable(record: dict[str, Any]) -> bool:
+    try:
+        ano_compra = int(record.get("anoCompra"))
+    except (TypeError, ValueError):
+        ano_compra = None
+    if ano_compra is None or ano_compra < PNCP_MIN_NOTICE_YEAR:
+        print(
+            "Skipping PNCP record before "
+            f"{PNCP_MIN_NOTICE_YEAR}: {record.get('numeroControlePNCP')}",
+            file=sys.stderr,
+        )
+        return False
+
     status = record.get("situacaoCompraId")
     try:
         status_int = int(status) if status is not None else None
@@ -422,6 +435,7 @@ def discover_candidates() -> tuple[dict[str, int], list[dict[str, Any]], datetim
                 continue
             url = str(candidate["url"])
             if url in seen_urls:
+                print(f"Skipping duplicate PNCP PDF URL: {url}", file=sys.stderr)
                 continue
             seen_urls.add(url)
             candidates.append(candidate)
@@ -604,8 +618,24 @@ def main() -> int:
     stats["ocr_failures"] = sum(1 for r in processed if r.get("error"))
     print(f"PNCP processing stats: {stats}")
 
+    if candidates and stats["ocr_successes"] == 0:
+        print(
+            "error: all discovered PNCP candidates failed download/OCR; "
+            "nothing will be submitted and checkpoint will not advance",
+            file=sys.stderr,
+        )
+        return 1
+
     result = submit_candidates(processed)
     print(f"Render candidate submission: {result}")
+
+    if candidates and result.get("submitted", 0) == 0:
+        print(
+            "error: discovered PNCP candidates produced no Render submissions; "
+            "checkpoint will not advance",
+            file=sys.stderr,
+        )
+        return 1
 
     if result.get("failed_batches", 0) == 0:
         _save_update_checkpoint(discovery_time)
@@ -638,6 +668,7 @@ def process_candidate(
         print(f"warning: download failed for {url}: {exc}", file=sys.stderr)
         return {**error_context, "error": f"download: {exc}"}
 
+    print(f"Downloaded PNCP PDF: {url} ({dl.content_length} bytes)")
     pdf_bytes = dl.content
     try:
         markdown = asyncio.run(extractor.extract(pdf_bytes))

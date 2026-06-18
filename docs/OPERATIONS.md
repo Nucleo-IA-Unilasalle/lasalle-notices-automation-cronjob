@@ -5,10 +5,13 @@
 The combined PNCP pipeline runs hourly via `pipeline-pncp-discovery.yml`:
 
 1. **Discover** — queries PNCP API for active procurement records across modalities 6 (Pregão Eletrônico), 8 (Dispensa de Licitação), and 4 (Concorrência Eletrônica)
-2. **Download** — fetches each candidate PDF with bounded HTTP, SSRF protection, and retry
-3. **Validate** — confirms PDF magic bytes and structure
-4. **OCR** — extracts text to markdown using PaddleOCR (latin language, tiny model tier)
-5. **Submit** — sends candidates with metadata, markdown, and content hash to Render `/api/pipeline/candidates`
+2. **Filter** - keeps only notices with `anoCompra >= 2026`
+3. **Download** - fetches each candidate PDF with bounded HTTP, SSRF protection, and retry
+4. **Validate** - confirms PDF magic bytes and structure
+5. **OCR** - extracts text to markdown using PaddleOCR (latin language, tiny model tier)
+6. **Submit** - sends candidates with metadata, markdown, and content hash to Render `/api/pipeline/candidates`
+
+The workflow fails instead of advancing the PNCP checkpoint when eligible candidates are discovered but all fail download/OCR or none are submitted to Render.
 
 After successful discovery, Render AI processing is triggered via `pipeline-ai.yml` (with daytime Pacific gate).
 
@@ -64,10 +67,12 @@ To pause the hourly combined pipeline:
 | `RENDER_APP_URL` | (required) | Render service base URL |
 | `PIPELINE_SECRET` | (required) | Bearer token for Render API |
 | `PNCP_UPDATE_CHECKPOINT_PATH` | `.cache/pncp-last-successful-update.json` | Checkpoint file path |
+| `PNCP_MIN_NOTICE_YEAR` | `2026` | Earliest `anoCompra` eligible for processing |
 | `SCRAPE_MAX_PDF_BYTES` | `15000000` | Max PDF download size |
 | `KREUZBERG_PADDLE_LANGUAGE` | `latin` | OCR language |
 | `KREUZBERG_PADDLE_MODEL_TIER` | `tiny` | OCR model tier |
 | `KREUZBERG_EXTRACTION_TIMEOUT_SECONDS` | `300` | OCR timeout |
+| `FLAGS_use_mkldnn` | `0` | Disable Paddle oneDNN on CPU runners |
 
 ### GitHub Actions (AI processing)
 

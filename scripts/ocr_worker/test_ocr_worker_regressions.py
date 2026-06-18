@@ -82,6 +82,20 @@ class KreuzbergExtractorTests(unittest.TestCase):
         self.assertEqual(created[0]["text_recognition_model_name"], "PP-OCRv6_small_rec")
         self.assertEqual(created[0]["device"], "gpu")
 
+    def test_get_ocr_instance_disables_onednn_before_importing_paddle(self) -> None:
+        captured_flag: list[str | None] = []
+
+        class PaddleOCR:
+            def __init__(self, **kwargs):
+                captured_flag.append(os.environ.get("FLAGS_use_mkldnn"))
+
+        fake_module = SimpleNamespace(PaddleOCR=PaddleOCR)
+        with patch.dict(os.environ, {}, clear=True):
+            with patch.dict(sys.modules, {"paddleocr": fake_module}):
+                kreuzberg_extractor._get_ocr_instance(model_tier="tiny", use_gpu=False)
+
+        self.assertEqual(captured_flag, ["0"])
+
 
 class WorkerSettingsTests(unittest.TestCase):
     def test_from_env_defaults_to_tiny_model_tier(self) -> None:

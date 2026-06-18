@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import os
 from typing import Any
 
 logger = logging.getLogger(__name__)
@@ -18,6 +19,10 @@ def _get_ocr_instance(model_tier: str = "tiny", use_gpu: bool = False) -> Any:
     cache_key = (model_tier, use_gpu)
     if cache_key in _paddleocr_instances:
         return _paddleocr_instances[cache_key]
+
+    # PaddleOCR currently fails on the GitHub Actions CPU runner with oneDNN
+    # enabled, raising ConvertPirAttribute2RuntimeAttribute at prediction time.
+    os.environ.setdefault("FLAGS_use_mkldnn", "0")
 
     try:
         from paddleocr import PaddleOCR
