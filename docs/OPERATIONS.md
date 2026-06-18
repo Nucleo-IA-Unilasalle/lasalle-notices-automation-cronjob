@@ -71,6 +71,8 @@ To pause the hourly combined pipeline:
 | `PNCP_MAX_CANDIDATES_PER_RUN` | `50` | Maximum candidates discovered in one Actions run |
 | `PNCP_MAX_PROCESSED_CANDIDATES_PER_RUN` | `20` | Maximum download/OCR attempts in one Actions run |
 | `PNCP_MAX_SUBMITTABLE_CANDIDATES_PER_RUN` | `5` | Maximum valid candidates prepared for submission in one Actions run |
+| `PNCP_FETCH_MAX_ATTEMPTS` | `3` | Maximum PNCP API attempts for transient connection failures |
+| `PNCP_FETCH_BACKOFF_SECONDS` | `2` | Base sleep seconds between PNCP API retry attempts |
 | `SCRAPE_MAX_PDF_BYTES` | `15000000` | Max PDF download size |
 | `KREUZBERG_PADDLE_LANGUAGE` | `latin` | OCR language |
 | `KREUZBERG_PADDLE_MODEL_TIER` | `tiny` | OCR model tier |

@@ -68,12 +68,22 @@ PNCP_MIN_NOTICE_YEAR = int(os.environ.get("PNCP_MIN_NOTICE_YEAR", "2026"))
 PNCP_MAX_CANDIDATES_PER_RUN = int(os.environ.get("PNCP_MAX_CANDIDATES_PER_RUN", "10"))
 PNCP_MAX_PROCESSED_CANDIDATES_PER_RUN = int(os.environ.get("PNCP_MAX_PROCESSED_CANDIDATES_PER_RUN", "20"))
 PNCP_MAX_SUBMITTABLE_CANDIDATES_PER_RUN = int(os.environ.get("PNCP_MAX_SUBMITTABLE_CANDIDATES_PER_RUN", "5"))
+PNCP_FETCH_MAX_ATTEMPTS = int(os.environ.get("PNCP_FETCH_MAX_ATTEMPTS", "3"))
+PNCP_FETCH_BACKOFF_SECONDS = float(os.environ.get("PNCP_FETCH_BACKOFF_SECONDS", "2"))
 
 
 def fetch_json(url: str, *, timeout: int = 30) -> Any:
-    response = requests.get(url, headers=DEFAULT_HEADERS, timeout=timeout)
-    response.raise_for_status()
-    return response.json()
+    for attempt in range(1, PNCP_FETCH_MAX_ATTEMPTS + 1):
+        try:
+            response = requests.get(url, headers=DEFAULT_HEADERS, timeout=timeout)
+            response.raise_for_status()
+            return response.json()
+        except (requests.Timeout, requests.ConnectionError):
+            if attempt >= PNCP_FETCH_MAX_ATTEMPTS:
+                raise
+            time.sleep(PNCP_FETCH_BACKOFF_SECONDS * attempt)
+
+    raise RuntimeError("unreachable PNCP fetch retry state")
 
 
 def fetch_pncp_search_pages(

@@ -95,6 +95,31 @@ def _make_doc(
 
 
 # ---------------------------------------------------------------------------
+# PNCP HTTP fetches
+# ---------------------------------------------------------------------------
+
+class TestPncpHttpFetch:
+    def test_fetch_json_retries_transient_connection_timeout(self) -> None:
+        import requests
+        from discover_pncp_candidates import fetch_json
+
+        response = MagicMock()
+        response.raise_for_status.return_value = None
+        response.json.return_value = {"data": []}
+
+        with patch(
+            "discover_pncp_candidates.requests.get",
+            side_effect=[requests.ConnectTimeout("connect timeout"), response],
+        ) as mock_get:
+            with patch("discover_pncp_candidates.time.sleep") as mock_sleep:
+                payload = fetch_json("https://pncp.gov.br/api/test")
+
+        assert payload == {"data": []}
+        assert mock_get.call_count == 2
+        mock_sleep.assert_called_once()
+
+
+# ---------------------------------------------------------------------------
 # Modality code constants
 # ---------------------------------------------------------------------------
 
