@@ -381,6 +381,77 @@ class TestCheckpointAdvancement:
             sys.modules.pop("ocr_worker.ocr_extraction_config", None)
             sys.modules.pop("ocr_worker.pdf_markdown_extractor", None)
 
+    def test_processing_continues_past_bad_pdfs_until_submit_cap(self) -> None:
+        from discover_pncp_candidates import main
+
+        bad = {
+            "url": "https://example.com/bad.pdf",
+            "kind": "pdf",
+            "metadata": {"numeroControlePNCP": "BAD-001", "sequencialDocumento": 1},
+        }
+        good = {
+            "url": "https://example.com/good.pdf",
+            "kind": "pdf",
+            "metadata": {"numeroControlePNCP": "OK-001", "sequencialDocumento": 1},
+        }
+        skipped = {
+            "url": "https://example.com/skipped.pdf",
+            "kind": "pdf",
+            "metadata": {"numeroControlePNCP": "SKIP-001", "sequencialDocumento": 1},
+        }
+        failed_result = {
+            "url": bad["url"],
+            "metadata": bad["metadata"],
+            "error": "download: not a valid PDF",
+        }
+        success_result = {
+            **good,
+            "worker_result": {
+                "ocr_markdown": "# Edital",
+                "content_hash": "h",
+                "content_length": 100,
+                "validated_at": "2026-06-12T12:00:00Z",
+                "validation_outcome": "valid_pdf",
+            },
+        }
+
+        import sys
+        ocr_mod = MagicMock()
+        config_mod = MagicMock()
+        sys.modules["ocr_worker.ocr_extraction_config"] = config_mod
+        sys.modules["ocr_worker.pdf_markdown_extractor"] = ocr_mod
+        try:
+            with patch("discover_pncp_candidates.discover_candidates") as mock_disc:
+                mock_disc.return_value = (
+                    {"records": 3, "candidates": 3},
+                    [bad, good, skipped],
+                    datetime(2026, 6, 12, 12, 0, tzinfo=timezone.utc),
+                )
+                with patch("discover_pncp_candidates.process_candidate", side_effect=[failed_result, success_result]) as mock_process:
+                    with patch("discover_pncp_candidates.submit_candidates") as mock_submit:
+                        mock_submit.return_value = {
+                            "total": 2,
+                            "submitted": 1,
+                            "failed_batches": 0,
+                            "errors": [],
+                        }
+                        with patch("discover_pncp_candidates.PNCP_MAX_SUBMITTABLE_CANDIDATES_PER_RUN", 1, create=True):
+                            with patch("discover_pncp_candidates.PNCP_MAX_PROCESSED_CANDIDATES_PER_RUN", 3, create=True):
+                                with patch.dict(os.environ, {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "t"}):
+                                    with patch("discover_pncp_candidates._save_update_checkpoint") as mock_save:
+                                        result = main()
+
+            assert result == 0
+            assert [call.args[0]["url"] for call in mock_process.call_args_list] == [
+                bad["url"],
+                good["url"],
+            ]
+            mock_submit.assert_called_once_with([failed_result, success_result])
+            mock_save.assert_called_once()
+        finally:
+            sys.modules.pop("ocr_worker.ocr_extraction_config", None)
+            sys.modules.pop("ocr_worker.pdf_markdown_extractor", None)
+
     def test_checkpoint_saved_after_successful_pipeline(self) -> None:
         from discover_pncp_candidates import main
         candidate = {

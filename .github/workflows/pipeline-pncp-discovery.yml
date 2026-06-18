@@ -42,7 +42,9 @@ jobs:
           PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}
           PNCP_UPDATE_CHECKPOINT_PATH: .cache/pncp-last-successful-update.json
           PNCP_MIN_NOTICE_YEAR: "2026"
-          PNCP_MAX_CANDIDATES_PER_RUN: "5"
+          PNCP_MAX_CANDIDATES_PER_RUN: "50"
+          PNCP_MAX_PROCESSED_CANDIDATES_PER_RUN: "20"
+          PNCP_MAX_SUBMITTABLE_CANDIDATES_PER_RUN: "5"
           SCRAPE_MAX_PDF_BYTES: "15000000"
           KREUZBERG_PADDLE_LANGUAGE: "latin"
           KREUZBERG_PADDLE_MODEL_TIER: "tiny"

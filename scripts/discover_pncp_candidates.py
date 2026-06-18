@@ -66,6 +66,8 @@ PNCP_MAX_DOCUMENT_LOOKUPS_PER_RUN = int(os.environ.get("PNCP_MAX_DOCUMENT_LOOKUP
 PNCP_MAX_CONSECUTIVE_DOCUMENT_FAILURES = int(os.environ.get("PNCP_MAX_CONSECUTIVE_DOCUMENT_FAILURES", "10"))
 PNCP_MIN_NOTICE_YEAR = int(os.environ.get("PNCP_MIN_NOTICE_YEAR", "2026"))
 PNCP_MAX_CANDIDATES_PER_RUN = int(os.environ.get("PNCP_MAX_CANDIDATES_PER_RUN", "10"))
+PNCP_MAX_PROCESSED_CANDIDATES_PER_RUN = int(os.environ.get("PNCP_MAX_PROCESSED_CANDIDATES_PER_RUN", "20"))
+PNCP_MAX_SUBMITTABLE_CANDIDATES_PER_RUN = int(os.environ.get("PNCP_MAX_SUBMITTABLE_CANDIDATES_PER_RUN", "5"))
 
 
 def fetch_json(url: str, *, timeout: int = 30) -> Any:
@@ -638,13 +640,31 @@ def main() -> int:
     max_pdf_bytes = int(os.getenv("SCRAPE_MAX_PDF_BYTES", "15000000"))
 
     processed: list[dict[str, Any]] = []
+    submit_ready = 0
     for candidate in candidates:
+        if len(processed) >= PNCP_MAX_PROCESSED_CANDIDATES_PER_RUN:
+            stats["processing_cap_reached"] = 1
+            print(
+                f"Stopping after processing cap {PNCP_MAX_PROCESSED_CANDIDATES_PER_RUN}",
+                file=sys.stderr,
+            )
+            break
+        if submit_ready >= PNCP_MAX_SUBMITTABLE_CANDIDATES_PER_RUN:
+            stats["submit_ready_cap_reached"] = 1
+            print(
+                f"Stopping after submit-ready cap {PNCP_MAX_SUBMITTABLE_CANDIDATES_PER_RUN}",
+                file=sys.stderr,
+            )
+            break
+
         result = process_candidate(
             candidate,
             extractor=extractor,
             max_bytes=max_pdf_bytes,
         )
         processed.append(result)
+        if result.get("worker_result"):
+            submit_ready += 1
 
     stats["processed"] = len(processed)
     stats["ocr_successes"] = sum(1 for r in processed if r.get("worker_result"))

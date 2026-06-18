@@ -41,7 +41,9 @@ The pipeline is split between GitHub Actions (discovery, download, OCR, submissi
 ## Important runtime settings
 
 - `PNCP_MIN_NOTICE_YEAR=2026` — do not process notices before 2026
-- `PNCP_MAX_CANDIDATES_PER_RUN=5` — process a small bounded batch so scheduled/manual runs complete and submit incrementally
+- `PNCP_MAX_CANDIDATES_PER_RUN=50` — keep a larger discovery pool so a few invalid PDFs do not starve valid notices
+- `PNCP_MAX_PROCESSED_CANDIDATES_PER_RUN=20` — bound download/OCR attempts per Actions run
+- `PNCP_MAX_SUBMITTABLE_CANDIDATES_PER_RUN=5` — stop once enough valid candidates are ready to submit incrementally
 - `FLAGS_use_mkldnn=0` — disables Paddle oneDNN on CPU runners; required to avoid the current PaddleOCR runtime failure seen in GitHub Actions
 - `PADDLE_PDX_ENABLE_MKLDNN_BYDEFAULT=0` — disables PaddleX's default oneDNN path used by PaddleOCR
 
