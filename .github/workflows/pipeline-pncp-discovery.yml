@@ -42,11 +42,12 @@ jobs:
           PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}
           PNCP_UPDATE_CHECKPOINT_PATH: .cache/pncp-last-successful-update.json
           PNCP_MIN_NOTICE_YEAR: "2026"
+          PNCP_MAX_CANDIDATES_PER_RUN: "5"
           SCRAPE_MAX_PDF_BYTES: "15000000"
           KREUZBERG_PADDLE_LANGUAGE: "latin"
           KREUZBERG_PADDLE_MODEL_TIER: "tiny"
           KREUZBERG_USE_GPU: "false"
           KREUZBERG_FORCE_OCR_DEFAULT: "false"
-          KREUZBERG_EXTRACTION_TIMEOUT_SECONDS: "300"
+          KREUZBERG_EXTRACTION_TIMEOUT_SECONDS: "120"
           FLAGS_use_mkldnn: "0"
           PADDLE_PDX_ENABLE_MKLDNN_BYDEFAULT: "0"

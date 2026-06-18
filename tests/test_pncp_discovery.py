@@ -484,6 +484,39 @@ class TestEligibilityYearFilter:
 
 
 # ---------------------------------------------------------------------------
+# Candidate run cap
+# ---------------------------------------------------------------------------
+
+class TestCandidateRunCap:
+    def test_discover_candidates_stops_at_configured_candidate_cap(self) -> None:
+        from discover_pncp_candidates import discover_candidates
+
+        records = [
+            _make_record(control="CAP-001", seq=1),
+            _make_record(control="CAP-002", seq=2),
+        ]
+
+        def docs_for(record: dict[str, Any]) -> tuple[list[dict[str, Any]], bool]:
+            return (
+                [
+                    _make_doc(
+                        url=f"https://example.com/{record['numeroControlePNCP']}.pdf",
+                    )
+                ],
+                False,
+            )
+
+        with patch("discover_pncp_candidates.fetch_pncp_records") as mock_records:
+            mock_records.return_value = (records, datetime(2026, 6, 12, tzinfo=timezone.utc))
+            with patch("discover_pncp_candidates.fetch_pncp_documents", side_effect=docs_for):
+                with patch("discover_pncp_candidates.PNCP_MAX_CANDIDATES_PER_RUN", 1, create=True):
+                    stats, candidates, _ = discover_candidates()
+
+        assert stats["candidates"] == 1
+        assert [c["metadata"]["numeroControlePNCP"] for c in candidates] == ["CAP-001"]
+
+
+# ---------------------------------------------------------------------------
 # Timestamp parsing
 # ---------------------------------------------------------------------------
 

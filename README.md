@@ -41,6 +41,7 @@ The pipeline is split between GitHub Actions (discovery, download, OCR, submissi
 ## Important runtime settings
 
 - `PNCP_MIN_NOTICE_YEAR=2026` — do not process notices before 2026
+- `PNCP_MAX_CANDIDATES_PER_RUN=5` — process a small bounded batch so scheduled/manual runs complete and submit incrementally
 - `FLAGS_use_mkldnn=0` — disables Paddle oneDNN on CPU runners; required to avoid the current PaddleOCR runtime failure seen in GitHub Actions
 - `PADDLE_PDX_ENABLE_MKLDNN_BYDEFAULT=0` — disables PaddleX's default oneDNN path used by PaddleOCR
 

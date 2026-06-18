@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import io
 import os
 import tempfile
 
@@ -32,11 +33,40 @@ class PDFMarkdownExtractor:
 
     async def extract(self, pdf_content: bytes) -> str:
         optimized = await self._optimize_pdf(pdf_content)
+        embedded_markdown = await asyncio.to_thread(self._extract_embedded_text, optimized)
+        if embedded_markdown:
+            return embedded_markdown
         markdown = await asyncio.wait_for(
             self._convert_to_markdown(optimized),
             timeout=self.ocr_config.extraction_timeout_seconds,
         )
         return markdown
+
+    def _extract_embedded_text(self, pdf_content: bytes) -> str | None:
+        if not pdf_content:
+            return None
+        try:
+            from pypdf import PdfReader
+
+            reader = PdfReader(io.BytesIO(pdf_content))
+            pages: list[str] = []
+            for page in reader.pages:
+                text = page.extract_text() or ""
+                if text.strip():
+                    pages.append(text.strip())
+        except Exception:
+            return None
+
+        if not pages:
+            return None
+
+        assembled: list[str] = []
+        for index, page_text in enumerate(pages, start=1):
+            if index == 1:
+                assembled.append(page_text)
+            else:
+                assembled.append(f"<!-- Página {index} -->\n\n{page_text}")
+        return "\n\n".join(assembled)
 
     async def _convert_to_markdown(self, pdf_content: bytes) -> str:
         if not pdf_content:

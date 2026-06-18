@@ -65,6 +65,7 @@ PNCP_PAGE_SIZE = int(os.environ.get("PNCP_PAGE_SIZE", "50"))
 PNCP_MAX_DOCUMENT_LOOKUPS_PER_RUN = int(os.environ.get("PNCP_MAX_DOCUMENT_LOOKUPS_PER_RUN", "100"))
 PNCP_MAX_CONSECUTIVE_DOCUMENT_FAILURES = int(os.environ.get("PNCP_MAX_CONSECUTIVE_DOCUMENT_FAILURES", "10"))
 PNCP_MIN_NOTICE_YEAR = int(os.environ.get("PNCP_MIN_NOTICE_YEAR", "2026"))
+PNCP_MAX_CANDIDATES_PER_RUN = int(os.environ.get("PNCP_MAX_CANDIDATES_PER_RUN", "10"))
 
 
 def fetch_json(url: str, *, timeout: int = 30) -> Any:
@@ -413,6 +414,7 @@ def discover_candidates() -> tuple[dict[str, int], list[dict[str, Any]], datetim
         "candidates": 0,
         "document_failures": 0,
         "search_failures": 0,
+        "candidate_cap_reached": 0,
     }
     candidates: list[dict[str, Any]] = []
     seen_urls: set[str] = set()
@@ -452,6 +454,16 @@ def discover_candidates() -> tuple[dict[str, int], list[dict[str, Any]], datetim
                 continue
             seen_urls.add(url)
             candidates.append(candidate)
+            if len(candidates) >= PNCP_MAX_CANDIDATES_PER_RUN:
+                stats["candidate_cap_reached"] = 1
+                print(
+                    f"Stopping after candidate cap {PNCP_MAX_CANDIDATES_PER_RUN}",
+                    file=sys.stderr,
+                )
+                break
+
+        if len(candidates) >= PNCP_MAX_CANDIDATES_PER_RUN:
+            break
 
     stats["candidates"] = len(candidates)
     return stats, candidates, discovery_time

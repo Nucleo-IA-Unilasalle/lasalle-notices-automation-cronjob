@@ -68,10 +68,11 @@ To pause the hourly combined pipeline:
 | `PIPELINE_SECRET` | (required) | Bearer token for Render API |
 | `PNCP_UPDATE_CHECKPOINT_PATH` | `.cache/pncp-last-successful-update.json` | Checkpoint file path |
 | `PNCP_MIN_NOTICE_YEAR` | `2026` | Earliest `anoCompra` eligible for processing |
+| `PNCP_MAX_CANDIDATES_PER_RUN` | `5` | Maximum candidates processed in one Actions run |
 | `SCRAPE_MAX_PDF_BYTES` | `15000000` | Max PDF download size |
 | `KREUZBERG_PADDLE_LANGUAGE` | `latin` | OCR language |
 | `KREUZBERG_PADDLE_MODEL_TIER` | `tiny` | OCR model tier |
-| `KREUZBERG_EXTRACTION_TIMEOUT_SECONDS` | `300` | OCR timeout |
+| `KREUZBERG_EXTRACTION_TIMEOUT_SECONDS` | `120` | OCR timeout |
 | `FLAGS_use_mkldnn` | `0` | Disable Paddle oneDNN on CPU runners |
 | `PADDLE_PDX_ENABLE_MKLDNN_BYDEFAULT` | `0` | Disable PaddleX oneDNN defaults used by PaddleOCR |
 

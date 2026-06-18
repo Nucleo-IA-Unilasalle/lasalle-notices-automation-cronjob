@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import sys
 import unittest
+import asyncio
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
@@ -12,6 +13,7 @@ if str(WORKER_DIR) not in sys.path:
     sys.path.insert(0, str(WORKER_DIR))
 
 import kreuzberg_extractor
+from pdf_markdown_extractor import PDFMarkdownExtractor
 from markdown_converter import MarkdownConverter
 from run_ocr_worker import WorkerSettings
 
@@ -22,6 +24,25 @@ class FakeOCR:
 
     def predict(self, file_path: str):
         return self.results
+
+
+class FakeOptimizer:
+    def optimize(self, pdf_content: bytes) -> bytes:
+        return pdf_content
+
+
+class FailingMarkdownConverter:
+    def convert_document(self, file_path: str) -> None:
+        raise AssertionError("OCR fallback should not run when PDF text is extractable")
+
+    def add_page_counters(self) -> None:
+        raise AssertionError("OCR fallback should not run when PDF text is extractable")
+
+    def get_markdown_document(self) -> str:
+        raise AssertionError("OCR fallback should not run when PDF text is extractable")
+
+    def clear(self) -> None:
+        pass
 
 
 class KreuzbergExtractorTests(unittest.TestCase):
@@ -100,6 +121,30 @@ class KreuzbergExtractorTests(unittest.TestCase):
                 kreuzberg_extractor._get_ocr_instance(model_tier="tiny", use_gpu=False)
 
         self.assertEqual(captured_flags, [("0", "0")])
+
+
+class PDFMarkdownExtractorTests(unittest.TestCase):
+    def test_extract_uses_embedded_pdf_text_before_ocr(self) -> None:
+        class Page:
+            def __init__(self, text: str) -> None:
+                self.text = text
+
+            def extract_text(self) -> str:
+                return self.text
+
+        class Reader:
+            def __init__(self, stream) -> None:
+                self.pages = [Page("first page"), Page("second page")]
+
+        extractor = PDFMarkdownExtractor(
+            markdown_converter=FailingMarkdownConverter(),
+            pdf_optimizer=FakeOptimizer(),
+        )
+
+        with patch("pypdf.PdfReader", Reader):
+            markdown = asyncio.run(extractor.extract(b"%PDF-1.4"))
+
+        self.assertEqual(markdown, "first page\n\n<!-- Página 2 -->\n\nsecond page")
 
 
 class WorkerSettingsTests(unittest.TestCase):
