@@ -245,7 +245,8 @@ def _deduplicate_records(raw_records: list[dict[str, Any]]) -> list[dict[str, An
 
 def fetch_pncp_records(stats: dict[str, int] | None = None) -> tuple[list[dict[str, Any]], datetime]:
     now_utc = datetime.now(timezone.utc)
-    today = now_utc.date()
+    now_brasilia = now_utc.astimezone(BRASILIA_OFFSET)
+    today = now_brasilia.date()
     publication_start = (today - timedelta(days=PNCP_LOOKBACK_DAYS)).strftime("%Y%m%d")
     today_str = today.strftime("%Y%m%d")
     proposal_end = (today + timedelta(days=PNCP_PROPOSTA_FORWARD_DAYS)).strftime("%Y%m%d")
@@ -275,11 +276,12 @@ def fetch_pncp_records(stats: dict[str, int] | None = None) -> tuple[list[dict[s
 
     checkpoint = _load_update_checkpoint()
     if checkpoint is not None:
-        overlap_start = _normalize_to_utc(checkpoint) - timedelta(hours=_ATUALIZACAO_OVERLAP_HOURS)
+        checkpoint_brasilia = _normalize_to_utc(checkpoint).astimezone(BRASILIA_OFFSET)
+        overlap_start = checkpoint_brasilia - timedelta(hours=_ATUALIZACAO_OVERLAP_HOURS)
     else:
-        overlap_start = now_utc - timedelta(hours=_ATUALIZACAO_INITIAL_HOURS)
+        overlap_start = now_brasilia - timedelta(hours=_ATUALIZACAO_INITIAL_HOURS)
     overlap_start_str = overlap_start.strftime("%Y%m%d%H%M%S")
-    now_str = now_utc.strftime("%Y%m%d%H%M%S")
+    now_str = now_brasilia.strftime("%Y%m%d%H%M%S")
 
     for modality_code in PNCP_DEFAULT_MODALITY_CODES:
         raw_records.extend(

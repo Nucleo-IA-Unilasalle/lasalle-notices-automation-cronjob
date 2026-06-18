@@ -253,7 +253,7 @@ class TestAtualizacaoCheckpoint:
             c for c in mock_search.call_args_list
             if c[0][0] == PNCP_ATUALIZACAO_URL
         ]
-        overlap_start = datetime(2026, 6, 12, 8, 0, 0, tzinfo=timezone.utc)
+        overlap_start = datetime(2026, 6, 12, 5, 0, 0)
         assert atualizacao_calls[0][0][1]["dataInicial"] == overlap_start.strftime("%Y%m%d%H%M%S")
 
     def test_missing_checkpoint_uses_48h_window(self) -> None:
