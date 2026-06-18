@@ -826,6 +826,34 @@ class TestDownloadPncpPdf:
             assert result.content_hash == hashlib.sha256(b"%PDF-1.4 test").hexdigest()
             assert result.content_length == len(b"%PDF-1.4 test")
 
+    def test_zip_response_extracts_first_valid_pdf(self) -> None:
+        import hashlib
+        import io
+        import zipfile
+
+        zip_buffer = io.BytesIO()
+        pdf_bytes = b"%PDF-1.4 zipped edital"
+        with zipfile.ZipFile(zip_buffer, "w") as archive:
+            archive.writestr("edital.pdf", pdf_bytes)
+
+        with patch("pncp_http.requests.Session") as MockSession:
+            session = MockSession.return_value.__enter__.return_value
+            resp = MagicMock()
+            resp.status_code = 200
+            resp.headers = {
+                "Content-Type": "application/octet-stream",
+                "Content-Disposition": 'attachment; filename="edital.zip"',
+            }
+            resp.iter_content.return_value = [zip_buffer.getvalue()]
+            resp.close.return_value = None
+            session.get.return_value = resp
+
+            result = download_pncp_pdf("https://example.com/doc.zip", max_bytes=5_000_000)
+
+        assert result.content == pdf_bytes
+        assert result.content_hash == hashlib.sha256(pdf_bytes).hexdigest()
+        assert result.content_length == len(pdf_bytes)
+
     def test_html_response_raises_error(self) -> None:
         with patch("pncp_http.requests.Session") as MockSession:
             session = MockSession.return_value.__enter__.return_value

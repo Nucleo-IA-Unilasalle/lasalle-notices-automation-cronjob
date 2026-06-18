@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import hashlib
+import io
 import time
+import zipfile
 from dataclasses import dataclass
 from urllib.parse import urljoin
 
@@ -39,6 +41,31 @@ class DownloadResult:
 
 def _compute_hash(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
+
+
+def _extract_pdf_from_zip(data: bytes, *, max_bytes: int) -> bytes | None:
+    if not data.startswith(b"PK"):
+        return None
+
+    try:
+        with zipfile.ZipFile(io.BytesIO(data)) as archive:
+            pdf_entries = [
+                info for info in archive.infolist()
+                if not info.is_dir() and info.filename.lower().endswith(".pdf")
+            ]
+            for info in pdf_entries:
+                if info.file_size > max_bytes:
+                    continue
+                pdf_bytes = archive.read(info)
+                try:
+                    validate_pdf(pdf_bytes, max_size=max_bytes)
+                except FileValidationError:
+                    continue
+                return pdf_bytes
+    except (zipfile.BadZipFile, RuntimeError):
+        return None
+
+    return None
 
 
 def _backoff_sleep(attempt: int, retry_after_header: str | None) -> None:
@@ -140,6 +167,9 @@ def download_pncp_pdf(
                     chunks.append(chunk)
 
                 pdf_bytes = b"".join(chunks)
+                extracted_pdf = _extract_pdf_from_zip(pdf_bytes, max_bytes=max_bytes)
+                if extracted_pdf is not None:
+                    pdf_bytes = extracted_pdf
                 try:
                     validate_pdf(pdf_bytes, max_size=max_bytes)
                 except FileValidationError as exc:
