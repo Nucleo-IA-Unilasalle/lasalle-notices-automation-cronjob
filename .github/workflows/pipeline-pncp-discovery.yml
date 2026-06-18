@@ -49,3 +49,4 @@ jobs:
           KREUZBERG_FORCE_OCR_DEFAULT: "false"
           KREUZBERG_EXTRACTION_TIMEOUT_SECONDS: "300"
           FLAGS_use_mkldnn: "0"
+          PADDLE_PDX_ENABLE_MKLDNN_BYDEFAULT: "0"

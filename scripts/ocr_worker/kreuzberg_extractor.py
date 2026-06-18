@@ -20,9 +20,10 @@ def _get_ocr_instance(model_tier: str = "tiny", use_gpu: bool = False) -> Any:
     if cache_key in _paddleocr_instances:
         return _paddleocr_instances[cache_key]
 
-    # PaddleOCR currently fails on the GitHub Actions CPU runner with oneDNN
-    # enabled, raising ConvertPirAttribute2RuntimeAttribute at prediction time.
+    # PaddleOCR/PaddleX currently fails on the GitHub Actions CPU runner with
+    # oneDNN enabled, raising ConvertPirAttribute2RuntimeAttribute at predict.
     os.environ.setdefault("FLAGS_use_mkldnn", "0")
+    os.environ.setdefault("PADDLE_PDX_ENABLE_MKLDNN_BYDEFAULT", "0")
 
     try:
         from paddleocr import PaddleOCR

@@ -73,6 +73,7 @@ To pause the hourly combined pipeline:
 | `KREUZBERG_PADDLE_MODEL_TIER` | `tiny` | OCR model tier |
 | `KREUZBERG_EXTRACTION_TIMEOUT_SECONDS` | `300` | OCR timeout |
 | `FLAGS_use_mkldnn` | `0` | Disable Paddle oneDNN on CPU runners |
+| `PADDLE_PDX_ENABLE_MKLDNN_BYDEFAULT` | `0` | Disable PaddleX oneDNN defaults used by PaddleOCR |
 
 ### GitHub Actions (AI processing)
 
