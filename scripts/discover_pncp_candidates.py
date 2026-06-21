@@ -71,12 +71,17 @@ PNCP_MAX_PROCESSED_CANDIDATES_PER_RUN = int(os.environ.get("PNCP_MAX_PROCESSED_C
 PNCP_MAX_SUBMITTABLE_CANDIDATES_PER_RUN = int(os.environ.get("PNCP_MAX_SUBMITTABLE_CANDIDATES_PER_RUN", "5"))
 PNCP_FETCH_MAX_ATTEMPTS = int(os.environ.get("PNCP_FETCH_MAX_ATTEMPTS", "3"))
 PNCP_FETCH_BACKOFF_SECONDS = float(os.environ.get("PNCP_FETCH_BACKOFF_SECONDS", "2"))
+PNCP_FETCH_TIMEOUT_SECONDS = int(os.environ.get("PNCP_FETCH_TIMEOUT_SECONDS", "8"))
 
 
-def fetch_json(url: str, *, timeout: int = 30) -> Any:
+def fetch_json(url: str, *, timeout: int | None = None) -> Any:
     for attempt in range(1, PNCP_FETCH_MAX_ATTEMPTS + 1):
         try:
-            response = requests.get(url, headers=DEFAULT_HEADERS, timeout=timeout)
+            response = requests.get(
+                url,
+                headers=DEFAULT_HEADERS,
+                timeout=PNCP_FETCH_TIMEOUT_SECONDS if timeout is None else timeout,
+            )
             if response.status_code in (408, 425, 429, 500, 502, 503, 504):
                 if attempt < PNCP_FETCH_MAX_ATTEMPTS:
                     retry_after = response.headers.get("Retry-After")

@@ -143,6 +143,19 @@ class TestPncpHttpFetch:
         assert mock_get.call_count == 2
         mock_sleep.assert_called_once_with(1.0)
 
+    def test_fetch_json_uses_configured_timeout(self) -> None:
+        from discover_pncp_candidates import fetch_json
+
+        response = MagicMock()
+        response.status_code = 200
+        response.raise_for_status.return_value = None
+        response.json.return_value = {"data": []}
+
+        with patch("discover_pncp_candidates.PNCP_FETCH_TIMEOUT_SECONDS", 8):
+            with patch("discover_pncp_candidates.requests.get", return_value=response) as mock_get:
+                fetch_json("https://pncp.gov.br/api/test")
+
+        assert mock_get.call_args.kwargs["timeout"] == 8
 
 # ---------------------------------------------------------------------------
 # Modality code constants
@@ -278,6 +291,19 @@ class TestUfFilter:
             assert len(params["dataInicial"]) == 8
             assert len(params["dataFinal"]) == 8
 
+def _is_valid_cnpj(cnpj: str) -> bool:
+    digits = "".join(ch for ch in cnpj if ch.isdigit())
+    if len(digits) != 14 or digits == digits[0] * 14:
+        return False
+
+    def expected_digit(prefix: str, weights: tuple[int, ...]) -> str:
+        total = sum(int(digit) * weight for digit, weight in zip(prefix, weights))
+        remainder = total % 11
+        return "0" if remainder < 2 else str(11 - remainder)
+
+    first = expected_digit(digits[:12], (5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2))
+    second = expected_digit(digits[:13], (6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2))
+    return digits[-2:] == first + second
 
 # ---------------------------------------------------------------------------
 # Federal CNPJs (FEDERAL_CNPJS in scripts/pncp_filters.py)
@@ -289,10 +315,11 @@ class TestFederalCnpjs:
 
         assert set(FEDERAL_CNPJS) == {
             "33654831000136",
-            "00889834000165",
+            "00889834000108",
             "00394494000136",
             "37115375000107",
         }
+        assert all(_is_valid_cnpj(cnpj) for cnpj in FEDERAL_CNPJS)
 
     def test_each_cnpj_queried_per_endpoint(self) -> None:
         from discover_pncp_candidates import (
@@ -1819,4 +1846,3 @@ class TestSubmissionTerminalOutcomes:
         assert lr["outcomes"]["K-002:1"] == "updated"
         assert lr["inserted"] == 1
         assert lr["updated"] == 1
-
