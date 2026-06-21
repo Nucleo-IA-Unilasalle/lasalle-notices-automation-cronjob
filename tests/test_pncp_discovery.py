@@ -227,6 +227,262 @@ class TestEmptyResponses:
 
 
 # ---------------------------------------------------------------------------
+# UF filter (UF_FILTER in scripts/pncp_filters.py)
+# ---------------------------------------------------------------------------
+
+class TestUfFilter:
+    def test_uf_filter_applied_to_all_3_endpoints(self) -> None:
+        from discover_pncp_candidates import (
+            PNCP_API_URL,
+            PNCP_ATUALIZACAO_URL,
+            PNCP_PROPOSTA_URL,
+        )
+
+        with patch("discover_pncp_candidates.fetch_pncp_search_pages") as mock_search:
+            mock_search.return_value = []
+            with patch("discover_pncp_candidates._load_update_checkpoint", return_value=None):
+                with patch("discover_pncp_candidates.UF_FILTER", "RS"):
+                    with patch("discover_pncp_candidates.FEDERAL_CNPJS", ()):
+                        fetch_pncp_records()
+
+        proposta_calls = [
+            c for c in mock_search.call_args_list if c[0][0] == PNCP_PROPOSTA_URL
+        ]
+        publicacao_calls = [
+            c for c in mock_search.call_args_list if c[0][0] == PNCP_API_URL
+        ]
+        atualizacao_calls = [
+            c for c in mock_search.call_args_list if c[0][0] == PNCP_ATUALIZACAO_URL
+        ]
+
+        assert len(proposta_calls) == 1
+        proposta_params = proposta_calls[0][0][1]
+        assert proposta_params["uf"] == "RS"
+        assert "cnpj" not in proposta_params
+        assert len(proposta_params["dataInicial"]) == 8
+        assert len(proposta_params["dataFinal"]) == 8
+
+        assert len(publicacao_calls) == 3
+        for call in publicacao_calls:
+            params = call[0][1]
+            assert params["uf"] == "RS"
+            assert "cnpj" not in params
+            assert len(params["dataInicial"]) == 8
+            assert len(params["dataFinal"]) == 8
+
+        assert len(atualizacao_calls) == 3
+        for call in atualizacao_calls:
+            params = call[0][1]
+            assert params["uf"] == "RS"
+            assert "cnpj" not in params
+            assert len(params["dataInicial"]) == 8
+            assert len(params["dataFinal"]) == 8
+
+
+# ---------------------------------------------------------------------------
+# Federal CNPJs (FEDERAL_CNPJS in scripts/pncp_filters.py)
+# ---------------------------------------------------------------------------
+
+class TestFederalCnpjs:
+    def test_default_federal_cnpjs_contains_expected_agencies(self) -> None:
+        from discover_pncp_candidates import FEDERAL_CNPJS
+
+        assert set(FEDERAL_CNPJS) == {
+            "33654831000136",
+            "00889834000165",
+            "00394494000136",
+            "37115375000107",
+        }
+
+    def test_each_cnpj_queried_per_endpoint(self) -> None:
+        from discover_pncp_candidates import (
+            PNCP_API_URL,
+            PNCP_ATUALIZACAO_URL,
+            PNCP_PROPOSTA_URL,
+        )
+
+        cnpjs = ("11111111000111", "22222222000122")
+        with patch("discover_pncp_candidates.fetch_pncp_search_pages") as mock_search:
+            mock_search.return_value = []
+            with patch("discover_pncp_candidates._load_update_checkpoint", return_value=None):
+                with patch("discover_pncp_candidates.UF_FILTER", ""):
+                    with patch("discover_pncp_candidates.FEDERAL_CNPJS", cnpjs):
+                        fetch_pncp_records()
+
+        proposta_calls = [
+            c for c in mock_search.call_args_list if c[0][0] == PNCP_PROPOSTA_URL
+        ]
+        publicacao_calls = [
+            c for c in mock_search.call_args_list if c[0][0] == PNCP_API_URL
+        ]
+        atualizacao_calls = [
+            c for c in mock_search.call_args_list if c[0][0] == PNCP_ATUALIZACAO_URL
+        ]
+
+        federal_proposta = [c for c in proposta_calls if "cnpj" in c[0][1]]
+        federal_publicacao = [c for c in publicacao_calls if "cnpj" in c[0][1]]
+        federal_atualizacao = [c for c in atualizacao_calls if "cnpj" in c[0][1]]
+
+        assert len(federal_proposta) == 2
+        assert len(federal_publicacao) == 6
+        assert len(federal_atualizacao) == 6
+
+        for call in federal_atualizacao:
+            params = call[0][1]
+            assert len(params["dataInicial"]) == 8
+            assert len(params["dataFinal"]) == 8
+
+    def test_federal_calls_carry_only_cnpj(self) -> None:
+        from discover_pncp_candidates import (
+            PNCP_API_URL,
+            PNCP_ATUALIZACAO_URL,
+            PNCP_PROPOSTA_URL,
+        )
+
+        cnpjs = ("11111111000111", "22222222000122")
+        with patch("discover_pncp_candidates.fetch_pncp_search_pages") as mock_search:
+            mock_search.return_value = []
+            with patch("discover_pncp_candidates._load_update_checkpoint", return_value=None):
+                with patch("discover_pncp_candidates.UF_FILTER", ""):
+                    with patch("discover_pncp_candidates.FEDERAL_CNPJS", cnpjs):
+                        fetch_pncp_records()
+
+        proposta_calls = [
+            c for c in mock_search.call_args_list if c[0][0] == PNCP_PROPOSTA_URL
+        ]
+        publicacao_calls = [
+            c for c in mock_search.call_args_list if c[0][0] == PNCP_API_URL
+        ]
+        atualizacao_calls = [
+            c for c in mock_search.call_args_list if c[0][0] == PNCP_ATUALIZACAO_URL
+        ]
+
+        federal_cnpjs_in_calls: set[str] = set()
+        for call in proposta_calls + publicacao_calls + atualizacao_calls:
+            params = call[0][1]
+            if "cnpj" in params:
+                assert params["cnpj"], "federal call must carry cnpj"
+                assert "uf" not in params
+                federal_cnpjs_in_calls.add(params["cnpj"])
+
+        assert federal_cnpjs_in_calls == {"11111111000111", "22222222000122"}
+
+        global_proposta = [c for c in proposta_calls if "cnpj" not in c[0][1]]
+        assert len(global_proposta) == 1
+        params = global_proposta[0][0][1]
+        assert "uf" not in params
+        assert "cnpj" not in params
+
+
+# ---------------------------------------------------------------------------
+# Drop expired (DROP_EXPIRED in scripts/pncp_filters.py)
+# ---------------------------------------------------------------------------
+
+class TestDropExpired:
+    def test_expired_records_filtered_out(self) -> None:
+        future_date = (datetime.now(timezone.utc) + timedelta(days=10)).strftime("%Y%m%d%H%M%S")
+        past_date = (datetime.now(timezone.utc) - timedelta(days=10)).strftime("%Y%m%d%H%M%S")
+        open_record = _make_record(
+            control="OPEN-001",
+            data_encerramento=future_date,
+            data_abertura=None,
+        )
+        expired_record = _make_record(
+            control="EXPIRED-001",
+            data_encerramento=past_date,
+            data_abertura=None,
+        )
+
+        with patch("discover_pncp_candidates.fetch_pncp_search_pages") as mock_search:
+            mock_search.return_value = [open_record, expired_record]
+            with patch("discover_pncp_candidates._load_update_checkpoint", return_value=None):
+                records, _ = fetch_pncp_records()
+        controls = {r["numeroControlePNCP"] for r in records}
+        assert "OPEN-001" in controls
+        assert "EXPIRED-001" not in controls
+
+    def test_missing_deadline_filtered_out(self) -> None:
+        missing_record = _make_record(
+            control="MISSING-001",
+            data_encerramento=None,
+            data_abertura=None,
+        )
+
+        with patch("discover_pncp_candidates.fetch_pncp_search_pages") as mock_search:
+            mock_search.return_value = [missing_record]
+            with patch("discover_pncp_candidates._load_update_checkpoint", return_value=None):
+                records, _ = fetch_pncp_records()
+        assert "MISSING-001" not in {r["numeroControlePNCP"] for r in records}
+
+    def test_expired_records_kept_when_drop_expired_false(self) -> None:
+        from discover_pncp_candidates import is_pncp_record_actionable
+
+        past_date = (datetime.now(timezone.utc) - timedelta(days=10)).strftime("%Y%m%d%H%M%S")
+        expired_record = _make_record(
+            control="EXPIRED-001",
+            data_encerramento=past_date,
+            data_abertura=None,
+        )
+        assert is_pncp_record_actionable(expired_record, drop_expired=False) is True
+        assert is_pncp_record_actionable(expired_record, drop_expired=True) is False
+
+
+# ---------------------------------------------------------------------------
+# Defaults (hardcoded config in scripts/pncp_filters.py)
+# ---------------------------------------------------------------------------
+
+class TestDefaults:
+    def test_default_config_produces_expected_call_count(self) -> None:
+        from discover_pncp_candidates import (
+            FEDERAL_CNPJS,
+            PNCP_API_URL,
+            PNCP_ATUALIZACAO_URL,
+            PNCP_PROPOSTA_URL,
+            UF_FILTER,
+        )
+
+        # Default config: UF_FILTER set + N federal CNPJs.
+        # Expected calls per scrape cycle: 1 global proposta + 3 publicacao + 3 atualizacao
+        # (all with uf=UF_FILTER) + len(FEDERAL_CNPJS) * (1 + 3 + 3) federal calls.
+        expected_total = 1 + 3 + 3 + len(FEDERAL_CNPJS) * (1 + 3 + 3)
+        assert UF_FILTER, "default UF_FILTER should be set for this test"
+
+        with patch("discover_pncp_candidates.fetch_pncp_search_pages") as mock_search:
+            mock_search.return_value = []
+            with patch("discover_pncp_candidates._load_update_checkpoint", return_value=None):
+                fetch_pncp_records()
+
+        proposta_calls = [
+            c for c in mock_search.call_args_list if c[0][0] == PNCP_PROPOSTA_URL
+        ]
+        publicacao_calls = [
+            c for c in mock_search.call_args_list if c[0][0] == PNCP_API_URL
+        ]
+        atualizacao_calls = [
+            c for c in mock_search.call_args_list if c[0][0] == PNCP_ATUALIZACAO_URL
+        ]
+
+        assert len(proposta_calls) == 1 + len(FEDERAL_CNPJS)
+        assert len(publicacao_calls) == 3 + 3 * len(FEDERAL_CNPJS)
+        assert len(atualizacao_calls) == 3 + 3 * len(FEDERAL_CNPJS)
+        assert mock_search.call_count == expected_total
+
+        for call in proposta_calls + publicacao_calls + atualizacao_calls:
+            params = call[0][1]
+            assert len(params["dataInicial"]) == 8
+            assert len(params["dataFinal"]) == 8
+
+        # Global calls carry uf but no cnpj; federal calls carry cnpj but no uf.
+        for call in proposta_calls + publicacao_calls + atualizacao_calls:
+            params = call[0][1]
+            has_cnpj = "cnpj" in params
+            if has_cnpj:
+                assert "uf" not in params
+            else:
+                assert params.get("uf") == UF_FILTER
+
+
+# ---------------------------------------------------------------------------
 # /proposta behavior
 # ---------------------------------------------------------------------------
 
@@ -259,9 +515,11 @@ class TestPublicacaoEndpoint:
         with patch("discover_pncp_candidates.fetch_pncp_search_pages") as mock_search:
             mock_search.return_value = []
             with patch("discover_pncp_candidates._load_update_checkpoint", return_value=None):
-                with patch("discover_pncp_candidates._save_update_checkpoint"):
-                    with patch("discover_pncp_candidates.fetch_pncp_documents", return_value=([], False)):
-                        fetch_pncp_records()
+                with patch("discover_pncp_candidates.UF_FILTER", ""):
+                    with patch("discover_pncp_candidates.FEDERAL_CNPJS", ()):
+                        with patch("discover_pncp_candidates._save_update_checkpoint"):
+                            with patch("discover_pncp_candidates.fetch_pncp_documents", return_value=([], False)):
+                                fetch_pncp_records()
         publicacao_calls = [
             c for c in mock_search.call_args_list
             if c[0][0] == PNCP_API_URL
@@ -282,48 +540,57 @@ class TestAtualizacaoCheckpoint:
         with patch("discover_pncp_candidates.fetch_pncp_search_pages") as mock_search:
             mock_search.return_value = []
             with patch("discover_pncp_candidates._load_update_checkpoint", return_value=checkpoint_time):
-                with patch("discover_pncp_candidates._save_update_checkpoint"):
-                    with patch("discover_pncp_candidates.fetch_pncp_documents", return_value=([], False)):
-                        fetch_pncp_records()
+                with patch("discover_pncp_candidates.UF_FILTER", ""):
+                    with patch("discover_pncp_candidates.FEDERAL_CNPJS", ()):
+                        with patch("discover_pncp_candidates._save_update_checkpoint"):
+                            with patch("discover_pncp_candidates.fetch_pncp_documents", return_value=([], False)):
+                                fetch_pncp_records()
         atualizacao_calls = [
             c for c in mock_search.call_args_list
             if c[0][0] == PNCP_ATUALIZACAO_URL
         ]
         assert len(atualizacao_calls) == 3
 
-    def test_atualizacao_two_hour_overlap(self) -> None:
+    def test_checkpoint_request_window_uses_yyyyMMdd_with_one_day_overlap(self) -> None:
         from discover_pncp_candidates import PNCP_ATUALIZACAO_URL
         checkpoint_time = datetime(2026, 6, 12, 10, 0, 0, tzinfo=timezone.utc)
         with patch("discover_pncp_candidates.fetch_pncp_search_pages") as mock_search:
             mock_search.return_value = []
             with patch("discover_pncp_candidates._load_update_checkpoint", return_value=checkpoint_time):
-                with patch("discover_pncp_candidates._save_update_checkpoint"):
-                    fetch_pncp_records()
+                with patch("discover_pncp_candidates.UF_FILTER", ""):
+                    with patch("discover_pncp_candidates.FEDERAL_CNPJS", ()):
+                        with patch("discover_pncp_candidates._save_update_checkpoint"):
+                            fetch_pncp_records()
         atualizacao_calls = [
             c for c in mock_search.call_args_list
             if c[0][0] == PNCP_ATUALIZACAO_URL
         ]
-        overlap_start = datetime(2026, 6, 12, 5, 0, 0)
-        assert atualizacao_calls[0][0][1]["dataInicial"] == overlap_start.strftime("%Y%m%d%H%M%S")
+        params = atualizacao_calls[0][0][1]
+        assert len(params["dataInicial"]) == 8
+        assert len(params["dataFinal"]) == 8
+        assert params["dataInicial"] == "20260611"
+        today_str = datetime.now(timezone(timedelta(hours=-3))).strftime("%Y%m%d")
+        assert params["dataFinal"] == today_str
 
-    def test_missing_checkpoint_uses_48h_window(self) -> None:
+    def test_missing_checkpoint_uses_2_day_window_with_yyyyMMdd(self) -> None:
         from discover_pncp_candidates import PNCP_ATUALIZACAO_URL
         with patch("discover_pncp_candidates.fetch_pncp_search_pages") as mock_search:
             mock_search.return_value = []
             with patch("discover_pncp_candidates._load_update_checkpoint", return_value=None):
-                with patch("discover_pncp_candidates._save_update_checkpoint"):
-                    fetch_pncp_records()
+                with patch("discover_pncp_candidates.UF_FILTER", ""):
+                    with patch("discover_pncp_candidates.FEDERAL_CNPJS", ()):
+                        with patch("discover_pncp_candidates._save_update_checkpoint"):
+                            fetch_pncp_records()
         atualizacao_calls = [
             c for c in mock_search.call_args_list
             if c[0][0] == PNCP_ATUALIZACAO_URL
         ]
         assert len(atualizacao_calls) > 0
-        data_inicial = atualizacao_calls[0][0][1]["dataInicial"]
-        data_final = atualizacao_calls[0][0][1]["dataFinal"]
-        fmt = "%Y%m%d%H%M%S"
-        start = datetime.strptime(data_inicial, fmt)
-        end = datetime.strptime(data_final, fmt)
-        assert (end - start).total_seconds() == 48 * 3600
+        params = atualizacao_calls[0][0][1]
+        fmt = "%Y%m%d"
+        start = datetime.strptime(params["dataInicial"], fmt)
+        end = datetime.strptime(params["dataFinal"], fmt)
+        assert (end - start).days == 2
 
 
 # ---------------------------------------------------------------------------
@@ -668,7 +935,8 @@ class TestTimestampParsing:
 class TestRecordFiltering:
     def test_upcoming_records_excluded(self) -> None:
         from discover_pncp_candidates import is_pncp_record_actionable
-        record = _make_record(status="1", data_encerramento="20270101180000")
+        future_open = (datetime.now(timezone.utc) + timedelta(days=1)).strftime("%Y%m%d%H%M%S")
+        record = _make_record(status="1", data_abertura=future_open, data_encerramento="20270101180000")
         assert is_pncp_record_actionable(record) is False
 
     def test_expired_deadline_excluded(self) -> None:
@@ -1551,3 +1819,4 @@ class TestSubmissionTerminalOutcomes:
         assert lr["outcomes"]["K-002:1"] == "updated"
         assert lr["inserted"] == 1
         assert lr["updated"] == 1
+

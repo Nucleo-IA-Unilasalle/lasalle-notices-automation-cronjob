@@ -80,6 +80,17 @@ To pause the hourly combined pipeline:
 | `FLAGS_use_mkldnn` | `0` | Disable Paddle oneDNN on CPU runners |
 | `PADDLE_PDX_ENABLE_MKLDNN_BYDEFAULT` | `0` | Disable PaddleX oneDNN defaults used by PaddleOCR |
 
+### PNCP filter configuration
+
+The PNCP discovery filter behavior (UF filter, federal CNPJ list, expired-record
+drop) is configured in code, not via environment variables. See
+`scripts/pncp_filters.py` as the single source of truth — `UF_FILTER`,
+`FEDERAL_CNPJS`, and `DROP_EXPIRED`. Editing those values requires a code change.
+
+The values are public configuration (UF sigla and public federal agency CNPJs)
+and are not sensitive. Coordinate any changes with the Render backend so the
+discovered editais stay in sync with the processing pipeline.
+
 ### GitHub Actions (AI processing)
 
 | Variable | Default | Description |

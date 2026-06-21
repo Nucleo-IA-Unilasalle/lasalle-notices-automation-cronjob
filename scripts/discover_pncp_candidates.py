@@ -11,6 +11,7 @@ from urllib.parse import urlencode
 
 import requests
 
+from pncp_filters import DROP_EXPIRED, FEDERAL_CNPJS, UF_FILTER
 from pncp_http import DownloadError, download_pncp_pdf
 
 
@@ -138,8 +139,8 @@ def fetch_pncp_search_pages(
 
 BRASILIA_OFFSET = timezone(timedelta(hours=-3))
 _UPDATE_FORMAT = "%Y%m%d%H%M%S"
-_ATUALIZACAO_INITIAL_HOURS = 48
-_ATUALIZACAO_OVERLAP_HOURS = 2
+_ATUALIZACAO_OVERLAP_DAYS = 1
+_ATUALIZACAO_INITIAL_LOOKBACK_DAYS = 2
 
 
 def parse_pncp_datetime(value: str | None) -> datetime | None:
@@ -170,7 +171,7 @@ def _normalize_to_utc(dt: datetime) -> datetime:
     return dt.astimezone(timezone.utc)
 
 
-def is_pncp_record_actionable(record: dict[str, Any]) -> bool:
+def is_pncp_record_actionable(record: dict[str, Any], *, drop_expired: bool = True) -> bool:
     try:
         ano_compra = int(record.get("anoCompra"))
     except (TypeError, ValueError):
@@ -190,6 +191,8 @@ def is_pncp_record_actionable(record: dict[str, Any]) -> bool:
         status_int = None
     if status_int is not None and status_int != 1:
         return False
+    if not drop_expired:
+        return True
     encerramento_raw = record.get("dataEncerramentoProposta")
     encerramento = parse_pncp_datetime(encerramento_raw)
     if encerramento is None:
@@ -265,29 +268,30 @@ def _deduplicate_records(raw_records: list[dict[str, Any]]) -> list[dict[str, An
     return list(best_by_control.values())
 
 
-def fetch_pncp_records(stats: dict[str, int] | None = None) -> tuple[list[dict[str, Any]], datetime]:
-    now_utc = datetime.now(timezone.utc)
-    now_brasilia = now_utc.astimezone(BRASILIA_OFFSET)
-    today = now_brasilia.date()
-    publication_start = (today - timedelta(days=PNCP_LOOKBACK_DAYS)).strftime("%Y%m%d")
-    today_str = today.strftime("%Y%m%d")
-    proposal_end = (today + timedelta(days=PNCP_PROPOSTA_FORWARD_DAYS)).strftime("%Y%m%d")
-
-    raw_records: list[dict[str, Any]] = []
-
-    raw_records.extend(
+def _scrape_three_endpoints(
+    base_params: dict[str, str | int],
+    *,
+    today_str: str,
+    proposal_end: str,
+    publication_start: str,
+    overlap_start_str: str,
+    stats: dict[str, int] | None,
+) -> list[dict[str, Any]]:
+    """Hit /proposta, /publicacao (per modality), and /atualizacao (per modality) with the given params."""
+    out: list[dict[str, Any]] = []
+    out.extend(
         fetch_pncp_search_pages(
             PNCP_PROPOSTA_URL,
-            {"dataInicial": today_str, "dataFinal": proposal_end},
+            {**base_params, "dataInicial": today_str, "dataFinal": proposal_end},
             stats=stats,
         )
     )
-
     for modality_code in PNCP_DEFAULT_MODALITY_CODES:
-        raw_records.extend(
+        out.extend(
             fetch_pncp_search_pages(
                 PNCP_API_URL,
                 {
+                    **base_params,
                     "dataInicial": publication_start,
                     "dataFinal": today_str,
                     "codigoModalidadeContratacao": modality_code,
@@ -295,25 +299,68 @@ def fetch_pncp_records(stats: dict[str, int] | None = None) -> tuple[list[dict[s
                 stats=stats,
             )
         )
+        out.extend(
+            fetch_pncp_search_pages(
+                PNCP_ATUALIZACAO_URL,
+                {
+                    **base_params,
+                    "dataInicial": overlap_start_str,
+                    "dataFinal": today_str,
+                    "codigoModalidadeContratacao": modality_code,
+                },
+                stats=stats,
+            )
+        )
+    return out
+
+
+def fetch_pncp_records(
+    stats: dict[str, int] | None = None,
+) -> tuple[list[dict[str, Any]], datetime]:
+    uf_filter = UF_FILTER
+    federal_cnpjs: list[str] = list(FEDERAL_CNPJS)
+    drop_expired = DROP_EXPIRED
+
+    now_utc = datetime.now(timezone.utc)
+    now_brasilia = now_utc.astimezone(BRASILIA_OFFSET)
+    today = now_brasilia.date()
+    publication_start = (today - timedelta(days=PNCP_LOOKBACK_DAYS)).strftime("%Y%m%d")
+    today_str = today.strftime("%Y%m%d")
+    proposal_end = (today + timedelta(days=PNCP_PROPOSTA_FORWARD_DAYS)).strftime("%Y%m%d")
+
+    base_params: dict[str, str | int] = {}
+    if uf_filter:
+        base_params["uf"] = uf_filter
+
+    raw_records: list[dict[str, Any]] = []
 
     checkpoint = _load_update_checkpoint()
     if checkpoint is not None:
         checkpoint_brasilia = _normalize_to_utc(checkpoint).astimezone(BRASILIA_OFFSET)
-        overlap_start = checkpoint_brasilia - timedelta(hours=_ATUALIZACAO_OVERLAP_HOURS)
+        overlap_start_date = checkpoint_brasilia.date() - timedelta(days=_ATUALIZACAO_OVERLAP_DAYS)
     else:
-        overlap_start = now_brasilia - timedelta(hours=_ATUALIZACAO_INITIAL_HOURS)
-    overlap_start_str = overlap_start.strftime("%Y%m%d%H%M%S")
-    now_str = now_brasilia.strftime("%Y%m%d%H%M%S")
+        overlap_start_date = today - timedelta(days=_ATUALIZACAO_INITIAL_LOOKBACK_DAYS)
+    overlap_start_str = overlap_start_date.strftime("%Y%m%d")
 
-    for modality_code in PNCP_DEFAULT_MODALITY_CODES:
+    raw_records.extend(
+        _scrape_three_endpoints(
+            base_params,
+            today_str=today_str,
+            proposal_end=proposal_end,
+            publication_start=publication_start,
+            overlap_start_str=overlap_start_str,
+            stats=stats,
+        )
+    )
+
+    for cnpj in federal_cnpjs:
         raw_records.extend(
-            fetch_pncp_search_pages(
-                PNCP_ATUALIZACAO_URL,
-                {
-                    "dataInicial": overlap_start_str,
-                    "dataFinal": now_str,
-                    "codigoModalidadeContratacao": modality_code,
-                },
+            _scrape_three_endpoints(
+                {"cnpj": cnpj},
+                today_str=today_str,
+                proposal_end=proposal_end,
+                publication_start=publication_start,
+                overlap_start_str=overlap_start_str,
                 stats=stats,
             )
         )
@@ -325,7 +372,10 @@ def fetch_pncp_records(stats: dict[str, int] | None = None) -> tuple[list[dict[s
     ]
     deduplicated = _deduplicate_records(proposta_records)
 
-    records = [r for r in deduplicated if is_pncp_record_actionable(r)]
+    records = [
+        r for r in deduplicated
+        if is_pncp_record_actionable(r, drop_expired=drop_expired)
+    ]
 
     return records, now_utc
 
