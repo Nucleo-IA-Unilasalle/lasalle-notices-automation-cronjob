@@ -26,7 +26,8 @@ The pipeline is split between GitHub Actions (discovery, download, OCR, submissi
 
 | Workflow | Trigger | Purpose |
 |----------|---------|---------|
-| `pipeline-pncp-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit |
+| `pipeline-pncp-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (PNCP) |
+| `pipeline-bndes-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (BNDES pilot, Phase 2) |
 | `pipeline-ai.yml` | After PNCP discovery + hourly cron | Trigger Render AI processing (daytime Pacific gate) |
 | `pipeline-ingest.yml` | Manual only | Legacy Render ingest (rollback) |
 | `pipeline-ocr.yml` | Manual only | Legacy Render OCR worker (backfill) |
@@ -40,8 +41,11 @@ The pipeline is split between GitHub Actions (discovery, download, OCR, submissi
 
 ## Important runtime settings
 
-- `PNCP_MIN_NOTICE_YEAR=2026` — do not process notices before 2026
+- `PNCP_MIN_NOTICE_YEAR=2026` — do not process notices before 2026 (PNCP discoverer)
+- `BNDES_MIN_NOTICE_YEAR=2026` — per-source year guard for the BNDE discoverer (the unified orchestrator-level `MIN_NOTICE_YEAR` lands in Phase 5; until then each non-PNCP discoverer carries its own `*_MIN_NOTICE_YEAR` knob)
 - `PNCP_MAX_CANDIDATES_PER_RUN=50` — keep a larger discovery pool so a few invalid PDFs do not starve valid notices
+- `BNDES_MAX_CANDIDATES_PER_RUN=50` — same cap on the BNDE discoverer
+- `BNDES_MAX_DETAILS_PER_RUN=20` — bound the number of detail-page fetches per BNDE run
 - `PNCP_MAX_PROCESSED_CANDIDATES_PER_RUN=20` — bound download/OCR attempts per Actions run
 - `PNCP_MAX_SUBMITTABLE_CANDIDATES_PER_RUN=5` — stop once enough valid candidates are ready to submit incrementally
 - `PNCP_FETCH_MAX_ATTEMPTS=3` — retry transient PNCP connection timeouts before marking a search/document lookup failed
@@ -55,7 +59,7 @@ The pipeline is split between GitHub Actions (discovery, download, OCR, submissi
 - `FLAGS_use_mkldnn=0` — disables Paddle oneDNN on CPU runners; required to avoid the current PaddleOCR runtime failure seen in GitHub Actions
 - `PADDLE_PDX_ENABLE_MKLDNN_BYDEFAULT=0` — disables PaddleX's default oneDNN path used by PaddleOCR
 
-The workflow fails if PNCP search fails and produces no candidates, if discovered candidates all fail download/OCR, or if no discovered candidate is submitted to Render, so the PNCP checkpoint is not advanced over unprocessed notices.
+The PNCP workflow fails if PNCP search fails and produces no candidates, if discovered candidates all fail download/OCR, or if no discovered candidate is submitted to Render, so the PNCP checkpoint is not advanced over unprocessed notices. The BNDE workflow mirrors the same shape but has no checkpoint to advance.
 
 ## Local development
 
