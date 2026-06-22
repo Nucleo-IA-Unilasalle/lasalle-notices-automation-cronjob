@@ -333,6 +333,8 @@ class TestSubmitCandidates:
         body = mock_post.call_args.kwargs["json"]
         assert len(body["candidates"]) == 1
         assert body["candidates"][0]["url"] == "https://example.com/doc.pdf"
+        assert "content" not in body["candidates"][0]
+        assert "pdf_bytes" not in body["candidates"][0]
         assert result["total"] == 2
         assert result["submitted"] == 1
         assert result["filtered_out"] == 1

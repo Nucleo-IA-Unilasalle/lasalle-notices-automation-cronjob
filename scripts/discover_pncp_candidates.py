@@ -15,15 +15,6 @@ from pncp_filters import DROP_EXPIRED, FEDERAL_CNPJS, UF_FILTER
 from pipeline_core import process_candidate
 
 
-# Re-exports for callers (and existing tests) that still import these
-# submit-side knobs from this module. They now live in pipeline_core so
-# future per-source discoverers can use the same constants.
-RENDER_SUBMIT_BATCH_SIZE = pipeline_core.RENDER_SUBMIT_BATCH_SIZE
-RENDER_SUBMIT_TIMEOUT = pipeline_core.RENDER_SUBMIT_TIMEOUT
-RENDER_SUBMIT_MAX_ATTEMPTS = pipeline_core.RENDER_SUBMIT_MAX_ATTEMPTS
-RENDER_SUBMIT_BACKOFF_BASE = pipeline_core.RENDER_SUBMIT_BACKOFF_BASE
-RENDER_SUBMIT_MAX_MARKDOWN_CHARS = pipeline_core.RENDER_SUBMIT_MAX_MARKDOWN_CHARS
-
 DEFAULT_HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
@@ -598,7 +589,6 @@ def main() -> int:
     max_pdf_bytes = pipeline_core.SCRAPE_MAX_PDF_BYTES
 
     processed: list[dict[str, Any]] = []
-    submit_ready = 0
     for candidate in candidates:
         if len(processed) >= PNCP_MAX_PROCESSED_CANDIDATES_PER_RUN:
             stats["processing_cap_reached"] = 1
@@ -607,10 +597,10 @@ def main() -> int:
                 file=sys.stderr,
             )
             break
-        if submit_ready >= PNCP_MAX_SUBMITTABLE_CANDIDATES_PER_RUN:
-            stats["submit_ready_cap_reached"] = 1
+        if pipeline_core.pdf_download_limit_reached(stats):
+            stats["pdf_download_cap_reached"] = 1
             print(
-                f"Stopping after submit-ready cap {PNCP_MAX_SUBMITTABLE_CANDIDATES_PER_RUN}",
+                f"Stopping after PDF download cap {pipeline_core.SCRAPE_MAX_PDFS_PER_RUN}",
                 file=sys.stderr,
             )
             break
@@ -622,7 +612,7 @@ def main() -> int:
         )
         processed.append(result)
         if result.get("worker_result"):
-            submit_ready += 1
+            pipeline_core.record_pdf_download(stats)
 
     stats["processed"] = len(processed)
     stats["ocr_successes"] = sum(1 for r in processed if r.get("worker_result"))

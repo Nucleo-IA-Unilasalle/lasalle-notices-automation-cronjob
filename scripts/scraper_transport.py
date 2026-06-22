@@ -17,7 +17,7 @@ from urllib.parse import urljoin
 import requests
 from bs4 import BeautifulSoup, Tag
 
-from ocr_worker.url_validation import is_safe_url
+from url_validation import is_safe_url
 
 
 logger = logging.getLogger(__name__)

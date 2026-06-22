@@ -19,6 +19,7 @@ from __future__ import annotations
 import asyncio
 import os
 import sys
+import threading
 import time
 from datetime import datetime, timezone
 from typing import Any
@@ -38,12 +39,16 @@ RENDER_SUBMIT_BACKOFF_BASE = float(os.environ.get("RENDER_SUBMIT_BACKOFF_BASE", 
 RENDER_SUBMIT_MAX_MARKDOWN_CHARS = int(os.environ.get("RENDER_SUBMIT_MAX_MARKDOWN_CHARS", "1000000"))
 
 
+_pdf_download_counter_lock = threading.Lock()
+
+
 def pdf_download_limit_reached(stats: dict[str, int]) -> bool:
     return stats.get("pdfs_downloaded", 0) >= SCRAPE_MAX_PDFS_PER_RUN
 
 
 def record_pdf_download(stats: dict[str, int]) -> None:
-    stats["pdfs_downloaded"] = stats.get("pdfs_downloaded", 0) + 1
+    with _pdf_download_counter_lock:
+        stats["pdfs_downloaded"] = stats.get("pdfs_downloaded", 0) + 1
 
 
 def process_candidate(

@@ -12,7 +12,7 @@ from urllib.parse import urljoin
 import requests
 
 from ocr_worker.file_validation import FileValidationError, validate_pdf
-from ocr_worker.url_validation import is_safe_url
+from url_validation import is_safe_url
 
 
 _RETRYABLE_STATUS_CODES = frozenset({408, 425, 429, 500, 502, 503, 504})

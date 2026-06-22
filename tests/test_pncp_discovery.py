@@ -779,7 +779,7 @@ class TestCheckpointAdvancement:
                             "failed_batches": 0,
                             "errors": [],
                         }
-                        with patch("discover_pncp_candidates.PNCP_MAX_SUBMITTABLE_CANDIDATES_PER_RUN", 1, create=True):
+                        with patch("pipeline_core.SCRAPE_MAX_PDFS_PER_RUN", 1):
                             with patch("discover_pncp_candidates.PNCP_MAX_PROCESSED_CANDIDATES_PER_RUN", 3, create=True):
                                 with patch.dict(os.environ, {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "t"}):
                                     with patch("discover_pncp_candidates._save_update_checkpoint") as mock_save:
@@ -1600,7 +1600,7 @@ class TestSubmissionContract:
         assert "pdf_bytes" not in c
 
     def test_markdown_respects_configured_size_limit(self) -> None:
-        from discover_pncp_candidates import submit_candidates, RENDER_SUBMIT_BATCH_SIZE
+        from discover_pncp_candidates import submit_candidates
         candidate = {
             "url": "https://example.com/doc.pdf",
             "kind": "pdf",
