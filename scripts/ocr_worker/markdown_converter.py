@@ -62,25 +62,25 @@ class MarkdownConverter:
 
         if _PAGE_PATTERN.search(self._markdown_document):
             pages = _PAGE_PATTERN.split(self._markdown_document)
-            assembled: list[str] = []
+            marked_sections: list[str] = []
             last_emitted_page: Optional[int] = None
             if pages[0].strip():
-                assembled.append(pages[0].strip())
+                marked_sections.append(pages[0].strip())
             for i in range(1, len(pages), 2):
                 page_num = int(pages[i])
                 content = pages[i + 1].strip() if i + 1 < len(pages) else ""
                 if page_num == 1:
                     if content:
-                        assembled.append(content)
+                        marked_sections.append(content)
                         last_emitted_page = 1
                 else:
                     if content:
                         if page_num != last_emitted_page:
-                            assembled.append(f"<!-- Página {page_num} -->\n\n{content}")
+                            marked_sections.append(f"<!-- Página {page_num} -->\n\n{content}")
                             last_emitted_page = page_num
                         else:
-                            assembled.append(content)
-            self._markdown_document = "\n\n".join(assembled)
+                            marked_sections.append(content)
+            self._markdown_document = "\n\n".join(marked_sections)
             return
 
         pages = [segment.strip() for segment in self._markdown_document.split("\f")]
@@ -89,14 +89,14 @@ class MarkdownConverter:
         if not pages:
             pages = [self._markdown_document.strip()]
 
-        assembled: list[str] = []
+        page_sections: list[str] = []
         for index, section in enumerate(pages, start=1):
             if index == 1:
-                assembled.append(section)
+                page_sections.append(section)
             else:
-                assembled.append(f"<!-- Página {index} -->\n\n{section}")
+                page_sections.append(f"<!-- Página {index} -->\n\n{section}")
 
-        self._markdown_document = "\n\n".join(assembled)
+        self._markdown_document = "\n\n".join(page_sections)
 
     def get_markdown_document(self) -> str:
         if not self._markdown_document:
