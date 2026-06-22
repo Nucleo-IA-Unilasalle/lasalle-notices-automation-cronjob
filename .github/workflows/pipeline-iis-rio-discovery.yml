@@ -2,7 +2,7 @@ name: IIS-Rio discovery
 
 on:
   schedule:
-    - cron: "25 * * * *"
+    - cron: "27 * * * *"
   workflow_dispatch:
 
 concurrency:
