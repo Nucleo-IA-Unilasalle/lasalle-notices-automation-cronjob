@@ -11,7 +11,8 @@ from __future__ import annotations
 
 import logging
 import re
-from typing import Callable, Literal
+import time
+from typing import Callable, Iterable, Literal
 from urllib.parse import urljoin
 
 import requests
@@ -105,6 +106,46 @@ def log_source_failure(message: str, *args: object, exc: Exception) -> None:
 
 def looks_like_pdf_url(url: str) -> bool:
     return bool(re.search(r"\.pdf($|[?#])", url.lower()))
+
+
+def fetch_html_with_retry(
+    url: str,
+    *,
+    timeout: int,
+    max_attempts: int = 3,
+    backoff_seconds: float = 2.0,
+    allowed_status_codes: Iterable[int] = (),
+) -> str:
+    """Fetch ``url`` as HTML and return ``response.text``.
+
+    Generic retry-with-backoff wrapper used by BS4 source discoverers
+    to fetch listing pages. The transport honours
+    ``request_with_safe_redirects`` for SSRF protection and applies a
+    linear backoff (``backoff_seconds * attempt``) between attempts.
+
+    Status codes listed in ``allowed_status_codes`` raise immediately
+    rather than retry — these are typically permanent client errors
+    (``404``, ``410``) or auth failures (``401``, ``403``) that the
+    caller wants to surface without waiting for the retry budget.
+    """
+    last_error: Exception | None = None
+    non_retryable_statuses = frozenset(allowed_status_codes)
+    for attempt in range(1, max_attempts + 1):
+        try:
+            response = request_with_safe_redirects(
+                method="GET", url=url, timeout=timeout,
+            )
+            response.raise_for_status()
+            return response.text
+        except Exception as exc:
+            last_error = exc
+            status_code = getattr(getattr(exc, "response", None), "status_code", None)
+            if status_code in non_retryable_statuses:
+                raise
+            if attempt < max_attempts:
+                time.sleep(backoff_seconds * attempt)
+    assert last_error is not None
+    raise last_error
 
 
 def discover_pdf_urls_on_page(

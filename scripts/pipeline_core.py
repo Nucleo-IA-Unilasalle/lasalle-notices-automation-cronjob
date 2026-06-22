@@ -111,6 +111,33 @@ def _is_retryable_response(response: requests.Response) -> bool:
     return response.status_code in (408, 425, 429, 500, 502, 503, 504)
 
 
+def make_default_ocr_extractor() -> tuple[Any, Any]:
+    """Build the default ``(OCRExtractionConfig, PDFMarkdownExtractor)`` pair.
+
+    Centralises the env-driven OCR configuration that ``main()``
+    functions previously duplicated per source. Returns a 2-tuple so
+    callers can keep the config alive alongside the extractor (useful
+    when unit tests want to inspect ``extractor.ocr_config``).
+
+    The values mirror the FastAPI cronjob defaults and honour the same
+    env vars (``KREUZBERG_PADDLE_LANGUAGE``,
+    ``KREUZBERG_PADDLE_MODEL_TIER``, ``KREUZBERG_USE_GPU``,
+    ``KREUZBERG_FORCE_OCR_DEFAULT``, ``KREUZBERG_EXTRACTION_TIMEOUT_SECONDS``).
+    """
+    from ocr_worker.ocr_extraction_config import OCRExtractionConfig
+    from ocr_worker.pdf_markdown_extractor import PDFMarkdownExtractor
+
+    config = OCRExtractionConfig(
+        language=os.getenv("KREUZBERG_PADDLE_LANGUAGE", "latin"),
+        model_tier=os.getenv("KREUZBERG_PADDLE_MODEL_TIER", "tiny"),
+        use_gpu=os.getenv("KREUZBERG_USE_GPU", "false").lower() == "true",
+        force_ocr=os.getenv("KREUZBERG_FORCE_OCR_DEFAULT", "false").lower() == "true",
+        extraction_timeout_seconds=int(os.getenv("KREUZBERG_EXTRACTION_TIMEOUT_SECONDS", "300")),
+    )
+    extractor = PDFMarkdownExtractor(ocr_config=config)
+    return config, extractor
+
+
 def _truncate_markdown(candidate: dict[str, Any]) -> dict[str, Any]:
     wr = candidate.get("worker_result")
     if not wr:

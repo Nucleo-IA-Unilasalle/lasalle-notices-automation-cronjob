@@ -33,7 +33,6 @@ from __future__ import annotations
 import os
 import re
 import sys
-import time
 from datetime import datetime, timezone
 from typing import Any
 from urllib.parse import parse_qs, urljoin, urlsplit, urlunsplit
@@ -41,12 +40,12 @@ from urllib.parse import parse_qs, urljoin, urlsplit, urlunsplit
 from bs4 import BeautifulSoup, Tag
 
 import pipeline_core
-from scraper_filters import is_likely_edital
+from scraper_filters import FilterPolicy, is_likely_edital
 from scraper_transport import (
     discover_pdf_urls_on_page,
+    fetch_html_with_retry,
     log_source_failure,
     looks_like_pdf_url,
-    request_with_safe_redirects,
 )
 
 
@@ -64,6 +63,32 @@ BNDES_FETCH_BACKOFF_SECONDS = float(os.environ.get("BNDES_FETCH_BACKOFF_SECONDS"
 BNDES_FETCH_TIMEOUT_SECONDS = int(os.environ.get("BNDES_FETCH_TIMEOUT_SECONDS", "30"))
 
 
+# Matches a 4-digit year token bounded by non-digit boundaries. The BNDES
+# listing slugs carry the year in English (e.g. ``chamada-periferias-2026``,
+# ``edital-2026.pdf``), so this regex is sufficient for BNDE today.
+#
+# What this regex does NOT match — sources that encode years differently
+# must supply their own ``_YEAR_PATTERN`` (or be filtered via a different
+# gate before reaching ``_extract_year_from_url``):
+#
+#   * Portuguese (or other-language) month slugs that carry a year in the
+#     path: ``marco-2026``, ``abril/2025``, ``jan-2024-edital``. The
+#     pattern still captures the digits, so these generally work — but
+#     ambiguous numeric substrings inside UUIDs / hashes can produce a
+#     false year match (see below).
+#   * UUID-style identifiers in the path
+#     (``/4f71d4b2-0a9a-4ca1-93f8-45d011e3074a/``): the year-2000 lookalike
+#     ``2026`` is filtered by the digit-boundary assertion, but
+#     accidentally-shaped digits (e.g. ``20-26`` boundary cases) may slip
+#     through; this is acceptable because the year guard treats unknown
+#     years as ``None`` and lets the candidate through.
+#   * URLs with no year at all
+#     (``wedocs.unep.org/bitstream/<id>/<n>/download``) — ``_extract_year_from_url``
+#     returns ``None`` and the candidate passes through (recorded in
+#     metadata for operator audit per plan §9).
+#   * Year tokens embedded in non-numeric formats ("二零二六",
+#     ``MMXXIV``, ``fy-2026-q1`` where ``q1`` is adjacent) — Phase 3
+#     sources using any of these encodings need a per-source override.
 _YEAR_PATTERN = re.compile(r"(?<!\d)(19|20)\d{2}(?!\d)")
 
 
@@ -206,32 +231,23 @@ def extract_bndes_detail_and_pdf_urls(listing_html: str, listing_url: str) -> li
 
 
 def _candidate_passes_edital_prefilter(
-    url: str, filter_policy: str = "default"
+    url: str, filter_policy: FilterPolicy = "default"
 ) -> bool:
     """Apply the EDITAL inclusion/exclusion patterns to a candidate URL."""
     parsed = urlsplit(url)
     filename = parsed.path.rsplit("/", 1)[-1]
-    return is_likely_edital(filename, url, filter_policy=filter_policy)  # type: ignore[arg-type]
+    return is_likely_edital(filename, url, filter_policy=filter_policy)
 
 
 def _fetch_listing_html(listing_url: str) -> str:
-    last_error: Exception | None = None
-    for attempt in range(1, BNDES_FETCH_MAX_ATTEMPTS + 1):
-        try:
-            response = request_with_safe_redirects(
-                method="GET", url=listing_url, timeout=BNDES_FETCH_TIMEOUT_SECONDS,
-            )
-            response.raise_for_status()
-            return response.text
-        except Exception as exc:
-            last_error = exc
-            status_code = getattr(getattr(exc, "response", None), "status_code", None)
-            if status_code in {401, 403, 404, 410}:
-                raise
-            if attempt < BNDES_FETCH_MAX_ATTEMPTS:
-                time.sleep(BNDES_FETCH_BACKOFF_SECONDS * attempt)
-    assert last_error is not None
-    raise last_error
+    """Fetch a BNDE listing page through the shared retry-with-backoff helper."""
+    return fetch_html_with_retry(
+        listing_url,
+        timeout=BNDES_FETCH_TIMEOUT_SECONDS,
+        max_attempts=BNDES_FETCH_MAX_ATTEMPTS,
+        backoff_seconds=BNDES_FETCH_BACKOFF_SECONDS,
+        allowed_status_codes=(401, 403, 404, 410),
+    )
 
 
 def build_candidate(
@@ -239,7 +255,7 @@ def build_candidate(
     *,
     listing_url: str,
     detail_url: str | None = None,
-    filter_policy: str = "default",
+    filter_policy: FilterPolicy = "default",
     min_year: int = BNDES_MIN_NOTICE_YEAR,
     origin: str | None = None,
 ) -> dict[str, Any] | None:
@@ -252,9 +268,9 @@ def build_candidate(
     if origin is None:
         origin = "listing_pdf" if looks_like_pdf_url(url) else "listing_detail"
 
-    pdf_year = _extract_year_from_url(url)
-    inherited_year = _extract_year_from_url(detail_url) if detail_url else None
-    extracted_year = pdf_year if pdf_year is not None else inherited_year
+    extracted_year = _extract_year_from_url(url)
+    if extracted_year is None and detail_url:
+        extracted_year = _extract_year_from_url(detail_url)
 
     metadata: dict[str, Any] = {
         "source": "bndes",
@@ -262,18 +278,16 @@ def build_candidate(
         "discovered_at": datetime.now(timezone.utc).isoformat(),
         "origin": origin,
         "extracted_year": extracted_year,
-        "pdf_year": pdf_year,
     }
     if detail_url is not None:
         metadata["detail_url"] = detail_url
-        metadata["inherited_year_from_detail_url"] = inherited_year
 
     return {"url": url, "kind": "pdf", "metadata": metadata}
 
 
 def discover_candidates(
     *,
-    filter_policy: str = "default",
+    filter_policy: FilterPolicy = "default",
     min_year: int = BNDES_MIN_NOTICE_YEAR,
 ) -> tuple[dict[str, int], list[dict[str, Any]]]:
     """Discover BNDE edital PDF candidates from the two BNDE listing pages.
@@ -390,16 +404,6 @@ def discover_candidates(
     return stats, candidates
 
 
-def submit_candidates(candidates: list[dict[str, Any]]) -> dict[str, Any]:
-    """Backwards-compatible wrapper around :func:`pipeline_core.submit_candidates`.
-
-    Pins ``source="bndes"`` so existing cronjob code that imports
-    ``discover_bndes_candidates.submit_candidates`` keeps the same
-    surface as the PNCP discoverer.
-    """
-    return pipeline_core.submit_candidates(candidates, source="bndes")
-
-
 def main() -> int:
     if not os.environ.get("RENDER_APP_URL"):
         print("error: RENDER_APP_URL is required", file=sys.stderr)
@@ -416,17 +420,7 @@ def main() -> int:
         print("No new candidates to submit")
         return 0
 
-    from ocr_worker.ocr_extraction_config import OCRExtractionConfig
-    from ocr_worker.pdf_markdown_extractor import PDFMarkdownExtractor
-
-    ocr_config = OCRExtractionConfig(
-        language=os.getenv("KREUZBERG_PADDLE_LANGUAGE", "latin"),
-        model_tier=os.getenv("KREUZBERG_PADDLE_MODEL_TIER", "tiny"),
-        use_gpu=os.getenv("KREUZBERG_USE_GPU", "false").lower() == "true",
-        force_ocr=os.getenv("KREUZBERG_FORCE_OCR_DEFAULT", "false").lower() == "true",
-        extraction_timeout_seconds=int(os.getenv("KREUZBERG_EXTRACTION_TIMEOUT_SECONDS", "300")),
-    )
-    extractor = PDFMarkdownExtractor(ocr_config=ocr_config)
+    _ocr_config, extractor = pipeline_core.make_default_ocr_extractor()
     max_pdf_bytes = pipeline_core.SCRAPE_MAX_PDF_BYTES
 
     processed: list[dict[str, Any]] = []
@@ -460,7 +454,7 @@ def main() -> int:
         )
         return 1
 
-    result = submit_candidates(processed)
+    result = pipeline_core.submit_candidates(processed, source="bndes")
     print(f"Render candidate submission: {result}")
 
     if candidates and result.get("submitted", 0) == 0:

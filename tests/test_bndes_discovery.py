@@ -18,24 +18,10 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 import requests
-SCRIPTS_DIR = Path(__file__).resolve().parent.parent / "scripts"
-if str(SCRIPTS_DIR) not in sys.path:
-    sys.path.insert(0, str(SCRIPTS_DIR))
+
+from conftest import make_response, patch_request_with_safe_redirects
 
 FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures" / "sources" / "bndes"
-
-
-@pytest.fixture(autouse=True)
-def _reset_bndes_env() -> None:
-    """Restore the BNDE env-driven module constants between tests.
-
-    Mirrors the pattern in ``tests/test_pipeline_core.py``. The
-    ``BNDES_*`` constants are captured at import time, so the
-    ``TestYearGuard`` reload tests permanently change the value for
-    the rest of the suite unless we reload back after they run.
-    """
-    yield
-    importlib.reload(importlib.import_module("discover_bndes_candidates"))
 
 
 # ---------------------------------------------------------------------------
@@ -57,18 +43,6 @@ INOVACAO_LISTING_URL = "https://www.bndes.gov.br/wps/vanityurl/chamadadeinovacao
 
 def _read_fixture(path: Path) -> str:
     return path.read_text(encoding="utf-8")
-
-
-def _make_response(text: str, status_code: int = 200) -> MagicMock:
-    resp = MagicMock(spec=requests.Response)
-    resp.text = text
-    resp.status_code = status_code
-    resp.raise_for_status = MagicMock()
-    if status_code >= 400:
-        resp.raise_for_status.side_effect = requests.HTTPError(
-            f"HTTP {status_code}", response=resp,
-        )
-    return resp
 
 
 # ---------------------------------------------------------------------------
@@ -387,42 +361,6 @@ class TestBuildCandidate:
 # discover_candidates — end-to-end against fixtures
 # ---------------------------------------------------------------------------
 
-def _patched_request_with_safe_redirects(responses: dict[str, MagicMock]) -> MagicMock:
-    """Patch ``request_with_safe_redirects`` at every import site the
-    discoverer actually uses.
-
-    The BNDE discoverer fetches listings through
-    ``request_with_safe_redirects`` and discovers detail-page PDFs
-    through ``scraper_transport.discover_pdf_urls_on_page`` which itself
-    calls ``request_with_safe_redirects``. Both reference sites need
-    to be patched for an end-to-end mock.
-    """
-
-    def fake_request(*, method: str, url: str, timeout: int, **_: object) -> MagicMock:
-        if url not in responses:
-            raise AssertionError(f"unexpected URL in test: {url}")
-        return responses[url]
-
-    p1 = patch(
-        "discover_bndes_candidates.request_with_safe_redirects",
-        side_effect=fake_request,
-    )
-    p2 = patch(
-        "scraper_transport.request_with_safe_redirects",
-        side_effect=fake_request,
-    )
-
-    class _Combined:
-        def __enter__(self) -> None:
-            p1.__enter__()
-            p2.__enter__()
-
-        def __exit__(self, *args: object) -> None:
-            p2.__exit__(*args)
-            p1.__exit__(*args)
-
-    return _Combined()
-
 
 class TestDiscoverCandidates:
     def test_returns_direct_pdfs_and_detail_page_pdfs(self) -> None:
@@ -444,13 +382,13 @@ class TestDiscoverCandidates:
         )
 
         responses = {
-            FUNDO_LISTING_URL: _make_response(fundo_html),
-            INOVACAO_LISTING_URL: _make_response(inovacao_html),
-            periferias_detail_url: _make_response(periferias_html),
-            corais_detail_url: _make_response(corais_html),
+            FUNDO_LISTING_URL: make_response(fundo_html),
+            INOVACAO_LISTING_URL: make_response(inovacao_html),
+            periferias_detail_url: make_response(periferias_html),
+            corais_detail_url: make_response(corais_html),
         }
 
-        with _patched_request_with_safe_redirects(responses):
+        with patch_request_with_safe_redirects(responses):
             stats, candidates = discover_candidates()
 
         urls = [c["url"] for c in candidates]
@@ -515,12 +453,12 @@ class TestDiscoverCandidates:
         )
 
         responses = {
-            FUNDO_LISTING_URL: _make_response(fundo_html),
-            INOVACAO_LISTING_URL: _make_response("<html></html>"),
-            periferias_detail_url: _make_response(periferias_html),
+            FUNDO_LISTING_URL: make_response(fundo_html),
+            INOVACAO_LISTING_URL: make_response("<html></html>"),
+            periferias_detail_url: make_response(periferias_html),
         }
 
-        with _patched_request_with_safe_redirects(responses):
+        with patch_request_with_safe_redirects(responses):
             stats, candidates = discover_candidates()
 
         detail_discovered = [
@@ -546,11 +484,11 @@ class TestDiscoverCandidates:
         </html>
         """
         responses = {
-            FUNDO_LISTING_URL: _make_response(fundo_listing_2025),
-            INOVACAO_LISTING_URL: _make_response("<html></html>"),
+            FUNDO_LISTING_URL: make_response(fundo_listing_2025),
+            INOVACAO_LISTING_URL: make_response("<html></html>"),
         }
 
-        with _patched_request_with_safe_redirects(responses):
+        with patch_request_with_safe_redirects(responses):
             stats, candidates = discover_candidates()
 
         assert candidates == []
@@ -572,11 +510,11 @@ class TestDiscoverCandidates:
         </html>
         """
         responses = {
-            FUNDO_LISTING_URL: _make_response(listing_html),
-            INOVACAO_LISTING_URL: _make_response("<html></html>"),
+            FUNDO_LISTING_URL: make_response(listing_html),
+            INOVACAO_LISTING_URL: make_response("<html></html>"),
         }
 
-        with _patched_request_with_safe_redirects(responses):
+        with patch_request_with_safe_redirects(responses):
             stats, candidates = discover_candidates()
 
         urls = [c["url"] for c in candidates]
@@ -594,31 +532,17 @@ class TestDiscoverCandidates:
         )
 
         responses = {
-            FUNDO_LISTING_URL: _make_response(_read_fixture(LISTING_FUNDO)),
-            INOVACAO_LISTING_URL: _make_response(_read_fixture(LISTING_INOVACAO)),
-            periferias_detail_url: _make_response("<html></html>"),
+            FUNDO_LISTING_URL: make_response(_read_fixture(LISTING_FUNDO)),
+            INOVACAO_LISTING_URL: make_response(_read_fixture(LISTING_INOVACAO)),
+            periferias_detail_url: requests.ConnectionError("network down"),
             "https://www.bndes.gov.br/wps/portal/site/home/"
-            "transparencia/chamadas/chamada-inovacao-cpsi-corais": _make_response(
+            "transparencia/chamadas/chamada-inovacao-cpsi-corais": make_response(
                 "<html></html>",
             ),
         }
 
-        def fake_request(*, method: str, url: str, timeout: int, **_: object) -> MagicMock:
-            if url == periferias_detail_url:
-                raise requests.ConnectionError("network down")
-            if url not in responses:
-                raise AssertionError(f"unexpected URL in test: {url}")
-            return responses[url]
-
-        with patch(
-            "discover_bndes_candidates.request_with_safe_redirects",
-            side_effect=fake_request,
-        ):
-            with patch(
-                "scraper_transport.request_with_safe_redirects",
-                side_effect=fake_request,
-            ):
-                stats, candidates = discover_candidates()
+        with patch_request_with_safe_redirects(responses):
+            stats, candidates = discover_candidates()
 
         assert stats["errors"] == 1
         # The fundo listing's direct PDF should still be there.
@@ -647,12 +571,16 @@ class TestSubmitHandoff:
             },
         }
 
-        # Stub the OCR worker modules before main() runs.
+        # Stub the OCR worker modules before main() runs. ``patch.dict``
+        # auto-restores ``sys.modules`` on exit so we don't need a
+        # manual ``sys.modules.pop`` cleanup in a ``finally`` block.
         ocr_mod = MagicMock()
         config_mod = MagicMock()
-        sys.modules["ocr_worker.ocr_extraction_config"] = config_mod
-        sys.modules["ocr_worker.pdf_markdown_extractor"] = ocr_mod
-        try:
+        module_stubs = {
+            "ocr_worker.ocr_extraction_config": config_mod,
+            "ocr_worker.pdf_markdown_extractor": ocr_mod,
+        }
+        with patch.dict(sys.modules, module_stubs):
             with patch.object(dpc, "discover_candidates") as mock_disc:
                 mock_disc.return_value = ({"candidates": 1}, [candidate])
                 with patch.object(
@@ -679,13 +607,10 @@ class TestSubmitHandoff:
                         ):
                             dpc.main()
 
-            mock_submit.assert_called_once()
-            call_args = mock_submit.call_args
-            assert call_args.args[0] == [candidate]
-            assert call_args.kwargs["source"] == "bndes"
-        finally:
-            sys.modules.pop("ocr_worker.ocr_extraction_config", None)
-            sys.modules.pop("ocr_worker.pdf_markdown_extractor", None)
+        mock_submit.assert_called_once()
+        call_args = mock_submit.call_args
+        assert call_args.args[0] == [candidate]
+        assert call_args.kwargs["source"] == "bndes"
 
     def test_main_returns_2_when_required_env_missing(self) -> None:
         import discover_bndes_candidates as dpc

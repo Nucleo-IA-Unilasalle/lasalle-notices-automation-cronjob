@@ -334,3 +334,85 @@ class TestFailureClassification:
 
         assert warning_calls == []
         assert len(error_calls) == 1
+
+
+# ---------------------------------------------------------------------------
+# fetch_html_with_retry
+# ---------------------------------------------------------------------------
+
+class TestFetchHtmlWithRetry:
+    def test_returns_text_on_first_success(self) -> None:
+        resp = MagicMock(spec=requests.Response)
+        resp.text = "<html></html>"
+        resp.status_code = 200
+        resp.raise_for_status = MagicMock()
+
+        with patch.object(
+            scraper_transport, "request_with_safe_redirects", return_value=resp,
+        ) as mock_req:
+            text = scraper_transport.fetch_html_with_retry(
+                "https://example.com/page", timeout=30,
+            )
+
+        assert text == "<html></html>"
+        assert mock_req.call_count == 1
+
+    def test_retries_with_linear_backoff_on_transient_error(self) -> None:
+        resp_ok = MagicMock(spec=requests.Response)
+        resp_ok.text = "<html></html>"
+        resp_ok.status_code = 200
+        resp_ok.raise_for_status = MagicMock()
+
+        with patch.object(
+            scraper_transport,
+            "request_with_safe_redirects",
+            side_effect=[requests.ConnectionError("boom"), resp_ok],
+        ) as mock_req:
+            with patch.object(scraper_transport.time, "sleep") as mock_sleep:
+                text = scraper_transport.fetch_html_with_retry(
+                    "https://example.com/page",
+                    timeout=30,
+                    max_attempts=3,
+                    backoff_seconds=2.0,
+                )
+
+        assert text == "<html></html>"
+        assert mock_req.call_count == 2
+        # Linear backoff: 2.0 * 1 for the first failure.
+        assert mock_sleep.call_count == 1
+        assert mock_sleep.call_args.args[0] == 2.0
+
+    def test_non_retryable_status_raises_immediately(self) -> None:
+        err = requests.HTTPError(response=MagicMock(status_code=404))
+        with patch.object(
+            scraper_transport,
+            "request_with_safe_redirects",
+            side_effect=err,
+        ) as mock_req:
+            with patch.object(scraper_transport.time, "sleep") as mock_sleep:
+                with pytest.raises(requests.HTTPError):
+                    scraper_transport.fetch_html_with_retry(
+                        "https://example.com/page",
+                        timeout=30,
+                        allowed_status_codes=(404,),
+                    )
+
+        assert mock_req.call_count == 1
+        assert mock_sleep.call_count == 0
+
+    def test_exhausts_attempts_and_raises_last_error(self) -> None:
+        with patch.object(
+            scraper_transport,
+            "request_with_safe_redirects",
+            side_effect=requests.ConnectionError("permanent"),
+        ) as mock_req:
+            with patch.object(scraper_transport.time, "sleep"):
+                with pytest.raises(requests.ConnectionError):
+                    scraper_transport.fetch_html_with_retry(
+                        "https://example.com/page",
+                        timeout=30,
+                        max_attempts=2,
+                        backoff_seconds=0.5,
+                    )
+
+        assert mock_req.call_count == 2

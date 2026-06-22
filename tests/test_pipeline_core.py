@@ -15,38 +15,12 @@ import importlib
 import os
 import sys
 from datetime import datetime, timezone
-from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
 
-SCRIPTS_DIR = Path(__file__).resolve().parent.parent / "scripts"
-if str(SCRIPTS_DIR) not in sys.path:
-    sys.path.insert(0, str(SCRIPTS_DIR))
-
 import pipeline_core
 from pncp_http import DownloadError, DownloadResult
-
-
-@pytest.fixture(autouse=True)
-def _reset_pipeline_core_env() -> None:
-    """Restore env-driven module constants between tests.
-
-    The ``SCRAPE_MAX_PDF_BYTES`` / ``SCRAPE_MAX_PDFS_PER_RUN`` constants are
-    captured at import time, so tests that override the env vars must reload
-    the module within the test and we must reload it back to its default
-    state once the test ends (after ``monkeypatch`` has restored the env
-    vars to their pre-test values). The same reload also refreshes the
-    ``discover_pncp_candidates`` re-export of ``process_candidate`` so the
-    identity check (``dpc.process_candidate is pipeline_core.process_candidate``)
-    holds across reloads.
-    """
-    yield
-    os.environ.pop("SCRAPE_MAX_PDF_BYTES", None)
-    os.environ.pop("SCRAPE_MAX_PDFS_PER_RUN", None)
-    importlib.reload(pipeline_core)
-    import discover_pncp_candidates  # noqa: PLC0415  (rebound after reload)
-    importlib.reload(discover_pncp_candidates)
 
 
 # ---------------------------------------------------------------------------
@@ -458,3 +432,77 @@ class TestReExports:
 
         body = mock_post.call_args.kwargs["json"]
         assert body["source"] == "pncp"
+
+
+# ---------------------------------------------------------------------------
+# make_default_ocr_extractor — shared OCR helper
+# ---------------------------------------------------------------------------
+
+class TestMakeDefaultOcrExtractor:
+    """Locks the env-driven OCR configuration that ``main()`` functions
+    previously duplicated per source. Centralising this means Phase 3
+    sources inherit the same defaults (and env-var names) without
+    restating the wiring."""
+
+    def test_passes_defaults_when_no_env_vars_set(
+        self, monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        monkeypatch.delenv("KREUZBERG_PADDLE_LANGUAGE", raising=False)
+        monkeypatch.delenv("KREUZBERG_PADDLE_MODEL_TIER", raising=False)
+        monkeypatch.delenv("KREUZBERG_USE_GPU", raising=False)
+        monkeypatch.delenv("KREUZBERG_FORCE_OCR_DEFAULT", raising=False)
+        monkeypatch.delenv("KREUZBERG_EXTRACTION_TIMEOUT_SECONDS", raising=False)
+
+        captured: dict[str, object] = {}
+
+        class FakeConfig:
+            def __init__(self, **kwargs: object) -> None:
+                captured.update(kwargs)
+
+        class FakeExtractor:
+            def __init__(self, *, ocr_config: object) -> None:
+                captured["extractor_ocr_config"] = ocr_config
+
+        with patch.dict(sys.modules, {
+            "ocr_worker.ocr_extraction_config": MagicMock(OCRExtractionConfig=FakeConfig),
+            "ocr_worker.pdf_markdown_extractor": MagicMock(PDFMarkdownExtractor=FakeExtractor),
+        }):
+            config, extractor = pipeline_core.make_default_ocr_extractor()
+
+        assert isinstance(config, FakeConfig)
+        assert isinstance(extractor, FakeExtractor)
+        assert captured["language"] == "latin"
+        assert captured["model_tier"] == "tiny"
+        assert captured["use_gpu"] is False
+        assert captured["force_ocr"] is False
+        assert captured["extraction_timeout_seconds"] == 300
+        assert captured["extractor_ocr_config"] is config
+
+    def test_honours_env_overrides(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setenv("KREUZBERG_PADDLE_LANGUAGE", "pt")
+        monkeypatch.setenv("KREUZBERG_PADDLE_MODEL_TIER", "small")
+        monkeypatch.setenv("KREUZBERG_USE_GPU", "true")
+        monkeypatch.setenv("KREUZBERG_FORCE_OCR_DEFAULT", "True")
+        monkeypatch.setenv("KREUZBERG_EXTRACTION_TIMEOUT_SECONDS", "120")
+
+        captured: dict[str, object] = {}
+
+        class FakeConfig:
+            def __init__(self, **kwargs: object) -> None:
+                captured.update(kwargs)
+
+        class FakeExtractor:
+            def __init__(self, *, ocr_config: object) -> None:
+                captured["extractor_ocr_config"] = ocr_config
+
+        with patch.dict(sys.modules, {
+            "ocr_worker.ocr_extraction_config": MagicMock(OCRExtractionConfig=FakeConfig),
+            "ocr_worker.pdf_markdown_extractor": MagicMock(PDFMarkdownExtractor=FakeExtractor),
+        }):
+            config, extractor = pipeline_core.make_default_ocr_extractor()
+
+        assert captured["language"] == "pt"
+        assert captured["model_tier"] == "small"
+        assert captured["use_gpu"] is True
+        assert captured["force_ocr"] is True
+        assert captured["extraction_timeout_seconds"] == 120
