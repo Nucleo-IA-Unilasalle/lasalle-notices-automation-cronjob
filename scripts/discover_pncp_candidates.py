@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import asyncio
 import json
 import os
 import sys
@@ -11,16 +10,19 @@ from urllib.parse import urlencode
 
 import requests
 
+import pipeline_core
 from pncp_filters import DROP_EXPIRED, FEDERAL_CNPJS, UF_FILTER
-from pncp_http import DownloadError, download_pncp_pdf
+from pipeline_core import process_candidate
 
 
-RENDER_SUBMIT_BATCH_SIZE = int(os.environ.get("RENDER_SUBMIT_BATCH_SIZE", "30"))
-RENDER_SUBMIT_TIMEOUT = int(os.environ.get("RENDER_SUBMIT_TIMEOUT", "90"))
-RENDER_SUBMIT_MAX_ATTEMPTS = int(os.environ.get("RENDER_SUBMIT_MAX_ATTEMPTS", "4"))
-RENDER_SUBMIT_BACKOFF_BASE = float(os.environ.get("RENDER_SUBMIT_BACKOFF_BASE", "5"))
-RENDER_SUBMIT_MAX_MARKDOWN_CHARS = int(os.environ.get("RENDER_SUBMIT_MAX_MARKDOWN_CHARS", "1000000"))
-
+# Re-exports for callers (and existing tests) that still import these
+# submit-side knobs from this module. They now live in pipeline_core so
+# future per-source discoverers can use the same constants.
+RENDER_SUBMIT_BATCH_SIZE = pipeline_core.RENDER_SUBMIT_BATCH_SIZE
+RENDER_SUBMIT_TIMEOUT = pipeline_core.RENDER_SUBMIT_TIMEOUT
+RENDER_SUBMIT_MAX_ATTEMPTS = pipeline_core.RENDER_SUBMIT_MAX_ATTEMPTS
+RENDER_SUBMIT_BACKOFF_BASE = pipeline_core.RENDER_SUBMIT_BACKOFF_BASE
+RENDER_SUBMIT_MAX_MARKDOWN_CHARS = pipeline_core.RENDER_SUBMIT_MAX_MARKDOWN_CHARS
 
 DEFAULT_HEADERS = {
     "User-Agent": (
@@ -545,135 +547,17 @@ def discover_candidates() -> tuple[dict[str, int], list[dict[str, Any]], datetim
     return stats, candidates, discovery_time
 
 
-def _is_retryable_response(response: requests.Response) -> bool:
-    return response.status_code in (408, 425, 429, 500, 502, 503, 504)
-
-
-def _truncate_markdown(candidate: dict[str, Any]) -> dict[str, Any]:
-    wr = candidate.get("worker_result")
-    if not wr:
-        return candidate
-    md = wr.get("ocr_markdown", "")
-    if len(md) > RENDER_SUBMIT_MAX_MARKDOWN_CHARS:
-        candidate = {**candidate, "worker_result": {**wr, "ocr_markdown": md[:RENDER_SUBMIT_MAX_MARKDOWN_CHARS]}}
-    return candidate
-
-
-def _post_batch(
-    render_url: str,
-    token: str,
-    batch: list[dict[str, Any]],
-    batch_index: int,
-    total_batches: int,
-) -> tuple[dict[str, Any] | None, str | None]:
-    url = f"{render_url}/api/pipeline/candidates"
-    last_error: str | None = None
-
-    for attempt in range(1, RENDER_SUBMIT_MAX_ATTEMPTS + 1):
-        try:
-            response = requests.post(
-                url,
-                headers={"Authorization": f"Bearer {token}"},
-                json={"source": "pncp", "candidates": batch},
-                timeout=RENDER_SUBMIT_TIMEOUT,
-            )
-        except (requests.Timeout, requests.ConnectionError) as exc:
-            last_error = f"{type(exc).__name__}: {exc}"
-            print(
-                f"warning: Render submit batch {batch_index}/{total_batches} "
-                f"attempt {attempt}/{RENDER_SUBMIT_MAX_ATTEMPTS} failed: {last_error}",
-                file=sys.stderr,
-            )
-            if attempt < RENDER_SUBMIT_MAX_ATTEMPTS:
-                time.sleep(RENDER_SUBMIT_BACKOFF_BASE ** attempt)
-            continue
-
-        if response.status_code >= 500 or _is_retryable_response(response):
-            last_error = f"HTTP {response.status_code}"
-            print(
-                f"warning: Render submit batch {batch_index}/{total_batches} "
-                f"attempt {attempt}/{RENDER_SUBMIT_MAX_ATTEMPTS} returned {last_error}",
-                file=sys.stderr,
-            )
-            if attempt < RENDER_SUBMIT_MAX_ATTEMPTS:
-                time.sleep(RENDER_SUBMIT_BACKOFF_BASE ** attempt)
-            continue
-
-        try:
-            response.raise_for_status()
-        except requests.HTTPError as exc:
-            last_error = f"HTTP {exc.response.status_code if exc.response is not None else '?'}"
-            print(
-                f"error: Render submit batch {batch_index}/{total_batches} "
-                f"non-retryable failure: {last_error}",
-                file=sys.stderr,
-            )
-            return None, last_error
-
-        try:
-            return response.json(), None
-        except ValueError:
-            return {"status": "accepted"}, None
-
-    return None, last_error
-
-
 def submit_candidates(
     candidates: list[dict[str, Any]],
 ) -> dict[str, Any]:
-    render_url = os.environ["RENDER_APP_URL"].rstrip("/")
-    token = os.environ["PIPELINE_SECRET"]
+    """PNCP-flavoured wrapper around :func:`pipeline_core.submit_candidates`.
 
-    valid = [
-        _truncate_markdown(c)
-        for c in candidates
-        if c.get("worker_result") and not c.get("error")
-    ]
-
-    batches = [
-        valid[i : i + RENDER_SUBMIT_BATCH_SIZE]
-        for i in range(0, len(valid), RENDER_SUBMIT_BATCH_SIZE)
-    ]
-    total_batches = len(batches)
-
-    submitted = 0
-    failed_batches: list[str] = []
-    last_result: dict[str, Any] | None = None
-
-    for index, batch in enumerate(batches, start=1):
-        result, error = _post_batch(render_url, token, batch, index, total_batches)
-        if error is None:
-            submitted += len(batch)
-            last_result = result
-            print(
-                f"Render submit batch {index}/{total_batches}: "
-                f"{len(batch)} candidates accepted"
-            )
-        else:
-            failed_batches.append(f"batch {index}/{total_batches} ({len(batch)}): {error}")
-            break
-
-    summary = {
-        "total": len(candidates),
-        "filtered_out": len(candidates) - len(valid),
-        "submitted": submitted,
-        "failed_batches": len(failed_batches),
-        "errors": failed_batches,
-        "last_result": last_result,
-    }
-
-    if submitted == 0 and failed_batches:
-        print(
-            f"error: {len(failed_batches)}/{total_batches} Render submit batches failed",
-            file=sys.stderr,
-        )
-    elif failed_batches:
-        print(
-            f"warning: {len(failed_batches)}/{total_batches} Render submit batches failed",
-            file=sys.stderr,
-        )
-
-    return summary
+    Preserves the original ``submit_candidates(candidates)`` signature for
+    backward compatibility with the existing test suite. New per-source
+    discoverers should call ``pipeline_core.submit_candidates`` directly
+    with their own ``source`` name.
+    """
+    return pipeline_core.submit_candidates(candidates, source="pncp")
 
 
 def main() -> int:
@@ -711,7 +595,7 @@ def main() -> int:
         extraction_timeout_seconds=int(os.getenv("KREUZBERG_EXTRACTION_TIMEOUT_SECONDS", "300")),
     )
     extractor = PDFMarkdownExtractor(ocr_config=ocr_config)
-    max_pdf_bytes = int(os.getenv("SCRAPE_MAX_PDF_BYTES", "15000000"))
+    max_pdf_bytes = pipeline_core.SCRAPE_MAX_PDF_BYTES
 
     processed: list[dict[str, Any]] = []
     submit_ready = 0
@@ -768,56 +652,6 @@ def main() -> int:
         _save_update_checkpoint(discovery_time)
 
     return 0
-
-
-def process_candidate(
-    candidate: dict[str, Any],
-    *,
-    extractor: Any,
-    max_bytes: int,
-    connect_timeout: int = 30,
-    read_timeout: int = 120,
-    max_attempts: int = 4,
-) -> dict[str, Any]:
-    url = candidate["url"]
-    metadata = candidate.get("metadata", {})
-    error_context = {"url": url, "metadata": metadata}
-
-    try:
-        dl = download_pncp_pdf(
-            url,
-            max_bytes=max_bytes,
-            connect_timeout=connect_timeout,
-            read_timeout=read_timeout,
-            max_attempts=max_attempts,
-        )
-    except DownloadError as exc:
-        print(f"warning: download failed for {url}: {exc}", file=sys.stderr)
-        return {**error_context, "error": f"download: {exc}"}
-
-    print(f"Downloaded PNCP PDF: {url} ({dl.content_length} bytes)")
-    pdf_bytes = dl.content
-    try:
-        markdown = asyncio.run(extractor.extract(pdf_bytes))
-    except Exception as exc:
-        print(f"warning: OCR failed for {url}: {exc}", file=sys.stderr)
-        return {**error_context, "error": f"ocr: {exc}"}
-    finally:
-        pdf_bytes = None
-
-    now_iso = datetime.now(timezone.utc).isoformat()
-    return {
-        "url": url,
-        "kind": candidate.get("kind", "pdf"),
-        "metadata": metadata,
-        "worker_result": {
-            "ocr_markdown": markdown,
-            "content_hash": dl.content_hash,
-            "content_length": dl.content_length,
-            "validated_at": now_iso,
-            "validation_outcome": "valid_pdf",
-        },
-    }
 
 
 if __name__ == "__main__":
