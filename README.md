@@ -34,6 +34,7 @@ The pipeline is split between GitHub Actions (discovery, download, OCR, submissi
 | `pipeline-iis-rio-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (IIS-Rio, Phase 3) |
 | `pipeline-sema-rs-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (SEMA-RS, Phase 3) |
 | `pipeline-tnc-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (TNC, Phase 3) |
+| `pipeline-wwf-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (WWF, Phase 3) |
 | `pipeline-ai.yml` | After PNCP discovery + hourly cron | Trigger Render AI processing (daytime Pacific gate) |
 | `pipeline-ingest.yml` | Manual only | Legacy Render ingest (rollback) |
 | `pipeline-ocr.yml` | Manual only | Legacy Render OCR worker (backfill) |
@@ -55,6 +56,7 @@ The pipeline is split between GitHub Actions (discovery, download, OCR, submissi
 - `IIS_RIO_MIN_NOTICE_YEAR=2026` — per-source year guard for the IIS-Rio discoverer
 - `SEMA_RS_MIN_NOTICE_YEAR=2026` — per-source year guard for the SEMA-RS discoverer
 - `TNC_MIN_NOTICE_YEAR=2026` — per-source year guard for the TNC discoverer
+- `WWF_MIN_NOTICE_YEAR=2026` — per-source year guard for the WWF discoverer
 - `PNCP_MAX_CANDIDATES_PER_RUN=50` — keep a larger discovery pool so a few invalid PDFs do not starve valid notices
 - `BNDES_MAX_CANDIDATES_PER_RUN=50` — same cap on the BNDE discoverer
 - `BRDE_MAX_CANDIDATES_PER_RUN=50` — same cap on the BRDE discoverer
@@ -69,6 +71,8 @@ The pipeline is split between GitHub Actions (discovery, download, OCR, submissi
 - `SEMA_RS_MAX_DETAILS_PER_RUN=40` — bound the number of detail-page fetches per SEMA-RS run
 - `TNC_MAX_CANDIDATES_PER_RUN=50` — same cap on the TNC discoverer
 - `TNC_MAX_DETAILS_PER_RUN=20` — bound the number of detail-page fetches per TNC run
+- `WWF_MAX_CANDIDATES_PER_RUN=50` — same cap on the WWF discoverer
+- `WWF_MAX_DETAILS_PER_RUN=20` — bound the number of detail-page fetches per WWF run
 - `PNCP_MAX_PROCESSED_CANDIDATES_PER_RUN=20` — bound download/OCR attempts per Actions run
 - `PNCP_MAX_SUBMITTABLE_CANDIDATES_PER_RUN=5` — stop once enough valid candidates are ready to submit incrementally
 - `PNCP_FETCH_MAX_ATTEMPTS=3` — retry transient PNCP connection timeouts before marking a search/document lookup failed
