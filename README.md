@@ -28,6 +28,9 @@ The pipeline is split between GitHub Actions (discovery, download, OCR, submissi
 |----------|---------|---------|
 | `pipeline-pncp-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (PNCP) |
 | `pipeline-bndes-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (BNDES pilot, Phase 2) |
+| `pipeline-brde-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (BRDE, Phase 3) |
+| `pipeline-fapergs-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (FAPERGS, Phase 3) |
+| `pipeline-funbio-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (FUNBIO, Phase 3) |
 | `pipeline-ai.yml` | After PNCP discovery + hourly cron | Trigger Render AI processing (daytime Pacific gate) |
 | `pipeline-ingest.yml` | Manual only | Legacy Render ingest (rollback) |
 | `pipeline-ocr.yml` | Manual only | Legacy Render OCR worker (backfill) |
@@ -43,9 +46,17 @@ The pipeline is split between GitHub Actions (discovery, download, OCR, submissi
 
 - `PNCP_MIN_NOTICE_YEAR=2026` — do not process notices before 2026 (PNCP discoverer)
 - `BNDES_MIN_NOTICE_YEAR=2026` — per-source year guard for the BNDE discoverer (the unified orchestrator-level `MIN_NOTICE_YEAR` lands in Phase 5; until then each non-PNCP discoverer carries its own `*_MIN_NOTICE_YEAR` knob)
+- `BRDE_MIN_NOTICE_YEAR=2026` — per-source year guard for the BRDE discoverer
+- `FAPERGS_MIN_NOTICE_YEAR=2026` — per-source year guard for the FAPERGS discoverer
+- `FUNBIO_MIN_NOTICE_YEAR=2026` — per-source year guard for the FUNBIO discoverer
 - `PNCP_MAX_CANDIDATES_PER_RUN=50` — keep a larger discovery pool so a few invalid PDFs do not starve valid notices
 - `BNDES_MAX_CANDIDATES_PER_RUN=50` — same cap on the BNDE discoverer
-- `BNDES_MAX_DETAILS_PER_RUN=20` — bound the number of detail-page fetches per BNDE run
+- `BRDE_MAX_CANDIDATES_PER_RUN=50` — same cap on the BRDE discoverer
+- `BRDE_MAX_DETAILS_PER_RUN=20` — bound the number of detail-page fetches per BRDE run
+- `FAPERGS_MAX_CANDIDATES_PER_RUN=50` — same cap on the FAPERGS discoverer
+- `FAPERGS_MAX_DETAILS_PER_RUN=20` — bound the number of detail-page fetches per FAPERGS run
+- `FUNBIO_MAX_CANDIDATES_PER_RUN=50` — same cap on the FUNBIO discoverer
+- `FUNBIO_MAX_DETAILS_PER_RUN=20` — bound the number of detail-page fetches per FUNBIO run
 - `PNCP_MAX_PROCESSED_CANDIDATES_PER_RUN=20` — bound download/OCR attempts per Actions run
 - `PNCP_MAX_SUBMITTABLE_CANDIDATES_PER_RUN=5` — stop once enough valid candidates are ready to submit incrementally
 - `PNCP_FETCH_MAX_ATTEMPTS=3` — retry transient PNCP connection timeouts before marking a search/document lookup failed
