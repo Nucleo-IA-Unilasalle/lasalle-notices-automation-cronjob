@@ -1380,6 +1380,105 @@ class TestDownloadPncpPdf:
             with pytest.raises(DownloadError, match="(?i)unsafe"):
                 download_pncp_pdf("https://example.com/redir.pdf", max_bytes=5_000_000)
 
+    def test_sends_browser_like_user_agent_header(self) -> None:
+        from scraper_transport import DEFAULT_HEADERS
+
+        with patch("pncp_http.requests.Session") as MockSession:
+            session = MockSession.return_value.__enter__.return_value
+            resp = MagicMock()
+            resp.status_code = 200
+            resp.headers = {"Content-Type": "application/pdf"}
+            resp.iter_content.return_value = [b"%PDF-1.4 ua"]
+            resp.close.return_value = None
+            session.get.return_value = resp
+            download_pncp_pdf("https://example.com/file.pdf", max_bytes=1024)
+
+        sent_headers = session.get.call_args.kwargs["headers"]
+        assert sent_headers["User-Agent"] == DEFAULT_HEADERS["User-Agent"]
+        assert sent_headers["User-Agent"].startswith("Mozilla/5.0")
+        assert "python-requests" not in sent_headers["User-Agent"]
+
+    def test_accept_header_advertises_pdf(self) -> None:
+        with patch("pncp_http.requests.Session") as MockSession:
+            session = MockSession.return_value.__enter__.return_value
+            resp = MagicMock()
+            resp.status_code = 200
+            resp.headers = {"Content-Type": "application/pdf"}
+            resp.iter_content.return_value = [b"%PDF-1.4 accept"]
+            resp.close.return_value = None
+            session.get.return_value = resp
+            download_pncp_pdf("https://example.com/file.pdf", max_bytes=1024)
+
+        sent_headers = session.get.call_args.kwargs["headers"]
+        assert "application/pdf" in sent_headers["Accept"]
+
+    def test_headers_sent_on_every_retry(self) -> None:
+        from scraper_transport import DEFAULT_HEADERS
+
+        with patch("pncp_http.requests.Session") as MockSession:
+            session = MockSession.return_value.__enter__.return_value
+            resp_503 = MagicMock()
+            resp_503.status_code = 503
+            resp_503.headers = {}
+            resp_503.close.return_value = None
+            resp_ok = MagicMock()
+            resp_ok.status_code = 200
+            resp_ok.headers = {"Content-Type": "application/pdf"}
+            resp_ok.iter_content.return_value = [b"%PDF-1.4 retry"]
+            resp_ok.close.return_value = None
+            session.get.side_effect = [resp_503, resp_ok]
+            with patch("pncp_http.time.sleep"):
+                download_pncp_pdf("https://example.com/file.pdf", max_bytes=1024)
+
+        assert session.get.call_count == 2
+        for call in session.get.call_args_list:
+            sent_headers = call.kwargs["headers"]
+            assert sent_headers["User-Agent"] == DEFAULT_HEADERS["User-Agent"]
+            assert "application/pdf" in sent_headers["Accept"]
+
+    def test_headers_sent_on_redirect(self) -> None:
+        from scraper_transport import DEFAULT_HEADERS
+
+        with patch("pncp_http.requests.Session") as MockSession:
+            session = MockSession.return_value.__enter__.return_value
+            resp_redirect = MagicMock()
+            resp_redirect.status_code = 302
+            resp_redirect.headers = {"Location": "https://example.com/followed.pdf"}
+            resp_redirect.close.return_value = None
+            resp_ok = MagicMock()
+            resp_ok.status_code = 200
+            resp_ok.headers = {"Content-Type": "application/pdf"}
+            resp_ok.iter_content.return_value = [b"%PDF-1.4 redir"]
+            resp_ok.close.return_value = None
+            session.get.side_effect = [resp_redirect, resp_ok]
+            download_pncp_pdf("https://example.com/start.pdf", max_bytes=1024)
+
+        assert session.get.call_count == 2
+        for call in session.get.call_args_list:
+            sent_headers = call.kwargs["headers"]
+            assert sent_headers["User-Agent"] == DEFAULT_HEADERS["User-Agent"]
+            assert "application/pdf" in sent_headers["Accept"]
+
+    def test_extra_headers_override_defaults(self) -> None:
+        with patch("pncp_http.requests.Session") as MockSession:
+            session = MockSession.return_value.__enter__.return_value
+            resp = MagicMock()
+            resp.status_code = 200
+            resp.headers = {"Content-Type": "application/pdf"}
+            resp.iter_content.return_value = [b"%PDF-1.4 override"]
+            resp.close.return_value = None
+            session.get.return_value = resp
+            download_pncp_pdf(
+                "https://example.com/file.pdf",
+                max_bytes=1024,
+                extra_headers={"User-Agent": "Custom/1.0", "X-Test": "1"},
+            )
+
+        sent_headers = session.get.call_args.kwargs["headers"]
+        assert sent_headers["User-Agent"] == "Custom/1.0"
+        assert sent_headers["X-Test"] == "1"
+        assert "application/pdf" in sent_headers["Accept"]
+
 
 class TestProcessCandidate:
     def test_valid_pdf_produces_worker_result(self) -> None:

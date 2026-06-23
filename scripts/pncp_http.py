@@ -12,6 +12,7 @@ from urllib.parse import urljoin
 import requests
 
 from ocr_worker.file_validation import FileValidationError, validate_pdf
+from scraper_transport import DEFAULT_HEADERS
 from url_validation import is_safe_url
 
 
@@ -24,6 +25,7 @@ _DEFAULT_MAX_ATTEMPTS = 4
 _DEFAULT_MAX_REDIRECTS = 5
 _DEFAULT_BACKOFF_SEQUENCE = (5, 15, 45)
 _RETRY_AFTER_CAP = 120
+_PDF_ACCEPT_HEADER = "application/pdf,application/octet-stream;q=0.9,*/*;q=0.8"
 
 
 class DownloadError(RuntimeError):
@@ -88,9 +90,16 @@ def download_pncp_pdf(
     read_timeout: int = _DEFAULT_READ_TIMEOUT,
     max_attempts: int = _DEFAULT_MAX_ATTEMPTS,
     max_redirects: int = _DEFAULT_MAX_REDIRECTS,
+    extra_headers: dict[str, str] | None = None,
 ) -> DownloadResult:
     if not is_safe_url(url):
         raise DownloadError(f"Unsafe URL rejected: {url}")
+
+    headers = {
+        **DEFAULT_HEADERS,
+        "Accept": _PDF_ACCEPT_HEADER,
+        **(extra_headers or {}),
+    }
 
     current_url = url
     redirect_count = 0
@@ -104,6 +113,7 @@ def download_pncp_pdf(
                     timeout=(connect_timeout, read_timeout),
                     allow_redirects=False,
                     stream=True,
+                    headers=headers,
                 )
             except (requests.ConnectionError, requests.Timeout) as exc:
                 if attempt < max_attempts:
