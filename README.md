@@ -42,6 +42,7 @@ The pipeline is split between GitHub Actions (discovery, download, OCR, submissi
 | `pipeline-kfw-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (KfW, Phase 4; Playwright-based listing) |
 | `pipeline-fundacao-grupo-boticario-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (Fundação Grupo Boticário, Phase 4; Playwright-based listing) |
 | `pipeline-msgov-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (MSGOV, Phase 4; pure-Playwright with shadow-DOM probing; magic-byte check rejects `.doc` annex leakage at download time) |
+| `pipeline-all-discovery.yml` | Hourly cron + manual | Unified orchestrator over the non-PNCP sources (Phase 5); reads `SOURCES` from the workflow_dispatch input (default: BNDE, BRDE, FAPERGS, FUNBIO, IIS-Rio, SEMA-RS, TNC, WWF — all BS4) |
 | `pipeline-ai.yml` | After PNCP discovery + hourly cron | Trigger Render AI processing (daytime Pacific gate) |
 | `pipeline-ingest.yml` | Manual only | Legacy Render ingest (rollback) |
 | `pipeline-ocr.yml` | Manual only | Legacy Render OCR worker (backfill) |
@@ -105,8 +106,21 @@ The pipeline is split between GitHub Actions (discovery, download, OCR, submissi
 - `RENDER_SUBMIT_MAX_MARKDOWN_CHARS=1000000` — truncate OCR markdown longer than this before submitting to Render
 - `FLAGS_use_mkldnn=0` — disables Paddle oneDNN on CPU runners; required to avoid the current PaddleOCR runtime failure seen in GitHub Actions
 - `PADDLE_PDX_ENABLE_MKLDNN_BYDEFAULT=0` — disables PaddleX's default oneDNN path used by PaddleOCR
+- `SOURCES` (Phase 5 unified orchestrator only) — comma-separated list of source names to run (e.g. `SOURCES=bndes,brde,wwf`); whitespace is tolerated and empty entries are dropped. Valid sources: `bndes`, `brde`, `fapergs`, `funbio`, `govbr_mma`, `iis_rio`, `sema_rs`, `tnc`, `unep`, `worldbank`, `wwf`, `fao`, `fundacao_grupo_boticario`, `kfw`, `msgov`. PNCP is intentionally not in this list (see plan §5 / "PNCP keeps its own workflow" below).
+- `MIN_NOTICE_YEAR` (Phase 5 unified orchestrator only, default `2026`) — generic year guard forwarded to BS4 discoverers as their `min_year` argument. Plan §9 recommends a generic name (not `PNCP_MIN_NOTICE_YEAR`) so the unified orchestrator does not couple non-PNCP sources to PNCP-specific env vars. Playwright sources (`fao`, `fundacao_grupo_boticario`, `kfw`, `msgov`) do not accept `min_year` and run with their own internal filtering.
+- `FILTER_POLICY` (Phase 5 unified orchestrator only, default `default`) — EDITAL inclusion/exclusion policy forwarded to BS4 discoverers (`default` | `include_tdr` | `no_prefilter`). Ignored by Playwright sources.
 
 The PNCP workflow fails if PNCP search fails and produces no candidates, if discovered candidates all fail download/OCR, or if no discovered candidate is submitted to Render, so the PNCP checkpoint is not advanced over unprocessed notices. The BNDE workflow mirrors the same shape but has no checkpoint to advance.
+
+### PNCP keeps its own workflow (Phase 5 decision)
+
+The Phase 5 plan recommends **keeping** `pipeline-pncp-discovery.yml` separate from the new `pipeline-all-discovery.yml` orchestrator rather than folding PNCP into it. Reasoning (plan §5):
+
+- PNCP has hard-won guardrails (`PNCP_MIN_NOTICE_YEAR`, `PNCP_MAX_CANDIDATES_PER_RUN`, modality filtering, document-type priorities, the `/atualizacao` checkpoint) that are not directly applicable to other sources.
+- The unified orchestrator uses the generic `MIN_NOTICE_YEAR` / `FILTER_POLICY` / `SOURCES` env vars; binding PNCP to those would couple its knobs to the new generic ones prematurely.
+- The PNCP discoverer also has a different return shape (``(stats, candidates, checkpoint)`` vs ``(stats, candidates)``), which would require either forcing it into the new shape or special-casing it.
+
+Operators who want to discover non-PNCP sources in a single Actions run should use `pipeline-all-discovery.yml`. PNCP continues to run via `pipeline-pncp-discovery.yml` unchanged. Folding PNCP in is tracked as a follow-up PR after the unified orchestrator stabilises.
 
 ## Local development
 
