@@ -41,6 +41,7 @@ The pipeline is split between GitHub Actions (discovery, download, OCR, submissi
 | `pipeline-fao-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (FAO, Phase 4; Playwright-based listing) |
 | `pipeline-kfw-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (KfW, Phase 4; Playwright-based listing) |
 | `pipeline-fundacao-grupo-boticario-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (Fundação Grupo Boticário, Phase 4; Playwright-based listing) |
+| `pipeline-msgov-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (MSGOV, Phase 4; pure-Playwright with shadow-DOM probing; magic-byte check rejects `.doc` annex leakage at download time) |
 | `pipeline-ai.yml` | After PNCP discovery + hourly cron | Trigger Render AI processing (daytime Pacific gate) |
 | `pipeline-ingest.yml` | Manual only | Legacy Render ingest (rollback) |
 | `pipeline-ocr.yml` | Manual only | Legacy Render OCR worker (backfill) |
@@ -70,6 +71,8 @@ The pipeline is split between GitHub Actions (discovery, download, OCR, submissi
 - `KFW_MAX_CANDIDATES_PER_RUN=50` — same cap on the KfW discoverer
 - `FUNDACAO_GRUPO_BOTICARIO_MAX_CANDIDATES_PER_RUN=50` — same cap on the Fundação Grupo Boticário discoverer
 - `FUNDACAO_GRUPO_BOTICARIO_MAX_DETAILS_PER_RUN=20` — bound the number of detail-page fetches per Fundação Grupo Boticário run
+- `MSGOV_MAX_CANDIDATES_PER_RUN=50` — same cap on the MSGOV discoverer
+- `MSGOV_MAX_DETAILS_PER_RUN=40` — bound the number of detail-page navigations per MSGOV run (Playwright is the primary path, so detail fetching is more expensive)
 - `PNCP_MAX_CANDIDATES_PER_RUN=50` — keep a larger discovery pool so a few invalid PDFs do not starve valid notices
 - `BNDES_MAX_CANDIDATES_PER_RUN=50` — same cap on the BNDE discoverer
 - `BRDE_MAX_CANDIDATES_PER_RUN=50` — same cap on the BRDE discoverer
