@@ -2,7 +2,7 @@ name: Pipeline - Sync
 
 on:
   schedule:
-    - cron: '35 * * * *'
+    - cron: '37 * * * *'
   workflow_dispatch:
 
 concurrency:
