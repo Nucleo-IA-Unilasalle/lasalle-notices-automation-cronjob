@@ -33,6 +33,10 @@ jobs:
   discover-all:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      DISCOVERY_SOURCES: ${{ inputs.sources || 'bndes,brde,fapergs,funbio,iis_rio,sema_rs,tnc,wwf' }}
+      DISCOVERY_FILTER_POLICY: ${{ inputs.filter_policy || 'default' }}
+      DISCOVERY_MIN_NOTICE_YEAR: ${{ inputs.min_notice_year || '2026' }}
     steps:
       - name: Checkout scheduler repository
         uses: actions/checkout@v4
@@ -47,14 +51,18 @@ jobs:
       - name: Install OCR worker dependencies
         run: pip install -r requirements-ocr-worker.txt
 
+      - name: Install Playwright Chromium for browser-backed sources
+        if: ${{ contains(format(',{0},', env.DISCOVERY_SOURCES), ',fao,') || contains(format(',{0},', env.DISCOVERY_SOURCES), ',fundacao_grupo_boticario,') || contains(format(',{0},', env.DISCOVERY_SOURCES), ',kfw,') || contains(format(',{0},', env.DISCOVERY_SOURCES), ',msgov,') }}
+        run: playwright install --with-deps chromium
+
       - name: Run unified discovery orchestrator
         run: python scripts/discover_all_candidates.py
         env:
           RENDER_APP_URL: ${{ secrets.RENDER_APP_URL }}
           PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}
-          SOURCES: ${{ inputs.sources }}
-          FILTER_POLICY: ${{ inputs.filter_policy }}
-          MIN_NOTICE_YEAR: ${{ inputs.min_notice_year }}
+          SOURCES: ${{ env.DISCOVERY_SOURCES }}
+          FILTER_POLICY: ${{ env.DISCOVERY_FILTER_POLICY }}
+          MIN_NOTICE_YEAR: ${{ env.DISCOVERY_MIN_NOTICE_YEAR }}
           SCRAPE_MAX_PDF_BYTES: "15000000"
           SCRAPE_MAX_PDFS_PER_RUN: "5"
           KREUZBERG_PADDLE_LANGUAGE: "latin"

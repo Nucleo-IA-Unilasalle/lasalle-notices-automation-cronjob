@@ -166,6 +166,29 @@ class TestDiscoverCandidates:
         assert stats["playwright_fallback_used"] == 0
         mock_pw.assert_not_called()
 
+    def test_listing_html_is_not_fetched_twice_for_bs4_results(self) -> None:
+        from discover_fao_candidates import discover_candidates
+        import discover_fao_candidates as dfc
+
+        calls: list[str] = []
+
+        def fake_request(*, method: str, url: str, timeout: int, **_: object) -> object:
+            calls.append(url)
+            if len(calls) > 1:
+                raise requests.ConnectionError("second fetch should not happen")
+            return make_response(_read_fixture(LISTING_FIXTURE))
+
+        with patch_request_with_safe_redirects(fake_request):
+            with patch.object(dfc, "_run_playwright_fallback") as mock_pw:
+                mock_pw.return_value = []
+                stats, candidates = discover_candidates()
+
+        assert stats["candidates"] == 2
+        assert stats["errors"] == 0
+        assert stats["playwright_fallback_used"] == 0
+        assert calls == [LISTING_URL]
+        mock_pw.assert_not_called()
+
     def test_listing_fetch_failure_falls_back_to_playwright(self) -> None:
         from discover_fao_candidates import discover_candidates
         import discover_fao_candidates as dfc

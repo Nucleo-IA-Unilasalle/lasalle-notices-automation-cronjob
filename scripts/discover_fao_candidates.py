@@ -41,11 +41,7 @@ from urllib.parse import urljoin, urlsplit, urlunsplit
 from bs4 import BeautifulSoup, Tag
 
 import pipeline_core
-from scraper_transport import (
-    discover_pdf_urls_on_page,
-    log_source_failure,
-    looks_like_pdf_url,
-)
+from scraper_transport import log_source_failure, looks_like_pdf_url
 
 
 FAO_LISTING_URL = "https://www.fao.org/plant-treaty/areas-of-work/funding/"
@@ -257,11 +253,7 @@ def discover_candidates() -> tuple[dict[str, int], list[dict[str, Any]]]:
 
     pdf_urls: list[str] = []
     if listing_html is not None:
-        pdf_urls = discover_pdf_urls_on_page(
-            FAO_LISTING_URL,
-            stats=stats,
-            extractor=extract_fao_pdf_urls,
-        )
+        pdf_urls = extract_fao_pdf_urls(listing_html, FAO_LISTING_URL)
         stats["details_fetched"] += 1
 
     if not pdf_urls:
