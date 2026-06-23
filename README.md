@@ -39,6 +39,7 @@ The pipeline is split between GitHub Actions (discovery, download, OCR, submissi
 | `pipeline-govbr-mma-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (GOVBR-MMA, Phase 3) |
 | `pipeline-worldbank-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (WorldBank, Phase 3; BS4 primary + Playwright fallback) |
 | `pipeline-fao-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (FAO, Phase 4; Playwright-based listing) |
+| `pipeline-kfw-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (KfW, Phase 4; Playwright-based listing) |
 | `pipeline-ai.yml` | After PNCP discovery + hourly cron | Trigger Render AI processing (daytime Pacific gate) |
 | `pipeline-ingest.yml` | Manual only | Legacy Render ingest (rollback) |
 | `pipeline-ocr.yml` | Manual only | Legacy Render OCR worker (backfill) |
@@ -65,6 +66,7 @@ The pipeline is split between GitHub Actions (discovery, download, OCR, submissi
 - `GOVBR_MMA_MIN_NOTICE_YEAR=2026` — per-source year guard for the GOVBR-MMA discoverer
 - `WORLDBANK_MIN_NOTICE_YEAR=2026` — per-source year guard for the WorldBank discoverer
 - `FAO_MAX_CANDIDATES_PER_RUN=50` — same cap on the FAO discoverer
+- `KFW_MAX_CANDIDATES_PER_RUN=50` — same cap on the KfW discoverer
 - `PNCP_MAX_CANDIDATES_PER_RUN=50` — keep a larger discovery pool so a few invalid PDFs do not starve valid notices
 - `BNDES_MAX_CANDIDATES_PER_RUN=50` — same cap on the BNDE discoverer
 - `BRDE_MAX_CANDIDATES_PER_RUN=50` — same cap on the BRDE discoverer

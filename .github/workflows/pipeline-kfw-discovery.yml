@@ -1,0 +1,49 @@
+name: KfW discovery
+
+on:
+  schedule:
+    - cron: "28 * * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: pipeline-trigger
+  cancel-in-progress: false
+
+jobs:
+  discover-kfw:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout scheduler repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: requirements-ocr-worker.txt
+
+      - name: Install OCR worker dependencies
+        run: pip install -r requirements-ocr-worker.txt
+
+      - name: Install Playwright Chromium
+        run: playwright install --with-deps chromium
+
+      - name: Run KfW discovery, download, OCR, and submission
+        run: python scripts/discover_kfw_candidates.py
+        env:
+          RENDER_APP_URL: ${{ secrets.RENDER_APP_URL }}
+          PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}
+          KFW_MAX_CANDIDATES_PER_RUN: "50"
+          KFW_FETCH_MAX_ATTEMPTS: "3"
+          KFW_FETCH_BACKOFF_SECONDS: "2"
+          KFW_FETCH_TIMEOUT_SECONDS: "30"
+          SCRAPE_MAX_PDF_BYTES: "15000000"
+          KREUZBERG_PADDLE_LANGUAGE: "latin"
+          KREUZBERG_PADDLE_MODEL_TIER: "tiny"
+          KREUZBERG_USE_GPU: "false"
+          KREUZBERG_FORCE_OCR_DEFAULT: "false"
+          KREUZBERG_EXTRACTION_TIMEOUT_SECONDS: "120"
+          FLAGS_use_mkldnn: "0"
+          PADDLE_PDX_ENABLE_MKLDNN_BYDEFAULT: "0"
