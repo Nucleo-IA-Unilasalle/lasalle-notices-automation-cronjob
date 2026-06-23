@@ -1,0 +1,74 @@
+name: All-sources discovery (unified orchestrator)
+
+on:
+  schedule:
+    - cron: "8 * * * *"
+  workflow_dispatch:
+    inputs:
+      sources:
+        description: "Comma-separated list of sources to discover (e.g. bndes,brde,wwf)"
+        required: false
+        default: "bndes,brde,fapergs,funbio,iis_rio,sema_rs,tnc,wwf"
+        type: string
+      filter_policy:
+        description: "Filter policy forwarded to BS4 discoverers (default|include_tdr|no_prefilter)"
+        required: false
+        default: "default"
+        type: choice
+        options:
+          - default
+          - include_tdr
+          - no_prefilter
+      min_notice_year:
+        description: "Minimum notice year forwarded to BS4 discoverers (plan §9 year guard)"
+        required: false
+        default: "2026"
+        type: string
+
+concurrency:
+  group: pipeline-trigger
+  cancel-in-progress: false
+
+jobs:
+  discover-all:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      DISCOVERY_SOURCES: ${{ inputs.sources || 'bndes,brde,fapergs,funbio,iis_rio,sema_rs,tnc,wwf' }}
+      DISCOVERY_FILTER_POLICY: ${{ inputs.filter_policy || 'default' }}
+      DISCOVERY_MIN_NOTICE_YEAR: ${{ inputs.min_notice_year || '2026' }}
+    steps:
+      - name: Checkout scheduler repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: requirements-ocr-worker.txt
+
+      - name: Install OCR worker dependencies
+        run: pip install -r requirements-ocr-worker.txt
+
+      - name: Install Playwright Chromium for browser-backed sources
+        if: ${{ contains(format(',{0},', env.DISCOVERY_SOURCES), ',fao,') || contains(format(',{0},', env.DISCOVERY_SOURCES), ',fundacao_grupo_boticario,') || contains(format(',{0},', env.DISCOVERY_SOURCES), ',kfw,') || contains(format(',{0},', env.DISCOVERY_SOURCES), ',msgov,') }}
+        run: playwright install --with-deps chromium
+
+      - name: Run unified discovery orchestrator
+        run: python scripts/discover_all_candidates.py
+        env:
+          RENDER_APP_URL: ${{ secrets.RENDER_APP_URL }}
+          PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}
+          SOURCES: ${{ env.DISCOVERY_SOURCES }}
+          FILTER_POLICY: ${{ env.DISCOVERY_FILTER_POLICY }}
+          MIN_NOTICE_YEAR: ${{ env.DISCOVERY_MIN_NOTICE_YEAR }}
+          SCRAPE_MAX_PDF_BYTES: "15000000"
+          SCRAPE_MAX_PDFS_PER_RUN: "5"
+          KREUZBERG_PADDLE_LANGUAGE: "latin"
+          KREUZBERG_PADDLE_MODEL_TIER: "tiny"
+          KREUZBERG_USE_GPU: "false"
+          KREUZBERG_FORCE_OCR_DEFAULT: "false"
+          KREUZBERG_EXTRACTION_TIMEOUT_SECONDS: "120"
+          FLAGS_use_mkldnn: "0"
+          PADDLE_PDX_ENABLE_MKLDNN_BYDEFAULT: "0"

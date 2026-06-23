@@ -779,7 +779,7 @@ class TestCheckpointAdvancement:
                             "failed_batches": 0,
                             "errors": [],
                         }
-                        with patch("discover_pncp_candidates.PNCP_MAX_SUBMITTABLE_CANDIDATES_PER_RUN", 1, create=True):
+                        with patch("pipeline_core.SCRAPE_MAX_PDFS_PER_RUN", 1):
                             with patch("discover_pncp_candidates.PNCP_MAX_PROCESSED_CANDIDATES_PER_RUN", 3, create=True):
                                 with patch.dict(os.environ, {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "t"}):
                                     with patch("discover_pncp_candidates._save_update_checkpoint") as mock_save:
@@ -1398,7 +1398,7 @@ class TestProcessCandidate:
         mock_extractor = MagicMock()
         mock_extractor.extract = fake_extract
 
-        with patch("discover_pncp_candidates.download_pncp_pdf") as mock_dl:
+        with patch("pipeline_core.download_pncp_pdf") as mock_dl:
             mock_dl.return_value = DownloadResult(
                 content=pdf_bytes,
                 content_hash=result_hash,
@@ -1426,7 +1426,7 @@ class TestProcessCandidate:
         mock_extractor = MagicMock()
         mock_extractor.extract = fake_extract
 
-        with patch("discover_pncp_candidates.download_pncp_pdf") as mock_dl:
+        with patch("pipeline_core.download_pncp_pdf") as mock_dl:
             mock_dl.side_effect = DownloadError("HTTP 404 permanent")
             result = process_candidate(candidate, extractor=mock_extractor, max_bytes=5_000_000)
 
@@ -1449,7 +1449,7 @@ class TestProcessCandidate:
         mock_extractor = MagicMock()
         mock_extractor.extract = failing_extract
 
-        with patch("discover_pncp_candidates.download_pncp_pdf") as mock_dl:
+        with patch("pipeline_core.download_pncp_pdf") as mock_dl:
             mock_dl.return_value = DownloadResult(
                 content=pdf_bytes,
                 content_hash=hashlib.sha256(pdf_bytes).hexdigest(),
@@ -1476,7 +1476,7 @@ class TestProcessCandidate:
         mock_extractor = MagicMock()
         mock_extractor.extract = fake_extract
 
-        with patch("discover_pncp_candidates.download_pncp_pdf") as mock_dl:
+        with patch("pipeline_core.download_pncp_pdf") as mock_dl:
             mock_dl.return_value = DownloadResult(
                 content=pdf_bytes,
                 content_hash="abc",
@@ -1507,7 +1507,7 @@ class TestProcessCandidate:
         mock_extractor = MagicMock()
         mock_extractor.extract = fake_extract
 
-        with patch("discover_pncp_candidates.download_pncp_pdf") as mock_dl:
+        with patch("pipeline_core.download_pncp_pdf") as mock_dl:
             mock_dl.return_value = DownloadResult(
                 content=pdf_bytes,
                 content_hash=hashlib.sha256(pdf_bytes).hexdigest(),
@@ -1600,7 +1600,7 @@ class TestSubmissionContract:
         assert "pdf_bytes" not in c
 
     def test_markdown_respects_configured_size_limit(self) -> None:
-        from discover_pncp_candidates import submit_candidates, RENDER_SUBMIT_BATCH_SIZE
+        from discover_pncp_candidates import submit_candidates
         candidate = {
             "url": "https://example.com/doc.pdf",
             "kind": "pdf",
