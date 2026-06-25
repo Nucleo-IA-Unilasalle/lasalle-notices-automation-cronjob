@@ -104,6 +104,8 @@ The local runner may be implemented in the backend repository because that is wh
 
 ## Validation
 
+Validation has two phases: local verification before pushing, then an integration gate after the backend has been deployed and confirmed healthy on Render.
+
 Backfill validation queries:
 
 ```sql
@@ -136,6 +138,57 @@ Expected local AI effect:
 - `ai_not_completed` decreases.
 - `ai_completed` increases.
 - Failed rows remain visible for retry rather than being silently hidden.
+
+## Post-Deploy Testing Gate
+
+Do not treat the implementation as complete immediately after code is pushed. The integration test gate comes after:
+
+1. Backend changes are pushed.
+2. Render deploys the backend service successfully.
+3. The deployed API is confirmed healthy.
+4. The GitHub Actions backfill workflow is triggered against the deployed backend.
+5. Production queries confirm the expected candidate and AI queue movement.
+
+Gate procedure:
+
+1. Confirm Render service `lasalle-notices-api` is running the new commit and has no startup/runtime errors.
+2. Call the new claim endpoint with a very small limit, such as `limit=1`, and confirm it returns only active PNCP pending candidates.
+3. Trigger the new GitHub Actions workflow manually with conservative limits.
+4. Inspect the workflow logs for claimed, processed, OCR success/failure, submitted, and failed batch counts.
+5. Query production to verify that at least one claimed active candidate moved from pending candidate backlog into `editais`, or that the run produced an explainable no-op.
+6. Confirm the AI backlog changed as expected after successful promotion.
+
+The gate should fail if:
+
+- Render is not serving the new endpoint.
+- The endpoint returns expired candidates by default.
+- The workflow submits zero candidates after claiming valid active rows.
+- `/api/pipeline/candidates` rejects the worker result payload.
+- Production queries do not show any expected state transition after a successful workflow run.
+
+Only after this gate passes should the backfill cadence be increased or scheduled.
+
+## Render MCP Context For Implementation Session
+
+The implementation session may need Render MCP access to verify deploy health and production database state. The previous Render MCP workspace discovery found one workspace:
+
+- Workspace id: `tea-d523k9dactks73ackil0`
+- Workspace name: `My Workspace`
+- Account email: `nucleoia@unilasalle.edu.br`
+
+Relevant Render services:
+
+- API service: `lasalle-notices-api`, id `srv-d524fvlactks73ad3110`, URL `https://lasalle-notices-api.onrender.com`
+- Static dashboard: `lasalle-notices`, id `srv-d52k6nili9vc73fa1f5g`, URL `https://lasalle-notices.onrender.com`
+- Postgres: `DB Editais`, id `dpg-d8fhe658nd3s73fqq3hg-a`
+
+When using Render MCP in the implementation session:
+
+1. Select workspace `tea-d523k9dactks73ackil0` if workspace selection is required.
+2. Check `lasalle-notices-api` deploy status after backend changes are pushed.
+3. Inspect recent service logs before triggering the GitHub Actions backfill workflow.
+4. Use production database queries only for validation and small read-only checks unless an explicit migration or data operation is part of the approved implementation.
+5. After the GitHub Actions workflow runs, query `scrape_candidates`, `editais`, and `pipeline_runs` to verify the post-deploy testing gate.
 
 ## Risks And Mitigations
 
