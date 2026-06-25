@@ -1,0 +1,57 @@
+name: PNCP pending candidate backfill
+
+on:
+  workflow_dispatch:
+    inputs:
+      claim_limit:
+        description: "Maximum active pending PNCP candidates to claim"
+        required: false
+        default: "5"
+      process_limit:
+        description: "Maximum claimed candidates to download/OCR"
+        required: false
+        default: "5"
+
+concurrency:
+  group: pncp-backfill
+  cancel-in-progress: false
+
+jobs:
+  backfill-pncp:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout scheduler repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: requirements-ocr-worker.txt
+
+      - name: Install OCR worker dependencies
+        run: pip install -r requirements-ocr-worker.txt
+
+      - name: Run PNCP active pending candidate backfill
+        run: python scripts/backfill_pncp_pending_candidates.py
+        env:
+          RENDER_APP_URL: ${{ secrets.RENDER_APP_URL }}
+          PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}
+          PNCP_BACKFILL_CLAIM_LIMIT: ${{ inputs.claim_limit }}
+          PNCP_MAX_PROCESSED_CANDIDATES_PER_RUN: ${{ inputs.process_limit }}
+          SCRAPE_MAX_PDF_BYTES: "15000000"
+          SCRAPE_MAX_PDFS_PER_RUN: "5"
+          RENDER_CLAIM_TIMEOUT: "60"
+          RENDER_SUBMIT_BATCH_SIZE: "5"
+          RENDER_SUBMIT_TIMEOUT: "90"
+          RENDER_SUBMIT_MAX_ATTEMPTS: "4"
+          RENDER_SUBMIT_BACKOFF_BASE: "5"
+          KREUZBERG_PADDLE_LANGUAGE: "latin"
+          KREUZBERG_PADDLE_MODEL_TIER: "tiny"
+          KREUZBERG_USE_GPU: "false"
+          KREUZBERG_FORCE_OCR_DEFAULT: "false"
+          KREUZBERG_EXTRACTION_TIMEOUT_SECONDS: "120"
+          FLAGS_use_mkldnn: "0"
+          PADDLE_PDX_ENABLE_MKLDNN_BYDEFAULT: "0"

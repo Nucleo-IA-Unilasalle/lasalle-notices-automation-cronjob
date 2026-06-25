@@ -27,6 +27,7 @@ The pipeline is split between GitHub Actions (discovery, download, OCR, submissi
 | Workflow | Trigger | Purpose |
 |----------|---------|---------|
 | `pipeline-pncp-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (PNCP) |
+| `pipeline-pncp-backfill.yml` | Manual only | Claims active pending PNCP candidates from Render, downloads/OCRs them in Actions, and submits worker results back to Render |
 | `pipeline-bndes-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (BNDES pilot, Phase 2) |
 | `pipeline-brde-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (BRDE, Phase 3) |
 | `pipeline-fapergs-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (FAPERGS, Phase 3) |
@@ -109,6 +110,17 @@ The pipeline is split between GitHub Actions (discovery, download, OCR, submissi
 - `SOURCES` (Phase 5 unified orchestrator only) — comma-separated list of source names to run (e.g. `SOURCES=bndes,brde,wwf`); whitespace is tolerated and empty entries are dropped. Valid sources: `bndes`, `brde`, `fapergs`, `funbio`, `govbr_mma`, `iis_rio`, `sema_rs`, `tnc`, `unep`, `worldbank`, `wwf`, `fao`, `fundacao_grupo_boticario`, `kfw`, `msgov`. PNCP is intentionally not in this list (see plan §5 / "PNCP keeps its own workflow" below).
 - `MIN_NOTICE_YEAR` (Phase 5 unified orchestrator only, default `2026`) — generic year guard forwarded to BS4 discoverers as their `min_year` argument. Plan §9 recommends a generic name (not `PNCP_MIN_NOTICE_YEAR`) so the unified orchestrator does not couple non-PNCP sources to PNCP-specific env vars. Playwright sources (`fao`, `fundacao_grupo_boticario`, `kfw`, `msgov`) do not accept `min_year` and run with their own internal filtering.
 - `FILTER_POLICY` (Phase 5 unified orchestrator only, default `default`) — EDITAL inclusion/exclusion policy forwarded to BS4 discoverers (`default` | `include_tdr` | `no_prefilter`). Ignored by Playwright sources.
+
+### PNCP pending candidate backfill
+
+`pipeline-pncp-backfill.yml` is a manual integration workflow for draining the active PNCP backlog in `scrape_candidates`. It calls the Render claim endpoint for active pending PNCP candidates, reuses the same download/OCR worker path as PNCP discovery, and submits successful worker results to `/api/pipeline/candidates`.
+
+Use conservative inputs until the post-deploy testing gate passes:
+
+- `claim_limit=1`
+- `process_limit=1`
+
+After Render is confirmed healthy and the first manual run moves an active candidate into `editais`, the limits can be increased gradually. Do not schedule this workflow until the active backlog behavior is verified in production.
 
 The PNCP workflow fails if PNCP search fails and produces no candidates, if discovered candidates all fail download/OCR, or if no discovered candidate is submitted to Render, so the PNCP checkpoint is not advanced over unprocessed notices. The BNDE workflow mirrors the same shape but has no checkpoint to advance.
 
