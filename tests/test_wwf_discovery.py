@@ -3,10 +3,14 @@
 Ports the WWF source from
 ``lasalle-notices-automation/app/services/scraper/sources/wwf.py`` into
 the cronjob, locking the discovery contract before Phase 3 ships.
-Tests exercise the ``extract_wwf_detail_urls`` helper plus the two-
-stage discovery (listing direct PDFs + detail-page PDFs), year guard,
-``is_likely_edital`` prefilter, and the ``process_candidate`` /
-``submit_candidates`` handoff.
+
+Plan 02 ("WWF Discovery Precision Repair") changes discovery from
+scanning every listing anchor to structurally parsing the
+``EDITAIS ABERTOS`` / ``EDITAIS ENCERRADOS`` sections and following only
+those row detail URLs. These tests lock that behaviour: section parsing,
+status preservation, process-number extraction, generic-document
+rejection, retification/annex retention, cross-record dedup, the
+selector-drift failure path, and Plan-01-compatible inventory output.
 """
 
 from __future__ import annotations
@@ -25,17 +29,28 @@ FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures" / "sources" / "wwf"
 
 
 LISTING_FIXTURE = FIXTURES_DIR / "listing.html"
-DETAIL_FIXTURE = FIXTURES_DIR / "detail.html"
+DETAIL_94482 = FIXTURES_DIR / "detail_94482.html"
+DETAIL_94483 = FIXTURES_DIR / "detail_94483.html"
+DETAIL_94484 = FIXTURES_DIR / "detail_94484.html"
 
 
 LISTING_URL = "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/"
-DETAIL_URL = (
-    "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?uNewsID=94482"
-)
+DETAIL_94482_URL = LISTING_URL + "?94482/Prestacao-de-servicos-de-analise-territorial"
+DETAIL_94483_URL = LISTING_URL + "?94483/Consultoria-em-educacao-ambiental"
+DETAIL_94484_URL = LISTING_URL + "?94484/Carta-convite-concorrencia-analise-territorial"
 
 
 def _read_fixture(path: Path) -> str:
     return path.read_text(encoding="utf-8")
+
+
+def _default_responses() -> dict[str, object]:
+    return {
+        LISTING_URL: make_response(_read_fixture(LISTING_FIXTURE)),
+        DETAIL_94482_URL: make_response(_read_fixture(DETAIL_94482)),
+        DETAIL_94483_URL: make_response(_read_fixture(DETAIL_94483)),
+        DETAIL_94484_URL: make_response(_read_fixture(DETAIL_94484)),
+    }
 
 
 class TestExtractWwfDetailUrls:
@@ -44,12 +59,12 @@ class TestExtractWwfDetailUrls:
     def test_listing_yields_detail_urls(self) -> None:
         from discover_wwf_candidates import extract_wwf_detail_urls
 
-        discovered = extract_wwf_detail_urls(
-            _read_fixture(LISTING_FIXTURE), LISTING_URL,
-        )
+        discovered = extract_wwf_detail_urls(_read_fixture(LISTING_FIXTURE), LISTING_URL)
 
         assert discovered == [
-            "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?uNewsID=94482",
+            DETAIL_94482_URL,
+            DETAIL_94483_URL,
+            DETAIL_94484_URL,
         ]
 
     def test_rejects_off_host_and_non_aquisicoesecontratacoes_paths(self) -> None:
@@ -77,19 +92,66 @@ class TestListingUrl:
         assert WWF_LISTING_URL == "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/"
 
 
+class TestSectionParsing:
+    def test_open_and_closed_sections_produce_statuses(self) -> None:
+        from discover_wwf_candidates import parse_listing_sections
+
+        rows = parse_listing_sections(_read_fixture(LISTING_FIXTURE))
+        assert rows is not None
+        open_rows = [r for r in rows if r["status"] == "open"]
+        closed_rows = [r for r in rows if r["status"] == "closed"]
+        assert {r["source_record_id"] for r in open_rows} == {"005705", "005706"}
+        assert {r["source_record_id"] for r in closed_rows} == {"005094"}
+
+    def test_process_number_becomes_source_record_id(self) -> None:
+        from discover_wwf_candidates import parse_listing_sections
+
+        rows = parse_listing_sections(_read_fixture(LISTING_FIXTURE))
+        assert rows is not None
+        by_id = {r["source_record_id"]: r for r in rows}
+        assert by_id["005705"]["canonical_url"] == DETAIL_94482_URL
+        assert "Prestação de serviços de análise territorial" in by_id["005705"]["title"]
+        assert by_id["005705"]["published_at"] == "2026-07-16T00:00:00Z"
+
+    def test_missing_sections_returns_none(self) -> None:
+        from discover_wwf_candidates import parse_listing_sections
+
+        html = "<html><body><h2>Outra coisa</h2></body></html>"
+        assert parse_listing_sections(html) is None
+
+    def test_one_missing_section_returns_none(self) -> None:
+        from discover_wwf_candidates import parse_listing_sections
+
+        html = "<html><body><h2>EDITAIS ABERTOS</h2></body></html>"
+        assert parse_listing_sections(html) is None
+
+    def test_fallback_to_uNewsID_when_no_process_number(self) -> None:
+        from discover_wwf_candidates import parse_listing_sections
+
+        html = """
+        <html><body>
+          <h2>EDITAIS ABERTOS</h2>
+          <a href="https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?uNewsID=77777">
+            Chamada pública sem número
+          </a>
+          <h2>EDITAIS ENCERRADOS</h2>
+        </body></html>
+        """
+        rows = parse_listing_sections(html)
+        assert rows is not None
+        assert rows[0]["source_record_id"] == "77777"
+        assert rows[0]["status"] == "open"
+
+
 class TestYearGuard:
     def test_default_min_notice_year_is_2026(self, monkeypatch: pytest.MonkeyPatch) -> None:
         monkeypatch.delenv("WWF_MIN_NOTICE_YEAR", raising=False)
-        module = importlib.reload(
-            __import__("discover_wwf_candidates"),
-        )
+        module = importlib.reload(__import__("discover_wwf_candidates"))
         assert module.WWF_MIN_NOTICE_YEAR == 2026
 
     def test_min_notice_year_override(self, monkeypatch: pytest.MonkeyPatch) -> None:
         monkeypatch.setenv("WWF_MIN_NOTICE_YEAR", "2027")
-        module = importlib.reload(
-            __import__("discover_wwf_candidates"),
-        )
+        module = importlib.reload(__import__("discover_wwf_candidates"))
         assert module.WWF_MIN_NOTICE_YEAR == 2027
         monkeypatch.delenv("WWF_MIN_NOTICE_YEAR", raising=False)
         importlib.reload(__import__("discover_wwf_candidates"))
@@ -133,6 +195,31 @@ class TestEditalPrefilter:
         url = "https://wwfbrnew.awsassets.panda.org/downloads/resultado-final-2026.pdf"
         assert _candidate_passes_edital_prefilter(url, "default") is False
 
+    def test_generic_supplier_assets_rejected(self) -> None:
+        from discover_wwf_candidates import _candidate_passes_edital_prefilter
+
+        generic = [
+            "https://x/awsassets.panda.org/downloads/documentos-necessarios.pdf",
+            "https://x/awsassets.panda.org/downloads/requisitos-basicos.pdf",
+            "https://x/awsassets.panda.org/downloads/modelo-de-proposta.pdf",
+            "https://x/awsassets.panda.org/downloads/proposta-modelo-2026.pdf",
+            "https://x/awsassets.panda.org/downloads/portal-fornecedor.pdf",
+            "https://x/awsassets.panda.org/downloads/fornecedor-portal.pdf",
+        ]
+        for url in generic:
+            assert _candidate_passes_edital_prefilter(url, "default") is False, url
+
+    def test_retificacao_and_anexo_retained(self) -> None:
+        from discover_wwf_candidates import _candidate_passes_edital_prefilter
+
+        retained = [
+            "https://x/awsassets.panda.org/downloads/retificacao-005705-2026.pdf",
+            "https://x/awsassets.panda.org/downloads/errata-001.pdf",
+            "https://x/awsassets.panda.org/downloads/anexo-005705-2026.pdf",
+        ]
+        for url in retained:
+            assert _candidate_passes_edital_prefilter(url, "default") is True, url
+
     def test_no_prefilter_policy_accepts_everything(self) -> None:
         from discover_wwf_candidates import _candidate_passes_edital_prefilter
 
@@ -148,11 +235,7 @@ class TestBuildCandidate:
 
         url = "https://wwfbrnew.awsassets.panda.org/downloads/edital-2026.pdf"
         before = datetime.now(timezone.utc)
-        candidate = build_candidate(
-            url,
-            listing_url=LISTING_URL,
-            origin="listing_pdf",
-        )
+        candidate = build_candidate(url, listing_url=LISTING_URL, origin="detail_page")
         after = datetime.now(timezone.utc)
 
         assert candidate is not None
@@ -161,7 +244,7 @@ class TestBuildCandidate:
         meta = candidate["metadata"]
         assert meta["source"] == "wwf"
         assert meta["listing_url"] == LISTING_URL
-        assert meta["origin"] == "listing_pdf"
+        assert meta["origin"] == "detail_page"
         assert meta["extracted_year"] == 2026
         discovered_at = datetime.fromisoformat(meta["discovered_at"])
         assert before <= discovered_at <= after
@@ -171,14 +254,11 @@ class TestBuildCandidate:
 
         url = "https://wwfbrnew.awsassets.panda.org/downloads/edital-2026.pdf"
         candidate = build_candidate(
-            url,
-            listing_url=LISTING_URL,
-            detail_url=DETAIL_URL,
-            origin="detail_page",
+            url, listing_url=LISTING_URL, detail_url=DETAIL_94482_URL, origin="detail_page",
         )
 
         assert candidate is not None
-        assert candidate["metadata"]["detail_url"] == DETAIL_URL
+        assert candidate["metadata"]["detail_url"] == DETAIL_94482_URL
         assert candidate["metadata"]["origin"] == "detail_page"
 
     def test_build_candidate_returns_none_for_pre_min_year(self) -> None:
@@ -195,70 +275,97 @@ class TestBuildCandidate:
 
 
 class TestDiscoverCandidates:
-    def test_listing_yields_direct_pdfs_and_detail_page_pdfs(self) -> None:
+    def test_discovery_follows_only_edital_rows(self) -> None:
         from discover_wwf_candidates import discover_candidates
 
-        responses = {
-            LISTING_URL: make_response(_read_fixture(LISTING_FIXTURE)),
-            DETAIL_URL: make_response(_read_fixture(DETAIL_FIXTURE)),
-        }
-
-        with patch_request_with_safe_redirects(responses):
+        with patch_request_with_safe_redirects(_default_responses()):
             stats, candidates = discover_candidates()
 
-        # 1 listing PDF + 2 detail PDFs (carta-convite + divulgacao dup),
-        # deduped to 2 unique URLs.
-        assert stats["candidates"] == 2
+        # 3 open/closed detail rows -> 7 unique PDFs (anexo shared across
+        # 94482 and 94483 is deduped). Generic listing docs are not scanned.
+        assert stats["candidates"] == 7
         assert stats["listings_fetched"] == 1
-        assert stats["details_fetched"] == 1
+        assert stats["details_fetched"] == 3
+        assert stats["section_parse_failed"] == 0
 
         urls = [c["url"] for c in candidates]
         assert (
-            "https://wwfbrnew.awsassets.panda.org/downloads/divulgacao_site_v3_sc005094.pdf"
-        ) in urls
-        assert (
-            "https://wwfbrnew.awsassets.panda.org/downloads/carta-convite-concorrencia_analise-territorial-no-medio-e-baixo-tapajos_005094.pdf"
-        ) in urls
-
-        listing_origin_candidate = next(
-            c for c in candidates
-            if c["url"].endswith("divulgacao_site_v3_sc005094.pdf")
-            and c["metadata"]["origin"] == "listing_pdf"
+            "https://wwfbrnew.awsassets.panda.org/downloads/edital-005705-analise-territorial-2026.pdf"
+            in urls
         )
-        assert (
-            "detail_url" not in listing_origin_candidate["metadata"]
-        )
+        # Generic supplier asset must NOT be a candidate.
+        assert all("modelo-de-proposta" not in u for u in urls)
+        # Generic listing-level docs were never followed.
+        assert all("documentos-necessarios" not in u for u in urls)
+        assert all("requisitos-basicos" not in u for u in urls)
+        # The source-record-specific divulgacao document is retained.
+        assert any("divulgacao_site_v3_sc005705" in u for u in urls)
+        assert stats["prefilter_rejected"] >= 1
 
-    def test_year_filter_excludes_pre_2026_pdf(self) -> None:
+    def test_retificacao_and_anexo_retained_as_candidates(self) -> None:
         from discover_wwf_candidates import discover_candidates
 
-        listing_html = """
-        <html>
-          <body>
-            <a href="/sobrenos/aquisicoesecontratacoes/?uNewsID=1">Processo 1</a>
-            <a href="https://wwfbrnew.awsassets.panda.org/downloads/edital-2025.pdf">PDF 2025 direto</a>
-          </body>
-        </html>
-        """
-        detail_html = """
-        <html>
-          <body>
-            <a href="https://wwfbrnew.awsassets.panda.org/downloads/anexo-2025.pdf">PDF 2025</a>
-          </body>
-        </html>
-        """
-        responses = {
-            LISTING_URL: make_response(listing_html),
-            DETAIL_URL.replace("94482", "1"): make_response(detail_html),
-        }
+        with patch_request_with_safe_redirects(_default_responses()):
+            _, candidates = discover_candidates()
 
+        urls = [c["url"] for c in candidates]
+        assert any("retificacao-005705" in u for u in urls)
+        assert any("anexo-005705" in u for u in urls)
+        assert any("retificacao-005094" in u for u in urls)
+
+    def test_candidates_trace_to_specific_row(self) -> None:
+        from discover_wwf_candidates import discover_candidates
+
+        with patch_request_with_safe_redirects(_default_responses()):
+            _, candidates = discover_candidates()
+
+        for c in candidates:
+            meta = c["metadata"]
+            assert "source_record_id" in meta
+            assert "detail_url" in meta
+            assert meta["detail_url"].startswith(LISTING_URL + "?")
+            assert meta["title"]
+            assert meta["published_at"]
+
+    def test_missing_detail_content_area_is_a_failure(self) -> None:
+        from discover_wwf_candidates import discover_candidates
+
+        responses = _default_responses()
+        responses[DETAIL_94482_URL] = make_response(
+            '<html><body><a href="https://example.test/unrelated.pdf">PDF</a></body></html>',
+        )
         with patch_request_with_safe_redirects(responses):
             stats, candidates = discover_candidates()
 
+        assert stats["detail_parse_failed"] == 1
+        assert stats["errors"] == 1
+        assert all("unrelated.pdf" not in candidate["url"] for candidate in candidates)
+
+    def test_duplicate_pdf_urls_across_records_not_duplicated(self) -> None:
+        from discover_wwf_candidates import discover_candidates
+
+        with patch_request_with_safe_redirects(_default_responses()):
+            stats, candidates = discover_candidates()
+
         urls = [c["url"] for c in candidates]
-        assert "https://wwfbrnew.awsassets.panda.org/downloads/edital-2025.pdf" not in urls
-        assert "https://wwfbrnew.awsassets.panda.org/downloads/anexo-2025.pdf" not in urls
-        assert stats["year_rejected"] >= 1
+        assert urls == list(dict.fromkeys(urls))
+        assert stats["candidates"] == len(set(urls))
+
+    def test_missing_sections_fails_audit_not_silent_zero(self) -> None:
+        from discover_wwf_candidates import discover_candidates
+
+        responses = {
+            LISTING_URL: make_response(
+                "<html><body><h2>Sem editais</h2></body></html>",
+            ),
+        }
+        with patch_request_with_safe_redirects(responses):
+            stats, candidates = discover_candidates()
+
+        assert stats["section_parse_failed"] == 1
+        assert stats["errors"] >= 1
+        assert candidates == []
+        assert stats["candidates"] == 0
 
     def test_listing_fetch_failure_is_logged(self) -> None:
         from discover_wwf_candidates import discover_candidates
@@ -270,6 +377,49 @@ class TestDiscoverCandidates:
 
         assert stats["errors"] == 1
         assert candidates == []
+
+
+class TestBuildInventory:
+    def test_inventory_is_plan01_compatible(self) -> None:
+        from discover_wwf_candidates import build_inventory
+
+        inventory, present = build_inventory(
+            listing_html=_read_fixture(LISTING_FIXTURE),
+            detail_responses={
+                DETAIL_94482_URL: _read_fixture(DETAIL_94482),
+                DETAIL_94483_URL: _read_fixture(DETAIL_94483),
+                DETAIL_94484_URL: _read_fixture(DETAIL_94484),
+            },
+        )
+        assert present is True
+        assert len(inventory) == 3
+
+        field_names = {
+            "source_key", "source_record_id", "canonical_url", "title",
+            "status", "published_at", "deadline", "document_urls", "document_hashes",
+        }
+        for record in inventory:
+            assert set(record.keys()) >= field_names
+            assert record["source_key"] == "wwf"
+
+        by_id = {r["source_record_id"]: r for r in inventory}
+        assert by_id["005705"]["status"] == "open"
+        assert by_id["005094"]["status"] == "closed"
+        # Retificacao/anexo retained in inventory; generic proposta excluded.
+        docs_5705 = by_id["005705"]["document_urls"]
+        assert any("retificacao-005705" in u for u in docs_5705)
+        assert any("anexo-005705" in u for u in docs_5705)
+        assert all("modelo-de-proposta" not in u for u in docs_5705)
+
+    def test_inventory_missing_sections_reports_absent(self) -> None:
+        from discover_wwf_candidates import build_inventory
+
+        inventory, present = build_inventory(
+            listing_html="<html><body><h2>nada</h2></body></html>",
+            detail_responses={},
+        )
+        assert present is False
+        assert inventory == []
 
 
 class TestSubmitHandoff:
@@ -299,19 +449,13 @@ class TestSubmitHandoff:
             with patch.object(dpc, "discover_candidates") as mock_disc:
                 mock_disc.return_value = ({"candidates": 1}, [candidate])
                 with patch.object(
-                    dpc.pipeline_core,
-                    "process_candidate",
-                    return_value=candidate,
+                    dpc.pipeline_core, "process_candidate", return_value=candidate,
                 ):
                     with patch.object(
-                        dpc.pipeline_core,
-                        "submit_candidates",
+                        dpc.pipeline_core, "submit_candidates",
                     ) as mock_submit:
                         mock_submit.return_value = {
-                            "total": 1,
-                            "submitted": 1,
-                            "failed_batches": 0,
-                            "errors": [],
+                            "total": 1, "submitted": 1, "failed_batches": 0, "errors": [],
                         }
                         with patch.dict(
                             "os.environ",
@@ -346,3 +490,40 @@ class TestSubmitHandoff:
                 },
             ):
                 assert dpc.main() == 0
+
+    def test_main_returns_1_when_discovery_reports_parser_failure(self) -> None:
+        import discover_wwf_candidates as dpc
+
+        with patch.object(dpc, "discover_candidates") as mock_disc:
+            mock_disc.return_value = (
+                {"candidates": 0, "errors": 1, "section_parse_failed": 1},
+                [],
+            )
+            with patch.dict(
+                "os.environ",
+                {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "tok"},
+            ):
+                assert dpc.main() == 1
+
+    def test_audit_mode_writes_json_without_submission_env(self, tmp_path) -> None:
+        import json
+        import discover_wwf_candidates as dpc
+
+        with patch.object(dpc, "_discover_candidates_and_inventory") as discover:
+            discover.return_value = (
+                {"candidates": 1, "errors": 0, "section_parse_failed": 0},
+                [{"url": "https://example.test/edital.pdf", "metadata": {"source_record_id": "1"}}],
+                [{
+                    "source_key": "wwf", "source_record_id": "1",
+                    "canonical_url": "https://example.test/1", "title": "Edital",
+                    "status": "open", "published_at": None, "deadline": None,
+                    "document_urls": ["https://example.test/edital.pdf"],
+                    "document_hashes": [],
+                }],
+            )
+            with patch.dict("os.environ", {}, clear=True):
+                assert dpc.main(["--audit-dir", str(tmp_path)]) == 0
+
+        assert json.loads((tmp_path / "source_inventory.json").read_text())
+        assert json.loads((tmp_path / "discovery.json").read_text())
+        assert json.loads((tmp_path / "candidates.json").read_text())

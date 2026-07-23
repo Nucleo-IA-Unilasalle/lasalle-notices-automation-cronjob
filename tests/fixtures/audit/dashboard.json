@@ -1,0 +1,66 @@
+[
+  {
+    "source_key": "wwf",
+    "source_record_id": "005705",
+    "canonical_url": "https://www.wwf.org.br/oportunidades/005705",
+    "title": "Prestacao de servicos de consultoria",
+    "status": "open",
+    "published_at": "2026-07-16T00:00:00Z",
+    "deadline": "2026-08-01T23:59:59Z",
+    "document_urls": [
+      "https://cdn.wwf.org.br/edital/005705.pdf"
+    ],
+    "document_hashes": [
+      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    ],
+    "renderable": true
+  },
+  {
+    "source_key": "funbio",
+    "source_record_id": "FB-100",
+    "canonical_url": "https://funbio.org.br/oportunidades/100",
+    "title": "Edital Funbio",
+    "status": "open",
+    "published_at": "2026-07-19T00:00:00Z",
+    "deadline": "2026-08-15T23:59:59Z",
+    "document_urls": [
+      "https://funbio.org.br/docs/edital100.pdf"
+    ],
+    "document_hashes": [
+      "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+    ],
+    "renderable": false
+  },
+  {
+    "source_key": "tnc",
+    "source_record_id": "TNC-77",
+    "canonical_url": "https://tnc.org.br/licitacoes/77",
+    "title": "Consultoria TNC",
+    "status": "open",
+    "published_at": "2026-07-20T00:00:00Z",
+    "deadline": "2026-08-20T23:59:59Z",
+    "document_urls": [
+      "https://tnc.org.br/docs/77.pdf"
+    ],
+    "document_hashes": [
+      "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+    ],
+    "renderable": true
+  },
+  {
+    "source_key": "wwf",
+    "source_record_id": "005720",
+    "canonical_url": "https://www.wwf.org.br/oportunidades/005720",
+    "title": "Registro extra do dashboard sem origem no inventario",
+    "status": "open",
+    "published_at": "2026-07-25T00:00:00Z",
+    "deadline": "2026-09-10T23:59:59Z",
+    "document_urls": [
+      "https://cdn.wwf.org.br/edital/005720.pdf"
+    ],
+    "document_hashes": [
+      "7777777777777777777777777777777777777777777777777777777777777777"
+    ],
+    "renderable": true
+  }
+]

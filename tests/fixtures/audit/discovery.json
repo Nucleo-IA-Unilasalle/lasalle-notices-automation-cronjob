@@ -1,0 +1,133 @@
+[
+  {
+    "source_key": "wwf",
+    "source_record_id": "005705",
+    "canonical_url": "https://www.wwf.org.br/oportunidades/005705?ref=email",
+    "title": "Prestacao de servicos de consultoria",
+    "status": "open",
+    "published_at": "2026-07-16T12:00:00Z",
+    "deadline": "2026-08-01T23:59:59Z",
+    "document_urls": [
+      "https://cdn.wwf.org.br/edital/005705.pdf"
+    ],
+    "document_hashes": [
+      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    ]
+  },
+  {
+    "canonical_url": "https://www.wwf.org.br/oportunidades/005706",
+    "title": "Consultoria em conservacao",
+    "status": "open",
+    "published_at": "2026-07-17T00:00:00Z",
+    "deadline": "2026-08-02T23:59:59Z",
+    "document_urls": [
+      "https://cdn.wwf.org.br/edital/005706.pdf"
+    ],
+    "document_hashes": [
+      "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    ]
+  },
+  {
+    "source_key": "mma",
+    "source_record_id": "MMA-2026-001",
+    "canonical_url": "https://www.gov.br/mma/oportunidades/001?utm_source=newsletter",
+    "title": "Chamada publica MMA",
+    "status": "closed",
+    "published_at": "2026-07-18T00:00:00Z",
+    "deadline": "2026-09-01T23:59:59Z",
+    "document_urls": [
+      "https://www.gov.br/mma/docs/edital.pdf"
+    ],
+    "document_hashes": [
+      "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    ]
+  },
+  {
+    "source_key": "funbio",
+    "source_record_id": "FB-100",
+    "canonical_url": "https://funbio.org.br/oportunidades/100",
+    "title": "Edital Funbio",
+    "status": "open",
+    "published_at": "2026-07-19T00:00:00Z",
+    "deadline": "2026-08-15T23:59:59Z",
+    "document_urls": [
+      "https://funbio.org.br/docs/edital100.pdf"
+    ],
+    "document_hashes": [
+      "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+    ]
+  },
+  {
+    "source_key": "tnc",
+    "source_record_id": "TNC-77",
+    "canonical_url": "https://cdn1.tnc.org.br/licitacoes/77/arquivo.pdf",
+    "title": "Consultoria TNC",
+    "status": "open",
+    "published_at": "2026-07-20T00:00:00Z",
+    "deadline": "2026-08-20T23:59:59Z",
+    "document_urls": [
+      "https://cdn1.tnc.org.br/licitacoes/77/arquivo.pdf"
+    ],
+    "document_hashes": [
+      "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+    ]
+  },
+  {
+    "source_key": "wwf",
+    "source_record_id": "005708",
+    "canonical_url": "https://www.wwf.org.br/oportunidades/005708",
+    "title": "Edital extra nao esta no inventario",
+    "status": "open",
+    "published_at": "2026-07-23T00:00:00Z",
+    "deadline": "2026-08-30T23:59:59Z",
+    "document_urls": [
+      "https://cdn.wwf.org.br/edital/005708.pdf"
+    ],
+    "document_hashes": [
+      "9999999999999999999999999999999999999999999999999999999999999999"
+    ]
+  },
+  {
+    "source_key": "unrelated",
+    "source_record_id": "UNREL-1",
+    "canonical_url": "https://example.com/relatorio-anual-2025.pdf",
+    "title": "Relatorio anual 2025 (nao e edital)",
+    "status": "open",
+    "published_at": "2026-07-24T00:00:00Z",
+    "deadline": "2026-12-31T23:59:59Z",
+    "document_urls": [
+      "https://example.com/relatorio-anual-2025.pdf"
+    ],
+    "document_hashes": [
+      "deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
+    ]
+  },
+  {
+    "source_key": "bndes",
+    "source_record_id": "BN-5",
+    "canonical_url": "https://bndes.gov.br/op/5-DIFFERENT",
+    "title": "Edital BNDES",
+    "status": "open",
+    "published_at": "2026-07-26T00:00:00Z",
+    "deadline": "2026-09-05T23:59:59Z",
+    "document_urls": [
+      "https://bndes.gov.br/docs/5-DIFFERENT.pdf"
+    ],
+    "document_hashes": [
+      "3333333333333333333333333333333333333333333333333333333333333333"
+    ]
+  },
+  {
+    "source_key": "brde",
+    "source_record_id": "BR-3",
+    "canonical_url": "https://brde.gov.br/op/3",
+    "status": "open",
+    "deadline": "2026-09-20T23:59:59Z",
+    "document_urls": [
+      "https://brde.gov.br/docs/3.pdf"
+    ],
+    "document_hashes": [
+      "4444444444444444444444444444444444444444444444444444444444444444"
+    ]
+  }
+]

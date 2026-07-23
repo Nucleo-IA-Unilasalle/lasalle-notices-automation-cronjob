@@ -4,6 +4,17 @@ on:
   schedule:
     - cron: "05 * * * *"
   workflow_dispatch:
+    inputs:
+      opportunity_v2:
+        description: "Emit one parent opportunity per PNCP control number"
+        required: false
+        default: false
+        type: boolean
+      shadow:
+        description: "Artifact-only v2 run; never submit to production"
+        required: false
+        default: true
+        type: boolean
 
 concurrency:
   group: pipeline-trigger
@@ -56,3 +67,14 @@ jobs:
           KREUZBERG_EXTRACTION_TIMEOUT_SECONDS: "120"
           FLAGS_use_mkldnn: "0"
           PADDLE_PDX_ENABLE_MKLDNN_BYDEFAULT: "0"
+          PNCP_OPPORTUNITY_V2_ENABLED: ${{ github.event_name == 'workflow_dispatch' && inputs.opportunity_v2 }}
+          PNCP_OPPORTUNITY_V2_SHADOW: ${{ github.event_name != 'workflow_dispatch' || inputs.shadow }}
+          PNCP_OPPORTUNITY_V2_ARTIFACT: artifacts/pncp-v2/opportunities.json
+
+      - name: Upload PNCP v2 shadow inventory
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pncp-v2-shadow
+          path: artifacts/pncp-v2
+          if-no-files-found: ignore

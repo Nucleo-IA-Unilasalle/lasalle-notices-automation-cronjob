@@ -89,6 +89,8 @@ ALL_REGISTERED_SOURCES = (
     "fapergs",
     "funbio",
     "govbr_mma",
+    "govbr_mma_public_calls",
+    "govbr_mma_fnma",
     "iis_rio",
     "sema_rs",
     "tnc",
@@ -222,6 +224,25 @@ class TestDiscoverSource:
         )
         assert stats == sample_stats
         assert candidates == sample_candidates
+
+
+class TestDiscoverSourceOpportunities:
+    def test_discards_optional_checkpoint_from_pncp_style_result(self) -> None:
+        from discover_all_candidates import discover_source_opportunities
+
+        discoverer = MagicMock()
+        discoverer.__dict__["discover_opportunities"] = lambda: (
+            {"opportunities": 1},
+            [{"source_record_id": "2026-0001"}],
+            "2026-07-23T00:00:00+00:00",
+        )
+
+        result = discover_source_opportunities(discoverer, min_year=2026)
+
+        assert result == (
+            {"opportunities": 1},
+            [{"source_record_id": "2026-0001"}],
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -494,6 +515,51 @@ class TestMainOrchestration:
             ) as mock_disc:
                 assert main() == 0
                 assert mock_disc.call_count == 2
+
+    def test_returns_1_when_source_reports_parser_failure(self) -> None:
+        from discover_all_candidates import main
+
+        _stub_ocr_modules()
+        env = {
+            "RENDER_APP_URL": "https://r.example.com",
+            "PIPELINE_SECRET": "tok",
+            "SOURCES": "wwf",
+        }
+        with patch.dict(os.environ, env, clear=True):
+            with patch(
+                "discover_all_candidates.discover_source",
+                return_value=(
+                    {"candidates": 0, "errors": 1, "section_parse_failed": 1},
+                    [],
+                ),
+            ):
+                assert main() == 1
+
+    def test_partial_source_error_does_not_discard_valid_candidates(self) -> None:
+        from discover_all_candidates import main
+
+        _stub_ocr_modules()
+        candidate = {"url": "https://example.com/edital.pdf", "kind": "pdf"}
+        processed = [{**candidate, "worker_result": {"ocr_markdown": "# Edital"}}]
+        env = {
+            "RENDER_APP_URL": "https://r.example.com",
+            "PIPELINE_SECRET": "tok",
+            "SOURCES": "govbr_mma_public_calls",
+        }
+        with patch.dict(os.environ, env, clear=True):
+            with patch(
+                "discover_all_candidates.discover_source",
+                return_value=({"candidates": 1, "errors": 1}, [candidate]),
+            ), patch(
+                "discover_all_candidates.process_source_candidates",
+                return_value=processed,
+            ) as mock_process, patch(
+                "discover_all_candidates.pipeline_core.submit_candidates",
+                return_value={"submitted": 1},
+            ) as mock_submit:
+                assert main() == 0
+        mock_process.assert_called_once()
+        mock_submit.assert_called_once()
 
     def test_calls_submit_candidates_with_correct_source_per_source(
         self,

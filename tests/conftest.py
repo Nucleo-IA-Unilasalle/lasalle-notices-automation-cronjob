@@ -135,11 +135,16 @@ _TRACKED_MODULES = (
     "discover_bndes_candidates",
     "pipeline_core",
     "discover_pncp_candidates",
+    "discover_govbr_mma_public_calls_candidates",
+    "discover_govbr_mma_fnma_candidates",
 )
 _TRACKED_ENV_VARS = (
     "BNDES_MIN_NOTICE_YEAR",
     "SCRAPE_MAX_PDF_BYTES",
     "SCRAPE_MAX_PDFS_PER_RUN",
+    "GOVBR_MMA_FNMA_INCLUDE_TDR",
+    "GOVBR_MMA_PUBLIC_CALLS_MIN_NOTICE_YEAR",
+    "GOVBR_MMA_FNMA_MIN_NOTICE_YEAR",
 )
 
 

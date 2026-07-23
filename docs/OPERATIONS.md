@@ -99,3 +99,152 @@ discovered editais stay in sync with the processing pipeline.
 | `PACIFIC_WINDOW_END` | `19` | Latest Pacific hour for AI triggers |
 | `AI_EDITAIS_PER_DAY` | `20` | Backend daily AI capacity |
 | `AI_EDITAIS_PER_MINUTE` | `3` | Backend per-minute AI capacity |
+
+## Source-fidelity audits
+
+Before enabling or modifying a source, run the offline fidelity audit to detect missing open opportunities, unrelated/extra records, duplicates, and field mismatches. The tool makes no LLM or network calls.
+
+```bash
+python scripts/audit_source_fidelity.py \
+  --source-inventory path/to/source_inventory.json \
+  --discovery path/to/discovery.json \
+  --dashboard path/to/dashboard_export.json \
+  --out ./report
+```
+
+Outputs (all written to `--out`):
+
+- `summary.json` — quantitative gates (inventory accounting %, candidate traceability %) and per-reason-code counts with pass/fail status. Inventory accounting uses only open, in-scope source records; retain closed rows in the inventory for provenance without expecting a current submission.
+- `matches.json` — deterministic matches and field-comparison evidence.
+- `exceptions.json` — every missing/extra/duplicate/mismatch/unverifiable record, each with `severity`, `reason_code`, and `evidence`. Authorization headers and credentials are redacted.
+- `report.md` — concise human-readable report.
+
+Exit codes: `0` = no blocking exceptions, `1` = fidelity failures (any blocking reason code count > 0), `2` = invalid input or configuration. Blocking reason codes are `missing_open`, `extra_submission`, `duplicate_identity`, `identity_mismatch`, `authoritative_status_mismatch`, `authoritative_deadline_mismatch`, `renderability_mismatch`, and `parser_failure`. A source may be enabled only when two consecutive live runs meet the program's quantitative gates (see `plans/opportunity-sources/README.md`).
+
+Input extensions used by the audit:
+
+- Set `reason_code` to `out_of_scope` for an explicit policy rejection or `unresolved_news_lead` for an unsubmitted lead that has not resolved to a canonical opportunity. Add a structured `evidence` object explaining the disposition.
+- A record declaring `renderable: true` must also provide `content_type_validated: true` and `hash_validated: true`. A file extension alone is not validation evidence.
+- Records and nested evidence are recursively redacted before reports are written, including authorization headers, cookies, password/token fields, URL user information, and authentication query parameters.
+
+## WWF discovery (Plan 02: structural precision)
+
+`discover_wwf_candidates.py` sources from the single WWF acquisitions page
+(`/sobrenos/aquisicoesecontratacoes/`). Plan 02 changed discovery from
+scanning every listing anchor to **structural section parsing**:
+
+- The listing HTML is split into `EDITAIS ABERTOS` (status `open`) and
+  `EDITAIS ENCERRADOS` (status `closed`) sections by their heading text.
+- Each edital row inside a section is parsed independently. The stable
+  process number (e.g. `005705`) becomes `source_record_id`; when no
+  process number is present the numeric WWF content ID from either the
+  current `?<id>/<slug>` URL or legacy `uNewsID` URL is used as fallback.
+- Only the detail URLs belonging to parsed edital rows are followed
+  (`WWF_MAX_DETAILS_PER_RUN` cap). PDFs are extracted only from the
+  record content area (`div.template433`, with legacy `div.page-content`
+  support); a missing selector is a parser failure rather than a whole-page
+  fallback.
+- Generic supplier assets are rejected in addition to the existing edital
+  prefilter (`is_likely_edital`): filenames/URLs matching
+  `documentos-necessarios`, `requisitos-basicos`, proposal-model
+  (`modelo*proposta` / `proposta*modelo`), and supplier-portal
+  (`portal*fornecedor` / `fornecedor*portal`). Record-bound divulgação,
+  retification (`retificacao` / `errata`), and annex (`anexo`) PDFs reached
+  via an edital row's detail page are retained.
+- `discover_candidates` still returns `(stats, candidates)` for the
+  unchanged download/OCR/submit path. `stats["section_parse_failed"]`
+  (and `errors`) is set when either heading is absent or no rows can be
+  parsed; `detail_parse_failed` covers missing record content selectors.
+  Either condition produces a non-zero command and workflow result.
+- `build_inventory(...)` emits a Plan-01-compatible normalized record per
+  parsed edital row (fields `source_key`, `source_record_id`,
+  `canonical_url`, `title`, `status`, `published_at`, `deadline`,
+  `document_urls`, `document_hashes`) for audit mode. Every candidate
+  carries `metadata.source_record_id` and `metadata.detail_url` so it
+  traces to a specific WWF row.
+
+Run `python scripts/discover_wwf_candidates.py --audit-dir artifacts/wwf`
+to fetch the live source without OCR or submission. It writes
+`source_inventory.json`, normalized `discovery.json`, raw `candidates.json`,
+and `stats.json`. A manual run of `pipeline-wwf-discovery.yml` defaults to this
+mode and uploads those files as the `wwf-fidelity-<run-id>` artifact.
+
+Enable WWF submission only after the audit shows all open records have an
+outcome and no introductory/generic documents appear as candidates (see
+`plans/opportunity-sources/02-wwf-discovery-precision.md`).
+
+## MMA public-calls and FNMA discovery (Plan 03)
+
+`discover_govbr_mma_public_calls_candidates.py` and
+`discover_govbr_mma_fnma_candidates.py` add two SEPARATE MMA feeds
+(`govbr_mma_public_calls`, `govbr_mma_fnma`) that do NOT modify the existing
+`govbr_mma` procurement discoverer. Both:
+
+- Parse only the gov.br editorial body (`#content-core #parent-fieldname-text`,
+  legacy `#content-core`, or the current `#content` cover body), so
+  cross-section navigation / footer links are excluded.
+- Associate year headings (`<h2>2026</h2>`) with the edital links that
+  follow, carrying the source year into `source_record_id` / inventory
+  records.
+- Treat `resultado` / `retificacao` / `errata` / historical / annex PDFs as
+  RELATED metadata of the parent opportunity — attached to the parent
+  inventory record's `document_urls`, never a separate candidate or inventory
+  entry. The principal edital PDF is the candidate.
+- Emit a Plan-01-compatible inventory (`build_inventory`) for deterministic
+  fidelity checks; every candidate carries `metadata.source_record_id` (and
+  `metadata.detail_url` where applicable) tracing to a record.
+- Do NOT infer `open` from the current year; when no deadline/status is
+  stated, `status` is `unknown`.
+
+The FNMA feed accepts a source-specific opt-in `GOVBR_MMA_FNMA_INCLUDE_TDR=1`
+to surface terms-of-reference as principal candidates. This is a SOURCE-
+SPECIFIC switch and must NOT change the global `FILTER_POLICY` default.
+
+When the editorial body is present but zero inventory records can be parsed,
+`discover_candidates` sets `stats["inventory_parse_failed"] = 1` and
+increments `errors` — it does NOT silently emit zero candidates as success.
+
+Run the staged live gates without OCR or submission:
+
+```bash
+python scripts/discover_govbr_mma_public_calls_candidates.py --audit-dir artifacts/mma-public
+python scripts/discover_govbr_mma_fnma_candidates.py --audit-dir artifacts/mma-fnma
+```
+
+Both directories contain `source_inventory.json`, `discovery.json`,
+`candidates.json`, and `stats.json`. Keep both MMA keys out of the scheduled
+default until the public-calls audit passes first, then enable FNMA in a later
+production run.
+
+Enable `govbr_mma_public_calls` first, then `govbr_mma_fnma`; do not enable
+both in the same first production run (see
+`plans/opportunity-sources/03-mma-source-expansion.md`).
+
+## Structured opportunity rollout
+
+`finep`, `fbds`, `tnc`, and `funbio` use
+`POST /api/pipeline/opportunities`. The shared worker validates principal PDFs,
+keeps ZIP/DOCX attachments non-renderable, OCRs safe PDF members from ZIPs in
+memory, and submits source Markdown even when attachment validation fails.
+
+Run one source at a time with `DISCOVERY_AUDIT_DIR=artifacts/source-audits`.
+Upload the workflow artifact, run `audit_source_fidelity.py` against the
+source's inventory/discovery files, and require two consecutive passing live
+runs before adding the source to the scheduled default. Roll back by removing
+only that key from `SOURCES`.
+
+FINEP uses API item `id`; FBDS uses the portal record identity; TNC uses the
+explicit TDR URL or a canonical heading/deadline hash; FUNBIO uses the canonical
+call slug. `FUNBIO_NEWS_ENABLED` defaults off. When enabled, news is resolved
+only by exact canonical URL/slug/source ID and unresolved likely calls are not
+submitted.
+
+## PNCP opportunity normalization
+
+The manual PNCP workflow exposes v2 in shadow mode. Keep
+`PNCP_OPPORTUNITY_V2_SHADOW=true` until its parent/document inventory matches
+the legacy production inventory for two runs. Before apply, restore a current
+production backup in isolation and run the backend reconciliation rehearsal.
+Review exported analyses and every association action, add `reviewed: true` to
+the exact rehearsal report, then pass it as `--reviewed-report` in apply mode.
+Any distinct uploaded Drive file conflict aborts the transaction.

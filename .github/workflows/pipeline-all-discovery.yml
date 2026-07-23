@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       sources:
-        description: "Comma-separated list of sources to discover (e.g. bndes,brde,wwf)"
+        description: "Comma-separated sources; structured options include finep,fbds,tnc,funbio"
         required: false
         default: "bndes,brde,fapergs,funbio,iis_rio,sema_rs,tnc,wwf"
         type: string
@@ -72,3 +72,15 @@ jobs:
           KREUZBERG_EXTRACTION_TIMEOUT_SECONDS: "120"
           FLAGS_use_mkldnn: "0"
           PADDLE_PDX_ENABLE_MKLDNN_BYDEFAULT: "0"
+          DISCOVERY_AUDIT_DIR: artifacts/source-audits
+          FUNBIO_NEWS_ENABLED: "false"
+          FINEP_MAX_OPPORTUNITIES_PER_RUN: "5"
+          FBDS_MAX_DETAILS_PER_RUN: "5"
+
+      - name: Upload structured source audit artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: structured-source-audits
+          path: artifacts/source-audits
+          if-no-files-found: ignore

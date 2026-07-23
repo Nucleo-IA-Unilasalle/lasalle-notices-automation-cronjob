@@ -36,12 +36,14 @@ endpoint can ingest it unchanged.
 from __future__ import annotations
 
 import json
+import hashlib
 import os
 import re
 import sys
 from datetime import datetime, timezone
 from typing import Any
 from urllib.parse import urljoin, urlsplit, urlunsplit
+from zoneinfo import ZoneInfo
 
 from bs4 import BeautifulSoup, Tag
 
@@ -56,6 +58,7 @@ from scraper_transport import (
 
 
 TNC_LISTING_URL = "https://www.tnc.org.br/conecte-se/comunicacao/noticias/"
+TNC_OPPORTUNITIES_URL = "https://www.tnc.org.br/conecte-se/trabalhe-conosco/"
 
 TNC_MIN_NOTICE_YEAR = int(os.environ.get("TNC_MIN_NOTICE_YEAR", "2026"))
 
@@ -341,6 +344,190 @@ def discover_candidates(
 
     stats["candidates"] = len(candidates)
     return stats, candidates
+
+
+def _consultancy_content(listing_html: str) -> Tag | None:
+    soup = BeautifulSoup(listing_html, "html.parser")
+    heading = next(
+        (
+            node
+            for node in soup.find_all(["h1", "h2", "h3"])
+            if re.search(
+                r"oportunidades para consultoria e presta(?:cao|ção) de servi(?:cos|ços)",
+                node.get_text(" ", strip=True),
+                re.I,
+            )
+        ),
+        None,
+    )
+    if not isinstance(heading, Tag):
+        return None
+    current = heading.find_next()
+    while isinstance(current, Tag):
+        if "rich-text-editor" in (current.get("class") or []):
+            return current
+        current = current.find_next()
+    return None
+
+
+def extract_consultancy_blocks(listing_html: str) -> list[list[Tag]]:
+    """Split the official consultancy section on its visible separators."""
+    content = _consultancy_content(listing_html)
+    if content is None:
+        return []
+    blocks: list[list[Tag]] = []
+    current: list[Tag] = []
+    for paragraph in content.find_all("p"):
+        if not isinstance(paragraph, Tag):
+            continue
+        text = paragraph.get_text(" ", strip=True)
+        if re.fullmatch(r"[-–—\s]{10,}", text):
+            if current:
+                blocks.append(current)
+                current = []
+            continue
+        if text or paragraph.find("a"):
+            current.append(paragraph)
+    if current:
+        blocks.append(current)
+    return blocks
+
+
+def _parse_tnc_deadline(text: str) -> datetime | None:
+    matches = list(
+        re.finditer(
+            r"(?:(NOVO)\s+)?PRAZO\s*:\s*(\d{2}/\d{2}/\d{4})(?:\s+at[eé]\s+(\d{1,2})h)?",
+            text,
+            re.I,
+        )
+    )
+    if not matches:
+        return None
+    preferred = next((match for match in reversed(matches) if match.group(1)), matches[-1])
+    hour = int(preferred.group(3) or 23)
+    minute = 59 if preferred.group(3) is None else 0
+    return datetime.strptime(preferred.group(2), "%d/%m/%Y").replace(
+        hour=hour,
+        minute=minute,
+        tzinfo=ZoneInfo("America/Sao_Paulo"),
+    )
+
+
+def parse_consultancy_block(
+    paragraphs: list[Tag],
+    *,
+    now: datetime | None = None,
+    snapshot_at: datetime | None = None,
+) -> dict[str, Any] | None:
+    text_parts = [paragraph.get_text(" ", strip=True) for paragraph in paragraphs]
+    full_text = "\n".join(part for part in text_parts if part)
+    deadline = _parse_tnc_deadline(full_text)
+    title = next(
+        (
+            part
+            for part in text_parts
+            if part
+            and not re.match(r"^(NOVO\s+)?PRAZO\s*:", part, re.I)
+            and not re.match(r"^CONTATO\s*:", part, re.I)
+        ),
+        "",
+    )
+    if not title or deadline is None:
+        return None
+    tdr_url = None
+    for paragraph in paragraphs:
+        for link in paragraph.find_all("a"):
+            href = link.get("href") if isinstance(link, Tag) else None
+            if isinstance(href, str) and re.search(r"\.(pdf|docx)($|[?#])", href, re.I):
+                tdr_url = urljoin(TNC_OPPORTUNITIES_URL, href)
+                break
+        if tdr_url:
+            break
+    if tdr_url and len(tdr_url) <= 255:
+        source_record_id = tdr_url
+    else:
+        identity = f"{TNC_OPPORTUNITIES_URL}|{title.casefold()}|{deadline.isoformat()}"
+        source_record_id = f"consultancy:{hashlib.sha256(identity.encode()).hexdigest()}"
+    current = now or datetime.now(ZoneInfo("America/Sao_Paulo"))
+    status = "open" if deadline >= current else "expired"
+    documents = []
+    if tdr_url:
+        kind = "pdf" if re.search(r"\.pdf($|[?#])", tdr_url, re.I) else "docx"
+        documents.append(
+            {
+                "source_document_id": tdr_url,
+                "document_kind": kind,
+                "url": tdr_url,
+                "filename": urlsplit(tdr_url).path.rsplit("/", 1)[-1],
+                "mime_type": (
+                    "application/pdf"
+                    if kind == "pdf"
+                    else "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                ),
+                "is_principal": False,
+                "is_renderable": False,
+            }
+        )
+    source_markdown = (
+        f"# {title}\n\n## Prazo\n\n{deadline.isoformat()}"
+        f"\n\n## Instrucoes e contato\n\n{full_text}"
+    )
+    snapshot = snapshot_at or datetime.now(timezone.utc)
+    return {
+        "source_key": "tnc",
+        "source_record_id": source_record_id,
+        "source_kind": "web",
+        "opportunity_type": "consultancy",
+        "canonical_url": TNC_OPPORTUNITIES_URL,
+        "title": title,
+        "description": full_text,
+        "authoritative_status": status,
+        "source_published_at": None,
+        "source_updated_at": None,
+        "proposal_opens_at": None,
+        "application_deadline": deadline.astimezone(timezone.utc).isoformat(),
+        "source_snapshot_at": snapshot.astimezone(timezone.utc).isoformat(),
+        "source_markdown": source_markdown,
+        "source_content_hash": "",
+        "documents": documents,
+    }
+
+
+def discover_opportunities(
+    *,
+    fetch_html: Any = None,
+    now: datetime | None = None,
+    snapshot_at: datetime | None = None,
+    min_year: int | None = None,
+) -> tuple[dict[str, int], list[dict[str, Any]]]:
+    """Discover only official consultancy blocks, never general news."""
+    del min_year
+    fetch = fetch_html or (
+        lambda url: fetch_html_with_retry(
+            url,
+            timeout=TNC_FETCH_TIMEOUT_SECONDS,
+            max_attempts=TNC_FETCH_MAX_ATTEMPTS,
+            backoff_seconds=TNC_FETCH_BACKOFF_SECONDS,
+        )
+    )
+    html = fetch(TNC_OPPORTUNITIES_URL)
+    if _consultancy_content(html) is None:
+        return {"section_parse_failed": 1, "blocks": 0, "opportunities": 0}, []
+    blocks = extract_consultancy_blocks(html)
+    opportunities = [
+        parsed
+        for block in blocks
+        if (
+            parsed := parse_consultancy_block(
+                block, now=now, snapshot_at=snapshot_at
+            )
+        )
+    ]
+    return {
+        "blocks": len(blocks),
+        "opportunities": len(opportunities),
+        "malformed_blocks": len(blocks) - len(opportunities),
+    }, opportunities
 
 
 def main() -> int:

@@ -5,6 +5,7 @@ import os
 import sys
 import time
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 from typing import Any
 from urllib.parse import urlencode
 
@@ -65,6 +66,12 @@ PNCP_MAX_SUBMITTABLE_CANDIDATES_PER_RUN = int(os.environ.get("PNCP_MAX_SUBMITTAB
 PNCP_FETCH_MAX_ATTEMPTS = int(os.environ.get("PNCP_FETCH_MAX_ATTEMPTS", "3"))
 PNCP_FETCH_BACKOFF_SECONDS = float(os.environ.get("PNCP_FETCH_BACKOFF_SECONDS", "2"))
 PNCP_FETCH_TIMEOUT_SECONDS = int(os.environ.get("PNCP_FETCH_TIMEOUT_SECONDS", "8"))
+PNCP_OPPORTUNITY_V2_ENABLED = (
+    os.environ.get("PNCP_OPPORTUNITY_V2_ENABLED", "false").lower() == "true"
+)
+PNCP_OPPORTUNITY_V2_SHADOW = (
+    os.environ.get("PNCP_OPPORTUNITY_V2_SHADOW", "true").lower() == "true"
+)
 
 
 def fetch_json(url: str, *, timeout: int | None = None) -> Any:
@@ -158,6 +165,13 @@ def parse_pncp_datetime(value: str | None) -> datetime | None:
         try:
             naive = datetime.strptime(value, _UPDATE_FORMAT)
             return naive.replace(tzinfo=BRASILIA_OFFSET)
+        except ValueError:
+            pass
+    if len(value) == 8 and value.isdigit():
+        try:
+            return datetime.strptime(value, "%Y%m%d").replace(
+                tzinfo=BRASILIA_OFFSET
+            )
         except ValueError:
             pass
     return None
@@ -475,6 +489,173 @@ def build_candidate(record: dict[str, Any], document: dict[str, Any]) -> dict[st
     return {"url": url.strip(), "kind": "pdf", "metadata": metadata}
 
 
+def _pncp_iso(value: Any) -> str | None:
+    parsed = parse_pncp_datetime(str(value)) if value else None
+    return _normalize_to_utc(parsed).isoformat() if parsed else None
+
+
+def build_opportunity(
+    record: dict[str, Any],
+    documents: list[dict[str, Any]],
+    *,
+    snapshot_at: datetime,
+) -> dict[str, Any] | None:
+    """Represent one PNCP control number as one parent with child documents."""
+    control_number = str(record.get("numeroControlePNCP") or "").strip()
+    if not control_number:
+        return None
+    orgao = record.get("orgaoEntidade")
+    cnpj = str(orgao.get("cnpj") or "") if isinstance(orgao, dict) else ""
+    year = record.get("anoCompra")
+    sequence = record.get("sequencialCompra")
+    canonical_url = (
+        f"https://pncp.gov.br/app/editais/{cnpj}/{year}/{sequence}"
+        if cnpj and year is not None and sequence is not None
+        else None
+    )
+    title = str(
+        record.get("objetoCompra")
+        or record.get("informacaoComplementar")
+        or f"Contratacao PNCP {control_number}"
+    ).strip()
+    field_values = [
+        ("Numero de controle PNCP", control_number),
+        ("Objeto", str(record.get("objetoCompra") or "").strip()),
+        ("Processo", str(record.get("processo") or "").strip()),
+        ("Modalidade", str(record.get("modalidadeNome") or "").strip()),
+        ("Situacao", str(record.get("situacaoCompraNome") or "").strip()),
+        ("Abertura", _pncp_iso(record.get("dataAberturaProposta")) or ""),
+        ("Encerramento", _pncp_iso(record.get("dataEncerramentoProposta")) or ""),
+        (
+            "Informacao complementar",
+            str(record.get("informacaoComplementar") or "").strip(),
+        ),
+    ]
+    lines = [f"# {title}"]
+    for label, value in field_values:
+        if value:
+            lines.extend(("", f"## {label}", "", value))
+    selected = select_pncp_documents(documents)
+    descriptors = []
+    seen_sequence: set[str] = set()
+    for document in selected:
+        url = document.get("url")
+        if not isinstance(url, str) or not url.strip():
+            continue
+        document_sequence = document.get("sequencialDocumento")
+        if document_sequence is None:
+            continue
+        source_document_id = str(document_sequence)
+        if source_document_id in seen_sequence:
+            continue
+        seen_sequence.add(source_document_id)
+        descriptors.append(
+            {
+                "source_document_id": source_document_id,
+                "document_kind": "pdf",
+                "url": url.strip(),
+                "filename": url.split("?", 1)[0].rsplit("/", 1)[-1],
+                "mime_type": "application/pdf",
+                "is_principal": False,
+                "is_renderable": False,
+            }
+        )
+    return {
+        "source_key": "pncp",
+        "source_record_id": control_number,
+        "source_kind": "api",
+        "opportunity_type": "procurement",
+        "canonical_url": canonical_url,
+        "title": title,
+        "description": str(record.get("informacaoComplementar") or "").strip() or None,
+        "authoritative_status": str(record.get("situacaoCompraNome") or "").strip() or None,
+        "source_published_at": _pncp_iso(record.get("dataPublicacaoPncp")),
+        "source_updated_at": _pncp_iso(
+            record.get("dataAtualizacaoGlobal") or record.get("dataAtualizacao")
+        ),
+        "proposal_opens_at": _pncp_iso(record.get("dataAberturaProposta")),
+        "application_deadline": _pncp_iso(record.get("dataEncerramentoProposta")),
+        "source_snapshot_at": snapshot_at.astimezone(timezone.utc).isoformat(),
+        "source_markdown": "\n".join(lines),
+        "source_content_hash": "",
+        "documents": descriptors,
+    }
+
+
+def discover_opportunities() -> tuple[dict[str, int], list[dict[str, Any]], datetime]:
+    """Discover PNCP parents even when their API document list is empty."""
+    stats = {
+        "records": 0,
+        "document_lookups": 0,
+        "opportunities": 0,
+        "document_failures": 0,
+        "search_failures": 0,
+    }
+    records, discovery_time = fetch_pncp_records(stats=stats)
+    stats["records"] = len(records)
+    opportunities: list[dict[str, Any]] = []
+    for record in records:
+        if stats["document_lookups"] >= PNCP_MAX_DOCUMENT_LOOKUPS_PER_RUN:
+            break
+        documents, failed = fetch_pncp_documents(record)
+        stats["document_lookups"] += 1
+        if failed:
+            stats["document_failures"] += 1
+            documents = []
+        opportunity = build_opportunity(
+            record, documents, snapshot_at=discovery_time
+        )
+        if opportunity is not None:
+            opportunities.append(opportunity)
+        if len(opportunities) >= PNCP_MAX_CANDIDATES_PER_RUN:
+            break
+    stats["opportunities"] = len(opportunities)
+    return stats, opportunities, discovery_time
+
+
+def _main_opportunities() -> int:
+    stats, opportunities, discovery_time = discover_opportunities()
+    print(f"PNCP v2 opportunity discovery stats: {stats}")
+    if not opportunities and stats.get("search_failures", 0):
+        return 1
+    if not opportunities:
+        return 0
+    if PNCP_OPPORTUNITY_V2_SHADOW:
+        artifact = Path(
+            os.environ.get(
+                "PNCP_OPPORTUNITY_V2_ARTIFACT",
+                "artifacts/pncp-v2/opportunities.json",
+            )
+        )
+        artifact.parent.mkdir(parents=True, exist_ok=True)
+        artifact.write_text(
+            json.dumps(
+                {"stats": stats, "opportunities": opportunities},
+                indent=2,
+                sort_keys=True,
+                ensure_ascii=True,
+                default=str,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        print(f"PNCP v2 shadow artifact written to {artifact}")
+        return 0
+    _config, extractor = pipeline_core.make_default_ocr_extractor()
+    processed = [
+        pipeline_core.process_opportunity(
+            opportunity, extractor=extractor, stats=stats
+        )
+        for opportunity in opportunities
+    ]
+    result = pipeline_core.submit_opportunities(processed)
+    print(f"PNCP v2 opportunity submission: {result}")
+    if result.get("submitted") != len(processed):
+        return 1
+    _save_update_checkpoint(discovery_time)
+    return 0
+
+
 def discover_candidates() -> tuple[dict[str, int], list[dict[str, Any]], datetime]:
     stats = {
         "records": 0,
@@ -558,6 +739,8 @@ def main() -> int:
     if not os.environ.get("PIPELINE_SECRET"):
         print("error: PIPELINE_SECRET is required", file=sys.stderr)
         return 2
+    if PNCP_OPPORTUNITY_V2_ENABLED:
+        return _main_opportunities()
 
     stats, candidates, discovery_time = discover_candidates()
     print(f"PNCP discovery stats: {stats}")

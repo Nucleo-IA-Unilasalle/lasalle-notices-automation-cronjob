@@ -1,0 +1,40 @@
+{
+  "items": [
+    {
+      "id": 991625,
+      "titulo": "BRICS - Chamada Publica de Inovacao",
+      "descricaoRawText": "Apoio a projetos de cooperacao internacional.",
+      "descricao": "<p>Apoio a projetos.</p><a href=\"https://download.finep.gov.br/2026/edital-brics.pdf\">Edital</a><a href=\"https://download.finep.gov.br/manuais/manual-cliente.pdf\">Manual do Cliente</a>",
+      "situacao": {"key": "aberta", "name": "Aberta"},
+      "dataDePublicacao": "2026-06-30T00:00:00Z",
+      "dateModified": "2026-07-02T19:29:10Z",
+      "prazoProposto": "2026-08-14T18:00:00Z",
+      "vigenciaInicio": "2026-06-30T00:00:00Z",
+      "publicoAlvo": [{"key": "empresas", "name": "Empresas"}],
+      "regiao": {"key": "todoBrasil", "name": "Todo Brasil"},
+      "tipoDeOportunidade": {"key": "naoReembolsavel", "name": "Nao reembolsavel"},
+      "tema": "Inovacao"
+    },
+    {
+      "id": 991626,
+      "titulo": "Chamada sem documento",
+      "descricaoRawText": "Oportunidade estruturada sem PDF.",
+      "descricao": "<p>Sem anexos.</p>",
+      "situacao": {"key": "aberta", "name": "Aberta"},
+      "dataDePublicacao": "2026-07-01T00:00:00Z",
+      "dateModified": "2026-07-01T10:00:00Z",
+      "prazoProposto": "2026-09-01T20:00:00Z"
+    },
+    {
+      "id": 900000,
+      "titulo": "Chamada encerrada",
+      "descricaoRawText": "Encerrada.",
+      "situacao": {"key": "encerrada", "name": "Encerrada"},
+      "dataDePublicacao": "2025-01-01T00:00:00Z"
+    }
+  ],
+  "lastPage": 1,
+  "page": 1,
+  "pageSize": 20,
+  "totalCount": 3
+}

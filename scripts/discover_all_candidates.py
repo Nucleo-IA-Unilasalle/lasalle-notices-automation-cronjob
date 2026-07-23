@@ -27,8 +27,10 @@ from __future__ import annotations
 
 import importlib
 import inspect
+import json
 import os
 import sys
+from pathlib import Path
 from typing import Any
 
 import pipeline_core
@@ -39,8 +41,12 @@ SOURCE_MODULES: dict[str, str] = {
     "bndes": "discover_bndes_candidates",
     "brde": "discover_brde_candidates",
     "fapergs": "discover_fapergs_candidates",
+    "fbds": "discover_fbds_opportunities",
+    "finep": "discover_finep_opportunities",
     "funbio": "discover_funbio_candidates",
     "govbr_mma": "discover_govbr_mma_candidates",
+    "govbr_mma_public_calls": "discover_govbr_mma_public_calls_candidates",
+    "govbr_mma_fnma": "discover_govbr_mma_fnma_candidates",
     "iis_rio": "discover_iis_rio_candidates",
     "sema_rs": "discover_sema_rs_candidates",
     "tnc": "discover_tnc_candidates",
@@ -95,6 +101,8 @@ def discover_source(
     *,
     filter_policy: FilterPolicy,
     min_year: int,
+    seen_pdfs: set[str] | None = None,
+    seen_ids: set[str] | None = None,
 ) -> tuple[dict[str, int], list[dict[str, Any]]]:
     """Call ``discoverer.discover_candidates`` with the params it accepts.
 
@@ -103,6 +111,10 @@ def discover_source(
     ``fundacao_grupo_boticario``, ``kfw``, ``msgov``) accept neither
     and run with their own internal filtering. We inspect the signature
     rather than forcing a uniform contract on the per-source modules.
+
+    ``seen_pdfs`` / ``seen_ids`` are threaded through to discoverers that
+    accept them (the two MMA feeds), giving stable cross-feed dedup so the
+    same PDF URL / opportunity identity is not double-submitted in one run.
     """
     signature = inspect.signature(discoverer.discover_candidates)
     kwargs: dict[str, Any] = {}
@@ -110,7 +122,36 @@ def discover_source(
         kwargs["filter_policy"] = filter_policy
     if "min_year" in signature.parameters:
         kwargs["min_year"] = min_year
+    if "seen_pdfs" in signature.parameters and seen_pdfs is not None:
+        kwargs["seen_pdfs"] = seen_pdfs
+    if "seen_ids" in signature.parameters and seen_ids is not None:
+        kwargs["seen_ids"] = seen_ids
     return discoverer.discover_candidates(**kwargs)
+
+
+def discover_source_opportunities(
+    discoverer: Any,
+    *,
+    min_year: int,
+) -> tuple[dict[str, int], list[dict[str, Any]]] | None:
+    """Use the structured opportunity contract when a source exposes it."""
+    # Read the concrete module namespace so MagicMock-based legacy tests (and
+    # dynamic objects in operators' tooling) are not mistaken for structured
+    # sources merely because ``getattr`` fabricates a callable attribute.
+    discover = getattr(discoverer, "__dict__", {}).get("discover_opportunities")
+    if not callable(discover):
+        return None
+    signature = inspect.signature(discover)
+    kwargs: dict[str, Any] = {}
+    if "min_year" in signature.parameters:
+        kwargs["min_year"] = min_year
+    result = discover(**kwargs)
+    # PNCP also returns its checkpoint timestamp. The all-sources runner only
+    # needs the shared stats and opportunity payloads.
+    if isinstance(result, tuple) and len(result) == 3:
+        stats, opportunities, _checkpoint = result
+        return stats, opportunities
+    return result
 
 
 def process_source_candidates(
@@ -150,6 +191,54 @@ def process_source_candidates(
             pipeline_core.record_pdf_download(stats)
 
     return processed
+
+
+def write_opportunity_audit(
+    source: str,
+    stats: dict[str, int],
+    opportunities: list[dict[str, Any]],
+) -> None:
+    """Write Plan-01-compatible inventory/discovery artifacts when configured."""
+    root_value = os.environ.get("DISCOVERY_AUDIT_DIR")
+    if not root_value:
+        return
+    target = Path(root_value) / source
+    target.mkdir(parents=True, exist_ok=True)
+    records = [
+        {
+            "source_key": item.get("source_key"),
+            "source_record_id": item.get("source_record_id"),
+            "canonical_url": item.get("canonical_url"),
+            "title": item.get("title"),
+            "status": item.get("authoritative_status"),
+            "published_at": item.get("source_published_at"),
+            "deadline": item.get("application_deadline"),
+            "document_urls": [
+                document.get("url")
+                for document in item.get("documents", [])
+                if document.get("url")
+            ],
+            "document_hashes": [
+                document.get("content_hash")
+                for document in item.get("documents", [])
+                if document.get("content_hash")
+            ],
+        }
+        for item in opportunities
+    ]
+    stable_json = lambda value: json.dumps(
+        value, indent=2, sort_keys=True, ensure_ascii=True, default=str
+    ) + "\n"
+    (target / "source_inventory.json").write_text(
+        stable_json(records), encoding="utf-8"
+    )
+    (target / "discovery.json").write_text(
+        stable_json(records), encoding="utf-8"
+    )
+    (target / "opportunities.json").write_text(
+        stable_json(opportunities), encoding="utf-8"
+    )
+    (target / "stats.json").write_text(stable_json(stats), encoding="utf-8")
 
 
 def _resolve_min_year() -> int:
@@ -216,6 +305,11 @@ def main() -> int:
 
     _, extractor = pipeline_core.make_default_ocr_extractor()
 
+    # Shared across feeds so a PDF that appears in more than one MMA source is
+    # not double-submitted within a single run.
+    shared_seen_pdfs: set[str] = set()
+    shared_seen_ids: set[str] = set()
+
     shared_stats: dict[str, int] = {}
     per_source_stats: dict[str, dict[str, int]] = {}
     per_source_processed: dict[str, int] = {}
@@ -246,11 +340,21 @@ def main() -> int:
             continue
 
         try:
-            source_stats, candidates = discover_source(
-                discoverer,
-                filter_policy=filter_policy,
-                min_year=min_year,
+            opportunity_result = discover_source_opportunities(
+                discoverer, min_year=min_year
             )
+            if opportunity_result is None:
+                source_stats, candidates = discover_source(
+                    discoverer,
+                    filter_policy=filter_policy,
+                    min_year=min_year,
+                    seen_pdfs=shared_seen_pdfs,
+                    seen_ids=shared_seen_ids,
+                )
+                opportunities: list[dict[str, Any]] | None = None
+            else:
+                source_stats, opportunities = opportunity_result
+                candidates = []
         except Exception as exc:
             print(
                 f"error: discovery failed for source {source!r}: {exc}",
@@ -261,10 +365,52 @@ def main() -> int:
             continue
 
         per_source_stats[source] = source_stats
+        if opportunities is not None:
+            write_opportunity_audit(source, source_stats, opportunities)
         print(
-            f"{source}: discovered {len(candidates)} candidates "
+            f"{source}: discovered "
+            f"{len(opportunities) if opportunities is not None else len(candidates)} "
+            f"{'opportunities' if opportunities is not None else 'candidates'} "
             f"(stats={source_stats})",
         )
+
+        if (
+            source_stats.get("section_parse_failed", 0)
+            or source_stats.get("inventory_parse_failed", 0)
+        ):
+            print(
+                f"error: discovery reported source/parser failures for {source!r}",
+                file=sys.stderr,
+            )
+            exit_code = 1
+            continue
+
+        if opportunities is not None:
+            processed_opportunities = [
+                pipeline_core.process_opportunity(
+                    opportunity,
+                    extractor=extractor,
+                    stats=shared_stats,
+                )
+                for opportunity in opportunities
+            ]
+            per_source_processed[source] = len(processed_opportunities)
+            try:
+                submit_result = pipeline_core.submit_opportunities(
+                    processed_opportunities
+                )
+            except Exception as exc:
+                print(
+                    f"error: opportunity submission failed for {source!r}: {exc}",
+                    file=sys.stderr,
+                )
+                exit_code = 1
+                continue
+            per_source_submitted[source] = submit_result.get("submitted", 0)
+            print(f"{source}: opportunity submission: {submit_result}")
+            if opportunities and submit_result.get("submitted", 0) == 0:
+                exit_code = 1
+            continue
 
         if not candidates:
             continue
@@ -279,7 +425,6 @@ def main() -> int:
         )
 
         ocr_successes = per_source_processed[source]
-        ocr_failures = sum(1 for r in processed if r.get("error"))
         if candidates and ocr_successes == 0:
             print(
                 f"error: all {source} candidates failed download/OCR; "

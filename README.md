@@ -14,6 +14,7 @@ The pipeline is split between GitHub Actions (discovery, download, OCR, submissi
 - **Validate** PDFs via magic-byte and structure checks
 - **OCR** extracted PDFs to markdown using PaddleOCR
 - **Submit** candidates with metadata, markdown, and content hash to Render `/api/pipeline/candidates`
+- **Submit** stable API/web opportunities, including zero-document and non-renderable-attachment records, to Render `/api/pipeline/opportunities`
 
 ### Render responsibilities
 
@@ -43,7 +44,7 @@ The pipeline is split between GitHub Actions (discovery, download, OCR, submissi
 | `pipeline-kfw-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (KfW, Phase 4; Playwright-based listing) |
 | `pipeline-fundacao-grupo-boticario-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (Fundação Grupo Boticário, Phase 4; Playwright-based listing) |
 | `pipeline-msgov-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (MSGOV, Phase 4; pure-Playwright with shadow-DOM probing; magic-byte check rejects `.doc` annex leakage at download time) |
-| `pipeline-all-discovery.yml` | Hourly cron + manual | Unified orchestrator over the non-PNCP sources (Phase 5); reads `SOURCES` from the workflow_dispatch input (default: BNDE, BRDE, FAPERGS, FUNBIO, IIS-Rio, SEMA-RS, TNC, WWF — all BS4) |
+| `pipeline-all-discovery.yml` | Hourly cron + manual | Unified orchestrator over the non-PNCP sources (Phase 5); reads `SOURCES` from the workflow_dispatch input. The Plan-03 MMA feeds are selectable but remain outside the scheduled default until their staged live gates pass. |
 | `pipeline-ai.yml` | After PNCP discovery + hourly cron | Trigger Render AI processing (daytime Pacific gate) |
 | `pipeline-ingest.yml` | Manual only | Legacy Render ingest (rollback) |
 | `pipeline-ocr.yml` | Manual only | Legacy Render OCR worker (backfill) |
@@ -94,10 +95,23 @@ The pipeline is split between GitHub Actions (discovery, download, OCR, submissi
 - `UNEP_MAX_CANDIDATES_PER_RUN=50` — same cap on the UNEP discoverer
 - `GOVBR_MMA_MAX_CANDIDATES_PER_RUN=50` — same cap on the GOVBR-MMA discoverer
 - `GOVBR_MMA_MAX_DETAILS_PER_RUN=20` — bound the number of detail-page fetches per GOVBR-MMA run
+- `GOVBR_MMA_PUBLIC_CALLS_MIN_NOTICE_YEAR=2026` — per-source year guard for the GOVBR-MMA public-calls (participation-social) discoverer (Plan 03)
+- `GOVBR_MMA_PUBLIC_CALLS_MAX_CANDIDATES_PER_RUN=50` — same cap on the GOVBR-MMA public-calls discoverer
+- `GOVBR_MMA_PUBLIC_CALLS_MAX_DETAILS_PER_RUN=20` — bound the number of detail-page fetches per GOVBR-MMA public-calls run
+- `GOVBR_MMA_FNMA_MIN_NOTICE_YEAR=2026` — per-source year guard for the GOVBR-MMA FNMA discoverer (Plan 03)
+- `GOVBR_MMA_FNMA_MAX_CANDIDATES_PER_RUN=50` — same cap on the GOVBR-MMA FNMA discoverer
+- `GOVBR_MMA_FNMA_INCLUDE_TDR=0` — source-specific opt-in (set `1`) to surface FNMA terms-of-reference (`termo de referencia`) as principal candidates. Default `0` keeps TDR as RELATED metadata and does NOT change the global `FILTER_POLICY` default.
 - `WORLDBANK_MAX_CANDIDATES_PER_RUN=50` — same cap on the WorldBank discoverer
 - `PNCP_MAX_PROCESSED_CANDIDATES_PER_RUN=20` — bound download/OCR attempts per Actions run
 - `PNCP_MAX_SUBMITTABLE_CANDIDATES_PER_RUN=5` — stop once enough valid candidates are ready to submit incrementally
 - `PNCP_FETCH_MAX_ATTEMPTS=3` — retry transient PNCP connection timeouts before marking a search/document lookup failed
+- `PNCP_OPPORTUNITY_V2_ENABLED=false` — opt into one PNCP parent per control number; the manual workflow exposes this separately from the legacy path
+- `PNCP_OPPORTUNITY_V2_SHADOW=true` — write the normalized PNCP inventory artifact without production submission
+- `FINEP_MAX_OPPORTUNITIES_PER_RUN=10` — bound structured FINEP API submissions
+- `FBDS_MAX_DETAILS_PER_RUN=20` — bound Restaura Amazônia detail parsing and ZIP inspection
+- `FUNBIO_NEWS_ENABLED=false` — enable bounded news resolution; unresolved articles remain artifacts and are never submitted
+- `FUNBIO_NEWS_LOOKBACK_DAYS=45` / `FUNBIO_NEWS_MAX_DETAILS=20` — bound news inventory work
+- `OPPORTUNITY_ATTACHMENT_MAX_BYTES=15000000` — compressed-size limit for non-PDF attachments
 - `SCRAPE_MAX_PDF_BYTES=15000000` — reject candidate PDFs larger than this many bytes during download
 - `SCRAPE_MAX_PDFS_PER_RUN=5` — generic per-run cap on successful PDF downloads/OCR completions (used by `pipeline_core.pdf_download_limit_reached`)
 - `RENDER_SUBMIT_BATCH_SIZE=30` — candidates per Render `/api/pipeline/candidates` POST batch
@@ -107,7 +121,8 @@ The pipeline is split between GitHub Actions (discovery, download, OCR, submissi
 - `RENDER_SUBMIT_MAX_MARKDOWN_CHARS=1000000` — truncate OCR markdown longer than this before submitting to Render
 - `FLAGS_use_mkldnn=0` — disables Paddle oneDNN on CPU runners; required to avoid the current PaddleOCR runtime failure seen in GitHub Actions
 - `PADDLE_PDX_ENABLE_MKLDNN_BYDEFAULT=0` — disables PaddleX's default oneDNN path used by PaddleOCR
-- `SOURCES` (Phase 5 unified orchestrator only) — comma-separated list of source names to run (e.g. `SOURCES=bndes,brde,wwf`); whitespace is tolerated and empty entries are dropped. Valid sources: `bndes`, `brde`, `fapergs`, `funbio`, `govbr_mma`, `iis_rio`, `sema_rs`, `tnc`, `unep`, `worldbank`, `wwf`, `fao`, `fundacao_grupo_boticario`, `kfw`, `msgov`. PNCP is intentionally not in this list (see plan §5 / "PNCP keeps its own workflow" below).
+- `SOURCES` (unified orchestrator only) — comma-separated source names; whitespace is tolerated and duplicates are removed. Valid structured sources include `finep`, `fbds`, `funbio`, and `tnc`, in addition to the legacy PDF source keys. PNCP remains in its dedicated workflow.
+- `DISCOVERY_AUDIT_DIR` — when set, every structured source writes stable `source_inventory.json`, `discovery.json`, `opportunities.json`, and `stats.json` artifacts.
 - `MIN_NOTICE_YEAR` (Phase 5 unified orchestrator only, default `2026`) — generic year guard forwarded to BS4 discoverers as their `min_year` argument. Plan §9 recommends a generic name (not `PNCP_MIN_NOTICE_YEAR`) so the unified orchestrator does not couple non-PNCP sources to PNCP-specific env vars. Playwright sources (`fao`, `fundacao_grupo_boticario`, `kfw`, `msgov`) do not accept `min_year` and run with their own internal filtering.
 - `FILTER_POLICY` (Phase 5 unified orchestrator only, default `default`) — EDITAL inclusion/exclusion policy forwarded to BS4 discoverers (`default` | `include_tdr` | `no_prefilter`). Ignored by Playwright sources.
 
@@ -134,6 +149,40 @@ The Phase 5 plan recommends **keeping** `pipeline-pncp-discovery.yml` separate f
 
 Operators who want to discover non-PNCP sources in a single Actions run should use `pipeline-all-discovery.yml`. PNCP continues to run via `pipeline-pncp-discovery.yml` unchanged. Folding PNCP in is tracked as a follow-up PR after the unified orchestrator stabilises.
 
+### WWF discovery precision (Plan 02)
+
+`discover_wwf_candidates.py` discovers WWF editais by structurally parsing the `EDITAIS ABERTOS` (status `open`) and `EDITAIS ENCERRADOS` (status `closed`) sections of the acquisitions page, following only those rows' detail URLs, and extracting PDFs only from the record content area. Generic supplier documents (`documentos-necessarios`, `requisitos-basicos`, proposal-model, and supplier-portal) are rejected; record-bound divulgação, retification, and annex PDFs are retained. A missing section, zero parsed rows, or missing detail content selector is reported as a failure rather than a healthy zero-result run.
+
+Run a live no-submit audit and write Plan-01-compatible inputs with:
+
+```bash
+python scripts/discover_wwf_candidates.py --audit-dir artifacts/wwf
+```
+
+This writes `source_inventory.json`, normalized `discovery.json`, raw `candidates.json`, and `stats.json`. The manual WWF workflow runs in audit-only mode by default and uploads this directory as an artifact.
+
+### MMA public-calls and FNMA discovery (Plan 03)
+
+`discover_govbr_mma_public_calls_candidates.py` and `discover_govbr_mma_fnma_candidates.py` add two SEPARATE MMA feeds without touching the existing `govbr_mma` procurement discoverer:
+
+- `govbr_mma_public_calls` — the participation-social public-call (chamamento) index.
+- `govbr_mma_fnma` — the FNMA editais / terms-of-reference page.
+
+Both parse only the gov.br editorial body (`#content-core #parent-fieldname-text`, legacy `#content-core`, or the current `#content` cover body), associate heading/callout year markers with following edital links, and emit a Plan-01-compatible inventory for deterministic fidelity checks. `resultado` / `retificacao` / `errata` / historical / annex PDFs are treated as RELATED metadata of the parent opportunity using accent-normalized anchor text and filenames. The principal edital PDF is the candidate. Explicit publication/status/deadline text is preserved; otherwise status remains `unknown`.
+
+The FNMA feed accepts an opt-in `GOVBR_MMA_FNMA_INCLUDE_TDR=1` to surface terms-of-reference as principal candidates; this is a SOURCE-SPECIFIC switch that does NOT mutate the global `FILTER_POLICY` default.
+
+Enable `govbr_mma_public_calls` first, then `govbr_mma_fnma` (do not enable both in the same first production run). Every candidate carries `metadata.source_record_id` + `metadata.detail_url` (where applicable) and traces to an inventory record.
+
+Run each source without OCR/submission and produce fidelity inputs with:
+
+```bash
+python scripts/discover_govbr_mma_public_calls_candidates.py --audit-dir artifacts/mma-public
+python scripts/discover_govbr_mma_fnma_candidates.py --audit-dir artifacts/mma-fnma
+```
+
+Each command writes `source_inventory.json`, normalized `discovery.json`, raw `candidates.json`, and `stats.json`. A detail/news lead that currently exposes no principal PDF is retained as `unresolved_news_lead`, not silently discarded or submitted.
+
 ## Local development
 
 ```bash
@@ -146,6 +195,53 @@ python -m pytest -v
 # Run discovery locally (requires env vars)
 RENDER_APP_URL=https://your-render.onrender.com PIPELINE_SECRET=token python scripts/discover_pncp_candidates.py
 ```
+
+## Source-fidelity audits
+
+`scripts/audit_source_fidelity.py` produces a deterministic, offline (no LLM/network) report comparing the authoritative source inventory, discovery candidates, and an optional dashboard export. It classifies each disagreement as a blocking or non-blocking exception and writes `summary.json`, `matches.json`, `exceptions.json`, and `report.md`. Inventory accounting is scoped to open, in-scope records, so a source can retain closed rows for provenance without falsely reporting them as missing current submissions.
+
+```bash
+python scripts/audit_source_fidelity.py \
+  --source-inventory tests/fixtures/audit/source_inventory.json \
+  --discovery tests/fixtures/audit/discovery.json \
+  --dashboard tests/fixtures/audit/dashboard.json \
+  --out ./report
+```
+
+Exit codes: `0` = no blocking exceptions, `1` = fidelity failures, `2` = invalid input/config. The matching ladder is, in descending authority: `(source_key, source_record_id)`, canonical URL (fragment removed, query params preserved), exact document SHA-256, then exact normalized document URL. Title similarity never establishes identity. See `plans/opportunity-sources/01-deterministic-source-fidelity.md` for the full contract and the quantitative success gates.
+
+Input files must contain arrays of record objects. `document_urls` and `document_hashes` are arrays of strings; hashes are 64-character SHA-256 hex digests. A record explicitly rejected by policy may set `reason_code` to `out_of_scope`; an unsubmitted unresolved announcement may use `unresolved_news_lead`. Include an `evidence` object for either disposition. A record with `renderable: true` must also include `content_type_validated: true` and `hash_validated: true`.
+
+## Structured opportunity sources
+
+The unified orchestrator detects `discover_opportunities()` modules and uses
+the stable opportunity endpoint instead of the legacy PDF-only endpoint:
+
+- `finep` consumes the paginated official `/o/c/chamadapublicas` JSON API, keys records by API `id`, excludes site-wide manuals/tutorials, and accepts complete records without a PDF.
+- `fbds` parses only the Restaura Amazônia edital portal. ZIPs remain official, non-renderable attachments; archive members are inspected and OCRed in memory with path, encryption, nesting, member-count, size, ratio, symlink, and PDF-magic guards.
+- `tnc` parses only the consultancy/service section of `trabalhe-conosco`, uses `NOVO PRAZO` over `PRAZO`, classifies every record as `consultancy`, and reports malformed blocks instead of traversing general news.
+- `funbio` keeps the calls portal as canonical. News resolution uses exact call URLs/slugs only; canonical fields win, institutional news is ignored, and unresolved likely calls are artifact-only.
+
+Structured sources remain outside the scheduled default until two consecutive
+live fidelity reports pass. Run a manual workflow with
+`DISCOVERY_AUDIT_DIR=artifacts/source-audits`, then compare each source's
+inventory and discovery files with `audit_source_fidelity.py`.
+
+## PNCP v2 reconciliation
+
+Set `PNCP_OPPORTUNITY_V2_ENABLED=true` and keep
+`PNCP_OPPORTUNITY_V2_SHADOW=true` for artifact-only parent/document discovery.
+Only after two passing shadow comparisons should a reviewed backend
+reconciliation be applied. The backend command is:
+
+```bash
+python scripts/reconcile_pncp_opportunities.py --mode rehearsal --report pncp-plan.json
+python scripts/reconcile_pncp_opportunities.py --mode apply --reviewed-report pncp-plan.reviewed.json --report pncp-applied.json
+```
+
+Apply mode requires the exact current `plan_hash` with `reviewed: true` and
+aborts when one user has distinct uploaded Drive files on rows that would be
+merged.
 
 ## Documentation
 

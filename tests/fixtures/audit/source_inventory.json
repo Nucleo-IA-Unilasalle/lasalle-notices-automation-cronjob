@@ -1,0 +1,150 @@
+[
+  {
+    "source_key": "wwf",
+    "source_record_id": "005705",
+    "canonical_url": "https://www.wwf.org.br/oportunidades/005705",
+    "title": "Prestacao de servicos de consultoria",
+    "status": "open",
+    "published_at": "2026-07-16T00:00:00Z",
+    "deadline": "2026-08-01T23:59:59Z",
+    "document_urls": [
+      "https://cdn.wwf.org.br/edital/005705.pdf"
+    ],
+    "document_hashes": [
+      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    ]
+  },
+  {
+    "source_key": "wwf",
+    "source_record_id": "005706",
+    "canonical_url": "https://www.wwf.org.br/oportunidades/005706",
+    "title": "Consultoria em conservacao",
+    "status": "open",
+    "published_at": "2026-07-17T00:00:00Z",
+    "deadline": "2026-08-02T23:59:59Z",
+    "document_urls": [
+      "https://cdn.wwf.org.br/edital/005706.pdf"
+    ],
+    "document_hashes": [
+      "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    ]
+  },
+  {
+    "source_key": "mma",
+    "source_record_id": "MMA-2026-001",
+    "canonical_url": "https://www.gov.br/mma/oportunidades/001?utm_source=newsletter",
+    "title": "Chamada publica MMA",
+    "status": "open",
+    "published_at": "2026-07-18T00:00:00Z",
+    "deadline": "2026-09-01T23:59:59Z",
+    "document_urls": [
+      "https://www.gov.br/mma/docs/edital.pdf"
+    ],
+    "document_hashes": [
+      "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    ]
+  },
+  {
+    "source_key": "funbio",
+    "source_record_id": "FB-100",
+    "canonical_url": "https://funbio.org.br/oportunidades/100",
+    "title": "Edital Funbio",
+    "status": "open",
+    "published_at": "2026-07-19T00:00:00Z",
+    "deadline": "2026-08-15T23:59:59Z",
+    "document_urls": [
+      "https://funbio.org.br/docs/edital100.pdf"
+    ],
+    "document_hashes": [
+      "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+    ]
+  },
+  {
+    "source_key": "tnc",
+    "source_record_id": "TNC-77",
+    "canonical_url": "https://tnc.org.br/licitacoes/77",
+    "title": "Consultoria TNC",
+    "status": "open",
+    "published_at": "2026-07-20T00:00:00Z",
+    "deadline": "2026-08-20T23:59:59Z",
+    "document_urls": [
+      "https://tnc.org.br/docs/77.pdf"
+    ],
+    "document_hashes": [
+      "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+    ]
+  },
+  {
+    "source_key": "wwf",
+    "source_record_id": "005710",
+    "canonical_url": "https://www.wwf.org.br/oportunidades/005710",
+    "title": "Oportunidade que nao foi descoberta",
+    "status": "open",
+    "published_at": "2026-07-21T00:00:00Z",
+    "deadline": "2026-08-25T23:59:59Z",
+    "document_urls": [
+      "https://cdn.wwf.org.br/edital/005710.pdf"
+    ],
+    "document_hashes": [
+      "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    ]
+  },
+  {
+    "source_key": "funbio",
+    "source_record_id": "FB-100",
+    "canonical_url": "https://funbio.org.br/oportunidades/100",
+    "title": "Edital Funbio duplicado na origem",
+    "status": "open",
+    "published_at": "2026-07-19T00:00:00Z",
+    "deadline": "2026-08-15T23:59:59Z",
+    "document_urls": [
+      "https://funbio.org.br/docs/edital100.pdf"
+    ],
+    "document_hashes": [
+      "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+    ]
+  },
+  {
+    "source_key": "iis_rio",
+    "source_record_id": "IIS-9",
+    "canonical_url": "https://iisrio.org.br/oportunidades/9",
+    "title": "Edital com deadline invalido",
+    "status": "open",
+    "published_at": "2026-07-22T00:00:00Z",
+    "deadline": "not-a-date",
+    "document_urls": [
+      "https://iisrio.org.br/docs/9.pdf"
+    ],
+    "document_hashes": [
+      "1111111111111111111111111111111111111111111111111111111111111111"
+    ]
+  },
+  {
+    "source_key": "bndes",
+    "source_record_id": "BN-5",
+    "canonical_url": "https://bndes.gov.br/op/5",
+    "title": "Edital BNDES",
+    "status": "open",
+    "published_at": "2026-07-26T00:00:00Z",
+    "deadline": "2026-09-05T23:59:59Z",
+    "document_urls": [
+      "https://bndes.gov.br/docs/5.pdf"
+    ],
+    "document_hashes": [
+      "2222222222222222222222222222222222222222222222222222222222222222"
+    ]
+  },
+  {
+    "source_key": "brde",
+    "source_record_id": "BR-3",
+    "canonical_url": "https://brde.gov.br/op/3",
+    "status": "open",
+    "deadline": "2026-09-10T23:59:59Z",
+    "document_urls": [
+      "https://brde.gov.br/docs/3.pdf"
+    ],
+    "document_hashes": [
+      "4444444444444444444444444444444444444444444444444444444444444444"
+    ]
+  }
+]

@@ -4,6 +4,12 @@ on:
   schedule:
     - cron: "40 * * * *"
   workflow_dispatch:
+    inputs:
+      audit_only:
+        description: "Write fidelity artifacts without OCR or submission"
+        required: true
+        type: boolean
+        default: true
 
 concurrency:
   group: pipeline-trigger
@@ -27,7 +33,27 @@ jobs:
       - name: Install OCR worker dependencies
         run: pip install -r requirements-ocr-worker.txt
 
+      - name: Run WWF discovery audit
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.audit_only }}
+        run: python scripts/discover_wwf_candidates.py --audit-dir artifacts/wwf
+        env:
+          WWF_MIN_NOTICE_YEAR: "2026"
+          WWF_MAX_CANDIDATES_PER_RUN: "50"
+          WWF_MAX_DETAILS_PER_RUN: "20"
+          WWF_FETCH_MAX_ATTEMPTS: "3"
+          WWF_FETCH_BACKOFF_SECONDS: "2"
+          WWF_FETCH_TIMEOUT_SECONDS: "30"
+
+      - name: Upload WWF fidelity artifacts
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.audit_only && always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: wwf-fidelity-${{ github.run_id }}
+          path: artifacts/wwf
+          if-no-files-found: error
+
       - name: Run WWF discovery, download, OCR, and submission
+        if: ${{ github.event_name != 'workflow_dispatch' || !inputs.audit_only }}
         run: python scripts/discover_wwf_candidates.py
         env:
           RENDER_APP_URL: ${{ secrets.RENDER_APP_URL }}

@@ -845,8 +845,19 @@ class TestCheckpointAdvancement:
 
 class TestDeduplication:
     def test_duplicate_records_retain_newest_by_data_atualizacao_global(self) -> None:
-        old = _make_record(control="DUP-001", data_atualizacao_global="20260610100000", data_abertura=None)
-        new = _make_record(control="DUP-001", data_atualizacao_global="20260612100000", data_abertura=None)
+        future = (datetime.now(timezone.utc) + timedelta(days=10)).strftime("%Y%m%d%H%M%S")
+        old = _make_record(
+            control="DUP-001",
+            data_atualizacao_global="20260610100000",
+            data_abertura=None,
+            data_encerramento=future,
+        )
+        new = _make_record(
+            control="DUP-001",
+            data_atualizacao_global="20260612100000",
+            data_abertura=None,
+            data_encerramento=future,
+        )
         with patch("discover_pncp_candidates.fetch_pncp_search_pages") as mock_search:
             mock_search.return_value = [old, new]
             with patch("discover_pncp_candidates._load_update_checkpoint", return_value=None):
@@ -858,17 +869,20 @@ class TestDeduplication:
         assert dup_records[0]["dataAtualizacaoGlobal"] == "20260612100000"
 
     def test_duplicate_records_fallback_to_data_atualizacao(self) -> None:
+        future = (datetime.now(timezone.utc) + timedelta(days=10)).strftime("%Y%m%d%H%M%S")
         old = _make_record(
             control="DUP-002",
             data_atualizacao_global="20260612100000",
             data_atualizacao="20260610100000",
             data_abertura=None,
+            data_encerramento=future,
         )
         new = _make_record(
             control="DUP-002",
             data_atualizacao_global="20260612100000",
             data_atualizacao="20260612120000",
             data_abertura=None,
+            data_encerramento=future,
         )
         with patch("discover_pncp_candidates.fetch_pncp_search_pages") as mock_search:
             mock_search.return_value = [old, new]
@@ -887,8 +901,19 @@ class TestDeduplication:
 
 class TestEligibilityYearFilter:
     def test_fetch_records_excludes_pre_2026_notices(self) -> None:
-        old = _make_record(control="OLD-2025", ano=2025, data_abertura=None)
-        current = _make_record(control="NEW-2026", ano=2026, data_abertura=None)
+        future = (datetime.now(timezone.utc) + timedelta(days=10)).strftime("%Y%m%d%H%M%S")
+        old = _make_record(
+            control="OLD-2025",
+            ano=2025,
+            data_abertura=None,
+            data_encerramento=future,
+        )
+        current = _make_record(
+            control="NEW-2026",
+            ano=2026,
+            data_abertura=None,
+            data_encerramento=future,
+        )
 
         with patch("discover_pncp_candidates.fetch_pncp_search_pages") as mock_search:
             mock_search.return_value = [old, current]
