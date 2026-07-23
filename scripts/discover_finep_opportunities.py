@@ -225,4 +225,3 @@ def discover_opportunities(
         "opportunities": len(opportunities),
         "policy_rejected": rejected,
     }, opportunities
-

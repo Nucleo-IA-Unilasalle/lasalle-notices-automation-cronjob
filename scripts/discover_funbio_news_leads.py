@@ -178,4 +178,3 @@ def resolve_news_leads(
                 }
             )
     return sorted(resolutions, key=lambda item: (item["news_id"], item["resolution"]))
-
