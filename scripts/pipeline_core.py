@@ -309,7 +309,12 @@ def process_opportunity(
 ) -> dict[str, Any]:
     """Validate and OCR source-owned attachments for one opportunity."""
     processed_documents: list[dict[str, Any]] = []
-    source_markdown = str(opportunity.get("source_markdown") or "").strip()
+    source_markdown = (
+        str(opportunity.get("source_markdown") or "")
+        .replace("\r\n", "\n")
+        .replace("\r", "\n")
+        .strip()
+    )
     for descriptor in opportunity.get("documents", []):
         document = dict(descriptor)
         url = str(document.get("url") or "")
