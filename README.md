@@ -163,7 +163,7 @@ Run a live no-submit audit and write Plan-01-compatible inputs with:
 python scripts/discover_wwf_candidates.py --audit-dir artifacts/wwf
 ```
 
-This writes `source_inventory.json`, normalized `discovery.json`, structured `opportunities.json`, raw `candidates.json`, and `stats.json`. The manual WWF workflow runs in audit-only mode by default and uploads this directory as an artifact.
+This writes `source_inventory.json`, normalized `discovery.json`, structured `opportunities.json`, raw `candidates.json`, and `stats.json`. The manual WWF workflow runs in audit-only mode by default on GitHub's macOS runner pool, enforces the fidelity comparator, and uploads this directory as an artifact. The scheduled production job remains on Ubuntu.
 
 ### MMA public-calls and FNMA discovery (Plan 03)
 
