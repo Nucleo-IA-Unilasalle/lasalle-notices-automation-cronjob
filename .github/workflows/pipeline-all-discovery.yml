@@ -15,11 +15,6 @@ on:
         required: true
         default: true
         type: boolean
-      opportunity_sources:
-        description: "Sources allowed to use the structured opportunity submission contract"
-        required: false
-        default: ""
-        type: string
       filter_policy:
         description: "Filter policy forwarded to BS4 discoverers (default|include_tdr|no_prefilter)"
         required: false
@@ -44,14 +39,20 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      DISCOVERY_SOURCES: ${{ inputs.sources || 'bndes,brde,fapergs,funbio,iis_rio,sema_rs,tnc,wwf' }}
       DISCOVERY_FILTER_POLICY: ${{ inputs.filter_policy || 'default' }}
       DISCOVERY_MIN_NOTICE_YEAR: ${{ inputs.min_notice_year || '2026' }}
-      DISCOVERY_AUDIT_ONLY: ${{ github.event_name == 'workflow_dispatch' && inputs.audit_only }}
-      OPPORTUNITY_SOURCES: ${{ inputs.opportunity_sources || vars.OPPORTUNITY_SOURCES || '' }}
     steps:
       - name: Checkout scheduler repository
         uses: actions/checkout@v4
+
+      - name: Configure production source routes
+        id: routes
+        run: python scripts/configure_source_routes.py
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          REQUESTED_SOURCES: ${{ inputs.sources || '' }}
+          APPROVED_OPPORTUNITY_SOURCES: ${{ vars.OPPORTUNITY_SOURCES || '' }}
+          AUDIT_ONLY: ${{ github.event_name == 'workflow_dispatch' && inputs.audit_only }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -64,17 +65,43 @@ jobs:
         run: pip install -r requirements-ocr-worker.txt
 
       - name: Install Playwright Chromium for browser-backed sources
-        if: ${{ contains(format(',{0},', env.DISCOVERY_SOURCES), ',fao,') || contains(format(',{0},', env.DISCOVERY_SOURCES), ',fundacao_grupo_boticario,') || contains(format(',{0},', env.DISCOVERY_SOURCES), ',kfw,') || contains(format(',{0},', env.DISCOVERY_SOURCES), ',msgov,') }}
+        if: ${{ contains(format(',{0},', steps.routes.outputs.sources), ',fao,') || contains(format(',{0},', steps.routes.outputs.sources), ',fundacao_grupo_boticario,') || contains(format(',{0},', steps.routes.outputs.sources), ',kfw,') || contains(format(',{0},', steps.routes.outputs.sources), ',msgov,') }}
         run: playwright install --with-deps chromium
 
-      - name: Run unified discovery orchestrator
+      - name: Run audit-only unified discovery
+        if: ${{ steps.routes.outputs.audit_only == 'true' }}
+        run: python scripts/discover_all_candidates.py
+        env:
+          SOURCES: ${{ steps.routes.outputs.sources }}
+          FILTER_POLICY: ${{ env.DISCOVERY_FILTER_POLICY }}
+          MIN_NOTICE_YEAR: ${{ env.DISCOVERY_MIN_NOTICE_YEAR }}
+          DISCOVERY_AUDIT_ONLY: "true"
+          OPPORTUNITY_SOURCES: ""
+          SCRAPE_MAX_PDF_BYTES: "15000000"
+          SCRAPE_MAX_PDFS_PER_RUN: "5"
+          KREUZBERG_PADDLE_LANGUAGE: "latin"
+          KREUZBERG_PADDLE_MODEL_TIER: "tiny"
+          KREUZBERG_USE_GPU: "false"
+          KREUZBERG_FORCE_OCR_DEFAULT: "false"
+          KREUZBERG_EXTRACTION_TIMEOUT_SECONDS: "120"
+          FLAGS_use_mkldnn: "0"
+          PADDLE_PDX_ENABLE_MKLDNN_BYDEFAULT: "0"
+          DISCOVERY_AUDIT_DIR: artifacts/source-audits
+          FUNBIO_NEWS_ENABLED: "false"
+          FINEP_MAX_OPPORTUNITIES_PER_RUN: "5"
+          FBDS_MAX_DETAILS_PER_RUN: "5"
+
+      - name: Run submission-enabled unified discovery
+        if: ${{ steps.routes.outputs.audit_only != 'true' }}
         run: python scripts/discover_all_candidates.py
         env:
           RENDER_APP_URL: ${{ secrets.RENDER_APP_URL }}
           PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}
-          SOURCES: ${{ env.DISCOVERY_SOURCES }}
+          SOURCES: ${{ steps.routes.outputs.sources }}
           FILTER_POLICY: ${{ env.DISCOVERY_FILTER_POLICY }}
           MIN_NOTICE_YEAR: ${{ env.DISCOVERY_MIN_NOTICE_YEAR }}
+          DISCOVERY_AUDIT_ONLY: "false"
+          OPPORTUNITY_SOURCES: ${{ steps.routes.outputs.opportunity_sources }}
           SCRAPE_MAX_PDF_BYTES: "15000000"
           SCRAPE_MAX_PDFS_PER_RUN: "5"
           KREUZBERG_PADDLE_LANGUAGE: "latin"
@@ -90,7 +117,7 @@ jobs:
           FBDS_MAX_DETAILS_PER_RUN: "5"
 
       - name: Verify source fidelity artifacts
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.audit_only }}
+        if: ${{ steps.routes.outputs.audit_only == 'true' }}
         shell: bash
         run: |
           set -euo pipefail
