@@ -591,6 +591,7 @@ def _discover_candidates_and_inventory(
     min_year: int = GOVBR_MMA_PUBLIC_CALLS_MIN_NOTICE_YEAR,
     seen_ids: set[str] | None = None,
     seen_pdfs: set[str] | None = None,
+    year_rejections: list[dict[str, Any]] | None = None,
 ) -> tuple[dict[str, int], list[dict[str, Any]], list[dict[str, Any]]]:
     """Discover public-call edital PDF candidates.
 
@@ -657,6 +658,25 @@ def _discover_candidates_and_inventory(
     pending_related_by_year: dict[int | None, list[str]] = {}
     cap_reached = False
 
+    def record_year_rejection(entry: dict[str, Any]) -> None:
+        if year_rejections is None:
+            return
+        year_rejections.append(
+            {
+                "source_key": SOURCE_KEY,
+                "canonical_url": entry["url"],
+                "title": entry["title"],
+                "source_year": entry["year"],
+                "status": "unknown",
+                "deadline": None,
+                "reason_code": "year_before_minimum",
+                "evidence": {
+                    "minimum_year": min_year,
+                    "year_source": "official_listing_heading",
+                },
+            }
+        )
+
     def add_record(record: dict[str, Any]) -> dict[str, Any]:
         record_id = record["source_record_id"]
         existing = inventory_by_id.get(record_id)
@@ -705,6 +725,7 @@ def _discover_candidates_and_inventory(
                     entry["url"], min_year=min_year, source_year=year,
                 ):
                     stats["year_rejected"] += 1
+                    record_year_rejection(entry)
                 else:
                     stats["prefilter_rejected"] += 1
                 continue
@@ -740,6 +761,7 @@ def _discover_candidates_and_inventory(
             continue
         if not _passes_year_guard(detail_url, min_year=min_year, source_year=year):
             stats["year_rejected"] += 1
+            record_year_rejection(entry)
             continue
         if details_fetched >= GOVBR_MMA_PUBLIC_CALLS_MAX_DETAILS_PER_RUN:
             break
@@ -872,12 +894,54 @@ def discover_candidates(
     return stats, candidates
 
 
+def _review_year_rejections(
+    year_rejections: list[dict[str, Any]],
+) -> None:
+    """Record whether historical detail evidence remains publicly readable."""
+    from scraper_transport import request_with_safe_redirects
+
+    reviewed_at = datetime.now(timezone.utc).isoformat()
+    for rejection in year_rejections:
+        evidence = rejection["evidence"]
+        evidence["reviewed_at"] = reviewed_at
+        response = None
+        try:
+            response = request_with_safe_redirects(
+                method="GET",
+                url=rejection["canonical_url"],
+                timeout=30,
+            )
+            evidence["http_status"] = response.status_code
+            final_url = response.url
+            restricted = (
+                "credentials_cookie_auth/require_login" in final_url
+                or "conteúdo restrito" in response.text.casefold()
+            )
+            evidence["detail_access"] = (
+                "requires_login" if restricted else "public"
+            )
+            if not restricted:
+                metadata = _extract_record_metadata(
+                    response.text,
+                    year=rejection["source_year"],
+                )
+                rejection["status"] = metadata["status"]
+                rejection["deadline"] = metadata["deadline"]
+        except Exception as exc:
+            evidence["detail_access"] = "fetch_failed"
+            evidence["fetch_error"] = type(exc).__name__
+        finally:
+            if response is not None:
+                response.close()
+
+
 def _write_audit_artifacts(
     output_dir: Path,
     *,
     inventory: list[dict[str, Any]],
     candidates: list[dict[str, Any]],
     stats: dict[str, int],
+    year_rejections: list[dict[str, Any]],
 ) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
     records_by_id = {record["source_record_id"]: record for record in inventory}
@@ -894,6 +958,7 @@ def _write_audit_artifacts(
         "discovery.json": discovery,
         "candidates.json": candidates,
         "stats.json": stats,
+        "year_rejections.json": year_rejections,
     }
     for filename, payload in payloads.items():
         (output_dir / filename).write_text(
@@ -915,12 +980,17 @@ def _parse_args(argv: list[str]) -> argparse.Namespace:
 def main(argv: list[str] | None = None) -> int:
     args = _parse_args(argv or [])
     if args.audit_dir is not None:
-        stats, candidates, inventory = _discover_candidates_and_inventory()
+        year_rejections: list[dict[str, Any]] = []
+        stats, candidates, inventory = _discover_candidates_and_inventory(
+            year_rejections=year_rejections,
+        )
+        _review_year_rejections(year_rejections)
         _write_audit_artifacts(
             args.audit_dir,
             inventory=inventory,
             candidates=candidates,
             stats=stats,
+            year_rejections=year_rejections,
         )
         print(f"GOVBR-MMA public-calls audit stats: {stats}")
         print(f"GOVBR-MMA public-calls audit artifacts: {args.audit_dir}")

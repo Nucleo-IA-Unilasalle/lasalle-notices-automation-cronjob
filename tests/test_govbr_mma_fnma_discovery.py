@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import importlib
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
@@ -125,6 +126,30 @@ class TestMetadata:
         assert root is not None
 
         assert _extract_listing_metadata(root, year=2026)["status"] == "unknown"
+
+    def test_explicit_open_status_expires_after_deadline(self) -> None:
+        from bs4 import BeautifulSoup
+
+        from discover_govbr_mma_fnma_candidates import _extract_listing_metadata
+
+        soup = BeautifulSoup(
+            """
+            <div id="content-core">
+              <p>Edital prorrogado. Propostas podem ser enviadas até 13/07/2026.</p>
+            </div>
+            """,
+            "html.parser",
+        )
+        root = soup.select_one("#content-core")
+        assert root is not None
+
+        metadata = _extract_listing_metadata(
+            root,
+            year=2026,
+            now=datetime(2026, 7, 25, tzinfo=timezone.utc),
+        )
+        assert metadata["deadline"] == "2026-07-13"
+        assert metadata["status"] == "expired"
 
 
 class TestDiscoverCandidates:

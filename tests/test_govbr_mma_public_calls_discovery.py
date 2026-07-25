@@ -244,6 +244,32 @@ class TestDiscoverCandidates:
         assert any("resultado" in u for u in detail_rec["document_urls"])
         assert any("anexo" in u for u in detail_rec["document_urls"])
 
+    def test_year_guard_rejections_are_auditable(self) -> None:
+        import discover_govbr_mma_public_calls_candidates as dpc
+
+        responses = {
+            LISTING_URL: make_response(_read_fixture(LISTING_FIXTURE)),
+            DETAIL_URL: make_response(_read_fixture(DETAIL_FIXTURE)),
+        }
+        year_rejections: list[dict[str, object]] = []
+        with patch_request_with_safe_redirects(responses):
+            stats, _candidates, _inventory = (
+                dpc._discover_candidates_and_inventory(
+                    year_rejections=year_rejections,
+                )
+            )
+
+        assert len(year_rejections) == stats["year_rejected"]
+        assert year_rejections
+        assert all(
+            rejection["reason_code"] == "year_before_minimum"
+            and rejection["status"] == "unknown"
+            and rejection["deadline"] is None
+            and rejection["evidence"]["year_source"]
+            == "official_listing_heading"
+            for rejection in year_rejections
+        )
+
     def test_result_retification_not_standalone_opportunity(self) -> None:
         from discover_govbr_mma_public_calls_candidates import (
             build_inventory,
@@ -642,5 +668,39 @@ class TestSubmitHandoff:
         ):
             assert dpc.main(["--audit-dir", str(tmp_path)]) == 0
         assert {path.name for path in tmp_path.iterdir()} == {
-            "source_inventory.json", "discovery.json", "candidates.json", "stats.json",
+            "source_inventory.json",
+            "discovery.json",
+            "candidates.json",
+            "stats.json",
+            "year_rejections.json",
         }
+
+    def test_year_rejection_review_records_restricted_detail_access(self) -> None:
+        import discover_govbr_mma_public_calls_candidates as dpc
+
+        response = MagicMock()
+        response.status_code = 200
+        response.url = (
+            "https://www.gov.br/mma/acl_users/credentials_cookie_auth/"
+            "require_login?came_from=detail"
+        )
+        response.text = "<h1>Conteúdo Restrito</h1>"
+        rejections = [
+            {
+                "canonical_url": "https://www.gov.br/mma/detail",
+                "source_year": 2025,
+                "status": "unknown",
+                "deadline": None,
+                "evidence": {},
+            }
+        ]
+
+        with patch(
+            "scraper_transport.request_with_safe_redirects",
+            return_value=response,
+        ):
+            dpc._review_year_rejections(rejections)
+
+        assert rejections[0]["evidence"]["http_status"] == 200
+        assert rejections[0]["evidence"]["detail_access"] == "requires_login"
+        response.close.assert_called_once()
