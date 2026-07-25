@@ -11,10 +11,17 @@ from urllib.parse import urljoin
 from bs4 import BeautifulSoup, Tag
 
 from scraper_transport import request_with_safe_redirects
+from structured_discovery import (
+    StructuredDiscoveryResult,
+    normalize_audit_status,
+    parser_failure,
+    policy_rejection,
+)
 
 
 FINEP_API_URL = "https://www.finep.gov.br/o/c/chamadapublicas"
 FINEP_DETAIL_BASE_URL = "https://www.finep.gov.br/chamada-publica/222684"
+FINEP_API_SORT = "dataDePublicacao:desc,id:desc"
 FINEP_PAGE_SIZE = int(os.environ.get("FINEP_PAGE_SIZE", "20"))
 FINEP_MAX_PAGES_PER_RUN = int(os.environ.get("FINEP_MAX_PAGES_PER_RUN", "5"))
 FINEP_MAX_OPPORTUNITIES_PER_RUN = int(
@@ -122,7 +129,7 @@ def record_to_inventory(record: dict[str, Any]) -> dict[str, Any]:
         "source_record_id": record_id,
         "canonical_url": f"{FINEP_DETAIL_BASE_URL}/{record_id}",
         "title": str(record.get("titulo") or "").strip(),
-        "status": (_choice_name(record.get("situacao")) or "unknown").lower(),
+        "status": normalize_audit_status(_choice_name(record.get("situacao"))),
         "published_at": _iso(record.get("dataDePublicacao")),
         "deadline": _iso(record.get("prazoProposto")),
         "document_urls": [document["url"] for document in documents],
@@ -178,7 +185,7 @@ def fetch_api_pages(
     records: list[dict[str, Any]] = []
     for page in range(1, FINEP_MAX_PAGES_PER_RUN + 1):
         url = (
-            f"{FINEP_API_URL}?sort=dataDePublicacao:desc"
+            f"{FINEP_API_URL}?sort={FINEP_API_SORT}"
             f"&pageSize={FINEP_PAGE_SIZE}&page={page}"
         )
         payload = fetch_json(url)
@@ -196,32 +203,115 @@ def discover_opportunities(
     fetch_json: Callable[[str], dict[str, Any]] | None = None,
     snapshot_at: datetime | None = None,
     min_year: int | None = None,
-) -> tuple[dict[str, int], list[dict[str, Any]]]:
+) -> StructuredDiscoveryResult:
     records = fetch_api_pages(fetch_json=fetch_json)
     if not records:
-        return {"inventory_parse_failed": 1, "records": 0, "opportunities": 0}, []
+        failure = parser_failure(
+            "finep",
+            stage="api_inventory",
+            error="canonical API returned no records",
+        )
+        return StructuredDiscoveryResult(
+            stats={
+                "inventory_parse_failed": 1,
+                "records": 0,
+                "inventory_records": 0,
+                "opportunities": 0,
+                "parser_failures": 1,
+            },
+            inventory=[],
+            opportunities=[],
+            parser_failures=[failure],
+        )
 
+    inventory: list[dict[str, Any]] = []
     opportunities: list[dict[str, Any]] = []
-    rejected = 0
+    rejections: list[dict[str, Any]] = []
+    parser_failures: list[dict[str, Any]] = []
+    audit_complete = os.environ.get("DISCOVERY_AUDIT_ONLY", "").strip().lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
     for record in records:
         if not record.get("id") or not str(record.get("titulo") or "").strip():
-            rejected += 1
+            parser_failures.append(
+                parser_failure(
+                    "finep",
+                    stage="api_record",
+                    error="record is missing its stable id or title",
+                    evidence={"record_id": record.get("id")},
+                )
+            )
             continue
+        inventory_record = record_to_inventory(record)
+        invalid_timestamps = [
+            field
+            for field in ("dataDePublicacao", "prazoProposto")
+            if record.get(field) and _iso(record.get(field)) is None
+        ]
+        if invalid_timestamps:
+            parser_failures.append(
+                parser_failure(
+                    "finep",
+                    stage="api_record",
+                    error="record contains an invalid authoritative timestamp",
+                    evidence={
+                        "record_id": record.get("id"),
+                        "fields": invalid_timestamps,
+                    },
+                )
+            )
         published = _iso(record.get("dataDePublicacao"))
         if min_year and published and int(published[:4]) < min_year:
-            rejected += 1
+            rejected = policy_rejection(
+                inventory_record,
+                policy="minimum_notice_year",
+                evidence={
+                    "minimum_year": min_year,
+                    "published_at": published,
+                },
+            )
+            inventory.append(rejected)
+            rejections.append(rejected)
             continue
-        status = (_choice_name(record.get("situacao")) or "").lower()
-        if status not in {"aberta", "open"}:
-            rejected += 1
+        if inventory_record["status"] != "open":
+            rejected = policy_rejection(
+                inventory_record,
+                policy="open_status_only",
+                evidence={
+                    "authoritative_status": _choice_name(
+                        record.get("situacao")
+                    )
+                },
+            )
+            inventory.append(rejected)
+            rejections.append(rejected)
+            continue
+        inventory.append(inventory_record)
+        if (
+            not audit_complete
+            and len(opportunities) >= FINEP_MAX_OPPORTUNITIES_PER_RUN
+        ):
             continue
         opportunities.append(
             record_to_opportunity(record, snapshot_at=snapshot_at)
         )
-        if len(opportunities) >= FINEP_MAX_OPPORTUNITIES_PER_RUN:
-            break
-    return {
+    stats = {
         "records": len(records),
+        "inventory_records": len(inventory),
         "opportunities": len(opportunities),
-        "policy_rejected": rejected,
-    }, opportunities
+        "policy_rejected": len(rejections),
+        "parser_failures": len(parser_failures),
+        "audit_complete_inventory": int(audit_complete),
+    }
+    if parser_failures:
+        stats["inventory_parse_failed"] = 1
+    return StructuredDiscoveryResult(
+        stats=stats,
+        inventory=inventory,
+        opportunities=opportunities,
+        policy_rejections=rejections,
+        parser_failures=parser_failures,
+    )

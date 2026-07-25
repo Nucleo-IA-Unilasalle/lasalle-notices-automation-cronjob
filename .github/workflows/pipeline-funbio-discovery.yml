@@ -17,7 +17,16 @@ jobs:
       - name: Checkout scheduler repository
         uses: actions/checkout@v4
 
+      - name: Configure production source routes
+        id: routes
+        run: python scripts/configure_source_routes.py
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          APPROVED_OPPORTUNITY_SOURCES: ${{ vars.OPPORTUNITY_SOURCES || '' }}
+          AUDIT_ONLY: "false"
+
       - name: Set up Python
+        if: ${{ steps.routes.outputs.funbio_route == 'legacy' }}
         uses: actions/setup-python@v5
         with:
           python-version: "3.13"
@@ -25,9 +34,11 @@ jobs:
           cache-dependency-path: requirements-ocr-worker.txt
 
       - name: Install OCR worker dependencies
+        if: ${{ steps.routes.outputs.funbio_route == 'legacy' }}
         run: pip install -r requirements-ocr-worker.txt
 
       - name: Run FUNBIO discovery, download, OCR, and submission
+        if: ${{ steps.routes.outputs.funbio_route == 'legacy' }}
         run: python scripts/discover_funbio_candidates.py
         env:
           RENDER_APP_URL: ${{ secrets.RENDER_APP_URL }}

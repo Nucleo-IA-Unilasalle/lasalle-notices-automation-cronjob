@@ -140,7 +140,7 @@ scanning every listing anchor to **structural section parsing**:
   process number is present the numeric WWF content ID from either the
   current `?<id>/<slug>` URL or legacy `uNewsID` URL is used as fallback.
 - Only the detail URLs belonging to parsed edital rows are followed
-  (`WWF_MAX_DETAILS_PER_RUN` cap). PDFs are extracted only from the
+  (`WWF_MAX_DETAILS_PER_RUN` cap). PDF and DOCX attachments are extracted only from the
   record content area (`div.template433`, with legacy `div.page-content`
   support); a missing selector is a parser failure rather than a whole-page
   fallback.
@@ -152,7 +152,9 @@ scanning every listing anchor to **structural section parsing**:
   retification (`retificacao` / `errata`), and annex (`anexo`) PDFs reached
   via an edital row's detail page are retained.
 - `discover_candidates` still returns `(stats, candidates)` for the
-  unchanged download/OCR/submit path. `stats["section_parse_failed"]`
+  unchanged PDF download/OCR/submit path. `discover_opportunities` emits
+  every parsed row as a structured opportunity and retains record-owned DOCX
+  files as non-renderable attachments. `stats["section_parse_failed"]`
   (and `errors`) is set when either heading is absent or no rows can be
   parsed; `detail_parse_failed` covers missing record content selectors.
   Either condition produces a non-zero command and workflow result.
@@ -162,12 +164,24 @@ scanning every listing anchor to **structural section parsing**:
   `document_urls`, `document_hashes`) for audit mode. Every candidate
   carries `metadata.source_record_id` and `metadata.detail_url` so it
   traces to a specific WWF row.
+- If the main listing returns HTTP 403, discovery reads the two official WWF
+  open/closed RSS endpoints linked by the page and reconstructs public detail
+  URLs from their content IDs. No proxy, mirror, or access-control bypass is
+  used.
 
 Run `python scripts/discover_wwf_candidates.py --audit-dir artifacts/wwf`
 to fetch the live source without OCR or submission. It writes
-`source_inventory.json`, normalized `discovery.json`, raw `candidates.json`,
-and `stats.json`. A manual run of `pipeline-wwf-discovery.yml` defaults to this
+`source_inventory.json`, normalized `discovery.json`, structured
+`opportunities.json`, raw `candidates.json`, and `stats.json`. A manual run of
+`pipeline-wwf-discovery.yml` defaults to this
 mode and uploads those files as the `wwf-fidelity-<run-id>` artifact.
+
+GitHub-hosted Ubuntu and macOS runners currently receive HTTP 403 from the
+listing and both official feeds. For live audits, use
+`pipeline-wwf-trusted-audit.yml` only after a dedicated repository-scoped
+runner with the `wwf-audit` label is online. Its no-secret, no-submit security
+contract and artifact gate are documented in
+`docs/WWF_TRUSTED_AUDIT_RUNNER.md`.
 
 Enable WWF submission only after the audit shows all open records have an
 outcome and no introductory/generic documents appear as candidates (see
@@ -227,11 +241,19 @@ both in the same first production run (see
 keeps ZIP/DOCX attachments non-renderable, OCRs safe PDF members from ZIPs in
 memory, and submits source Markdown even when attachment validation fails.
 
-Run one source at a time with `DISCOVERY_AUDIT_DIR=artifacts/source-audits`.
-Upload the workflow artifact, run `audit_source_fidelity.py` against the
-source's inventory/discovery files, and require two consecutive passing live
-runs before adding the source to the scheduled default. Roll back by removing
-only that key from `SOURCES`.
+Run one source at a time with a manual audit in
+`pipeline-all-discovery.yml`. Upload the workflow artifact, run
+`audit_source_fidelity.py` against the source's inventory/discovery files, and
+require two consecutive passing live runs before changing its production
+route.
+
+For structured sources, `source_inventory.json` is produced from canonical
+source records before acceptance policy and run caps are applied.
+`discovery.json` is produced separately from accepted opportunity records.
+`verify_structured_audit_artifacts.py` checks that provenance contract,
+requires explicit evidence for policy rejections, and fails if
+`parser_failures.json` is non-empty. Never treat an empty inventory as healthy
+when the manifest or stats report a parser failure.
 
 Manual runs of `pipeline-all-discovery.yml` default to
 `DISCOVERY_AUDIT_ONLY=true`, which skips OCR and all Render submissions. After
@@ -243,6 +265,66 @@ explicit TDR URL or a canonical heading/deadline hash; FUNBIO uses the canonical
 call slug. `FUNBIO_NEWS_ENABLED` defaults off. When enabled, news is resolved
 only by exact canonical URL/slug/source ID and unresolved likely calls are not
 submitted.
+
+### FUNBIO/TNC production-route cutover
+
+Three workflows can discover FUNBIO or TNC:
+
+| Workflow | FUNBIO | TNC | Submission path |
+|----------|--------|-----|-----------------|
+| `pipeline-funbio-discovery.yml` | yes | no | Legacy `/api/pipeline/candidates` |
+| `pipeline-tnc-discovery.yml` | no | yes | Legacy `/api/pipeline/candidates` |
+| `pipeline-all-discovery.yml` | yes | yes | Structured `/api/pipeline/opportunities` when approved; audit-only otherwise |
+
+Before route gating, the unified schedule selected FUNBIO and TNC while both
+dedicated schedules were also active. The unified legacy mode loads the same
+`discover_funbio_candidates` / `discover_tnc_candidates` modules as the
+dedicated workflows and submits the same document URLs with the same source
+keys. The schedules could therefore submit the same source identity more than
+once, even though backend idempotency usually prevented a duplicate row.
+
+`OPPORTUNITY_SOURCES` is now the single route switch for these two sources:
+
+- Key absent: the dedicated legacy workflow submits; the scheduled unified
+  workflow excludes the source.
+- Key present: the dedicated workflow stops before dependency installation or
+  submission; the scheduled unified workflow includes the source and uses the
+  structured endpoint.
+- Manual audit: the unified audit step has no `RENDER_APP_URL` or
+  `PIPELINE_SECRET`, sets `DISCOVERY_AUDIT_ONLY=true`, and never submits.
+- Manual submission: the route resolver rejects FUNBIO/TNC unless the source
+  is already approved in `OPPORTUNITY_SOURCES`.
+
+Use lowercase comma-separated keys, for example `finep,fbds,funbio`; whitespace
+and case are normalized by the route resolver. Change only one key at a time.
+Do not add `tnc` while its shared-TDR identity conflict remains open.
+
+Cut over one approved source:
+
+```bash
+gh variable set OPPORTUNITY_SOURCES \
+  --repo Nucleo-IA-Unilasalle/lasalle-notices-automation-cronjob \
+  --body "finep,fbds,funbio"
+```
+
+Verify the next unified run reports `funbio_route=structured`, then verify the
+dedicated FUNBIO run contains only checkout/route-resolution steps. Do not
+perform this change until the source's rollout gates pass.
+
+Roll back immediately by removing only the failing key from the variable, then
+manually dispatch its dedicated workflow. Route resolution will exclude it
+from the next unified schedule and restore the legacy submission step:
+
+```bash
+gh variable set OPPORTUNITY_SOURCES \
+  --repo Nucleo-IA-Unilasalle/lasalle-notices-automation-cronjob \
+  --body "finep,fbds"
+gh workflow run pipeline-funbio-discovery.yml \
+  --repo Nucleo-IA-Unilasalle/lasalle-notices-automation-cronjob
+```
+
+Never use `workflow_dispatch` inputs as a production enablement bypass. The
+repository variable remains authoritative.
 
 ## PNCP opportunity normalization
 

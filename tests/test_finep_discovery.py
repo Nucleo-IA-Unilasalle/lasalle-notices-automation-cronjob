@@ -14,16 +14,31 @@ def _page():
 
 def test_pagination_and_open_documentless_records_are_supported(monkeypatch):
     monkeypatch.setattr(finep, "FINEP_MAX_OPPORTUNITIES_PER_RUN", 10)
-    stats, opportunities = finep.discover_opportunities(
+    result = finep.discover_opportunities(
         fetch_json=lambda _url: _page(),
         snapshot_at=datetime(2026, 7, 23, tzinfo=timezone.utc),
         min_year=2026,
     )
-    assert stats == {"records": 3, "opportunities": 2, "policy_rejected": 1}
+    stats, opportunities = result
+    assert stats == {
+        "records": 3,
+        "inventory_records": 3,
+        "opportunities": 2,
+        "policy_rejected": 1,
+        "parser_failures": 0,
+        "audit_complete_inventory": 0,
+    }
     assert [item["source_record_id"] for item in opportunities] == [
         "991625",
         "991626",
     ]
+    assert [item["source_record_id"] for item in result.inventory] == [
+        "991625",
+        "991626",
+        "900000",
+    ]
+    assert result.inventory[-1]["reason_code"] == "out_of_scope"
+    assert result.inventory[-1]["evidence"]["policy"] == "minimum_notice_year"
     assert opportunities[1]["documents"] == []
 
 
@@ -48,8 +63,66 @@ def test_markdown_and_identity_are_deterministic():
 
 
 def test_empty_or_malformed_api_is_a_visible_audit_failure():
-    stats, opportunities = finep.discover_opportunities(
+    result = finep.discover_opportunities(
         fetch_json=lambda _url: {"items": [], "lastPage": 1}
     )
+    stats, opportunities = result
     assert opportunities == []
     assert stats["inventory_parse_failed"] == 1
+    assert result.parser_failures[0]["stage"] == "api_inventory"
+
+
+def test_pagination_uses_stable_id_tiebreaker(monkeypatch):
+    monkeypatch.setattr(finep, "FINEP_MAX_PAGES_PER_RUN", 2)
+    requested_urls = []
+
+    def fetch_json(url):
+        requested_urls.append(url)
+        record_id = "2" if "page=1" in url else "1"
+        return {
+            "items": [{"id": record_id}],
+            "lastPage": 2,
+        }
+
+    records = finep.fetch_api_pages(fetch_json=fetch_json)
+
+    assert [record["id"] for record in records] == ["2", "1"]
+    assert len(requested_urls) == 2
+    assert all(
+        "sort=dataDePublicacao:desc,id:desc" in url
+        for url in requested_urls
+    )
+
+
+def test_audit_mode_bypasses_submission_cap(monkeypatch):
+    monkeypatch.setattr(finep, "FINEP_MAX_OPPORTUNITIES_PER_RUN", 1)
+    monkeypatch.setenv("DISCOVERY_AUDIT_ONLY", "true")
+
+    result = finep.discover_opportunities(
+        fetch_json=lambda _url: _page(),
+        snapshot_at=datetime(2026, 7, 23, tzinfo=timezone.utc),
+        min_year=2026,
+    )
+
+    assert result.stats["audit_complete_inventory"] == 1
+    assert [item["source_record_id"] for item in result.opportunities] == [
+        "991625",
+        "991626",
+    ]
+
+
+def test_submission_mode_retains_source_cap(monkeypatch):
+    monkeypatch.setattr(finep, "FINEP_MAX_OPPORTUNITIES_PER_RUN", 1)
+    monkeypatch.delenv("DISCOVERY_AUDIT_ONLY", raising=False)
+
+    result = finep.discover_opportunities(
+        fetch_json=lambda _url: _page(),
+        snapshot_at=datetime(2026, 7, 23, tzinfo=timezone.utc),
+        min_year=2026,
+    )
+
+    assert result.stats["audit_complete_inventory"] == 0
+    assert [item["source_record_id"] for item in result.opportunities] == [
+        "991625",
+    ]
+    assert len(result.inventory) == 3

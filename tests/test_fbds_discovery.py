@@ -13,11 +13,14 @@ def test_listing_and_detail_create_stable_zip_backed_opportunity():
     pages = {fbds.FBDS_LISTING_URL: listing}
     records = fbds.extract_fbds_records(listing, fbds.FBDS_LISTING_URL)
     pages[records[0]["canonical_url"]] = detail
-    stats, opportunities = fbds.discover_opportunities(
+    result = fbds.discover_opportunities(
         fetch_html=pages.__getitem__,
         snapshot_at=datetime(2026, 7, 23, tzinfo=timezone.utc),
     )
+    stats, opportunities = result
     assert stats["opportunities"] == 1
+    assert result.inventory[0]["source_record_id"] == "24"
+    assert result.inventory[0] is not opportunities[0]
     opportunity = opportunities[0]
     assert opportunity["source_record_id"] == "24"
     assert opportunity["application_deadline"].startswith("2026-09-30")
@@ -40,11 +43,13 @@ def test_footer_documents_are_not_attributed_to_record():
 
 
 def test_missing_listing_content_fails_audit_visibly():
-    stats, opportunities = fbds.discover_opportunities(
+    result = fbds.discover_opportunities(
         fetch_html=lambda _url: "<html><body><footer>Editais</footer></body></html>"
     )
+    stats, opportunities = result
     assert opportunities == []
     assert stats["inventory_parse_failed"] == 1
+    assert result.parser_failures
 
 
 def test_current_spip_principal_section_is_supported():

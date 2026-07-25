@@ -47,10 +47,12 @@ Filter pipeline (per plan §9):
 from __future__ import annotations
 
 import argparse
+import html
 import json
 import os
 import re
 import sys
+import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Literal
@@ -61,6 +63,7 @@ from bs4 import BeautifulSoup, NavigableString, Tag
 import pipeline_core
 from scraper_filters import FilterPolicy, is_likely_edital
 from scraper_transport import (
+    extract_status_code_from_exception,
     fetch_html_with_retry,
     log_source_failure,
     looks_like_pdf_url,
@@ -68,6 +71,16 @@ from scraper_transport import (
 
 
 WWF_LISTING_URL = "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/"
+WWF_OPEN_RSS_URL = (
+    "https://www.wwf.org.br/_template/_international/article/rss-feed.cfm"
+    "?rss_xnav_id=23274&rss_obj_id=153142&rss_lang_id=62&rss_xsite_id=62"
+    "&rss_language=pt&rss_adminMode=false&rss_ArchiveMode=false"
+)
+WWF_CLOSED_RSS_URL = (
+    "https://www.wwf.org.br/_template/_international/article/rss-feed.cfm"
+    "?rss_xnav_id=23274&rss_obj_id=153143&rss_lang_id=62&rss_xsite_id=62"
+    "&rss_language=pt&rss_adminMode=false&rss_ArchiveMode=false"
+)
 
 WWF_MIN_NOTICE_YEAR = int(os.environ.get("WWF_MIN_NOTICE_YEAR", "2026"))
 
@@ -127,6 +140,8 @@ _EDITAL_COMPONENT_PATTERNS = [
     r"errata",
     r"anexo",
 ]
+
+_SUPPORTED_DOCUMENT_PATTERN = re.compile(r"\.(pdf|docx)($|[?#])", re.IGNORECASE)
 
 
 StatusValue = Literal["open", "closed"]
@@ -380,29 +395,113 @@ def parse_listing_sections(
     return open_rows + closed_rows
 
 
-def _extract_detail_pdf_urls(page_html: str, detail_url: str) -> list[str]:
-    """Extract PDF URLs only from the detail content area.
+def parse_rss_inventory(
+    feed_xml: str,
+    status: StatusValue,
+    *,
+    listing_url: str = WWF_LISTING_URL,
+) -> list[dict[str, Any]]:
+    """Parse the official WWF section feed used by the listing page.
 
-    Filtering is applied by the inventory/candidate callers after extraction.
+    The feed publishes internal origin URLs. Only their public content IDs are
+    retained; canonical URLs are rebuilt on the public WWF host.
     """
+    root = ET.fromstring(feed_xml)
+    rows: list[dict[str, Any]] = []
+    seen_ids: set[str] = set()
+    for item in root.findall(".//item"):
+        raw_title = item.findtext("title") or ""
+        raw_link = item.findtext("link") or ""
+        detail_id = _extract_detail_id(raw_link)
+        if detail_id is None or detail_id in seen_ids:
+            continue
+        seen_ids.add(detail_id)
+        title = BeautifulSoup(html.unescape(raw_title), "html.parser").get_text(
+            " ", strip=True
+        )
+        rows.append(
+            {
+                "source_record_id": detail_id,
+                "title": title,
+                "status": status,
+                "canonical_url": f"{listing_url}?uNewsID={detail_id}",
+                "listing_url": listing_url,
+                "published_at": None,
+                "deadline": None,
+                "document_urls": [],
+                "document_hashes": [],
+            }
+        )
+    return rows
+
+
+def _fetch_rss_inventory(
+    *,
+    listing_url: str,
+) -> tuple[list[dict[str, Any]], int]:
+    rows: list[dict[str, Any]] = []
+    feeds_fetched = 0
+    for feed_url, status in (
+        (WWF_OPEN_RSS_URL, "open"),
+        (WWF_CLOSED_RSS_URL, "closed"),
+    ):
+        feed_xml = fetch_html_with_retry(
+            feed_url,
+            timeout=WWF_FETCH_TIMEOUT_SECONDS,
+            max_attempts=WWF_FETCH_MAX_ATTEMPTS,
+            backoff_seconds=WWF_FETCH_BACKOFF_SECONDS,
+            allowed_status_codes=(401, 403, 404, 410),
+        )
+        feeds_fetched += 1
+        rows.extend(parse_rss_inventory(feed_xml, status, listing_url=listing_url))
+    return rows, feeds_fetched
+
+
+def _enrich_row_from_detail(row: dict[str, Any], page_html: str) -> None:
+    """Fill feed-fallback identity from the authoritative detail page."""
+    text = BeautifulSoup(page_html, "html.parser").get_text(" ", strip=True)
+    process_match = _PROCESS_NUMBER_PATTERN.search(text)
+    if process_match:
+        row["source_record_id"] = process_match.group(1)
+
+
+def _extract_detail_document_urls(page_html: str, detail_url: str) -> list[str]:
+    """Extract supported record-owned attachments from the detail content."""
     soup = BeautifulSoup(page_html, "html.parser")
     content_area = soup.select_one("div.template433, div.page-content")
     if content_area is None:
         return []
     found: list[str] = []
     seen: set[str] = set()
-    for link in content_area.find_all("a", href=lambda h: bool(h and looks_like_pdf_url(h))):
+    for link in content_area.find_all(
+        "a",
+        href=lambda href: bool(
+            isinstance(href, str) and _SUPPORTED_DOCUMENT_PATTERN.search(href)
+        ),
+    ):
         if not isinstance(link, Tag):
             continue
         href = link.get("href")
         if not isinstance(href, str) or not href:
             continue
-        pdf_url = urljoin(detail_url, href)
-        if pdf_url in seen:
+        document_url = urljoin(detail_url, href)
+        if document_url in seen:
             continue
-        seen.add(pdf_url)
-        found.append(pdf_url)
+        seen.add(document_url)
+        found.append(document_url)
     return found
+
+
+def _extract_detail_pdf_urls(page_html: str, detail_url: str) -> list[str]:
+    """Extract PDF URLs only from the detail content area.
+
+    Filtering is applied by the inventory/candidate callers after extraction.
+    """
+    return [
+        url
+        for url in _extract_detail_document_urls(page_html, detail_url)
+        if looks_like_pdf_url(url)
+    ]
 
 
 def build_inventory(
@@ -425,17 +524,30 @@ def build_inventory(
     rows = parse_listing_sections(listing_html, listing_url)
     if rows is None:
         return [], False
+    return _build_inventory_from_rows(rows, detail_responses), True
 
+
+def _build_inventory_from_rows(
+    rows: list[dict[str, Any]],
+    detail_responses: dict[str, str],
+) -> list[dict[str, Any]]:
     inventory: list[dict[str, Any]] = []
     for row in rows:
         detail_url = row["canonical_url"]
         doc_urls: list[str] = []
         if detail_url in detail_responses:
-            for pdf_url in _extract_detail_pdf_urls(detail_responses[detail_url], detail_url):
-                if not _candidate_passes_edital_prefilter(pdf_url):
+            for document_url in _extract_detail_document_urls(
+                detail_responses[detail_url], detail_url
+            ):
+                if _is_generic_supplier_asset(document_url):
                     continue
-                if pdf_url not in doc_urls:
-                    doc_urls.append(pdf_url)
+                if (
+                    looks_like_pdf_url(document_url)
+                    and not _candidate_passes_edital_prefilter(document_url)
+                ):
+                    continue
+                if document_url not in doc_urls:
+                    doc_urls.append(document_url)
         record: dict[str, Any] = {
             "source_key": "wwf",
             "source_record_id": row["source_record_id"],
@@ -448,7 +560,7 @@ def build_inventory(
             "document_hashes": row["document_hashes"],
         }
         inventory.append(record)
-    return inventory, True
+    return inventory
 
 
 def build_candidate(
@@ -507,10 +619,14 @@ def _discover_candidates_and_inventory(
         "candidate_cap_reached": 0,
         "section_parse_failed": 0,
         "detail_parse_failed": 0,
+        "rss_fallback_used": 0,
+        "rss_feeds_fetched": 0,
     }
     candidates: list[dict[str, Any]] = []
     seen_pdfs: set[str] = set()
     details_fetched = 0
+    listing_html: str | None = None
+    rows: list[dict[str, Any]] | None = None
 
     try:
         listing_html = fetch_html_with_retry(
@@ -522,16 +638,34 @@ def _discover_candidates_and_inventory(
         )
         stats["listings_fetched"] += 1
     except Exception as exc:
-        log_source_failure(
-            "Failed to fetch WWF listing %s: %s",
-            listing_url,
-            exc,
-            exc=exc,
-        )
-        stats["errors"] = stats.get("errors", 0) + 1
-        return stats, candidates, []
+        if extract_status_code_from_exception(exc) == 403:
+            try:
+                rows, feeds_fetched = _fetch_rss_inventory(
+                    listing_url=listing_url
+                )
+            except Exception as fallback_exc:
+                log_source_failure(
+                    "Failed to fetch WWF listing %s and official RSS fallback: %s",
+                    listing_url,
+                    fallback_exc,
+                    exc=fallback_exc,
+                )
+                stats["errors"] = stats.get("errors", 0) + 1
+                return stats, candidates, []
+            stats["rss_fallback_used"] = 1
+            stats["rss_feeds_fetched"] = feeds_fetched
+        else:
+            log_source_failure(
+                "Failed to fetch WWF listing %s: %s",
+                listing_url,
+                exc,
+                exc=exc,
+            )
+            stats["errors"] = stats.get("errors", 0) + 1
+            return stats, candidates, []
 
-    rows = parse_listing_sections(listing_html, listing_url)
+    if rows is None and listing_html is not None:
+        rows = parse_listing_sections(listing_html, listing_url)
     if rows is None or not rows:
         log_source_failure(
             "WWF listing %s has missing edital sections or no parsed rows; selector drift suspected",
@@ -584,15 +718,12 @@ def _discover_candidates_and_inventory(
             stats["detail_parse_failed"] += 1
             stats["errors"] += 1
             continue
+        _enrich_row_from_detail(row, page_html)
         detail_responses[detail_url] = page_html
         for pdf_url in _extract_detail_pdf_urls(page_html, detail_url):
             detail_pdf_records.append((pdf_url, detail_url, row))
 
-    inventory, _sections_present = build_inventory(
-        listing_html=listing_html,
-        detail_responses=detail_responses,
-        listing_url=listing_url,
-    )
+    inventory = _build_inventory_from_rows(rows, detail_responses)
 
     for pdf_url, detail_url, row in detail_pdf_records:
         if pdf_url in seen_pdfs:
@@ -645,12 +776,107 @@ def discover_candidates(
     return stats, candidates
 
 
+def _document_descriptor(url: str) -> dict[str, Any]:
+    kind = "pdf" if looks_like_pdf_url(url) else "docx"
+    return {
+        "source_document_id": url,
+        "document_kind": kind,
+        "url": url,
+        "filename": urlsplit(url).path.rsplit("/", 1)[-1],
+        "mime_type": (
+            "application/pdf"
+            if kind == "pdf"
+            else "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        ),
+        "is_principal": False,
+        "is_renderable": False,
+    }
+
+
+def _inventory_record_to_opportunity(
+    record: dict[str, Any],
+    *,
+    snapshot_at: datetime | None = None,
+) -> dict[str, Any]:
+    title = str(record["title"]).strip()
+    canonical_url = str(record["canonical_url"])
+    lines = [
+        f"# {title}",
+        "",
+        "## Fonte oficial",
+        "",
+        canonical_url,
+        "",
+        "## Situacao",
+        "",
+        str(record["status"]),
+    ]
+    if record.get("published_at"):
+        lines.extend(("", "## Publicacao", "", str(record["published_at"])))
+    documents = [
+        _document_descriptor(url)
+        for url in record.get("document_urls", [])
+        if isinstance(url, str)
+    ]
+    snapshot = snapshot_at or datetime.now(timezone.utc)
+    return {
+        "source_key": "wwf",
+        "source_record_id": record["source_record_id"],
+        "source_kind": "web",
+        "opportunity_type": "consultancy",
+        "canonical_url": canonical_url,
+        "title": title,
+        "description": title,
+        "authoritative_status": record["status"],
+        "source_published_at": record.get("published_at"),
+        "source_updated_at": None,
+        "proposal_opens_at": None,
+        "application_deadline": record.get("deadline"),
+        "source_snapshot_at": snapshot.astimezone(timezone.utc).isoformat(),
+        "source_markdown": "\n".join(lines),
+        "source_content_hash": "",
+        "documents": documents,
+    }
+
+
+def discover_opportunities(
+    *,
+    filter_policy: FilterPolicy = "default",
+    min_year: int = WWF_MIN_NOTICE_YEAR,
+    listing_url: str = WWF_LISTING_URL,
+    snapshot_at: datetime | None = None,
+) -> tuple[dict[str, int], list[dict[str, Any]]]:
+    """Discover structured WWF records, including DOCX-only opportunities."""
+    stats, _candidates, inventory = _discover_candidates_and_inventory(
+        filter_policy=filter_policy,
+        min_year=min_year,
+        listing_url=listing_url,
+    )
+    opportunities = [
+        _inventory_record_to_opportunity(record, snapshot_at=snapshot_at)
+        for record in inventory
+    ]
+    stats["opportunities"] = len(opportunities)
+    stats["documentless_opportunities"] = sum(
+        not opportunity["documents"] for opportunity in opportunities
+    )
+    stats["docx_opportunities"] = sum(
+        any(
+            document["document_kind"] == "docx"
+            for document in opportunity["documents"]
+        )
+        for opportunity in opportunities
+    )
+    return stats, opportunities
+
+
 def _write_audit_artifacts(
     output_dir: Path,
     *,
     inventory: list[dict[str, Any]],
     candidates: list[dict[str, Any]],
     stats: dict[str, int],
+    opportunities: list[dict[str, Any]] | None = None,
 ) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
     records_by_id = {record["source_record_id"]: record for record in inventory}
@@ -668,10 +894,27 @@ def _write_audit_artifacts(
         if candidate["url"] not in record["document_urls"]:
             record["document_urls"].append(candidate["url"])
 
+    if opportunities is not None:
+        for opportunity in opportunities:
+            record_id = opportunity.get("source_record_id")
+            inventory_record = records_by_id.get(record_id)
+            if not isinstance(record_id, str) or inventory_record is None:
+                continue
+            discovery_by_id[record_id] = {
+                **inventory_record,
+                "document_urls": [
+                    document["url"]
+                    for document in opportunity.get("documents", [])
+                    if isinstance(document.get("url"), str)
+                ],
+                "document_hashes": [],
+            }
+
     payloads = {
         "source_inventory.json": inventory,
         "discovery.json": list(discovery_by_id.values()),
         "candidates.json": candidates,
+        "opportunities.json": opportunities or [],
         "stats.json": stats,
     }
     for filename, payload in payloads.items():
@@ -695,11 +938,27 @@ def main(argv: list[str] | None = None) -> int:
     args = _parse_args(argv or [])
     if args.audit_dir is not None:
         stats, candidates, inventory = _discover_candidates_and_inventory()
+        opportunities = [
+            _inventory_record_to_opportunity(record)
+            for record in inventory
+        ]
+        stats["opportunities"] = len(opportunities)
+        stats["documentless_opportunities"] = sum(
+            not opportunity["documents"] for opportunity in opportunities
+        )
+        stats["docx_opportunities"] = sum(
+            any(
+                document["document_kind"] == "docx"
+                for document in opportunity["documents"]
+            )
+            for opportunity in opportunities
+        )
         _write_audit_artifacts(
             args.audit_dir,
             inventory=inventory,
             candidates=candidates,
             stats=stats,
+            opportunities=opportunities,
         )
         print(f"WWF audit stats: {stats}")
         print(f"WWF audit artifacts: {args.audit_dir}")
