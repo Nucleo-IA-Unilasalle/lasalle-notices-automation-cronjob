@@ -173,10 +173,15 @@ Run `python scripts/discover_wwf_candidates.py --audit-dir artifacts/wwf`
 to fetch the live source without OCR or submission. It writes
 `source_inventory.json`, normalized `discovery.json`, structured
 `opportunities.json`, raw `candidates.json`, and `stats.json`. A manual run of
-`pipeline-wwf-discovery.yml` defaults to this mode on the GitHub macOS runner
-pool, runs the deterministic fidelity comparator, and uploads those files as
-the `wwf-fidelity-<run-id>` artifact. The scheduled production job remains on
-Ubuntu.
+`pipeline-wwf-discovery.yml` defaults to this
+mode and uploads those files as the `wwf-fidelity-<run-id>` artifact.
+
+GitHub-hosted Ubuntu and macOS runners currently receive HTTP 403 from the
+listing and both official feeds. For live audits, use
+`pipeline-wwf-trusted-audit.yml` only after a dedicated repository-scoped
+runner with the `wwf-audit` label is online. Its no-secret, no-submit security
+contract and artifact gate are documented in
+`docs/WWF_TRUSTED_AUDIT_RUNNER.md`.
 
 Enable WWF submission only after the audit shows all open records have an
 outcome and no introductory/generic documents appear as candidates (see
