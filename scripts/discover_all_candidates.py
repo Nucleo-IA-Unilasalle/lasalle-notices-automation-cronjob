@@ -452,9 +452,11 @@ def main() -> int:
         if (
             source_stats.get("section_parse_failed", 0)
             or source_stats.get("inventory_parse_failed", 0)
+            or source_stats.get("ambiguous_document_conflicts", 0)
         ):
             print(
-                f"error: discovery reported source/parser failures for {source!r}",
+                f"error: discovery reported source/parser/identity failures "
+                f"for {source!r}",
                 file=sys.stderr,
             )
             exit_code = 1

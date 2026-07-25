@@ -41,6 +41,7 @@ import os
 import re
 import sys
 from datetime import datetime, timezone
+from io import BytesIO
 from typing import Any
 from urllib.parse import urljoin, urlsplit, urlunsplit
 from zoneinfo import ZoneInfo
@@ -497,13 +498,117 @@ def _fallback_consultancy_id(title: str, deadline: str) -> str:
     return f"consultancy:{hashlib.sha256(identity.encode()).hexdigest()}"
 
 
+def _extract_document_text(url: str) -> str:
+    """Read a duplicated official PDF so its owner can be verified."""
+    if not re.search(r"\.pdf($|[?#])", url, re.I):
+        return ""
+    from pypdf import PdfReader
+
+    content = pipeline_core._download_attachment(
+        url,
+        max_bytes=pipeline_core.SCRAPE_MAX_PDF_BYTES,
+    )
+    return "\n".join(
+        page.extract_text() or ""
+        for page in PdfReader(BytesIO(content)).pages
+    )
+
+
+def _association_markers(opportunity: dict[str, Any]) -> tuple[set[str], set[str]]:
+    """Return exact public deadline/contact markers from one source block."""
+    description = str(opportunity.get("description") or "")
+    deadlines = {
+        match.group(1)
+        for match in re.finditer(r"\b(\d{2}/\d{2}/\d{4})\b", description)
+    }
+    contacts = {
+        match.group(0).casefold()
+        for match in re.finditer(
+            r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b",
+            description,
+            re.I,
+        )
+    }
+    return deadlines, contacts
+
+
+def _resolve_duplicate_documents(
+    opportunities: list[dict[str, Any]],
+    *,
+    fetch_document_text: Any,
+) -> list[dict[str, Any]]:
+    """Assign a reused link only when PDF metadata proves a unique owner.
+
+    TNC occasionally publishes the same anchor under adjacent consultancy
+    blocks. Stable IDs remain block-derived in that case. The attachment is
+    retained only when its text contains both the exact deadline and a public
+    contact from exactly one block; otherwise it is quarantined from every
+    opportunity and returned as blocking audit evidence.
+    """
+    owners_by_url: dict[str, list[dict[str, Any]]] = {}
+    for opportunity in opportunities:
+        for document in opportunity.get("documents", []):
+            url = str(document.get("url") or "")
+            if url:
+                owners_by_url.setdefault(url, []).append(opportunity)
+
+    conflicts: list[dict[str, Any]] = []
+    for url, possible_owners in owners_by_url.items():
+        if len(possible_owners) <= 1:
+            continue
+        document_text = ""
+        inspection_error = None
+        try:
+            document_text = str(fetch_document_text(url) or "")
+        except Exception as exc:
+            inspection_error = type(exc).__name__
+        normalized_text = document_text.casefold()
+        proven_owners: list[dict[str, Any]] = []
+        for opportunity in possible_owners:
+            deadlines, contacts = _association_markers(opportunity)
+            deadline_match = bool(deadlines) and any(
+                deadline in normalized_text for deadline in deadlines
+            )
+            contact_match = bool(contacts) and any(
+                contact in normalized_text for contact in contacts
+            )
+            if deadline_match and contact_match:
+                proven_owners.append(opportunity)
+
+        retained_owner = proven_owners[0] if len(proven_owners) == 1 else None
+        for opportunity in possible_owners:
+            if opportunity is retained_owner:
+                continue
+            opportunity["documents"] = [
+                document
+                for document in opportunity.get("documents", [])
+                if document.get("url") != url
+            ]
+
+        if retained_owner is None:
+            evidence: dict[str, Any] = {
+                "reason_code": "identity_mismatch",
+                "document_url": url,
+                "source_record_ids": [
+                    opportunity["source_record_id"]
+                    for opportunity in possible_owners
+                ],
+                "resolution": "attachment_quarantined",
+            }
+            if inspection_error:
+                evidence["inspection_error"] = inspection_error
+            conflicts.append(evidence)
+    return conflicts
+
+
 def discover_opportunities(
     *,
     fetch_html: Any = None,
+    fetch_document_text: Any = None,
     now: datetime | None = None,
     snapshot_at: datetime | None = None,
     min_year: int | None = None,
-) -> tuple[dict[str, int], list[dict[str, Any]]]:
+) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     """Discover only official consultancy blocks, never general news."""
     del min_year
     fetch = fetch_html or (
@@ -542,11 +647,19 @@ def discover_opportunities(
         opportunity["canonical_url"] = (
             f"{TNC_OPPORTUNITIES_URL}?consultancy={fallback_id.removeprefix('consultancy:')}"
         )
-    return {
+    conflicts = _resolve_duplicate_documents(
+        opportunities,
+        fetch_document_text=fetch_document_text or _extract_document_text,
+    )
+    stats: dict[str, Any] = {
         "blocks": len(blocks),
         "opportunities": len(opportunities),
         "malformed_blocks": len(blocks) - len(opportunities),
-    }, opportunities
+    }
+    if conflicts:
+        stats["ambiguous_document_conflicts"] = len(conflicts)
+        stats["document_conflicts"] = conflicts
+    return stats, opportunities
 
 
 def main() -> int:
