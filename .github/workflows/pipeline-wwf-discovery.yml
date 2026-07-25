@@ -16,7 +16,49 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  audit-wwf:
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.audit_only }}
+    runs-on: macos-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout scheduler repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: requirements-ocr-worker.txt
+
+      - name: Install audit dependencies
+        run: pip install beautifulsoup4 requests
+
+      - name: Run WWF discovery audit
+        run: |
+          python scripts/discover_wwf_candidates.py --audit-dir artifacts/wwf
+          python scripts/audit_source_fidelity.py \
+            --source-inventory artifacts/wwf/source_inventory.json \
+            --discovery artifacts/wwf/discovery.json \
+            --out artifacts/wwf/fidelity
+        env:
+          WWF_MIN_NOTICE_YEAR: "2026"
+          WWF_MAX_CANDIDATES_PER_RUN: "50"
+          WWF_MAX_DETAILS_PER_RUN: "20"
+          WWF_FETCH_MAX_ATTEMPTS: "3"
+          WWF_FETCH_BACKOFF_SECONDS: "2"
+          WWF_FETCH_TIMEOUT_SECONDS: "30"
+
+      - name: Upload WWF fidelity artifacts
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: wwf-fidelity-${{ github.run_id }}
+          path: artifacts/wwf
+          if-no-files-found: error
+
   discover-wwf:
+    if: ${{ github.event_name != 'workflow_dispatch' || !inputs.audit_only }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -33,32 +75,7 @@ jobs:
       - name: Install OCR worker dependencies
         run: pip install -r requirements-ocr-worker.txt
 
-      - name: Run WWF discovery audit
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.audit_only }}
-        run: |
-          python scripts/discover_wwf_candidates.py --audit-dir artifacts/wwf
-          python scripts/audit_source_fidelity.py \
-            --source-inventory artifacts/wwf/source_inventory.json \
-            --discovery artifacts/wwf/discovery.json \
-            --out artifacts/wwf/fidelity
-        env:
-          WWF_MIN_NOTICE_YEAR: "2026"
-          WWF_MAX_CANDIDATES_PER_RUN: "50"
-          WWF_MAX_DETAILS_PER_RUN: "20"
-          WWF_FETCH_MAX_ATTEMPTS: "3"
-          WWF_FETCH_BACKOFF_SECONDS: "2"
-          WWF_FETCH_TIMEOUT_SECONDS: "30"
-
-      - name: Upload WWF fidelity artifacts
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.audit_only && always() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: wwf-fidelity-${{ github.run_id }}
-          path: artifacts/wwf
-          if-no-files-found: error
-
       - name: Run WWF discovery, download, OCR, and submission
-        if: ${{ github.event_name != 'workflow_dispatch' || !inputs.audit_only }}
         run: python scripts/discover_wwf_candidates.py
         env:
           RENDER_APP_URL: ${{ secrets.RENDER_APP_URL }}
