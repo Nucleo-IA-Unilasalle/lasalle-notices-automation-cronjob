@@ -140,7 +140,7 @@ scanning every listing anchor to **structural section parsing**:
   process number is present the numeric WWF content ID from either the
   current `?<id>/<slug>` URL or legacy `uNewsID` URL is used as fallback.
 - Only the detail URLs belonging to parsed edital rows are followed
-  (`WWF_MAX_DETAILS_PER_RUN` cap). PDFs are extracted only from the
+  (`WWF_MAX_DETAILS_PER_RUN` cap). PDF and DOCX attachments are extracted only from the
   record content area (`div.template433`, with legacy `div.page-content`
   support); a missing selector is a parser failure rather than a whole-page
   fallback.
@@ -152,7 +152,9 @@ scanning every listing anchor to **structural section parsing**:
   retification (`retificacao` / `errata`), and annex (`anexo`) PDFs reached
   via an edital row's detail page are retained.
 - `discover_candidates` still returns `(stats, candidates)` for the
-  unchanged download/OCR/submit path. `stats["section_parse_failed"]`
+  unchanged PDF download/OCR/submit path. `discover_opportunities` emits
+  every parsed row as a structured opportunity and retains record-owned DOCX
+  files as non-renderable attachments. `stats["section_parse_failed"]`
   (and `errors`) is set when either heading is absent or no rows can be
   parsed; `detail_parse_failed` covers missing record content selectors.
   Either condition produces a non-zero command and workflow result.
@@ -162,11 +164,16 @@ scanning every listing anchor to **structural section parsing**:
   `document_urls`, `document_hashes`) for audit mode. Every candidate
   carries `metadata.source_record_id` and `metadata.detail_url` so it
   traces to a specific WWF row.
+- If the main listing returns HTTP 403, discovery reads the two official WWF
+  open/closed RSS endpoints linked by the page and reconstructs public detail
+  URLs from their content IDs. No proxy, mirror, or access-control bypass is
+  used.
 
 Run `python scripts/discover_wwf_candidates.py --audit-dir artifacts/wwf`
 to fetch the live source without OCR or submission. It writes
-`source_inventory.json`, normalized `discovery.json`, raw `candidates.json`,
-and `stats.json`. A manual run of `pipeline-wwf-discovery.yml` defaults to this
+`source_inventory.json`, normalized `discovery.json`, structured
+`opportunities.json`, raw `candidates.json`, and `stats.json`. A manual run of
+`pipeline-wwf-discovery.yml` defaults to this
 mode and uploads those files as the `wwf-fidelity-<run-id>` artifact.
 
 Enable WWF submission only after the audit shows all open records have an

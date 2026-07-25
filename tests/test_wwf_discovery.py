@@ -32,12 +32,19 @@ LISTING_FIXTURE = FIXTURES_DIR / "listing.html"
 DETAIL_94482 = FIXTURES_DIR / "detail_94482.html"
 DETAIL_94483 = FIXTURES_DIR / "detail_94483.html"
 DETAIL_94484 = FIXTURES_DIR / "detail_94484.html"
+LISTING_DOCX_FIXTURE = FIXTURES_DIR / "listing_docx.html"
+DETAIL_94946 = FIXTURES_DIR / "detail_94946.html"
+DETAIL_94947 = FIXTURES_DIR / "detail_94947.html"
+DETAIL_94948 = FIXTURES_DIR / "detail_94948.html"
 
 
 LISTING_URL = "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/"
 DETAIL_94482_URL = LISTING_URL + "?94482/Prestacao-de-servicos-de-analise-territorial"
 DETAIL_94483_URL = LISTING_URL + "?94483/Consultoria-em-educacao-ambiental"
 DETAIL_94484_URL = LISTING_URL + "?94484/Carta-convite-concorrencia-analise-territorial"
+DETAIL_94946_URL = LISTING_URL + "?94946/Consultoria-eventos"
+DETAIL_94947_URL = LISTING_URL + "?94947/Consultoria-genero"
+DETAIL_94948_URL = LISTING_URL + "?94948/Consultoria-comunicacao"
 
 
 def _read_fixture(path: Path) -> str:
@@ -50,6 +57,15 @@ def _default_responses() -> dict[str, object]:
         DETAIL_94482_URL: make_response(_read_fixture(DETAIL_94482)),
         DETAIL_94483_URL: make_response(_read_fixture(DETAIL_94483)),
         DETAIL_94484_URL: make_response(_read_fixture(DETAIL_94484)),
+    }
+
+
+def _docx_responses() -> dict[str, object]:
+    return {
+        LISTING_URL: make_response(_read_fixture(LISTING_DOCX_FIXTURE)),
+        DETAIL_94946_URL: make_response(_read_fixture(DETAIL_94946)),
+        DETAIL_94947_URL: make_response(_read_fixture(DETAIL_94947)),
+        DETAIL_94948_URL: make_response(_read_fixture(DETAIL_94948)),
     }
 
 
@@ -420,6 +436,108 @@ class TestBuildInventory:
         )
         assert present is False
         assert inventory == []
+
+
+class TestDocxOpportunities:
+    def test_all_three_live_docx_records_are_structured_opportunities(self) -> None:
+        from discover_wwf_candidates import discover_opportunities
+
+        with patch_request_with_safe_redirects(_docx_responses()):
+            stats, opportunities = discover_opportunities()
+
+        assert stats["opportunities"] == 3
+        assert stats["docx_opportunities"] == 3
+        assert stats["documentless_opportunities"] == 0
+        assert stats["candidates"] == 0
+        assert {item["source_record_id"] for item in opportunities} == {
+            "94946", "94947", "94948",
+        }
+        for opportunity in opportunities:
+            assert opportunity["authoritative_status"] == "open"
+            assert opportunity["opportunity_type"] == "consultancy"
+            assert len(opportunity["documents"]) == 1
+            document = opportunity["documents"][0]
+            assert document["document_kind"] == "docx"
+            assert document["is_renderable"] is False
+            assert document["mime_type"].endswith(
+                "officedocument.wordprocessingml.document"
+            )
+
+    def test_generic_supplier_docx_is_excluded(self) -> None:
+        from discover_wwf_candidates import build_inventory
+
+        inventory, present = build_inventory(
+            listing_html=_read_fixture(LISTING_DOCX_FIXTURE),
+            detail_responses={
+                DETAIL_94946_URL: _read_fixture(DETAIL_94946),
+                DETAIL_94947_URL: _read_fixture(DETAIL_94947),
+                DETAIL_94948_URL: _read_fixture(DETAIL_94948),
+            },
+        )
+
+        assert present is True
+        urls = [
+            url
+            for record in inventory
+            for url in record["document_urls"]
+        ]
+        assert len(urls) == 3
+        assert all(url.endswith(".docx") for url in urls)
+        assert all("modelo-de-proposta" not in url for url in urls)
+
+    def test_audit_discovery_accounts_for_docx_records(self, tmp_path) -> None:
+        import json
+        import discover_wwf_candidates as dpc
+
+        with patch_request_with_safe_redirects(_docx_responses()):
+            assert dpc.main(["--audit-dir", str(tmp_path)]) == 0
+
+        discovery = json.loads((tmp_path / "discovery.json").read_text())
+        opportunities = json.loads((tmp_path / "opportunities.json").read_text())
+        assert len(discovery) == 3
+        assert len(opportunities) == 3
+        assert all(record["document_urls"] for record in discovery)
+        assert all(
+            item["documents"][0]["document_kind"] == "docx"
+            for item in opportunities
+        )
+
+
+class TestRssFallback:
+    def test_official_feeds_replace_a_forbidden_listing(self) -> None:
+        import discover_wwf_candidates as dpc
+
+        open_feed = """<?xml version="1.0" encoding="utf-8"?>
+        <rss><channel>
+          <item><title>Consultoria eventos</title>
+            <link>http://originlaccms1.wwf-sites.org:8301/sobrenos/aquisicoesecontratacoes/?uNewsID=94946</link>
+          </item>
+          <item><title>Consultoria genero</title>
+            <link>http://originlaccms1.wwf-sites.org:8301/sobrenos/aquisicoesecontratacoes/?uNewsID=94947</link>
+          </item>
+          <item><title>Consultoria comunicacao</title>
+            <link>http://originlaccms1.wwf-sites.org:8301/sobrenos/aquisicoesecontratacoes/?uNewsID=94948</link>
+          </item>
+        </channel></rss>"""
+        closed_feed = """<?xml version="1.0" encoding="utf-8"?>
+        <rss><channel /></rss>"""
+        responses = {
+            LISTING_URL: make_response(status_code=403),
+            dpc.WWF_OPEN_RSS_URL: make_response(open_feed),
+            dpc.WWF_CLOSED_RSS_URL: make_response(closed_feed),
+            LISTING_URL + "?uNewsID=94946": make_response(_read_fixture(DETAIL_94946)),
+            LISTING_URL + "?uNewsID=94947": make_response(_read_fixture(DETAIL_94947)),
+            LISTING_URL + "?uNewsID=94948": make_response(_read_fixture(DETAIL_94948)),
+        }
+
+        with patch_request_with_safe_redirects(responses):
+            stats, opportunities = dpc.discover_opportunities()
+
+        assert stats["rss_fallback_used"] == 1
+        assert stats["rss_feeds_fetched"] == 2
+        assert stats["errors"] == 0
+        assert len(opportunities) == 3
+        assert all(item["documents"] for item in opportunities)
 
 
 class TestSubmitHandoff:

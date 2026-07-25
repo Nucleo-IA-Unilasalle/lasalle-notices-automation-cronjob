@@ -153,7 +153,9 @@ Operators who want to discover non-PNCP sources in a single Actions run should u
 
 ### WWF discovery precision (Plan 02)
 
-`discover_wwf_candidates.py` discovers WWF editais by structurally parsing the `EDITAIS ABERTOS` (status `open`) and `EDITAIS ENCERRADOS` (status `closed`) sections of the acquisitions page, following only those rows' detail URLs, and extracting PDFs only from the record content area. Generic supplier documents (`documentos-necessarios`, `requisitos-basicos`, proposal-model, and supplier-portal) are rejected; record-bound divulgação, retification, and annex PDFs are retained. A missing section, zero parsed rows, or missing detail content selector is reported as a failure rather than a healthy zero-result run.
+`discover_wwf_candidates.py` discovers WWF editais by structurally parsing the `EDITAIS ABERTOS` (status `open`) and `EDITAIS ENCERRADOS` (status `closed`) sections of the acquisitions page, following only those rows' detail URLs, and extracting record-owned PDF or DOCX attachments from the record content area. DOCX-only rows are emitted through `discover_opportunities()` as non-renderable structured opportunities; the legacy candidate path remains PDF-only. Generic supplier documents (`documentos-necessarios`, `requisitos-basicos`, proposal-model, and supplier-portal) are rejected; record-bound divulgação, retification, and annex PDFs are retained. A missing section, zero parsed rows, or missing detail content selector is reported as a failure rather than a healthy zero-result run.
+
+If the acquisitions listing returns HTTP 403, the discoverer falls back only to the two official WWF section feeds linked by that page, then rebuilds public WWF detail URLs from their content IDs. It does not use a proxy or an unofficial mirror.
 
 Run a live no-submit audit and write Plan-01-compatible inputs with:
 
@@ -161,7 +163,7 @@ Run a live no-submit audit and write Plan-01-compatible inputs with:
 python scripts/discover_wwf_candidates.py --audit-dir artifacts/wwf
 ```
 
-This writes `source_inventory.json`, normalized `discovery.json`, raw `candidates.json`, and `stats.json`. The manual WWF workflow runs in audit-only mode by default and uploads this directory as an artifact.
+This writes `source_inventory.json`, normalized `discovery.json`, structured `opportunities.json`, raw `candidates.json`, and `stats.json`. The manual WWF workflow runs in audit-only mode by default and uploads this directory as an artifact.
 
 ### MMA public-calls and FNMA discovery (Plan 03)
 

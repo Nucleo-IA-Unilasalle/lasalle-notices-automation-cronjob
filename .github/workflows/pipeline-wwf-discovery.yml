@@ -35,7 +35,12 @@ jobs:
 
       - name: Run WWF discovery audit
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.audit_only }}
-        run: python scripts/discover_wwf_candidates.py --audit-dir artifacts/wwf
+        run: |
+          python scripts/discover_wwf_candidates.py --audit-dir artifacts/wwf
+          python scripts/audit_source_fidelity.py \
+            --source-inventory artifacts/wwf/source_inventory.json \
+            --discovery artifacts/wwf/discovery.json \
+            --out artifacts/wwf/fidelity
         env:
           WWF_MIN_NOTICE_YEAR: "2026"
           WWF_MAX_CANDIDATES_PER_RUN: "50"
