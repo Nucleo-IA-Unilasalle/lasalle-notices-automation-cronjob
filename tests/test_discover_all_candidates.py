@@ -227,22 +227,33 @@ class TestDiscoverSource:
 
 
 class TestDiscoverSourceOpportunities:
-    def test_discards_optional_checkpoint_from_pncp_style_result(self) -> None:
+    def test_requires_independent_structured_result(self) -> None:
+        from discover_all_candidates import discover_source_opportunities
+        from structured_discovery import StructuredDiscoveryResult
+
+        discoverer = MagicMock()
+        expected = StructuredDiscoveryResult(
+            stats={"opportunities": 1},
+            inventory=[{"source_record_id": "2026-0001"}],
+            opportunities=[{"source_record_id": "2026-0001"}],
+        )
+        discoverer.__dict__["discover_opportunities"] = lambda: expected
+
+        result = discover_source_opportunities(discoverer, min_year=2026)
+
+        assert result is expected
+
+    def test_rejects_legacy_tuple_that_cannot_prove_independence(self) -> None:
         from discover_all_candidates import discover_source_opportunities
 
         discoverer = MagicMock()
         discoverer.__dict__["discover_opportunities"] = lambda: (
             {"opportunities": 1},
             [{"source_record_id": "2026-0001"}],
-            "2026-07-23T00:00:00+00:00",
         )
 
-        result = discover_source_opportunities(discoverer, min_year=2026)
-
-        assert result == (
-            {"opportunities": 1},
-            [{"source_record_id": "2026-0001"}],
-        )
+        with pytest.raises(TypeError, match="independent inventory"):
+            discover_source_opportunities(discoverer, min_year=2026)
 
 
 # ---------------------------------------------------------------------------
@@ -529,6 +540,7 @@ class TestMainOrchestration:
         self, tmp_path,
     ) -> None:
         from discover_all_candidates import main
+        from structured_discovery import StructuredDiscoveryResult
 
         opportunity = {
             "source_key": "finep",
@@ -539,8 +551,32 @@ class TestMainOrchestration:
         }
         discoverer = MagicMock()
         discoverer.__dict__["discover_opportunities"] = lambda: (
-            {"opportunities": 1},
-            [opportunity],
+            StructuredDiscoveryResult(
+                stats={"opportunities": 1},
+                inventory=[
+                    {
+                        "source_key": "finep",
+                        "source_record_id": "42",
+                        "canonical_url": "https://example.com/42",
+                        "title": "Chamada",
+                        "status": "open",
+                        "document_urls": [],
+                        "document_hashes": [],
+                    },
+                    {
+                        "source_key": "finep",
+                        "source_record_id": "closed",
+                        "canonical_url": "https://example.com/closed",
+                        "title": "Encerrada",
+                        "status": "closed",
+                        "reason_code": "out_of_scope",
+                        "evidence": {"policy": "open_status_only"},
+                        "document_urls": [],
+                        "document_hashes": [],
+                    },
+                ],
+                opportunities=[opportunity],
+            )
         )
         env = {
             "SOURCES": "finep",
@@ -559,7 +595,18 @@ class TestMainOrchestration:
 
         mock_process.assert_not_called()
         mock_submit.assert_not_called()
-        assert (tmp_path / "finep" / "opportunities.json").exists()
+        source_dir = tmp_path / "finep"
+        assert (source_dir / "opportunities.json").exists()
+        assert len(
+            __import__("json").loads(
+                (source_dir / "source_inventory.json").read_text()
+            )
+        ) == 2
+        assert len(
+            __import__("json").loads(
+                (source_dir / "discovery.json").read_text()
+            )
+        ) == 1
 
     def test_returns_0_when_all_sources_yield_no_candidates(self) -> None:
         from discover_all_candidates import main
@@ -601,6 +648,7 @@ class TestMainOrchestration:
         self, tmp_path,
     ) -> None:
         from discover_all_candidates import main
+        from structured_discovery import StructuredDiscoveryResult
 
         opportunity = {
             "source_key": "tnc",
@@ -611,7 +659,8 @@ class TestMainOrchestration:
         }
         discoverer = MagicMock()
         discoverer.__dict__["discover_opportunities"] = lambda: (
-            {
+            StructuredDiscoveryResult(
+                stats={
                 "opportunities": 1,
                 "ambiguous_document_conflicts": 1,
                 "document_conflicts": [
@@ -621,8 +670,22 @@ class TestMainOrchestration:
                         "resolution": "attachment_quarantined",
                     }
                 ],
-            },
-            [opportunity],
+                },
+                inventory=[
+                    {
+                        "source_key": "tnc",
+                        "source_record_id": "consultancy:one",
+                        "canonical_url": "https://example.com/one",
+                        "title": "Consultoria",
+                        "status": "open",
+                        "published_at": None,
+                        "deadline": None,
+                        "document_urls": [],
+                        "document_hashes": [],
+                    }
+                ],
+                opportunities=[opportunity],
+            )
         )
         env = {
             "SOURCES": "tnc",

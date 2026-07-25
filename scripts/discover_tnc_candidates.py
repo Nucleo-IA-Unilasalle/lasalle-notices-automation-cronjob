@@ -56,6 +56,11 @@ from scraper_transport import (
     log_source_failure,
     looks_like_pdf_url,
 )
+from structured_discovery import (
+    StructuredDiscoveryResult,
+    parser_failure,
+    policy_rejection,
+)
 
 
 TNC_LISTING_URL = "https://www.tnc.org.br/conecte-se/comunicacao/noticias/"
@@ -493,6 +498,57 @@ def parse_consultancy_block(
     }
 
 
+def parse_consultancy_inventory_block(
+    paragraphs: list[Tag],
+    *,
+    now: datetime | None = None,
+) -> dict[str, Any] | None:
+    """Parse a canonical consultancy block directly into audit inventory."""
+    text_parts = [paragraph.get_text(" ", strip=True) for paragraph in paragraphs]
+    full_text = "\n".join(part for part in text_parts if part)
+    deadline = _parse_tnc_deadline(full_text)
+    title = next(
+        (
+            part
+            for part in text_parts
+            if part
+            and not re.match(r"^(NOVO\s+)?PRAZO\s*:", part, re.I)
+            and not re.match(r"^CONTATO\s*:", part, re.I)
+        ),
+        "",
+    )
+    if not title or deadline is None:
+        return None
+    tdr_url = next(
+        (
+            urljoin(TNC_OPPORTUNITIES_URL, href)
+            for paragraph in paragraphs
+            for link in paragraph.find_all("a")
+            if isinstance(link, Tag)
+            if isinstance((href := link.get("href")), str)
+            if re.search(r"\.(pdf|docx)($|[?#])", href, re.I)
+        ),
+        None,
+    )
+    source_record_id = (
+        tdr_url
+        if tdr_url and len(tdr_url) <= 255
+        else _fallback_consultancy_id(title, deadline.isoformat())
+    )
+    current = now or datetime.now(ZoneInfo("America/Sao_Paulo"))
+    return {
+        "source_key": "tnc",
+        "source_record_id": source_record_id,
+        "canonical_url": tdr_url or TNC_OPPORTUNITIES_URL,
+        "title": title,
+        "status": "open" if deadline >= current else "closed",
+        "published_at": None,
+        "deadline": deadline.astimezone(timezone.utc).isoformat(),
+        "document_urls": [tdr_url] if tdr_url else [],
+        "document_hashes": [],
+    }
+
+
 def _fallback_consultancy_id(title: str, deadline: str) -> str:
     identity = f"{TNC_OPPORTUNITIES_URL}|{title.casefold()}|{deadline}"
     return f"consultancy:{hashlib.sha256(identity.encode()).hexdigest()}"
@@ -601,6 +657,24 @@ def _resolve_duplicate_documents(
     return conflicts
 
 
+def _disambiguate_shared_source_ids(records: list[dict[str, Any]]) -> None:
+    """Give distinct blocks stable IDs without discarding shared TDR evidence."""
+    source_id_counts: dict[str, int] = {}
+    for record in records:
+        source_id = record["source_record_id"]
+        source_id_counts[source_id] = source_id_counts.get(source_id, 0) + 1
+    for record in records:
+        if source_id_counts[record["source_record_id"]] <= 1:
+            continue
+        deadline = record.get("application_deadline") or record.get("deadline")
+        fallback_id = _fallback_consultancy_id(record["title"], deadline)
+        record["source_record_id"] = fallback_id
+        record["canonical_url"] = (
+            f"{TNC_OPPORTUNITIES_URL}?consultancy="
+            f"{fallback_id.removeprefix('consultancy:')}"
+        )
+
+
 def discover_opportunities(
     *,
     fetch_html: Any = None,
@@ -608,7 +682,7 @@ def discover_opportunities(
     now: datetime | None = None,
     snapshot_at: datetime | None = None,
     min_year: int | None = None,
-) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+) -> StructuredDiscoveryResult:
     """Discover only official consultancy blocks, never general news."""
     del min_year
     fetch = fetch_html or (
@@ -621,45 +695,139 @@ def discover_opportunities(
     )
     html = fetch(TNC_OPPORTUNITIES_URL)
     if _consultancy_content(html) is None:
-        return {"section_parse_failed": 1, "blocks": 0, "opportunities": 0}, []
+        failure = parser_failure(
+            "tnc",
+            stage="consultancy_section",
+            error="canonical consultancy section was not found",
+        )
+        return StructuredDiscoveryResult(
+            stats={
+                "section_parse_failed": 1,
+                "blocks": 0,
+                "inventory_records": 0,
+                "opportunities": 0,
+                "parser_failures": 1,
+            },
+            inventory=[],
+            opportunities=[],
+            parser_failures=[failure],
+        )
     blocks = extract_consultancy_blocks(html)
-    opportunities = [
-        parsed
-        for block in blocks
-        if (
-            parsed := parse_consultancy_block(
-                block, now=now, snapshot_at=snapshot_at
+    if not blocks:
+        failure = parser_failure(
+            "tnc",
+            stage="consultancy_inventory",
+            error="canonical consultancy section contained no blocks",
+        )
+        return StructuredDiscoveryResult(
+            stats={
+                "inventory_parse_failed": 1,
+                "blocks": 0,
+                "inventory_records": 0,
+                "opportunities": 0,
+                "parser_failures": 1,
+            },
+            inventory=[],
+            opportunities=[],
+            parser_failures=[failure],
+        )
+    raw_inventory: list[dict[str, Any]] = []
+    raw_opportunities: list[dict[str, Any]] = []
+    parser_failures: list[dict[str, Any]] = []
+    for index, block in enumerate(blocks):
+        inventory_record = parse_consultancy_inventory_block(block, now=now)
+        opportunity = parse_consultancy_block(
+            block,
+            now=now,
+            snapshot_at=snapshot_at,
+        )
+        if inventory_record is None or opportunity is None:
+            parser_failures.append(
+                parser_failure(
+                    "tnc",
+                    stage="consultancy_block",
+                    error="block is missing a stable title or deadline",
+                    evidence={
+                        "block_index": index,
+                        "text": " ".join(
+                            paragraph.get_text(" ", strip=True)
+                            for paragraph in block
+                        )[:500],
+                    },
+                )
             )
-        )
-    ]
-    source_id_counts: dict[str, int] = {}
-    for opportunity in opportunities:
-        source_id = opportunity["source_record_id"]
-        source_id_counts[source_id] = source_id_counts.get(source_id, 0) + 1
-    for opportunity in opportunities:
-        if source_id_counts[opportunity["source_record_id"]] <= 1:
             continue
-        fallback_id = _fallback_consultancy_id(
-            opportunity["title"],
-            opportunity["application_deadline"],
-        )
-        opportunity["source_record_id"] = fallback_id
-        opportunity["canonical_url"] = (
-            f"{TNC_OPPORTUNITIES_URL}?consultancy={fallback_id.removeprefix('consultancy:')}"
-        )
+        raw_inventory.append(inventory_record)
+        raw_opportunities.append(opportunity)
+    _disambiguate_shared_source_ids(raw_inventory)
+    _disambiguate_shared_source_ids(raw_opportunities)
+
     conflicts = _resolve_duplicate_documents(
-        opportunities,
+        raw_opportunities,
         fetch_document_text=fetch_document_text or _extract_document_text,
     )
-    stats: dict[str, Any] = {
+    opportunity_documents = {
+        opportunity["source_record_id"]: [
+            document["url"]
+            for document in opportunity.get("documents", [])
+            if document.get("url")
+        ]
+        for opportunity in raw_opportunities
+    }
+    for inventory_record in raw_inventory:
+        inventory_record["document_urls"] = opportunity_documents.get(
+            inventory_record["source_record_id"],
+            [],
+        )
+    parser_failures.extend(
+        parser_failure(
+            "tnc",
+            stage="document_association",
+            error="shared attachment ownership could not be proven",
+            evidence=conflict,
+        )
+        for conflict in conflicts
+    )
+
+    inventory: list[dict[str, Any]] = []
+    opportunities: list[dict[str, Any]] = []
+    rejections: list[dict[str, Any]] = []
+    for inventory_record, opportunity in zip(
+        raw_inventory,
+        raw_opportunities,
+        strict=True,
+    ):
+        if inventory_record["status"] == "closed":
+            rejected = policy_rejection(
+                inventory_record,
+                policy="open_status_only",
+                evidence={"authoritative_status": "expired"},
+            )
+            inventory.append(rejected)
+            rejections.append(rejected)
+        else:
+            inventory.append(inventory_record)
+            opportunities.append(opportunity)
+    stats = {
         "blocks": len(blocks),
+        "inventory_records": len(inventory),
         "opportunities": len(opportunities),
-        "malformed_blocks": len(blocks) - len(opportunities),
+        "malformed_blocks": len(parser_failures),
+        "policy_rejected": len(rejections),
+        "parser_failures": len(parser_failures),
     }
     if conflicts:
         stats["ambiguous_document_conflicts"] = len(conflicts)
         stats["document_conflicts"] = conflicts
-    return stats, opportunities
+    if parser_failures:
+        stats["inventory_parse_failed"] = 1
+    return StructuredDiscoveryResult(
+        stats=stats,
+        inventory=inventory,
+        opportunities=opportunities,
+        policy_rejections=rejections,
+        parser_failures=parser_failures,
+    )
 
 
 def main() -> int:
