@@ -21,6 +21,7 @@ from structured_discovery import (
 
 FINEP_API_URL = "https://www.finep.gov.br/o/c/chamadapublicas"
 FINEP_DETAIL_BASE_URL = "https://www.finep.gov.br/chamada-publica/222684"
+FINEP_API_SORT = "dataDePublicacao:desc,id:desc"
 FINEP_PAGE_SIZE = int(os.environ.get("FINEP_PAGE_SIZE", "20"))
 FINEP_MAX_PAGES_PER_RUN = int(os.environ.get("FINEP_MAX_PAGES_PER_RUN", "5"))
 FINEP_MAX_OPPORTUNITIES_PER_RUN = int(
@@ -184,7 +185,7 @@ def fetch_api_pages(
     records: list[dict[str, Any]] = []
     for page in range(1, FINEP_MAX_PAGES_PER_RUN + 1):
         url = (
-            f"{FINEP_API_URL}?sort=dataDePublicacao:desc"
+            f"{FINEP_API_URL}?sort={FINEP_API_SORT}"
             f"&pageSize={FINEP_PAGE_SIZE}&page={page}"
         )
         payload = fetch_json(url)
@@ -227,6 +228,12 @@ def discover_opportunities(
     opportunities: list[dict[str, Any]] = []
     rejections: list[dict[str, Any]] = []
     parser_failures: list[dict[str, Any]] = []
+    audit_complete = os.environ.get("DISCOVERY_AUDIT_ONLY", "").strip().lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
     for record in records:
         if not record.get("id") or not str(record.get("titulo") or "").strip():
             parser_failures.append(
@@ -283,7 +290,10 @@ def discover_opportunities(
             rejections.append(rejected)
             continue
         inventory.append(inventory_record)
-        if len(opportunities) >= FINEP_MAX_OPPORTUNITIES_PER_RUN:
+        if (
+            not audit_complete
+            and len(opportunities) >= FINEP_MAX_OPPORTUNITIES_PER_RUN
+        ):
             continue
         opportunities.append(
             record_to_opportunity(record, snapshot_at=snapshot_at)
@@ -294,6 +304,7 @@ def discover_opportunities(
         "opportunities": len(opportunities),
         "policy_rejected": len(rejections),
         "parser_failures": len(parser_failures),
+        "audit_complete_inventory": int(audit_complete),
     }
     if parser_failures:
         stats["inventory_parse_failed"] = 1
