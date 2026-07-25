@@ -241,6 +241,64 @@ def write_opportunity_audit(
     (target / "stats.json").write_text(stable_json(stats), encoding="utf-8")
 
 
+def write_candidate_audit(
+    source: str,
+    stats: dict[str, int],
+    candidates: list[dict[str, Any]],
+) -> None:
+    """Write no-submit audit artifacts for PDF-backed discoverers."""
+    root_value = os.environ.get("DISCOVERY_AUDIT_DIR")
+    if not root_value:
+        return
+    target = Path(root_value) / source
+    target.mkdir(parents=True, exist_ok=True)
+    records = []
+    for candidate in candidates:
+        metadata = candidate.get("metadata") or {}
+        url = candidate.get("url")
+        records.append(
+            {
+                "source_key": metadata.get("source_key")
+                or metadata.get("source")
+                or source,
+                "source_record_id": metadata.get("source_record_id")
+                or metadata.get("external_id")
+                or url,
+                "canonical_url": metadata.get("detail_url")
+                or metadata.get("canonical_url")
+                or url,
+                "title": metadata.get("title") or candidate.get("title"),
+                "status": metadata.get("status")
+                or metadata.get("authoritative_status"),
+                "published_at": metadata.get("published_at"),
+                "deadline": metadata.get("application_deadline")
+                or metadata.get("deadline"),
+                "document_urls": [url] if url else [],
+                "document_hashes": [],
+            }
+        )
+    stable_json = lambda value: json.dumps(
+        value, indent=2, sort_keys=True, ensure_ascii=True, default=str
+    ) + "\n"
+    (target / "source_inventory.json").write_text(
+        stable_json(records), encoding="utf-8"
+    )
+    (target / "discovery.json").write_text(
+        stable_json(records), encoding="utf-8"
+    )
+    (target / "candidates.json").write_text(
+        stable_json(candidates), encoding="utf-8"
+    )
+    (target / "stats.json").write_text(stable_json(stats), encoding="utf-8")
+
+
+def _env_flag(name: str, *, default: bool = False) -> bool:
+    value = os.environ.get(name)
+    if value is None:
+        return default
+    return value.strip().lower() in {"1", "true", "yes", "on"}
+
+
 def _resolve_min_year() -> int:
     raw = os.environ.get("MIN_NOTICE_YEAR", str(DEFAULT_MIN_NOTICE_YEAR))
     try:
@@ -262,11 +320,18 @@ def _resolve_filter_policy() -> FilterPolicy:
 
 
 def main() -> int:
-    if not os.environ.get("RENDER_APP_URL"):
+    audit_only = _env_flag("DISCOVERY_AUDIT_ONLY")
+    if not audit_only and not os.environ.get("RENDER_APP_URL"):
         print("error: RENDER_APP_URL is required", file=sys.stderr)
         return 2
-    if not os.environ.get("PIPELINE_SECRET"):
+    if not audit_only and not os.environ.get("PIPELINE_SECRET"):
         print("error: PIPELINE_SECRET is required", file=sys.stderr)
+        return 2
+    if audit_only and not os.environ.get("DISCOVERY_AUDIT_DIR"):
+        print(
+            "error: DISCOVERY_AUDIT_DIR is required in audit-only mode",
+            file=sys.stderr,
+        )
         return 2
 
     sources = parse_sources(os.environ.get("SOURCES"))
@@ -300,10 +365,16 @@ def main() -> int:
     print(
         f"discover_all_candidates: sources={sources} "
         f"min_year={min_year} filter_policy={filter_policy} "
-        f"pdf_cap={pipeline_core.SCRAPE_MAX_PDFS_PER_RUN}",
+        f"pdf_cap={pipeline_core.SCRAPE_MAX_PDFS_PER_RUN} "
+        f"audit_only={audit_only}",
     )
 
-    _, extractor = pipeline_core.make_default_ocr_extractor()
+    extractor = None
+    if not audit_only:
+        _, extractor = pipeline_core.make_default_ocr_extractor()
+    opportunity_sources = set(
+        parse_sources(os.environ.get("OPPORTUNITY_SOURCES"))
+    )
 
     # Shared across feeds so a PDF that appears in more than one MMA source is
     # not double-submitted within a single run.
@@ -340,8 +411,10 @@ def main() -> int:
             continue
 
         try:
-            opportunity_result = discover_source_opportunities(
-                discoverer, min_year=min_year
+            opportunity_result = (
+                discover_source_opportunities(discoverer, min_year=min_year)
+                if audit_only or source in opportunity_sources
+                else None
             )
             if opportunity_result is None:
                 source_stats, candidates = discover_source(
@@ -367,6 +440,8 @@ def main() -> int:
         per_source_stats[source] = source_stats
         if opportunities is not None:
             write_opportunity_audit(source, source_stats, opportunities)
+        elif audit_only:
+            write_candidate_audit(source, source_stats, candidates)
         print(
             f"{source}: discovered "
             f"{len(opportunities) if opportunities is not None else len(candidates)} "
@@ -383,6 +458,11 @@ def main() -> int:
                 file=sys.stderr,
             )
             exit_code = 1
+            continue
+
+        if audit_only:
+            per_source_processed[source] = 0
+            per_source_submitted[source] = 0
             continue
 
         if opportunities is not None:

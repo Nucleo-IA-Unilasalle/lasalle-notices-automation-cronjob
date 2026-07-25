@@ -446,8 +446,7 @@ def parse_consultancy_block(
     if tdr_url and len(tdr_url) <= 255:
         source_record_id = tdr_url
     else:
-        identity = f"{TNC_OPPORTUNITIES_URL}|{title.casefold()}|{deadline.isoformat()}"
-        source_record_id = f"consultancy:{hashlib.sha256(identity.encode()).hexdigest()}"
+        source_record_id = _fallback_consultancy_id(title, deadline.isoformat())
     current = now or datetime.now(ZoneInfo("America/Sao_Paulo"))
     status = "open" if deadline >= current else "expired"
     documents = []
@@ -478,7 +477,7 @@ def parse_consultancy_block(
         "source_record_id": source_record_id,
         "source_kind": "web",
         "opportunity_type": "consultancy",
-        "canonical_url": TNC_OPPORTUNITIES_URL,
+        "canonical_url": tdr_url or TNC_OPPORTUNITIES_URL,
         "title": title,
         "description": full_text,
         "authoritative_status": status,
@@ -491,6 +490,11 @@ def parse_consultancy_block(
         "source_content_hash": "",
         "documents": documents,
     }
+
+
+def _fallback_consultancy_id(title: str, deadline: str) -> str:
+    identity = f"{TNC_OPPORTUNITIES_URL}|{title.casefold()}|{deadline}"
+    return f"consultancy:{hashlib.sha256(identity.encode()).hexdigest()}"
 
 
 def discover_opportunities(
@@ -523,6 +527,21 @@ def discover_opportunities(
             )
         )
     ]
+    source_id_counts: dict[str, int] = {}
+    for opportunity in opportunities:
+        source_id = opportunity["source_record_id"]
+        source_id_counts[source_id] = source_id_counts.get(source_id, 0) + 1
+    for opportunity in opportunities:
+        if source_id_counts[opportunity["source_record_id"]] <= 1:
+            continue
+        fallback_id = _fallback_consultancy_id(
+            opportunity["title"],
+            opportunity["application_deadline"],
+        )
+        opportunity["source_record_id"] = fallback_id
+        opportunity["canonical_url"] = (
+            f"{TNC_OPPORTUNITIES_URL}?consultancy={fallback_id.removeprefix('consultancy:')}"
+        )
     return {
         "blocks": len(blocks),
         "opportunities": len(opportunities),

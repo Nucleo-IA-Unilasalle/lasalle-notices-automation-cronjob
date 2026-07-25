@@ -399,6 +399,32 @@ def _stub_ocr_modules() -> None:
 
 
 class TestMainEnvValidation:
+    def test_audit_only_does_not_require_render_credentials(self) -> None:
+        from discover_all_candidates import main
+
+        env = {
+            "SOURCES": "bndes",
+            "DISCOVERY_AUDIT_ONLY": "true",
+            "DISCOVERY_AUDIT_DIR": "artifacts/test-audit",
+        }
+        with patch.dict(os.environ, env, clear=True), patch(
+            "discover_all_candidates.discover_source",
+            return_value=({"candidates": 0}, []),
+        ), patch(
+            "discover_all_candidates.pipeline_core.make_default_ocr_extractor",
+        ) as mock_extractor:
+            assert main() == 0
+        mock_extractor.assert_not_called()
+
+    def test_audit_only_requires_artifact_directory(self) -> None:
+        from discover_all_candidates import main
+
+        with patch.dict(os.environ, {
+            "SOURCES": "bndes",
+            "DISCOVERY_AUDIT_ONLY": "true",
+        }, clear=True):
+            assert main() == 2
+
     def test_returns_2_when_render_app_url_missing(self) -> None:
         from discover_all_candidates import main
 
@@ -499,6 +525,42 @@ def _processed(url: str, *, ok: bool = True) -> dict[str, Any]:
 
 
 class TestMainOrchestration:
+    def test_audit_only_never_processes_or_submits_opportunities(
+        self, tmp_path,
+    ) -> None:
+        from discover_all_candidates import main
+
+        opportunity = {
+            "source_key": "finep",
+            "source_record_id": "42",
+            "canonical_url": "https://example.com/42",
+            "title": "Chamada",
+            "documents": [],
+        }
+        discoverer = MagicMock()
+        discoverer.__dict__["discover_opportunities"] = lambda: (
+            {"opportunities": 1},
+            [opportunity],
+        )
+        env = {
+            "SOURCES": "finep",
+            "DISCOVERY_AUDIT_ONLY": "true",
+            "DISCOVERY_AUDIT_DIR": str(tmp_path),
+        }
+        with patch.dict(os.environ, env, clear=True), patch(
+            "discover_all_candidates.load_discoverer",
+            return_value=discoverer,
+        ), patch(
+            "discover_all_candidates.pipeline_core.process_opportunity",
+        ) as mock_process, patch(
+            "discover_all_candidates.pipeline_core.submit_opportunities",
+        ) as mock_submit:
+            assert main() == 0
+
+        mock_process.assert_not_called()
+        mock_submit.assert_not_called()
+        assert (tmp_path / "finep" / "opportunities.json").exists()
+
     def test_returns_0_when_all_sources_yield_no_candidates(self) -> None:
         from discover_all_candidates import main
 

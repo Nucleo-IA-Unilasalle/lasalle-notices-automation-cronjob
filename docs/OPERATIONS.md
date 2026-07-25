@@ -233,6 +233,11 @@ source's inventory/discovery files, and require two consecutive passing live
 runs before adding the source to the scheduled default. Roll back by removing
 only that key from `SOURCES`.
 
+Manual runs of `pipeline-all-discovery.yml` default to
+`DISCOVERY_AUDIT_ONLY=true`, which skips OCR and all Render submissions. After
+two reviewed passing runs, add the source key to the `OPPORTUNITY_SOURCES`
+repository variable to opt it into the structured submission contract.
+
 FINEP uses API item `id`; FBDS uses the portal record identity; TNC uses the
 explicit TDR URL or a canonical heading/deadline hash; FUNBIO uses the canonical
 call slug. `FUNBIO_NEWS_ENABLED` defaults off. When enabled, news is resolved

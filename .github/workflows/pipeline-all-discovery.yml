@@ -10,6 +10,16 @@ on:
         required: false
         default: "bndes,brde,fapergs,funbio,iis_rio,sema_rs,tnc,wwf"
         type: string
+      audit_only:
+        description: "Discover and upload fidelity artifacts without OCR or submission"
+        required: true
+        default: true
+        type: boolean
+      opportunity_sources:
+        description: "Sources allowed to use the structured opportunity submission contract"
+        required: false
+        default: ""
+        type: string
       filter_policy:
         description: "Filter policy forwarded to BS4 discoverers (default|include_tdr|no_prefilter)"
         required: false
@@ -37,6 +47,8 @@ jobs:
       DISCOVERY_SOURCES: ${{ inputs.sources || 'bndes,brde,fapergs,funbio,iis_rio,sema_rs,tnc,wwf' }}
       DISCOVERY_FILTER_POLICY: ${{ inputs.filter_policy || 'default' }}
       DISCOVERY_MIN_NOTICE_YEAR: ${{ inputs.min_notice_year || '2026' }}
+      DISCOVERY_AUDIT_ONLY: ${{ github.event_name == 'workflow_dispatch' && inputs.audit_only }}
+      OPPORTUNITY_SOURCES: ${{ inputs.opportunity_sources || vars.OPPORTUNITY_SOURCES || '' }}
     steps:
       - name: Checkout scheduler repository
         uses: actions/checkout@v4
@@ -76,6 +88,22 @@ jobs:
           FUNBIO_NEWS_ENABLED: "false"
           FINEP_MAX_OPPORTUNITIES_PER_RUN: "5"
           FBDS_MAX_DETAILS_PER_RUN: "5"
+
+      - name: Verify source fidelity artifacts
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.audit_only }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          found=0
+          for source_dir in artifacts/source-audits/*; do
+            [ -d "$source_dir" ] || continue
+            found=1
+            python scripts/audit_source_fidelity.py \
+              --source-inventory "$source_dir/source_inventory.json" \
+              --discovery "$source_dir/discovery.json" \
+              --out "$source_dir/fidelity"
+          done
+          [ "$found" -eq 1 ]
 
       - name: Upload structured source audit artifacts
         if: always()

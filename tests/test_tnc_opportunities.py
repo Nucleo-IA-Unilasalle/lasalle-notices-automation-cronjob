@@ -28,3 +28,32 @@ def test_missing_section_is_visible_audit_failure():
     )
     assert opportunities == []
     assert stats["section_parse_failed"] == 1
+
+
+def test_reused_tdr_url_gets_distinct_fallback_identities():
+    html = """
+    <html><body>
+      <h2>Conheça também nossas oportunidades para consultoria e prestação de serviços</h2>
+      <div class="rich-text-editor"><div class="c-rich-text">
+      <p>Primeira consultoria</p>
+      <p><b>PRAZO:</b> 30/07/2026</p>
+      <p><a href="/shared.pdf">VEJA O TERMO DE REFERÊNCIA AQUI</a></p>
+      <p>--------------------------------------------------------------------------------------</p>
+      <p>Segunda consultoria</p>
+      <p><b>PRAZO:</b> 31/07/2026</p>
+      <p><a href="/shared.pdf">VEJA O TERMO DE REFERÊNCIA AQUI</a></p>
+      </div></div>
+    </body></html>
+    """
+    _, opportunities = tnc.discover_opportunities(
+        fetch_html=lambda _url: html,
+        now=datetime(2026, 7, 23, tzinfo=ZoneInfo("America/Sao_Paulo")),
+    )
+
+    assert len(opportunities) == 2
+    assert len({item["source_record_id"] for item in opportunities}) == 2
+    assert all(
+        item["source_record_id"].startswith("consultancy:")
+        for item in opportunities
+    )
+    assert len({item["canonical_url"] for item in opportunities}) == 2
