@@ -61,6 +61,11 @@ from discover_funbio_news_leads import (
     parse_news_inventory,
     resolve_news_leads,
 )
+from structured_discovery import (
+    StructuredDiscoveryResult,
+    parser_failure,
+    policy_rejection,
+)
 
 
 FUNBIO_LISTING_URL = "https://chamadas.funbio.org.br/"
@@ -367,6 +372,7 @@ def parse_funbio_opportunity(
     detail_html: str,
     *,
     snapshot_at: datetime | None = None,
+    now: datetime | None = None,
 ) -> dict[str, Any] | None:
     """Build a canonical call record; news text never supplies these fields."""
     soup = BeautifulSoup(detail_html, "html.parser")
@@ -398,8 +404,12 @@ def parse_funbio_opportunity(
         deadline = datetime.strptime(deadline_match.group(1), "%d/%m/%Y").replace(
             hour=23, minute=59, tzinfo=timezone.utc
         )
-    now = datetime.now(timezone.utc)
-    status = "open" if deadline and deadline >= now else ("closed" if deadline else "unknown")
+    current = now or datetime.now(timezone.utc)
+    status = (
+        "open"
+        if deadline and deadline >= current
+        else ("closed" if deadline else "unknown")
+    )
     documents = []
     for index, href in enumerate(extract_funbio_pdf_urls(BeautifulSoup(detail_html, "html.parser"), detail_url), start=1):
         url = urljoin(detail_url, href)
@@ -438,13 +448,76 @@ def parse_funbio_opportunity(
     }
 
 
+def parse_funbio_inventory_record(
+    detail_url: str,
+    detail_html: str,
+    *,
+    now: datetime | None = None,
+) -> dict[str, Any]:
+    """Read canonical call fields directly into the Plan-01 inventory."""
+    soup = BeautifulSoup(detail_html, "html.parser")
+    content = soup.select_one("main, #content-core, article")
+    if content is None:
+        next_root = soup.select_one("#__next")
+        heading = next_root.find("h1") if isinstance(next_root, Tag) else None
+        if isinstance(heading, Tag):
+            content = heading
+            while (
+                isinstance(content.parent, Tag)
+                and content.parent is not next_root
+            ):
+                content = content.parent
+    if content is None:
+        raise ValueError("FUNBIO detail content area not found")
+    heading = content.find(["h1", "h2"])
+    title = heading.get_text(" ", strip=True) if isinstance(heading, Tag) else ""
+    text = re.sub(r"\s+", " ", content.get_text(" ", strip=True)).strip()
+    if not title or not text:
+        raise ValueError("FUNBIO detail is missing its title or content")
+    deadline_match = re.search(
+        r"(?:at[eé]|prazo|aberta\s+at[eé]).{0,50}?(\d{2}/\d{2}/\d{4})",
+        text,
+        re.I,
+    )
+    deadline = (
+        datetime.strptime(deadline_match.group(1), "%d/%m/%Y")
+        .replace(hour=23, minute=59, tzinfo=timezone.utc)
+        if deadline_match
+        else None
+    )
+    current = now or datetime.now(timezone.utc)
+    status = (
+        "open"
+        if deadline and deadline >= current
+        else ("closed" if deadline else "unknown")
+    )
+    canonical = urlunsplit((*urlsplit(detail_url)[:3], "", ""))
+    return {
+        "source_key": "funbio",
+        "source_record_id": urlsplit(canonical).path.strip("/"),
+        "canonical_url": canonical,
+        "title": title,
+        "status": status,
+        "published_at": None,
+        "deadline": deadline.isoformat() if deadline else None,
+        "document_urls": [
+            urljoin(detail_url, href)
+            for href in extract_funbio_pdf_urls(
+                BeautifulSoup(detail_html, "html.parser"),
+                detail_url,
+            )
+        ],
+        "document_hashes": [],
+    }
+
+
 def discover_opportunities(
     *,
     fetch_html: Any = None,
     snapshot_at: datetime | None = None,
     include_news: bool = FUNBIO_NEWS_ENABLED,
     min_year: int | None = None,
-) -> tuple[dict[str, int], list[dict[str, Any]]]:
+) -> StructuredDiscoveryResult:
     """Discover canonical calls and optionally resolve the bounded news feed."""
     del min_year
     fetch = fetch_html or (
@@ -458,20 +531,89 @@ def discover_opportunities(
     listing_html = fetch(FUNBIO_LISTING_URL)
     detail_urls = extract_funbio_detail_urls(listing_html, FUNBIO_LISTING_URL)
     if not detail_urls:
-        return {"inventory_parse_failed": 1, "records": 0, "opportunities": 0}, []
+        failure = parser_failure(
+            "funbio",
+            stage="listing_inventory",
+            error="canonical listing returned no call records",
+        )
+        return StructuredDiscoveryResult(
+            stats={
+                "inventory_parse_failed": 1,
+                "records": 0,
+                "inventory_records": 0,
+                "opportunities": 0,
+                "parser_failures": 1,
+            },
+            inventory=[],
+            opportunities=[],
+            parser_failures=[failure],
+        )
+    inventory: list[dict[str, Any]] = []
     opportunities: list[dict[str, Any]] = []
-    errors = 0
-    for detail_url in detail_urls[:FUNBIO_MAX_DETAILS_PER_RUN]:
-        try:
-            parsed = parse_funbio_opportunity(
-                detail_url, fetch(detail_url), snapshot_at=snapshot_at
+    rejections: list[dict[str, Any]] = []
+    parser_failures: list[dict[str, Any]] = []
+    for index, detail_url in enumerate(detail_urls):
+        if index >= FUNBIO_MAX_DETAILS_PER_RUN:
+            parser_failures.append(
+                parser_failure(
+                    "funbio",
+                    stage="detail_inventory",
+                    error="detail fetch cap left an authoritative record unresolved",
+                    evidence={
+                        "canonical_url": detail_url,
+                        "detail_cap": FUNBIO_MAX_DETAILS_PER_RUN,
+                    },
+                )
             )
-        except Exception:
+            continue
+        try:
+            detail_html = fetch(detail_url)
+            inventory_record = parse_funbio_inventory_record(
+                detail_url,
+                detail_html,
+                now=snapshot_at,
+            )
+            parsed = parse_funbio_opportunity(
+                detail_url,
+                detail_html,
+                snapshot_at=snapshot_at,
+                now=snapshot_at,
+            )
+        except Exception as exc:
+            parser_failures.append(
+                parser_failure(
+                    "funbio",
+                    stage="detail_inventory",
+                    error=str(exc),
+                    evidence={"canonical_url": detail_url},
+                )
+            )
             parsed = None
         if parsed is None:
-            errors += 1
+            if not any(
+                item["evidence"].get("canonical_url") == detail_url
+                for item in parser_failures
+            ):
+                parser_failures.append(
+                    parser_failure(
+                        "funbio",
+                        stage="opportunity_projection",
+                        error="canonical detail could not be projected",
+                        evidence={"canonical_url": detail_url},
+                    )
+                )
         else:
-            opportunities.append(parsed)
+            if inventory_record["status"] == "closed":
+                rejected = policy_rejection(
+                    inventory_record,
+                    policy="open_status_only",
+                    evidence={"authoritative_status": "closed"},
+                )
+                inventory.append(rejected)
+                rejections.append(rejected)
+            else:
+                inventory.append(inventory_record)
+                opportunities.append(parsed)
 
     resolutions: list[dict[str, Any]] = []
     if include_news:
@@ -490,25 +632,75 @@ def discover_opportunities(
                 if canonical in {item["canonical_url"] for item in opportunities}:
                     continue
                 try:
-                    parsed = parse_funbio_opportunity(
-                        canonical, fetch(canonical), snapshot_at=snapshot_at
+                    detail_html = fetch(canonical)
+                    inventory_record = parse_funbio_inventory_record(
+                        canonical,
+                        detail_html,
+                        now=snapshot_at,
                     )
-                except Exception:
+                    parsed = parse_funbio_opportunity(
+                        canonical,
+                        detail_html,
+                        snapshot_at=snapshot_at,
+                        now=snapshot_at,
+                    )
+                except Exception as exc:
+                    parser_failures.append(
+                        parser_failure(
+                            "funbio",
+                            stage="news_detail_inventory",
+                            error=str(exc),
+                            evidence={
+                                "canonical_url": canonical,
+                                "article_url": resolution["article_url"],
+                            },
+                        )
+                    )
                     parsed = None
                 if parsed is not None:
+                    inventory.append(inventory_record)
                     parsed["_related_news"] = [resolution["article_url"]]
                     opportunities.append(parsed)
-    return {
+            elif resolution["resolution"] == "unresolved_lead":
+                rejections.append(
+                    {
+                        "source_key": "funbio",
+                        "source_record_id": str(
+                            resolution.get("news_id")
+                            or resolution.get("article_url")
+                        ),
+                        "canonical_url": resolution.get("article_url"),
+                        "title": resolution.get("title"),
+                        "reason_code": "unresolved_news_lead",
+                        "evidence": {
+                            "resolution": "unresolved_lead",
+                            "article_url": resolution.get("article_url"),
+                        },
+                    }
+                )
+    stats = {
         "records": len(detail_urls),
+        "inventory_records": len(inventory),
         "opportunities": len(opportunities),
-        "errors": errors,
+        "errors": len(parser_failures),
+        "policy_rejected": len(rejections),
+        "parser_failures": len(parser_failures),
         "news_resolved": sum(
             item["resolution"] == "resolved" for item in resolutions
         ),
         "news_unresolved": sum(
             item["resolution"] == "unresolved_lead" for item in resolutions
         ),
-    }, opportunities
+    }
+    if parser_failures:
+        stats["inventory_parse_failed"] = 1
+    return StructuredDiscoveryResult(
+        stats=stats,
+        inventory=inventory,
+        opportunities=opportunities,
+        policy_rejections=rejections,
+        parser_failures=parser_failures,
+    )
 
 
 def main() -> int:

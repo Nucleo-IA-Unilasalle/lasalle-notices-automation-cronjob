@@ -35,6 +35,10 @@ from typing import Any
 
 import pipeline_core
 from scraper_filters import FilterPolicy, VALID_FILTER_POLICIES
+from structured_discovery import (
+    StructuredDiscoveryResult,
+    opportunity_to_fidelity_record,
+)
 
 
 SOURCE_MODULES: dict[str, str] = {
@@ -133,7 +137,7 @@ def discover_source_opportunities(
     discoverer: Any,
     *,
     min_year: int,
-) -> tuple[dict[str, int], list[dict[str, Any]]] | None:
+) -> StructuredDiscoveryResult | None:
     """Use the structured opportunity contract when a source exposes it."""
     # Read the concrete module namespace so MagicMock-based legacy tests (and
     # dynamic objects in operators' tooling) are not mistaken for structured
@@ -146,11 +150,11 @@ def discover_source_opportunities(
     if "min_year" in signature.parameters:
         kwargs["min_year"] = min_year
     result = discover(**kwargs)
-    # PNCP also returns its checkpoint timestamp. The all-sources runner only
-    # needs the shared stats and opportunity payloads.
-    if isinstance(result, tuple) and len(result) == 3:
-        stats, opportunities, _checkpoint = result
-        return stats, opportunities
+    if not isinstance(result, StructuredDiscoveryResult):
+        raise TypeError(
+            "discover_opportunities must return StructuredDiscoveryResult "
+            "with independent inventory and opportunity collections"
+        )
     return result
 
 
@@ -195,50 +199,54 @@ def process_source_candidates(
 
 def write_opportunity_audit(
     source: str,
-    stats: dict[str, int],
-    opportunities: list[dict[str, Any]],
+    result: StructuredDiscoveryResult,
 ) -> None:
-    """Write Plan-01-compatible inventory/discovery artifacts when configured."""
+    """Write independently produced Plan-01 inventory/discovery artifacts."""
     root_value = os.environ.get("DISCOVERY_AUDIT_DIR")
     if not root_value:
         return
     target = Path(root_value) / source
     target.mkdir(parents=True, exist_ok=True)
-    records = [
-        {
-            "source_key": item.get("source_key"),
-            "source_record_id": item.get("source_record_id"),
-            "canonical_url": item.get("canonical_url"),
-            "title": item.get("title"),
-            "status": item.get("authoritative_status"),
-            "published_at": item.get("source_published_at"),
-            "deadline": item.get("application_deadline"),
-            "document_urls": [
-                document.get("url")
-                for document in item.get("documents", [])
-                if document.get("url")
-            ],
-            "document_hashes": [
-                document.get("content_hash")
-                for document in item.get("documents", [])
-                if document.get("content_hash")
-            ],
-        }
-        for item in opportunities
+    discovery = [
+        opportunity_to_fidelity_record(item)
+        for item in result.opportunities
     ]
     stable_json = lambda value: json.dumps(
         value, indent=2, sort_keys=True, ensure_ascii=True, default=str
     ) + "\n"
     (target / "source_inventory.json").write_text(
-        stable_json(records), encoding="utf-8"
+        stable_json(result.inventory), encoding="utf-8"
     )
     (target / "discovery.json").write_text(
-        stable_json(records), encoding="utf-8"
+        stable_json(discovery), encoding="utf-8"
     )
     (target / "opportunities.json").write_text(
-        stable_json(opportunities), encoding="utf-8"
+        stable_json(result.opportunities), encoding="utf-8"
     )
-    (target / "stats.json").write_text(stable_json(stats), encoding="utf-8")
+    (target / "policy_rejections.json").write_text(
+        stable_json(result.policy_rejections), encoding="utf-8"
+    )
+    (target / "parser_failures.json").write_text(
+        stable_json(result.parser_failures), encoding="utf-8"
+    )
+    (target / "audit_manifest.json").write_text(
+        stable_json(
+            {
+                "contract_version": 2,
+                "source": source,
+                "inventory_origin": "authoritative_source_records",
+                "discovery_origin": "accepted_opportunity_projections",
+                "inventory_records": len(result.inventory),
+                "discovery_records": len(discovery),
+                "policy_rejections": len(result.policy_rejections),
+                "parser_failures": len(result.parser_failures),
+            }
+        ),
+        encoding="utf-8",
+    )
+    (target / "stats.json").write_text(
+        stable_json(result.stats), encoding="utf-8"
+    )
 
 
 def write_candidate_audit(
@@ -411,12 +419,12 @@ def main() -> int:
             continue
 
         try:
-            opportunity_result = (
+            structured_result = (
                 discover_source_opportunities(discoverer, min_year=min_year)
                 if audit_only or source in opportunity_sources
                 else None
             )
-            if opportunity_result is None:
+            if structured_result is None:
                 source_stats, candidates = discover_source(
                     discoverer,
                     filter_policy=filter_policy,
@@ -426,7 +434,8 @@ def main() -> int:
                 )
                 opportunities: list[dict[str, Any]] | None = None
             else:
-                source_stats, opportunities = opportunity_result
+                source_stats = structured_result.stats
+                opportunities = structured_result.opportunities
                 candidates = []
         except Exception as exc:
             print(
@@ -439,7 +448,8 @@ def main() -> int:
 
         per_source_stats[source] = source_stats
         if opportunities is not None:
-            write_opportunity_audit(source, source_stats, opportunities)
+            assert structured_result is not None
+            write_opportunity_audit(source, structured_result)
         elif audit_only:
             write_candidate_audit(source, source_stats, candidates)
         print(
@@ -452,6 +462,7 @@ def main() -> int:
         if (
             source_stats.get("section_parse_failed", 0)
             or source_stats.get("inventory_parse_failed", 0)
+            or source_stats.get("parser_failures", 0)
         ):
             print(
                 f"error: discovery reported source/parser failures for {source!r}",

@@ -98,6 +98,9 @@ jobs:
           for source_dir in artifacts/source-audits/*; do
             [ -d "$source_dir" ] || continue
             found=1
+            if [ -f "$source_dir/opportunities.json" ]; then
+              python scripts/verify_structured_audit_artifacts.py "$source_dir"
+            fi
             python scripts/audit_source_fidelity.py \
               --source-inventory "$source_dir/source_inventory.json" \
               --discovery "$source_dir/discovery.json" \

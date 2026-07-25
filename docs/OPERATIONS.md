@@ -233,6 +233,14 @@ source's inventory/discovery files, and require two consecutive passing live
 runs before adding the source to the scheduled default. Roll back by removing
 only that key from `SOURCES`.
 
+For structured sources, `source_inventory.json` is produced from canonical
+source records before acceptance policy and run caps are applied.
+`discovery.json` is produced separately from accepted opportunity records.
+`verify_structured_audit_artifacts.py` checks that provenance contract,
+requires explicit evidence for policy rejections, and fails if
+`parser_failures.json` is non-empty. Never treat an empty inventory as healthy
+when the manifest or stats report a parser failure.
+
 Manual runs of `pipeline-all-discovery.yml` default to
 `DISCOVERY_AUDIT_ONLY=true`, which skips OCR and all Render submissions. After
 two reviewed passing runs, add the source key to the `OPPORTUNITY_SOURCES`

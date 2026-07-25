@@ -1,0 +1,53 @@
+{
+  "base_record": {
+    "source_key": "finep",
+    "source_record_id": "42",
+    "canonical_url": "https://example.test/calls/42",
+    "title": "Chamada 42",
+    "status": "open",
+    "published_at": "2026-07-01T00:00:00Z",
+    "deadline": "2026-09-30T23:59:00Z",
+    "document_urls": [
+      "https://example.test/docs/42.pdf"
+    ],
+    "document_hashes": [],
+    "renderable": false
+  },
+  "cases": [
+    {
+      "name": "missing_record",
+      "mutation": "remove_discovery",
+      "expected_reason_code": "missing_open"
+    },
+    {
+      "name": "extra_record",
+      "mutation": "add_extra_discovery",
+      "expected_reason_code": "extra_submission"
+    },
+    {
+      "name": "duplicate_id",
+      "mutation": "duplicate_discovery_id",
+      "expected_reason_code": "duplicate_identity"
+    },
+    {
+      "name": "duplicate_url",
+      "mutation": "duplicate_inventory_url",
+      "expected_reason_code": "duplicate_identity"
+    },
+    {
+      "name": "status_mismatch",
+      "mutation": "change_discovery_status",
+      "expected_reason_code": "authoritative_status_mismatch"
+    },
+    {
+      "name": "deadline_mismatch",
+      "mutation": "change_discovery_deadline",
+      "expected_reason_code": "authoritative_deadline_mismatch"
+    },
+    {
+      "name": "document_validation_mismatch",
+      "mutation": "claim_unvalidated_renderable_document",
+      "expected_reason_code": "renderability_mismatch"
+    }
+  ]
+}
