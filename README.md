@@ -32,10 +32,10 @@ The pipeline is split between GitHub Actions (discovery, download, OCR, submissi
 | `pipeline-bndes-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (BNDES pilot, Phase 2) |
 | `pipeline-brde-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (BRDE, Phase 3) |
 | `pipeline-fapergs-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (FAPERGS, Phase 3) |
-| `pipeline-funbio-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (FUNBIO, Phase 3) |
+| `pipeline-funbio-discovery.yml` | Hourly cron + manual | Legacy FUNBIO candidate route; submission steps run only while `funbio` is absent from `OPPORTUNITY_SOURCES` |
 | `pipeline-iis-rio-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (IIS-Rio, Phase 3) |
 | `pipeline-sema-rs-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (SEMA-RS, Phase 3) |
-| `pipeline-tnc-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (TNC, Phase 3) |
+| `pipeline-tnc-discovery.yml` | Hourly cron + manual | Legacy TNC candidate route; submission steps run only while `tnc` is absent from `OPPORTUNITY_SOURCES` |
 | `pipeline-wwf-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (WWF, Phase 3) |
 | `pipeline-unep-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (UNEP, Phase 3; Cloudflare bypass via browser User-Agent) |
 | `pipeline-govbr-mma-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (GOVBR-MMA, Phase 3) |
@@ -44,7 +44,7 @@ The pipeline is split between GitHub Actions (discovery, download, OCR, submissi
 | `pipeline-kfw-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (KfW, Phase 4; Playwright-based listing) |
 | `pipeline-fundacao-grupo-boticario-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (Fundação Grupo Boticário, Phase 4; Playwright-based listing) |
 | `pipeline-msgov-discovery.yml` | Hourly cron + manual | Combined discover → download → OCR → submit (MSGOV, Phase 4; pure-Playwright with shadow-DOM probing; magic-byte check rejects `.doc` annex leakage at download time) |
-| `pipeline-all-discovery.yml` | Hourly cron + manual | Unified orchestrator over the non-PNCP sources (Phase 5); reads `SOURCES` from the workflow_dispatch input. The Plan-03 MMA feeds are selectable but remain outside the scheduled default until their staged live gates pass. |
+| `pipeline-all-discovery.yml` | Hourly cron + manual | Unified non-PNCP orchestrator. Scheduled FUNBIO/TNC routes are included only when their keys are in `OPPORTUNITY_SOURCES`; manual audits may select them without enabling submission. |
 | `pipeline-ai.yml` | After PNCP discovery + hourly cron | Trigger Render AI processing (daytime Pacific gate) |
 | `pipeline-ingest.yml` | Manual only | Legacy Render ingest (rollback) |
 | `pipeline-ocr.yml` | Manual only | Legacy Render OCR worker (backfill) |
@@ -123,7 +123,7 @@ The pipeline is split between GitHub Actions (discovery, download, OCR, submissi
 - `PADDLE_PDX_ENABLE_MKLDNN_BYDEFAULT=0` — disables PaddleX's default oneDNN path used by PaddleOCR
 - `SOURCES` (unified orchestrator only) — comma-separated source names; whitespace is tolerated and duplicates are removed. Valid structured sources include `finep`, `fbds`, `funbio`, and `tnc`, in addition to the legacy PDF source keys. PNCP remains in its dedicated workflow.
 - `DISCOVERY_AUDIT_ONLY=true` — performs discovery and writes fidelity artifacts without OCR or Render submission; manual all-sources runs default to this safe mode.
-- `OPPORTUNITY_SOURCES` — comma-separated sources allowed to use the structured opportunity endpoint. Scheduled runs default to the legacy candidate path until a source passes its rollout gates; set the repository variable to enable sources reversibly.
+- `OPPORTUNITY_SOURCES` — normalized lowercase comma-separated sources allowed to use the structured opportunity endpoint. Scheduled runs default to the legacy candidate path until a source passes its rollout gates. For FUNBIO/TNC this is also the single production-route switch: adding a key moves it from its dedicated legacy workflow to the unified structured workflow; removing it restores the legacy route.
 - `DISCOVERY_AUDIT_DIR` — when set, every structured source writes an authoritative `source_inventory.json` independently from accepted `discovery.json` records, plus `opportunities.json`, `policy_rejections.json`, `parser_failures.json`, `audit_manifest.json`, and `stats.json`. Structured audit verification fails closed on parser failures or an incomplete contract.
 - `MIN_NOTICE_YEAR` (Phase 5 unified orchestrator only, default `2026`) — generic year guard forwarded to BS4 discoverers as their `min_year` argument. Plan §9 recommends a generic name (not `PNCP_MIN_NOTICE_YEAR`) so the unified orchestrator does not couple non-PNCP sources to PNCP-specific env vars. Playwright sources (`fao`, `fundacao_grupo_boticario`, `kfw`, `msgov`) do not accept `min_year` and run with their own internal filtering.
 - `FILTER_POLICY` (Phase 5 unified orchestrator only, default `default`) — EDITAL inclusion/exclusion policy forwarded to BS4 discoverers (`default` | `include_tdr` | `no_prefilter`). Ignored by Playwright sources.
@@ -225,9 +225,18 @@ the stable opportunity endpoint instead of the legacy PDF-only endpoint:
 - `funbio` keeps the calls portal as canonical. News resolution uses exact call URLs/slugs only; canonical fields win, institutional news is ignored, and unresolved likely calls are artifact-only.
 
 Structured sources remain outside the scheduled default until two consecutive
-live fidelity reports pass. Run a manual workflow with
-`DISCOVERY_AUDIT_DIR=artifacts/source-audits`, then compare each source's
-inventory and discovery files with `audit_source_fidelity.py`.
+live fidelity reports pass. Run a manual audit in
+`pipeline-all-discovery.yml`, then compare each source's inventory and
+discovery files with `audit_source_fidelity.py`. The audit step receives no
+Render secrets and the orchestrator skips OCR and every submission call.
+
+For FUNBIO and TNC, `OPPORTUNITY_SOURCES` is the cutover switch. With a key
+absent, only its dedicated legacy workflow can submit it and the scheduled
+unified route excludes it. Adding a key disables the dedicated submission
+steps and schedules that source through the structured opportunity route.
+Removing the key reverses both decisions. Manual submission through the
+unified workflow is rejected for either source unless its structured route is
+already approved in the repository variable.
 
 ## PNCP v2 reconciliation
 
