@@ -207,7 +207,12 @@ def _extract_date(text: str, *, year: int | None) -> str | None:
     return None
 
 
-def _extract_listing_metadata(root: Tag, *, year: int | None) -> dict[str, Any]:
+def _extract_listing_metadata(
+    root: Tag,
+    *,
+    year: int | None,
+    now: datetime | None = None,
+) -> dict[str, Any]:
     text = root.get_text(" ", strip=True)
     folded = _fold_text(text)
     status = "unknown"
@@ -226,6 +231,13 @@ def _extract_listing_metadata(root: Tag, *, year: int | None) -> dict[str, Any]:
         parsed = _extract_date(match.group(0), year=year)
         if parsed is not None:
             deadline = parsed
+    current_date = (now or datetime.now(timezone.utc)).date()
+    if (
+        status == "open"
+        and deadline is not None
+        and datetime.fromisoformat(deadline).date() < current_date
+    ):
+        status = "expired"
 
     published_at = None
     document = root.find_parent("html") or root
