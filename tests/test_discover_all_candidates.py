@@ -597,6 +597,47 @@ class TestMainOrchestration:
             ):
                 assert main() == 1
 
+    def test_audit_only_returns_1_for_ambiguous_document_conflict(
+        self, tmp_path,
+    ) -> None:
+        from discover_all_candidates import main
+
+        opportunity = {
+            "source_key": "tnc",
+            "source_record_id": "consultancy:one",
+            "canonical_url": "https://example.com/one",
+            "title": "Consultoria",
+            "documents": [],
+        }
+        discoverer = MagicMock()
+        discoverer.__dict__["discover_opportunities"] = lambda: (
+            {
+                "opportunities": 1,
+                "ambiguous_document_conflicts": 1,
+                "document_conflicts": [
+                    {
+                        "reason_code": "identity_mismatch",
+                        "document_url": "https://example.com/shared.pdf",
+                        "resolution": "attachment_quarantined",
+                    }
+                ],
+            },
+            [opportunity],
+        )
+        env = {
+            "SOURCES": "tnc",
+            "DISCOVERY_AUDIT_ONLY": "true",
+            "DISCOVERY_AUDIT_DIR": str(tmp_path),
+        }
+
+        with patch.dict(os.environ, env, clear=True), patch(
+            "discover_all_candidates.load_discoverer",
+            return_value=discoverer,
+        ):
+            assert main() == 1
+
+        assert (tmp_path / "tnc" / "stats.json").exists()
+
     def test_partial_source_error_does_not_discard_valid_candidates(self) -> None:
         from discover_all_candidates import main
 
