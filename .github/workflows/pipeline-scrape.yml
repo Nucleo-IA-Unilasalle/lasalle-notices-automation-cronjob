@@ -3,6 +3,9 @@ name: Pipeline - Scrape
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 concurrency:
   group: pipeline-trigger
   cancel-in-progress: false
@@ -10,7 +13,7 @@ concurrency:
 jobs:
   trigger:
     runs-on: ubuntu-latest
-    timeout-minutes: 50
+    timeout-minutes: 170
     env:
       RENDER_APP_URL: ${{ secrets.RENDER_APP_URL }}
       PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}
@@ -22,7 +25,8 @@ jobs:
         run: |
           set -euo pipefail
 
-          URL="${RENDER_APP_URL}/api/pipeline/${PIPELINE_STEP}?mode=bs4&sources=pncp"
+          BASE_URL="${RENDER_APP_URL%/}"
+          URL="${BASE_URL}/api/pipeline/${PIPELINE_STEP}?mode=bs4&sources=pncp"
           MAX_ATTEMPTS=4
           SLEEP_SECONDS=120
 

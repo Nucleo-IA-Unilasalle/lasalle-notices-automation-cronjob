@@ -35,8 +35,18 @@ PNCP_MODALITY_NAMES = {
     "8": "Dispensa de Licitação",
     "4": "Concorrência Eletrônica",
 }
-PNCP_UPDATE_CHECKPOINT_PATH = os.environ.get(
-    "PNCP_UPDATE_CHECKPOINT_PATH", ".cache/pncp_update_checkpoint.json"
+def _positive_env_int(name: str, default: int) -> int:
+    """Keep safety-related PNCP caps positive when env input is missing/bad."""
+    try:
+        value = int(os.environ.get(name, str(default)))
+    except (TypeError, ValueError):
+        return default
+    return value if value > 0 else default
+
+
+PNCP_UPDATE_CHECKPOINT_PATH = (
+    os.environ.get("PNCP_UPDATE_CHECKPOINT_PATH", ".cache/pncp_update_checkpoint.json").strip()
+    or ".cache/pncp_update_checkpoint.json"
 )
 PNCP_PREFERRED_DOCUMENT_TYPES = (
     "edital",
@@ -53,19 +63,30 @@ PNCP_DOCUMENT_TYPE_PRIORITIES = {
     "termo de referencia": 30,
 }
 
-PNCP_LOOKBACK_DAYS = int(os.environ.get("PNCP_LOOKBACK_DAYS", "30"))
-PNCP_PROPOSTA_FORWARD_DAYS = int(os.environ.get("PNCP_PROPOSTA_FORWARD_DAYS", "60"))
-PNCP_MAX_PAGES_PER_QUERY = int(os.environ.get("PNCP_MAX_PAGES_PER_QUERY", "20"))
-PNCP_PAGE_SIZE = int(os.environ.get("PNCP_PAGE_SIZE", "50"))
-PNCP_MAX_DOCUMENT_LOOKUPS_PER_RUN = int(os.environ.get("PNCP_MAX_DOCUMENT_LOOKUPS_PER_RUN", "100"))
-PNCP_MAX_CONSECUTIVE_DOCUMENT_FAILURES = int(os.environ.get("PNCP_MAX_CONSECUTIVE_DOCUMENT_FAILURES", "10"))
-PNCP_MIN_NOTICE_YEAR = int(os.environ.get("PNCP_MIN_NOTICE_YEAR", "2026"))
-PNCP_MAX_CANDIDATES_PER_RUN = int(os.environ.get("PNCP_MAX_CANDIDATES_PER_RUN", "10"))
-PNCP_MAX_PROCESSED_CANDIDATES_PER_RUN = int(os.environ.get("PNCP_MAX_PROCESSED_CANDIDATES_PER_RUN", "20"))
-PNCP_MAX_SUBMITTABLE_CANDIDATES_PER_RUN = int(os.environ.get("PNCP_MAX_SUBMITTABLE_CANDIDATES_PER_RUN", "5"))
-PNCP_FETCH_MAX_ATTEMPTS = int(os.environ.get("PNCP_FETCH_MAX_ATTEMPTS", "3"))
-PNCP_FETCH_BACKOFF_SECONDS = float(os.environ.get("PNCP_FETCH_BACKOFF_SECONDS", "2"))
-PNCP_FETCH_TIMEOUT_SECONDS = int(os.environ.get("PNCP_FETCH_TIMEOUT_SECONDS", "8"))
+PNCP_LOOKBACK_DAYS = _positive_env_int("PNCP_LOOKBACK_DAYS", 30)
+PNCP_PROPOSTA_FORWARD_DAYS = _positive_env_int("PNCP_PROPOSTA_FORWARD_DAYS", 60)
+PNCP_MAX_PAGES_PER_QUERY = _positive_env_int("PNCP_MAX_PAGES_PER_QUERY", 20)
+PNCP_PAGE_SIZE = _positive_env_int("PNCP_PAGE_SIZE", 50)
+PNCP_MAX_DOCUMENT_LOOKUPS_PER_RUN = _positive_env_int("PNCP_MAX_DOCUMENT_LOOKUPS_PER_RUN", 100)
+PNCP_MAX_CONSECUTIVE_DOCUMENT_FAILURES = _positive_env_int(
+    "PNCP_MAX_CONSECUTIVE_DOCUMENT_FAILURES", 10
+)
+PNCP_MIN_NOTICE_YEAR = _positive_env_int("PNCP_MIN_NOTICE_YEAR", 2026)
+PNCP_MAX_CANDIDATES_PER_RUN = _positive_env_int("PNCP_MAX_CANDIDATES_PER_RUN", 10)
+PNCP_MAX_PROCESSED_CANDIDATES_PER_RUN = _positive_env_int(
+    "PNCP_MAX_PROCESSED_CANDIDATES_PER_RUN", 20
+)
+PNCP_MAX_SUBMITTABLE_CANDIDATES_PER_RUN = _positive_env_int(
+    "PNCP_MAX_SUBMITTABLE_CANDIDATES_PER_RUN", 5
+)
+PNCP_FETCH_MAX_ATTEMPTS = _positive_env_int("PNCP_FETCH_MAX_ATTEMPTS", 3)
+try:
+    PNCP_FETCH_BACKOFF_SECONDS = max(
+        0.0, float(os.environ.get("PNCP_FETCH_BACKOFF_SECONDS", "2"))
+    )
+except (TypeError, ValueError):
+    PNCP_FETCH_BACKOFF_SECONDS = 2.0
+PNCP_FETCH_TIMEOUT_SECONDS = _positive_env_int("PNCP_FETCH_TIMEOUT_SECONDS", 8)
 PNCP_OPPORTUNITY_V2_ENABLED = (
     os.environ.get("PNCP_OPPORTUNITY_V2_ENABLED", "false").lower() == "true"
 )
@@ -758,20 +779,11 @@ def main() -> int:
         print("No new candidates to submit")
         return 0
 
-    from ocr_worker.ocr_extraction_config import OCRExtractionConfig
-    from ocr_worker.pdf_markdown_extractor import PDFMarkdownExtractor
-
-    ocr_config = OCRExtractionConfig(
-        language=os.getenv("KREUZBERG_PADDLE_LANGUAGE", "latin"),
-        model_tier=os.getenv("KREUZBERG_PADDLE_MODEL_TIER", "tiny"),
-        use_gpu=os.getenv("KREUZBERG_USE_GPU", "false").lower() == "true",
-        force_ocr=os.getenv("KREUZBERG_FORCE_OCR_DEFAULT", "false").lower() == "true",
-        extraction_timeout_seconds=int(os.getenv("KREUZBERG_EXTRACTION_TIMEOUT_SECONDS", "300")),
-    )
-    extractor = PDFMarkdownExtractor(ocr_config=ocr_config)
+    _ocr_config, extractor = pipeline_core.make_default_ocr_extractor()
     max_pdf_bytes = pipeline_core.SCRAPE_MAX_PDF_BYTES
 
     processed: list[dict[str, Any]] = []
+    successful_results = 0
     for candidate in candidates:
         if len(processed) >= PNCP_MAX_PROCESSED_CANDIDATES_PER_RUN:
             stats["processing_cap_reached"] = 1
@@ -796,6 +808,15 @@ def main() -> int:
         processed.append(result)
         if result.get("worker_result"):
             pipeline_core.record_pdf_download(stats)
+            successful_results += 1
+            if successful_results >= PNCP_MAX_SUBMITTABLE_CANDIDATES_PER_RUN:
+                stats["submittable_cap_reached"] = 1
+                print(
+                    "Stopping after submittable candidate cap "
+                    f"{PNCP_MAX_SUBMITTABLE_CANDIDATES_PER_RUN}",
+                    file=sys.stderr,
+                )
+                break
 
     stats["processed"] = len(processed)
     stats["ocr_successes"] = sum(1 for r in processed if r.get("worker_result"))

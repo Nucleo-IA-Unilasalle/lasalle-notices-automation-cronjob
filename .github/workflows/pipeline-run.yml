@@ -3,6 +3,9 @@ name: Pipeline - Run
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 # Legacy full pipeline run via Render.
 # The normal path now runs discovery → download → OCR → submission in GitHub Actions
 # (pipeline-pncp-discovery.yml), then Render handles AI and serving.
@@ -14,7 +17,7 @@ concurrency:
 jobs:
   trigger:
     runs-on: ubuntu-latest
-    timeout-minutes: 50
+    timeout-minutes: 170
     env:
       RENDER_APP_URL: ${{ secrets.RENDER_APP_URL }}
       PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}
@@ -26,7 +29,8 @@ jobs:
         run: |
           set -euo pipefail
 
-          URL="${RENDER_APP_URL}/api/pipeline/${PIPELINE_STEP}"
+          BASE_URL="${RENDER_APP_URL%/}"
+          URL="${BASE_URL}/api/pipeline/${PIPELINE_STEP}"
           MAX_ATTEMPTS=4
           SLEEP_SECONDS=120
 
@@ -44,7 +48,7 @@ jobs:
             cat response.json || true
             echo
 
-            if [ "$http_code" = "200" ] || [ "$http_code" = "202" ] || [ "$http_code" = "207" ]; then
+            if [ "$http_code" = "200" ] || [ "$http_code" = "202" ]; then
               exit 0
             fi
 

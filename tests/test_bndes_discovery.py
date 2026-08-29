@@ -549,6 +549,24 @@ class TestDiscoverCandidates:
         urls = [c["url"] for c in candidates]
         assert any("edital-fundo-socioambiental-2026.pdf" in url for url in urls)
 
+    def test_direct_pdf_candidate_cap_preserves_candidate_stats(self) -> None:
+        import discover_bndes_candidates as dpc
+
+        listing_html = """
+        <html><body>
+          <a href="/wps/wcm/connect/site/xyz/edital-2026.pdf?MOD=AJPERES">Edital</a>
+        </body></html>
+        """
+        with patch.object(dpc, "BNDES_MAX_CANDIDATES_PER_RUN", 1):
+            with patch_request_with_safe_redirects(
+                {FUNDO_LISTING_URL: make_response(listing_html)},
+            ):
+                stats, candidates = dpc.discover_candidates()
+
+        assert len(candidates) == 1
+        assert stats["candidates"] == 1
+        assert stats["candidate_cap_reached"] == 1
+
 
 # ---------------------------------------------------------------------------
 # Submit handoff

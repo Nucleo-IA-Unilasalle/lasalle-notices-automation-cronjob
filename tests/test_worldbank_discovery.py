@@ -230,6 +230,7 @@ class TestDiscoverCandidates:
         assert stats["candidates"] == 2
         assert stats["listings_fetched"] == 1
         assert stats["playwright_fallback_used"] == 0
+        assert "details_fetched" not in stats
 
         urls = [c["url"] for c in candidates]
         assert (

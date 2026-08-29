@@ -51,6 +51,7 @@ def extract_file_sync(
     language: str = "latin",
     model_tier: str = "tiny",
     use_gpu: bool = False,
+    max_pages: int = 50,
 ) -> str:
     """Extract text from a file using PaddleOCR directly with PP-OCRv6."""
     ocr = _get_ocr_instance(model_tier=model_tier, use_gpu=use_gpu)
@@ -63,7 +64,10 @@ def extract_file_sync(
     result = ocr.predict(file_path)
 
     pages: list[str] = []
-    for page_result in result:
+    for page_number, page_result in enumerate(result):
+        if max_pages > 0 and page_number >= max_pages:
+            logger.info("Stopped OCR after %d pages", max_pages)
+            break
         rec_texts = page_result.get("rec_texts", [])
         page_text = "\n".join(rec_texts)
         page_index = page_result.get("page_index")

@@ -128,14 +128,26 @@ class TestDiscoverCandidates:
         from discover_fundacao_grupo_boticario_candidates import (
             discover_candidates,
         )
+        import discover_fundacao_grupo_boticario_candidates as dfb
 
         with patch_request_with_safe_redirects(self._setup_responses()):
-            stats, candidates = discover_candidates()
+            with patch.object(
+                dfb,
+                "_run_playwright_detail_fallback",
+                return_value=[
+                    "https://fundacaogrupoboticario.org.br/wp-content/uploads/2026/03/regulamento-sprint-prevencao-ao-fogo.pdf",
+                    "https://fundacaogrupoboticario.org.br/wp-content/uploads/2026/03/cronograma-sprint-prevencao-ao-fogo.pdf#page=2",
+                ],
+            ) as detail_fallback:
+                stats, candidates = discover_candidates()
 
         assert stats["candidates"] == 4
         assert stats["listings_fetched"] == 1
         assert stats["details_fetched"] == 2
         assert stats["playwright_fallback_used"] == 0
+        detail_fallback.assert_called_once_with(
+            SPRINT_DETAIL_URL, stats=stats,
+        )
 
         urls = sorted(c["url"] for c in candidates)
         assert urls == sorted(
@@ -194,7 +206,15 @@ class TestDiscoverCandidates:
         with patch_request_with_safe_redirects(self._setup_responses()):
             with patch.object(dfb, "_run_playwright_fallback") as mock_pw:
                 mock_pw.return_value = []
-                stats, _candidates = discover_candidates()
+                with patch.object(
+                    dfb,
+                    "_run_playwright_detail_fallback",
+                    return_value=[
+                        "https://fundacaogrupoboticario.org.br/wp-content/uploads/2026/03/regulamento-sprint-prevencao-ao-fogo.pdf",
+                        "https://fundacaogrupoboticario.org.br/wp-content/uploads/2026/03/cronograma-sprint-prevencao-ao-fogo.pdf#page=2",
+                    ],
+                ):
+                    stats, _candidates = discover_candidates()
 
         assert stats["candidates"] == 4
         assert stats["playwright_fallback_used"] == 0
@@ -216,6 +236,60 @@ class TestDiscoverCandidates:
         assert stats["errors"] == 1
         assert stats["playwright_fallback_used"] == 1
         assert candidates == []
+
+    def test_detail_fetch_failure_is_counted_and_does_not_stop_other_details(self) -> None:
+        from discover_fundacao_grupo_boticario_candidates import discover_candidates
+        import discover_fundacao_grupo_boticario_candidates as dfb
+
+        with patch_request_with_safe_redirects({LISTING_URL: make_response(_read_fixture(LISTING_FIXTURE))}):
+            with patch.object(
+                dfb,
+                "discover_pdf_urls_on_page",
+                side_effect=[requests.ConnectionError("detail down"), [
+                    "https://fundacaogrupoboticario.org.br/edital-2026.pdf",
+                ]],
+            ):
+                with patch.object(
+                    dfb,
+                    "_run_playwright_detail_fallback",
+                    return_value=[
+                        "https://fundacaogrupoboticario.org.br/edital-2026.pdf",
+                    ],
+                ):
+                    stats, candidates = discover_candidates()
+
+        assert stats["errors"] == 1
+        assert stats["details_fetched"] == 1
+        assert [candidate["url"] for candidate in candidates] == [
+            "https://fundacaogrupoboticario.org.br/edital-2026.pdf",
+        ]
+
+    def test_foundation_detail_skips_static_fetch_and_uses_playwright(self) -> None:
+        from discover_fundacao_grupo_boticario_candidates import discover_candidates
+        import discover_fundacao_grupo_boticario_candidates as dfb
+
+        listing_html = (
+            f'<html><body><a href="{SPRINT_DETAIL_URL}">Sprint edital</a>'
+            "</body></html>"
+        )
+        dynamic_pdf = (
+            "https://fundacaogrupoboticario.org.br/wp-content/uploads/2026/03/"
+            "dynamic-edital.pdf"
+        )
+        with patch_request_with_safe_redirects(
+            {LISTING_URL: make_response(listing_html)},
+        ):
+            with patch.object(dfb, "discover_pdf_urls_on_page") as static_fetch:
+                with patch.object(
+                    dfb,
+                    "_run_playwright_detail_fallback",
+                    return_value=[dynamic_pdf],
+                ) as detail_fallback:
+                    stats, candidates = discover_candidates()
+
+        static_fetch.assert_not_called()
+        detail_fallback.assert_called_once_with(SPRINT_DETAIL_URL, stats=stats)
+        assert [candidate["url"] for candidate in candidates] == [dynamic_pdf]
 
 
 class TestPlaywrightFallback:
@@ -298,6 +372,37 @@ class TestPlaywrightFallback:
                 detail_urls = dfb._run_playwright_fallback(LISTING_URL, stats=stats)
 
         assert detail_urls == [CHAMADA_DETAIL_URL, SPRINT_DETAIL_URL]
+
+    def test_run_playwright_detail_fallback_returns_pdf_urls(self) -> None:
+        import types
+
+        import discover_fundacao_grupo_boticario_candidates as dfb
+
+        pdf_url = "https://fundacaogrupoboticario.org.br/docs/edital.pdf"
+        fake_pw = self._fake_async_pw(
+            [{"href": "/docs/edital.pdf"}, {"href": "/docs/notices.html"}],
+        )
+        fake_async_api = types.ModuleType("playwright.async_api")
+        fake_async_api.async_playwright = fake_pw  # type: ignore[attr-defined]
+        fake_playwright = types.ModuleType("playwright")
+        fake_playwright.async_api = fake_async_api  # type: ignore[attr-defined]
+
+        stats: dict[str, int] = {}
+        with patch.dict(
+            sys.modules,
+            {
+                "playwright": fake_playwright,
+                "playwright.async_api": fake_async_api,
+            },
+        ):
+            with patch.object(dfb, "ensure_safe_url"):
+                with patch.object(dfb.asyncio, "run", side_effect=self._patched_asyncio_run):
+                    pdf_urls = dfb._run_playwright_detail_fallback(
+                        SPRINT_DETAIL_URL, stats=stats,
+                    )
+
+        assert pdf_urls == [pdf_url]
+        assert stats == {}
 
     def test_run_playwright_fallback_returns_empty_when_playwright_missing(
         self,

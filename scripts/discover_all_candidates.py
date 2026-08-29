@@ -43,6 +43,8 @@ SOURCE_MODULES: dict[str, str] = {
     "fapergs": "discover_fapergs_candidates",
     "fbds": "discover_fbds_opportunities",
     "finep": "discover_finep_opportunities",
+    "dopa": "discover_dopa_opportunities",
+    "canoas": "discover_canoas_opportunities",
     "funbio": "discover_funbio_candidates",
     "govbr_mma": "discover_govbr_mma_candidates",
     "govbr_mma_public_calls": "discover_govbr_mma_public_calls_candidates",
@@ -57,7 +59,16 @@ SOURCE_MODULES: dict[str, str] = {
     "fundacao_grupo_boticario": "discover_fundacao_grupo_boticario_candidates",
     "kfw": "discover_kfw_candidates",
     "msgov": "discover_msgov_candidates",
+    "ibama": "discover_ibama_candidates",
 }
+
+# These modules expose only the structured opportunity contract. Route them
+# automatically when an operator selects them in a manual all-source run.
+STRUCTURED_OPPORTUNITY_SOURCES = {"finep", "fbds"}
+
+# IBAMA exposes a compatibility candidate wrapper, but production must never
+# fall back to it. Keep structured submission behind an explicit operator opt-in.
+STRUCTURED_ONLY_SOURCES = frozenset({"ibama"})
 
 
 DEFAULT_MIN_NOTICE_YEAR = 2026
@@ -411,9 +422,42 @@ def main() -> int:
             continue
 
         try:
+            has_structured_only_contract = (
+                source in STRUCTURED_ONLY_SOURCES
+                or (
+                    callable(
+                        getattr(discoverer, "__dict__", {}).get(
+                            "discover_opportunities"
+                        )
+                    )
+                    and not callable(
+                        getattr(discoverer, "__dict__", {}).get(
+                            "discover_candidates"
+                        )
+                    )
+                )
+            )
+            if (
+                not audit_only
+                and source not in opportunity_sources
+                and source not in STRUCTURED_OPPORTUNITY_SOURCES
+                and has_structured_only_contract
+            ):
+                print(
+                    f"error: structured-only source {source!r} requires "
+                    "explicit OPPORTUNITY_SOURCES opt-in",
+                    file=sys.stderr,
+                )
+                per_source_stats[source] = {"errors": 1}
+                exit_code = 1
+                continue
             opportunity_result = (
                 discover_source_opportunities(discoverer, min_year=min_year)
-                if audit_only or source in opportunity_sources
+                if (
+                    audit_only
+                    or source in opportunity_sources
+                    or source in STRUCTURED_OPPORTUNITY_SOURCES
+                )
                 else None
             )
             if opportunity_result is None:
@@ -529,6 +573,12 @@ def main() -> int:
         per_source_submitted[source] = submit_result.get("submitted", 0)
         print(f"{source}: render submission: {submit_result}")
 
+        if submit_result.get("failed_batches", 0) > 0:
+            print(
+                f"error: {source} candidate submission was partial or failed",
+                file=sys.stderr,
+            )
+            exit_code = 1
         if candidates and submit_result.get("submitted", 0) == 0:
             print(
                 f"error: discovered {source} candidates produced no "

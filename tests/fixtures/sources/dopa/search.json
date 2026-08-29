@@ -1,0 +1,51 @@
+[
+  {
+    "idConteudo": 9001,
+    "tituloConteudo": "Edital 010/2026 - Chamamento Publico para Apoio a Projetos Ambientais",
+    "dataConteudo": "19/08/2026",
+    "numeroEdicao": 7830,
+    "linkPaginaDetalhes": "/api/diarios/conteudo/9001/detalhes",
+    "linkDiarioCompleto": "/api/diarios/edicao/6154/download?tipo=executivo",
+    "tipo": "Executivo"
+  },
+  {
+    "idConteudo": 9002,
+    "tituloConteudo": "Resultado do Edital 009/2026",
+    "dataConteudo": "19/08/2026",
+    "numeroEdicao": 7830,
+    "linkPaginaDetalhes": "/api/diarios/conteudo/9002/detalhes",
+    "tipo": "Executivo"
+  },
+  {
+    "idConteudo": 9003,
+    "tituloConteudo": "DLC - Abertura de Pregao Eletronico 123/2026",
+    "dataConteudo": "19/08/2026",
+    "numeroEdicao": 7830,
+    "linkPaginaDetalhes": "/api/diarios/conteudo/9003/detalhes",
+    "tipo": "Executivo"
+  },
+  {
+    "idConteudo": 9004,
+    "tituloConteudo": "Edital 009/2025 - Chamada Publica",
+    "dataConteudo": "19/08/2025",
+    "numeroEdicao": 7600,
+    "linkPaginaDetalhes": "/api/diarios/conteudo/9004/detalhes",
+    "tipo": "Executivo"
+  },
+  {
+    "idConteudo": 9001,
+    "tituloConteudo": "Edital 010/2026 - Chamamento Publico para Apoio a Projetos Ambientais",
+    "dataConteudo": "19/08/2026",
+    "numeroEdicao": 7830,
+    "linkPaginaDetalhes": "/api/diarios/conteudo/9001/detalhes",
+    "tipo": "Executivo"
+  },
+  {
+    "idConteudo": 9005,
+    "tituloConteudo": "Edital 011/2026 - Chamamento Publico Legislativo",
+    "dataConteudo": "19/08/2026",
+    "numeroEdicao": 7830,
+    "linkPaginaDetalhes": "/api/diarios/conteudo/9005/detalhes",
+    "tipo": "Legislativo"
+  }
+]

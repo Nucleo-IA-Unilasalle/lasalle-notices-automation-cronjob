@@ -4,23 +4,34 @@ import argparse
 import asyncio
 import logging
 import os
+import sys
 import threading
 import time
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import Callable
+from pathlib import Path
+from typing import Any, Callable
 from urllib.parse import urljoin
+
+# The workflow executes this file by path rather than installing ``scripts``
+# as a package. Add the sibling script directory before importing it.
+_SCRIPTS_DIR = Path(__file__).resolve().parents[1]
+if str(_SCRIPTS_DIR) not in sys.path:
+    sys.path.insert(0, str(_SCRIPTS_DIR))
 
 import requests
 
 if __package__:
     from .file_validation import FileValidationError, validate_pdf
-    from .ocr_extraction_config import OCRExtractionConfig
+    from .ocr_extraction_config import OCRExtractionConfig, parse_ocr_timeout
     from .pdf_markdown_extractor import PDFMarkdownExtractor
-    from url_validation import is_safe_url
+    try:
+        from scripts.url_validation import is_safe_url
+    except ModuleNotFoundError:
+        from url_validation import is_safe_url
 else:
     from file_validation import FileValidationError, validate_pdf
-    from ocr_extraction_config import OCRExtractionConfig
+    from ocr_extraction_config import OCRExtractionConfig, parse_ocr_timeout
     from pdf_markdown_extractor import PDFMarkdownExtractor
     from url_validation import is_safe_url
 
@@ -30,6 +41,9 @@ _REDIRECT_STATUS_CODES = {301, 302, 303, 307, 308}
 
 _CLAIM_MAX_ATTEMPTS = 4
 _CLAIM_RETRY_SLEEP_SECONDS = 120
+DEFAULT_MARKDOWN_MAX_BYTES = 5_000_000
+DEFAULT_HEARTBEAT_JOIN_TIMEOUT_SECONDS = 5.0
+DEFAULT_OCR_MAX_PAGES = 50
 
 
 class ClaimOwnershipLost(RuntimeError):
@@ -42,6 +56,10 @@ class DownloadError(RuntimeError):
 
 class RenderCommunicationError(RuntimeError):
     """Raised when the worker cannot communicate with Render reliably."""
+
+
+class PayloadTooLargeError(RuntimeError):
+    """Raised before sending a markdown payload larger than Repo A accepts."""
 
 
 class TransientRenewalError(RuntimeError):
@@ -65,6 +83,8 @@ class WorkerSettings:
     renew_interval_seconds: float
     pdf_max_bytes: int
     download_timeout_seconds: int
+    markdown_max_bytes: int
+    heartbeat_join_timeout_seconds: float
     ocr_config: OCRExtractionConfig
 
     @classmethod
@@ -75,12 +95,37 @@ class WorkerSettings:
         renew_interval_seconds = float(os.getenv("OCR_WORKER_RENEW_INTERVAL_SECONDS", "60"))
         pdf_max_bytes = int(os.getenv("SCRAPE_MAX_PDF_BYTES", "15000000"))
         download_timeout_seconds = int(os.getenv("AI_SOURCE_RESOLUTION_TIMEOUT_SECONDS", "60"))
+        try:
+            markdown_max_bytes = int(
+                os.getenv("OCR_WORKER_MARKDOWN_MAX_BYTES", str(DEFAULT_MARKDOWN_MAX_BYTES))
+            )
+        except (TypeError, ValueError):
+            markdown_max_bytes = DEFAULT_MARKDOWN_MAX_BYTES
+        markdown_max_bytes = min(DEFAULT_MARKDOWN_MAX_BYTES, max(1, markdown_max_bytes))
+        try:
+            heartbeat_join_timeout_seconds = float(
+                os.getenv(
+                    "OCR_WORKER_HEARTBEAT_JOIN_TIMEOUT_SECONDS",
+                    str(DEFAULT_HEARTBEAT_JOIN_TIMEOUT_SECONDS),
+                )
+            )
+        except (TypeError, ValueError):
+            heartbeat_join_timeout_seconds = DEFAULT_HEARTBEAT_JOIN_TIMEOUT_SECONDS
+        heartbeat_join_timeout_seconds = max(0.0, heartbeat_join_timeout_seconds)
+        try:
+            max_pages = int(os.getenv("OCR_MAX_PDF_PAGES", str(DEFAULT_OCR_MAX_PAGES)))
+        except (TypeError, ValueError):
+            max_pages = DEFAULT_OCR_MAX_PAGES
+        max_pages = max_pages if max_pages > 0 else DEFAULT_OCR_MAX_PAGES
         ocr_config = OCRExtractionConfig(
             language=os.getenv("KREUZBERG_PADDLE_LANGUAGE", "latin"),
             model_tier=os.getenv("KREUZBERG_PADDLE_MODEL_TIER", "tiny"),
             use_gpu=os.getenv("KREUZBERG_USE_GPU", "false").lower() == "true",
             force_ocr=os.getenv("KREUZBERG_FORCE_OCR_DEFAULT", "false").lower() == "true",
-            extraction_timeout_seconds=int(os.getenv("KREUZBERG_EXTRACTION_TIMEOUT_SECONDS", "300")),
+            extraction_timeout_seconds=parse_ocr_timeout(
+                os.getenv("KREUZBERG_EXTRACTION_TIMEOUT_SECONDS")
+            ),
+            max_pages=max_pages,
         )
         return cls(
             render_app_url=render_app_url,
@@ -89,6 +134,8 @@ class WorkerSettings:
             renew_interval_seconds=renew_interval_seconds,
             pdf_max_bytes=pdf_max_bytes,
             download_timeout_seconds=download_timeout_seconds,
+            markdown_max_bytes=markdown_max_bytes,
+            heartbeat_join_timeout_seconds=heartbeat_join_timeout_seconds,
             ocr_config=ocr_config,
         )
 
@@ -107,6 +154,56 @@ class OCRWorkerApi:
 
     def close(self) -> None:
         self._session.close()
+
+    @staticmethod
+    def _parse_claim(item: Any, index: int) -> WorkerClaim:
+        if not isinstance(item, dict):
+            raise RenderCommunicationError(
+                f"Invalid OCR claim payload at index {index}: expected an object"
+            )
+
+        edital_id = item.get("edital_id")
+        source_url = item.get("source_url")
+        claim_token = item.get("claim_token")
+        expires_at_raw = item.get("expires_at")
+        original_filename = item.get("original_filename")
+        if not isinstance(edital_id, int) or isinstance(edital_id, bool) or edital_id <= 0:
+            raise RenderCommunicationError(
+                f"Invalid OCR claim payload at index {index}: edital_id must be a positive integer"
+            )
+        if not isinstance(source_url, str) or not source_url.strip():
+            raise RenderCommunicationError(
+                f"Invalid OCR claim payload at index {index}: source_url must be a non-empty string"
+            )
+        if not isinstance(claim_token, str) or not claim_token:
+            raise RenderCommunicationError(
+                f"Invalid OCR claim payload at index {index}: claim_token must be a non-empty string"
+            )
+        if original_filename is not None and not isinstance(original_filename, str):
+            raise RenderCommunicationError(
+                f"Invalid OCR claim payload at index {index}: original_filename must be a string"
+            )
+        if not isinstance(expires_at_raw, str) or not expires_at_raw:
+            raise RenderCommunicationError(
+                f"Invalid OCR claim payload at index {index}: expires_at must be an ISO timestamp"
+            )
+        try:
+            expires_at = datetime.fromisoformat(expires_at_raw.replace("Z", "+00:00"))
+        except (TypeError, ValueError) as exc:
+            raise RenderCommunicationError(
+                f"Invalid OCR claim payload at index {index}: expires_at is not ISO-8601"
+            ) from exc
+        if expires_at.tzinfo is None or expires_at.utcoffset() is None:
+            raise RenderCommunicationError(
+                f"Invalid OCR claim payload at index {index}: expires_at must include a timezone"
+            )
+        return WorkerClaim(
+            edital_id=edital_id,
+            source_url=source_url,
+            original_filename=original_filename,
+            claim_token=claim_token,
+            expires_at=expires_at,
+        )
 
     def claim(self, limit: int) -> list[WorkerClaim]:
         last_exc: Exception | None = None
@@ -149,16 +246,17 @@ class OCRWorkerApi:
             except requests.RequestException as exc:
                 raise RenderCommunicationError(f"Failed to claim OCR work: {exc}") from exc
 
-            return [
-                WorkerClaim(
-                    edital_id=item["edital_id"],
-                    source_url=item["source_url"],
-                    original_filename=item.get("original_filename"),
-                    claim_token=item["claim_token"],
-                    expires_at=datetime.fromisoformat(item["expires_at"].replace("Z", "+00:00")),
+            try:
+                payload = response.json()
+            except (TypeError, ValueError) as exc:
+                raise RenderCommunicationError(
+                    f"Invalid OCR claim response: response is not valid JSON: {exc}"
+                ) from exc
+            if not isinstance(payload, dict) or not isinstance(payload.get("claims"), list):
+                raise RenderCommunicationError(
+                    "Invalid OCR claim response: expected an object with a claims list"
                 )
-                for item in response.json()["claims"]
-            ]
+            return [self._parse_claim(item, index) for index, item in enumerate(payload["claims"])]
 
         raise RenderCommunicationError(
             f"Failed to claim OCR work after {_CLAIM_MAX_ATTEMPTS} attempts: {last_exc}"
@@ -184,9 +282,46 @@ class OCRWorkerApi:
         except requests.RequestException as exc:
             raise TransientRenewalError(f"Transient renewal failure: {exc}") from exc
 
-        return datetime.fromisoformat(response.json()["expires_at"].replace("Z", "+00:00"))
+        try:
+            payload = response.json()
+        except (TypeError, ValueError) as exc:
+            raise RenderCommunicationError(
+                f"Invalid OCR claim renewal response: response is not valid JSON: {exc}"
+            ) from exc
+        if not isinstance(payload, dict):
+            raise RenderCommunicationError(
+                "Invalid OCR claim renewal response: expected an object"
+            )
+        expires_at_raw = payload.get("expires_at")
+        if not isinstance(expires_at_raw, str) or not expires_at_raw:
+            raise RenderCommunicationError(
+                "Invalid OCR claim renewal response: expires_at must be an ISO timestamp"
+            )
+        try:
+            expires_at = datetime.fromisoformat(expires_at_raw.replace("Z", "+00:00"))
+        except (TypeError, ValueError) as exc:
+            raise RenderCommunicationError(
+                "Invalid OCR claim renewal response: expires_at is not ISO-8601"
+            ) from exc
+        if expires_at.tzinfo is None or expires_at.utcoffset() is None:
+            raise RenderCommunicationError(
+                "Invalid OCR claim renewal response: expires_at must include a timezone"
+            )
+        return expires_at
 
-    def complete(self, claim: WorkerClaim, markdown: str) -> None:
+    def complete(
+        self,
+        claim: WorkerClaim,
+        markdown: str,
+        *,
+        max_bytes: int = DEFAULT_MARKDOWN_MAX_BYTES,
+    ) -> None:
+        markdown_bytes = len(markdown.encode("utf-8"))
+        effective_max_bytes = min(DEFAULT_MARKDOWN_MAX_BYTES, max(1, max_bytes))
+        if markdown_bytes > effective_max_bytes:
+            raise PayloadTooLargeError(
+                f"OCR markdown is {markdown_bytes} bytes; maximum is {effective_max_bytes} bytes"
+            )
         headers = {
             **self._auth_headers(),
             "X-OCR-Claim-Token": claim.claim_token,
@@ -233,13 +368,21 @@ class OCRWorkerApi:
 
 
 class LeaseHeartbeat:
-    def __init__(self, api: OCRWorkerApi, claim: WorkerClaim, interval_seconds: float):
+    def __init__(
+        self,
+        api: OCRWorkerApi,
+        claim: WorkerClaim,
+        interval_seconds: float,
+        join_timeout_seconds: float = DEFAULT_HEARTBEAT_JOIN_TIMEOUT_SECONDS,
+    ):
         self.api = api.isolated()
         self.claim = claim
         self.interval_seconds = interval_seconds
+        self.join_timeout_seconds = join_timeout_seconds
         self._expires_at = claim.expires_at
         self._stop = threading.Event()
         self._ownership_lost = threading.Event()
+        self._communication_error: RenderCommunicationError | None = None
         self._thread = threading.Thread(target=self._run, daemon=True)
 
     def _run(self) -> None:
@@ -259,6 +402,15 @@ class LeaseHeartbeat:
                     if datetime.now(timezone.utc) >= self._expires_at:
                         self._ownership_lost.set()
                         return
+                except RenderCommunicationError as exc:
+                    logger.error(
+                        "Malformed OCR claim heartbeat response for edital=%s: %s",
+                        self.claim.edital_id,
+                        exc,
+                    )
+                    self._communication_error = exc
+                    self._ownership_lost.set()
+                    return
                 except Exception:
                     logger.exception(
                         "Unexpected OCR claim heartbeat failure for edital=%s",
@@ -275,11 +427,21 @@ class LeaseHeartbeat:
 
     def __exit__(self, exc_type, exc, tb):
         self._stop.set()
-        self._thread.join()
+        self._thread.join(timeout=self.join_timeout_seconds)
+        if self._thread.is_alive():
+            logger.error(
+                "OCR claim heartbeat thread did not stop within %.1f seconds for edital=%s",
+                self.join_timeout_seconds,
+                self.claim.edital_id,
+            )
 
     @property
     def ownership_lost(self) -> bool:
         return self._ownership_lost.is_set()
+
+    @property
+    def communication_error(self) -> RenderCommunicationError | None:
+        return self._communication_error
 
 
 class OCRWorker:
@@ -290,11 +452,40 @@ class OCRWorker:
         downloader: Callable[[str], bytes],
         extractor,
         renew_interval_seconds: float,
+        markdown_max_bytes: int = DEFAULT_MARKDOWN_MAX_BYTES,
+        heartbeat_join_timeout_seconds: float = DEFAULT_HEARTBEAT_JOIN_TIMEOUT_SECONDS,
     ) -> None:
         self.api = api
         self.downloader = downloader
         self.extractor = extractor
         self.renew_interval_seconds = renew_interval_seconds
+        self.markdown_max_bytes = min(DEFAULT_MARKDOWN_MAX_BYTES, max(1, markdown_max_bytes))
+        self.heartbeat_join_timeout_seconds = max(0.0, heartbeat_join_timeout_seconds)
+
+    def _fail_remaining_claims(
+        self,
+        claims: list[WorkerClaim],
+        *,
+        error_message: str,
+    ) -> None:
+        if not claims:
+            return
+        logger.error(
+            "Accounting for %d OCR claims after Render communication failure: %s",
+            len(claims),
+            [claim.edital_id for claim in claims],
+        )
+        for claim in claims:
+            try:
+                self.api.fail(
+                    claim,
+                    error_kind="communication_error",
+                    error_message=error_message[:500],
+                )
+            except ClaimOwnershipLost:
+                logger.warning("OCR claim already lost while accounting for edital=%s", claim.edital_id)
+            except RenderCommunicationError:
+                logger.error("Unable to account for OCR claim edital=%s", claim.edital_id)
 
     def run(self, *, limit: int) -> int:
         try:
@@ -303,17 +494,38 @@ class OCRWorker:
             logger.exception("Unable to claim OCR work from Render")
             return 1
 
-        for claim in claims:
+        for claim_index, claim in enumerate(claims):
             try:
-                with LeaseHeartbeat(self.api, claim, self.renew_interval_seconds) as heartbeat:
+                with LeaseHeartbeat(
+                    self.api,
+                    claim,
+                    self.renew_interval_seconds,
+                    self.heartbeat_join_timeout_seconds,
+                ) as heartbeat:
                     pdf_bytes = self.downloader(claim.source_url)
                     markdown = asyncio.run(self.extractor.extract(pdf_bytes))
+                communication_error = getattr(heartbeat, "communication_error", None)
+                if communication_error is not None:
+                    raise communication_error
                 if not heartbeat.ownership_lost:
-                    self.api.complete(claim, markdown)
+                    if len(markdown.encode("utf-8")) > self.markdown_max_bytes:
+                        raise PayloadTooLargeError(
+                            f"OCR markdown is {len(markdown.encode('utf-8'))} bytes; "
+                            f"maximum is {self.markdown_max_bytes} bytes"
+                        )
+                    self.api.complete(
+                        claim,
+                        markdown,
+                        max_bytes=self.markdown_max_bytes,
+                    )
             except ClaimOwnershipLost:
                 logger.warning("OCR claim lost before completion for edital=%s", claim.edital_id)
-            except RenderCommunicationError:
+            except RenderCommunicationError as exc:
                 logger.exception("Render communication failed while handling edital=%s", claim.edital_id)
+                self._fail_remaining_claims(
+                    claims[claim_index:],
+                    error_message=f"Render communication failure: {exc}",
+                )
                 return 1
             except Exception as exc:
                 try:
@@ -324,8 +536,12 @@ class OCRWorker:
                     )
                 except ClaimOwnershipLost:
                     logger.warning("OCR claim lost before failure report for edital=%s", claim.edital_id)
-                except RenderCommunicationError:
+                except RenderCommunicationError as report_exc:
                     logger.exception("Render communication failed while reporting failure for edital=%s", claim.edital_id)
+                    self._fail_remaining_claims(
+                        claims[claim_index:],
+                        error_message=f"Render communication failure: {report_exc}",
+                    )
                     return 1
         return 0
 
@@ -335,6 +551,8 @@ def classify_error(exc: Exception) -> str:
         return "download_error"
     if isinstance(exc, FileValidationError):
         return "invalid_pdf"
+    if isinstance(exc, PayloadTooLargeError):
+        return "payload_too_large"
     return "extraction_error"
 
 
@@ -407,6 +625,8 @@ def build_worker(settings: WorkerSettings) -> OCRWorker:
         downloader=downloader,
         extractor=extractor,
         renew_interval_seconds=settings.renew_interval_seconds,
+        markdown_max_bytes=settings.markdown_max_bytes,
+        heartbeat_join_timeout_seconds=settings.heartbeat_join_timeout_seconds,
     )
 
 

@@ -353,6 +353,7 @@ def discover_candidates(
                     f"Stopping after candidate cap {BNDES_MAX_CANDIDATES_PER_RUN}",
                     file=sys.stderr,
                 )
+                stats["candidates"] = len(candidates)
                 return stats, candidates
 
         for detail_url in detail_urls:

@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       sources:
-        description: "Comma-separated sources; structured options include finep,fbds,tnc,funbio"
+        description: "Comma-separated sources; structured options include finep,fbds,dopa,canoas,ibama,tnc,funbio"
         required: false
         default: "bndes,brde,fapergs,funbio,iis_rio,sema_rs,tnc,wwf"
         type: string
@@ -35,6 +35,9 @@ on:
         default: "2026"
         type: string
 
+permissions:
+  contents: read
+
 concurrency:
   group: pipeline-trigger
   cancel-in-progress: false
@@ -51,10 +54,10 @@ jobs:
       OPPORTUNITY_SOURCES: ${{ inputs.opportunity_sources || vars.OPPORTUNITY_SOURCES || '' }}
     steps:
       - name: Checkout scheduler repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: "3.13"
           cache: pip
@@ -81,13 +84,13 @@ jobs:
           KREUZBERG_PADDLE_MODEL_TIER: "tiny"
           KREUZBERG_USE_GPU: "false"
           KREUZBERG_FORCE_OCR_DEFAULT: "false"
-          KREUZBERG_EXTRACTION_TIMEOUT_SECONDS: "120"
+          KREUZBERG_EXTRACTION_TIMEOUT_SECONDS: "300"
           FLAGS_use_mkldnn: "0"
           PADDLE_PDX_ENABLE_MKLDNN_BYDEFAULT: "0"
           DISCOVERY_AUDIT_DIR: artifacts/source-audits
           FUNBIO_NEWS_ENABLED: "false"
-          FINEP_MAX_OPPORTUNITIES_PER_RUN: "5"
-          FBDS_MAX_DETAILS_PER_RUN: "5"
+          FINEP_MAX_OPPORTUNITIES_PER_RUN: "10"
+          FBDS_MAX_DETAILS_PER_RUN: "20"
 
       - name: Verify source fidelity artifacts
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.audit_only }}
@@ -107,7 +110,7 @@ jobs:
 
       - name: Upload structured source audit artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: structured-source-audits
           path: artifacts/source-audits

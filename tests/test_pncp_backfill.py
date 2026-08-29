@@ -3,6 +3,23 @@ from __future__ import annotations
 import pytest
 
 
+@pytest.mark.parametrize(
+    ("claim_limit", "process_limit"),
+    [(0, 1), (1, 101), (101, 101), (2, 1)],
+)
+def test_backfill_limits_are_bounded_and_ordered(claim_limit, process_limit):
+    import scripts.backfill_pncp_pending_candidates as backfill
+
+    with pytest.raises(ValueError):
+        backfill.resolve_backfill_limits(claim_limit, process_limit)
+
+
+def test_backfill_limits_allow_repo_a_maximum():
+    import scripts.backfill_pncp_pending_candidates as backfill
+
+    assert backfill.resolve_backfill_limits(100, 100) == (100, 100)
+
+
 def test_fetch_claimed_candidates_calls_render(monkeypatch):
     import scripts.backfill_pncp_pending_candidates as backfill
 

@@ -10,11 +10,11 @@ import tempfile
 if __package__:
     from .markdown_converter import MarkdownConversionError, MarkdownConverter
     from .ocr_extraction_config import OCRExtractionConfig
-    from .pdf_optimizer import PDFCompressionError, PDFOptimizer
+    from .pdf_optimizer import PDFCompressionError, PDFOptimizer, PDFOptimizerConfig
 else:
     from markdown_converter import MarkdownConversionError, MarkdownConverter
     from ocr_extraction_config import OCRExtractionConfig
-    from pdf_optimizer import PDFCompressionError, PDFOptimizer
+    from pdf_optimizer import PDFCompressionError, PDFOptimizer, PDFOptimizerConfig
 
 
 class PDFMarkdownExtractor:
@@ -29,7 +29,9 @@ class PDFMarkdownExtractor:
     ) -> None:
         self.ocr_config = ocr_config or OCRExtractionConfig()
         self.markdown_converter = markdown_converter or MarkdownConverter(ocr_config=self.ocr_config)
-        self.pdf_optimizer = pdf_optimizer or PDFOptimizer()
+        self.pdf_optimizer = pdf_optimizer or PDFOptimizer(
+            PDFOptimizerConfig(max_pages=self.ocr_config.max_pages)
+        )
 
     async def extract(self, pdf_content: bytes) -> str:
         optimized = await self._optimize_pdf(pdf_content)
@@ -49,19 +51,22 @@ class PDFMarkdownExtractor:
             from pypdf import PdfReader
 
             reader = PdfReader(io.BytesIO(pdf_content))
-            pages: list[str] = []
-            for page in reader.pages:
+            pdf_pages = reader.pages
+            if self.ocr_config.max_pages > 0:
+                pdf_pages = pdf_pages[: self.ocr_config.max_pages]
+            page_texts: list[str] = []
+            for page in pdf_pages:
                 text = page.extract_text() or ""
                 if text.strip():
-                    pages.append(text.strip())
+                    page_texts.append(text.strip())
         except Exception:
             return None
 
-        if not pages:
+        if not page_texts:
             return None
 
         assembled: list[str] = []
-        for index, page_text in enumerate(pages, start=1):
+        for index, page_text in enumerate(page_texts, start=1):
             if index == 1:
                 assembled.append(page_text)
             else:

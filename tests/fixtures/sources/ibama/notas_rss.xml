@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns="http://purl.org/rss/1.0/">
+  <channel><title>2026</title><link>https://www.gov.br/ibama/pt-br/assuntos/notas/2026</link>
+    <item rdf:about="https://www.gov.br/ibama/pt-br/assuntos/notas/2026/chamada-publica-para-osc-7-2026"><title>Chamamento Público nº 7/2026 para OSC</title><link>https://www.gov.br/ibama/pt-br/assuntos/notas/2026/chamada-publica-para-osc-7-2026</link><dc:date>2026-07-10T12:00:00Z</dc:date></item>
+  </channel>
+</rdf:RDF>
