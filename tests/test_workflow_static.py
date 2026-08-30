@@ -198,6 +198,7 @@ def test_ocr_worker_requirements_are_pinned() -> None:
     ]
     assert requirement_lines
     assert all("==" in line for line in requirement_lines)
+    assert any(line.startswith("lxml==") for line in requirement_lines)
 
 
 def test_timeout_and_thread_limitation_are_documented() -> None:

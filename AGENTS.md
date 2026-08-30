@@ -31,6 +31,7 @@ FastAPI service.
 - Keep discovery, PDF-byte, per-run PDF, OCR-page, attachment, and submission-payload caps explicit in workflow environments and documentation.
 - Scheduled workflows must have one canonical path per source. Manual-only workflows are rollback, audit, backfill, or per-source fallback paths and must remain documented as such.
 - Tests must be offline and deterministic. Do not call production endpoints from tests; use the workflow-pinned Python 3.13 interpreter.
+- `requirements-ocr-worker.txt` pins runtime dependencies, including `lxml` for BeautifulSoup's XML/RDF feed parsing. CI installs the same dependency file as production discovery workflows.
 
 ## Verification
 
