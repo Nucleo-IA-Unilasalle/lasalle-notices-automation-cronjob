@@ -376,11 +376,47 @@ def _post_batch_with_payload_shrink(
         f"{batch_label}b",
         total_batches,
     )
+    # Preserve the outcome counters from both child requests.  The caller gets
+    # one result per logical input batch, so aggregate the recursively split
+    # responses before returning it.
+    merged_result = dict(right_result or left_result or {})
+    merged_counts: dict[str, int] = {}
+    for child in (left_result, right_result):
+        if not isinstance(child, dict):
+            continue
+        counts = child.get("outcome_counts")
+        if not isinstance(counts, dict):
+            counts = child
+        for name in ("inserted", "updated", "reactivated", "duplicates", "duplicate", "invalid"):
+            value = counts.get(name, 0)
+            if isinstance(value, int) and not isinstance(value, bool):
+                canonical = "duplicates" if name == "duplicate" else name
+                merged_counts[canonical] = merged_counts.get(canonical, 0) + value
+    if merged_counts:
+        merged_result["outcome_counts"] = merged_counts
     return (
         left_submitted + right_submitted,
-        right_result or left_result,
+        merged_result or None,
         left_errors + right_errors,
     )
+
+
+def _outcome_counts(result: dict[str, Any] | None) -> dict[str, int]:
+    """Read and canonicalize persistence counters from a backend response."""
+    if not isinstance(result, dict):
+        return {}
+    counts = result.get("outcome_counts")
+    if not isinstance(counts, dict):
+        counts = result
+    output: dict[str, int] = {}
+    for name in ("inserted", "updated", "reactivated", "invalid"):
+        value = counts.get(name, 0)
+        if isinstance(value, int) and not isinstance(value, bool):
+            output[name] = value
+    duplicate = counts.get("duplicates", counts.get("duplicate", 0))
+    if isinstance(duplicate, int) and not isinstance(duplicate, bool):
+        output["duplicates"] = duplicate
+    return output
 
 
 def submit_candidates(
@@ -402,6 +438,7 @@ def submit_candidates(
     submitted = 0
     failed_batches: list[str] = list(oversized_errors)
     last_result: dict[str, Any] | None = None
+    outcome_counts = {name: 0 for name in ("inserted", "updated", "reactivated", "duplicates", "invalid")}
 
     for index, batch in enumerate(batches, start=1):
         accepted, result, errors = _post_batch_with_payload_shrink(
@@ -415,6 +452,8 @@ def submit_candidates(
         submitted += accepted
         if result is not None:
             last_result = result
+            for name, value in _outcome_counts(result).items():
+                outcome_counts[name] += value
         if not errors:
             print(
                 f"Render submit batch {index}/{total_batches}: "
@@ -430,6 +469,7 @@ def submit_candidates(
         "failed_batches": len(failed_batches),
         "errors": failed_batches,
         "last_result": last_result,
+        "outcome_counts": outcome_counts,
     }
 
     if submitted == 0 and failed_batches:
@@ -697,6 +737,7 @@ def submit_opportunities(opportunities: list[dict[str, Any]]) -> dict[str, Any]:
     submitted = 0
     errors: list[str] = []
     outcomes: list[dict[str, Any]] = []
+    outcome_counts = {name: 0 for name in ("inserted", "updated", "reactivated", "duplicates", "invalid")}
 
     oversized_by_index = {
         index: _oversized_opportunity_fields(opportunity)
@@ -754,13 +795,20 @@ def submit_opportunities(opportunities: list[dict[str, Any]]) -> dict[str, Any]:
             errors.append(error)
             continue
         submitted += 1
-        outcomes.append(result or {"outcome": "accepted"})
+        outcome = result or {"outcome": "accepted"}
+        outcomes.append(outcome)
+        vocabulary = outcome.get("outcome")
+        if vocabulary in {"inserted", "updated", "reactivated", "invalid"}:
+            outcome_counts[vocabulary] += 1
+        elif vocabulary == "duplicate":
+            outcome_counts["duplicates"] += 1
     return {
         "total": len(opportunities),
         "submitted": submitted,
         "failed": len(errors),
         "errors": errors,
         "outcomes": outcomes,
+        "outcome_counts": outcome_counts,
     }
 
 

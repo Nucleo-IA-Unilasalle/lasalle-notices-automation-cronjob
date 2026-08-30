@@ -12,6 +12,7 @@ from urllib.parse import urlencode
 import requests
 
 import pipeline_core
+from source_run_reporting import SourceRunReporter
 from pncp_filters import DROP_EXPIRED, FEDERAL_CNPJS, UF_FILTER
 from pipeline_core import process_candidate
 
@@ -753,7 +754,7 @@ def submit_candidates(
     return pipeline_core.submit_candidates(candidates, source="pncp")
 
 
-def main() -> int:
+def _main_impl(reporter: SourceRunReporter | None = None) -> int:
     if not os.environ.get("RENDER_APP_URL"):
         print("error: RENDER_APP_URL is required", file=sys.stderr)
         return 2
@@ -764,6 +765,12 @@ def main() -> int:
         return _main_opportunities()
 
     stats, candidates, discovery_time = discover_candidates()
+    if reporter is not None:
+        reporter.record_inventory(
+            seen=int(stats.get("records", stats.get("candidates", 0)) or 0),
+            in_scope=int(stats.get("candidates", 0) or 0),
+            policy_rejected=int(stats.get("year_rejected", 0) or 0) + int(stats.get("prefilter_rejected", 0) or 0),
+        )
     print(f"PNCP discovery stats: {stats}")
     print(f"PNCP candidates discovered: {len(candidates)}")
 
@@ -821,6 +828,8 @@ def main() -> int:
     stats["processed"] = len(processed)
     stats["ocr_successes"] = sum(1 for r in processed if r.get("worker_result"))
     stats["ocr_failures"] = sum(1 for r in processed if r.get("error"))
+    if reporter is not None:
+        reporter.record_downloads(stats.get("pdfs_downloaded", 0), stats.get("ocr_successes", 0))
     print(f"PNCP processing stats: {stats}")
 
     if candidates and stats["ocr_successes"] == 0:
@@ -832,6 +841,13 @@ def main() -> int:
         return 1
 
     result = submit_candidates(processed)
+    if reporter is not None:
+        counts = result.get("outcome_counts", {})
+        reporter.record_submission_outcomes(
+            inserted=counts.get("inserted", 0), updated=counts.get("updated", 0),
+            reactivated=counts.get("reactivated", 0), duplicates=counts.get("duplicates", 0),
+            errors=counts.get("invalid", 0) + result.get("failed_batches", 0),
+        )
     print(f"Render candidate submission: {result}")
 
     if candidates and result.get("submitted", 0) == 0:
@@ -846,6 +862,27 @@ def main() -> int:
         _save_update_checkpoint(discovery_time)
 
     return 0
+
+
+def main() -> int:
+    reporter = SourceRunReporter(source_key="pncp")
+    result = 1
+    try:
+        with reporter:
+            result = _main_impl(reporter)
+            if result != 0:
+                reporter.record_error("discovery_failed")
+                reporter.complete("failed")
+    except Exception:
+        reporter.record_error("scraping_failed")
+        reporter.complete("failed")
+        raise
+    finally:
+        if reporter.telemetry_failed:
+            # Preserve the primary ingestion result, but make telemetry failure
+            # observable to Actions.
+            result = 1
+    return result
 
 
 if __name__ == "__main__":

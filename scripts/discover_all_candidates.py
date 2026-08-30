@@ -33,8 +33,10 @@ import sys
 from pathlib import Path
 from typing import Any
 
+import audit_source_fidelity
 import pipeline_core
 from scraper_filters import FilterPolicy, VALID_FILTER_POLICIES
+from source_run_reporting import SourceRunReporter
 
 
 SOURCE_MODULES: dict[str, str] = {
@@ -330,6 +332,52 @@ def _resolve_filter_policy() -> FilterPolicy:
     return policy  # type: ignore[return-value]
 
 
+def normalize_inventory_seen(stats: dict[str, Any]) -> int:
+    value = stats.get("inventory_seen", stats.get("records", stats.get("opportunities", stats.get("candidates", 0))))
+    return max(0, int(value or 0))
+
+def normalize_in_scope(stats: dict[str, Any]) -> int:
+    value = stats.get("in_scope", stats.get("candidates", stats.get("opportunities", 0)))
+    return max(0, int(value or 0))
+
+def normalize_policy_rejected(stats: dict[str, Any]) -> int:
+    value = stats.get("policy_rejected")
+    if value is None:
+        value = sum(int(stats.get(key, 0) or 0) for key in ("filtered", "year_rejected", "prefilter_rejected"))
+    return max(0, int(value or 0))
+
+def normalize_stats(stats: dict[str, Any]) -> dict[str, int | bool]:
+    return {
+        "cap_reached": bool(stats.get("candidate_cap_reached") or stats.get("pdf_download_cap_reached") or stats.get("search_result_cap_reached") or stats.get("detail_cap_reached")),
+        "partial_inventory": bool(stats.get("section_parse_failed") or stats.get("inventory_parse_failed")),
+        "parser_failures": sum(int(stats.get(k, 0) or 0) for k in ("section_parse_failed", "inventory_parse_failed", "detail_parse_failures", "detail_parse_failed")),
+        "download_failures": int(stats.get("download_failures", stats.get("search_failures", stats.get("attachment_failures", 0))) or 0),
+        "ocr_failures": int(stats.get("ocr_failures", 0) or 0),
+        "submission_failures": int(stats.get("submission_failures", 0) or 0),
+    }
+
+def normalize_fidelity_blockers(stats: dict[str, Any]) -> int:
+    """Count fatal discovery failures, not a substitute for an offline audit."""
+    return sum(int(stats.get(k, 0) or 0) for k in ("section_parse_failed", "inventory_parse_failed"))
+
+
+def verify_source_fidelity(source: str) -> int:
+    """Run the offline CLI before publishing any terminal audit telemetry."""
+    target = Path(os.environ["DISCOVERY_AUDIT_DIR"]) / source
+    result = audit_source_fidelity.main([
+        "--source-inventory", str(target / "source_inventory.json"),
+        "--discovery", str(target / "discovery.json"),
+        "--out", str(target / "fidelity"),
+    ])
+    if result not in (audit_source_fidelity.EXIT_OK, audit_source_fidelity.EXIT_FAILURE):
+        raise ValueError("Source fidelity verification could not complete")
+    summary = json.loads((target / "fidelity" / "summary.json").read_text(encoding="utf-8"))
+    blockers = summary["total_blocking_exceptions"]
+    if type(blockers) is not int or blockers < 0 or bool(blockers) != bool(result):
+        raise ValueError("Source fidelity verification returned an invalid summary")
+    return blockers
+
+
 def main() -> int:
     audit_only = _env_flag("DISCOVERY_AUDIT_ONLY")
     if not audit_only and not os.environ.get("RENDER_APP_URL"):
@@ -407,185 +455,260 @@ def main() -> int:
             )
             break
 
-        try:
-            discoverer = load_discoverer(source)
-        except UnknownSourceError as exc:
-            print(f"error: {exc}", file=sys.stderr)
-            exit_code = 1
-            continue
-        except ImportError as exc:
-            print(
-                f"error: failed to import discoverer for source {source!r}: {exc}",
-                file=sys.stderr,
-            )
-            exit_code = 1
-            continue
-
-        try:
-            has_structured_only_contract = (
-                source in STRUCTURED_ONLY_SOURCES
-                or (
-                    callable(
-                        getattr(discoverer, "__dict__", {}).get(
-                            "discover_opportunities"
-                        )
-                    )
-                    and not callable(
-                        getattr(discoverer, "__dict__", {}).get(
-                            "discover_candidates"
-                        )
-                    )
-                )
-            )
-            if (
-                not audit_only
-                and source not in opportunity_sources
-                and source not in STRUCTURED_OPPORTUNITY_SOURCES
-                and has_structured_only_contract
-            ):
-                print(
-                    f"error: structured-only source {source!r} requires "
-                    "explicit OPPORTUNITY_SOURCES opt-in",
-                    file=sys.stderr,
-                )
-                per_source_stats[source] = {"errors": 1}
-                exit_code = 1
-                continue
-            opportunity_result = (
-                discover_source_opportunities(discoverer, min_year=min_year)
-                if (
-                    audit_only
-                    or source in opportunity_sources
-                    or source in STRUCTURED_OPPORTUNITY_SOURCES
-                )
-                else None
-            )
-            if opportunity_result is None:
-                source_stats, candidates = discover_source(
-                    discoverer,
-                    filter_policy=filter_policy,
-                    min_year=min_year,
-                    seen_pdfs=shared_seen_pdfs,
-                    seen_ids=shared_seen_ids,
-                )
-                opportunities: list[dict[str, Any]] | None = None
-            else:
-                source_stats, opportunities = opportunity_result
-                candidates = []
-        except Exception as exc:
-            print(
-                f"error: discovery failed for source {source!r}: {exc}",
-                file=sys.stderr,
-            )
-            per_source_stats[source] = {"errors": 1}
-            exit_code = 1
-            continue
-
-        per_source_stats[source] = source_stats
-        if opportunities is not None:
-            write_opportunity_audit(source, source_stats, opportunities)
-        elif audit_only:
-            write_candidate_audit(source, source_stats, candidates)
-        print(
-            f"{source}: discovered "
-            f"{len(opportunities) if opportunities is not None else len(candidates)} "
-            f"{'opportunities' if opportunities is not None else 'candidates'} "
-            f"(stats={source_stats})",
+        reporter = SourceRunReporter(
+            source_key=source,
+            trigger_kind="audit" if audit_only else None,
         )
+        try:
+            with reporter:
+                try:
+                    discoverer = load_discoverer(source)
+                except UnknownSourceError as exc:
+                    print(f"error: {exc}", file=sys.stderr)
+                    exit_code = 1
+                    reporter.record_error("scraping_failed")
+                    reporter.complete(status="failed")
+                    continue
+                except ImportError as exc:
+                    print(
+                        f"error: failed to import discoverer for source {source!r}: {exc}",
+                        file=sys.stderr,
+                    )
+                    exit_code = 1
+                    reporter.record_error("scraping_failed")
+                    reporter.complete(status="failed")
+                    continue
 
-        if (
-            source_stats.get("section_parse_failed", 0)
-            or source_stats.get("inventory_parse_failed", 0)
-        ):
-            print(
-                f"error: discovery reported source/parser failures for {source!r}",
-                file=sys.stderr,
-            )
-            exit_code = 1
-            continue
+                try:
+                    has_structured_only_contract = (
+                        source in STRUCTURED_ONLY_SOURCES
+                        or (
+                            callable(
+                                getattr(discoverer, "__dict__", {}).get(
+                                    "discover_opportunities"
+                                )
+                            )
+                            and not callable(
+                                getattr(discoverer, "__dict__", {}).get(
+                                    "discover_candidates"
+                                )
+                            )
+                        )
+                    )
+                    if (
+                        not audit_only
+                        and source not in opportunity_sources
+                        and source not in STRUCTURED_OPPORTUNITY_SOURCES
+                        and has_structured_only_contract
+                    ):
+                        print(
+                            f"error: structured-only source {source!r} requires "
+                            "explicit OPPORTUNITY_SOURCES opt-in",
+                            file=sys.stderr,
+                        )
+                        per_source_stats[source] = {"errors": 1}
+                        exit_code = 1
+                        reporter.record_error("submission_failed")
+                        reporter.complete(status="failed")
+                        continue
+                    opportunity_result = (
+                        discover_source_opportunities(discoverer, min_year=min_year)
+                        if (
+                            audit_only
+                            or source in opportunity_sources
+                            or source in STRUCTURED_OPPORTUNITY_SOURCES
+                        )
+                        else None
+                    )
+                    if opportunity_result is None:
+                        source_stats, candidates = discover_source(
+                            discoverer,
+                            filter_policy=filter_policy,
+                            min_year=min_year,
+                            seen_pdfs=shared_seen_pdfs,
+                            seen_ids=shared_seen_ids,
+                        )
+                        opportunities: list[dict[str, Any]] | None = None
+                    else:
+                        source_stats, opportunities = opportunity_result
+                        candidates = []
+                except Exception as exc:
+                    print(
+                        f"error: discovery failed for source {source!r}: {exc}",
+                        file=sys.stderr,
+                    )
+                    per_source_stats[source] = {"errors": 1}
+                    exit_code = 1
+                    reporter.record_error("scraping_failed")
+                    reporter.complete(status="failed")
+                    continue
 
-        if audit_only:
-            per_source_processed[source] = 0
-            per_source_submitted[source] = 0
-            continue
+                per_source_stats[source] = source_stats
+                reporter.record_inventory(normalize_inventory_seen(source_stats), normalize_in_scope(source_stats), normalize_policy_rejected(source_stats))
+                reporter.metrics.stats.update(normalize_stats(source_stats))
+                reporter.record_fidelity_blockers(normalize_fidelity_blockers(source_stats))
+                if opportunities is not None:
+                    write_opportunity_audit(source, source_stats, opportunities)
+                elif audit_only:
+                    write_candidate_audit(source, source_stats, candidates)
+                print(
+                    f"{source}: discovered "
+                    f"{len(opportunities) if opportunities is not None else len(candidates)} "
+                    f"{'opportunities' if opportunities is not None else 'candidates'} "
+                    f"(stats={source_stats})",
+                )
 
-        if opportunities is not None:
-            processed_opportunities = [
-                pipeline_core.process_opportunity(
-                    opportunity,
+                if (
+                    source_stats.get("section_parse_failed", 0)
+                    or source_stats.get("inventory_parse_failed", 0)
+                ):
+                    print(
+                        f"error: discovery reported source/parser failures for {source!r}",
+                        file=sys.stderr,
+                    )
+                    exit_code = 1
+                    reporter.record_error("inventory_parse_failed")
+                    reporter.complete(status="failed")
+                    continue
+
+                if audit_only:
+                    per_source_processed[source] = 0
+                    per_source_submitted[source] = 0
+                    try:
+                        blockers = verify_source_fidelity(source)
+                    except Exception as exc:
+                        print(f"error: fidelity verification failed for {source!r}: {exc}", file=sys.stderr)
+                        reporter.record_fidelity_blockers(1)
+                        reporter.record_error("fidelity_violation")
+                        reporter.complete(status="failed")
+                        exit_code = 1
+                        continue
+                    reporter.record_fidelity_blockers(blockers)
+                    if blockers:
+                        reporter.record_error("fidelity_violation")
+                        reporter.complete(status="failed")
+                        exit_code = 1
+                    continue
+
+                if opportunities is not None:
+                    processed_opportunities = [
+                        pipeline_core.process_opportunity(
+                            opportunity,
+                            extractor=extractor,
+                            stats=shared_stats,
+                        )
+                        for opportunity in opportunities
+                    ]
+                    per_source_processed[source] = len(processed_opportunities)
+                    reporter.record_downloads(
+                        sum(1 for item in processed_opportunities for d in item.get("documents", []) if d.get("is_renderable")),
+                        sum(1 for item in processed_opportunities for d in item.get("documents", []) if d.get("extracted_markdown")),
+                    )
+                    reporter.metrics.stats.update(normalize_stats({**source_stats, **shared_stats}))
+                    try:
+                        submit_result = pipeline_core.submit_opportunities(
+                            processed_opportunities
+                        )
+                    except Exception as exc:
+                        print(
+                            f"error: opportunity submission failed for {source!r}: {exc}",
+                            file=sys.stderr,
+                        )
+                        exit_code = 1
+                        reporter.record_error("submission_failed")
+                        reporter.complete(status="failed")
+                        continue
+                    per_source_submitted[source] = submit_result.get("submitted", 0)
+                    counts = submit_result.get("outcome_counts", {})
+                    failures = counts.get("invalid", 0) + submit_result.get("failed", 0)
+                    reporter.record_submission_outcomes(inserted=counts.get("inserted", 0), updated=counts.get("updated", 0), reactivated=counts.get("reactivated", 0), duplicates=counts.get("duplicates", 0), errors=failures)
+                    reporter.metrics.stats["submission_failures"] = failures
+                    print(f"{source}: opportunity submission: {submit_result}")
+                    if failures:
+                        print(f"error: {source} opportunity submission was partial or failed", file=sys.stderr)
+                        exit_code = 1
+                        reporter.metrics.error_code = reporter.metrics.error_code or "submission_failed"
+                        reporter.complete(status="warning" if reporter.metrics.submitted else "failed")
+                    if opportunities and submit_result.get("submitted", 0) == 0:
+                        exit_code = 1
+                        if not failures:
+                            reporter.record_error("submission_failed")
+                            reporter.complete(status="failed")
+                    continue
+
+                if not candidates:
+                    continue
+
+                processed = process_source_candidates(
+                    candidates,
                     extractor=extractor,
                     stats=shared_stats,
                 )
-                for opportunity in opportunities
-            ]
-            per_source_processed[source] = len(processed_opportunities)
-            try:
-                submit_result = pipeline_core.submit_opportunities(
-                    processed_opportunities
+                per_source_processed[source] = sum(
+                    1 for r in processed if r.get("worker_result")
                 )
-            except Exception as exc:
-                print(
-                    f"error: opportunity submission failed for {source!r}: {exc}",
-                    file=sys.stderr,
-                )
+
+                ocr_successes = per_source_processed[source]
+                if candidates and ocr_successes == 0:
+                    print(
+                        f"error: all {source} candidates failed download/OCR; "
+                        "nothing will be submitted for this source",
+                        file=sys.stderr,
+                    )
+                    exit_code = 1
+                    reporter.record_error("download_failed")
+                    reporter.complete(status="failed")
+                    continue
+
+                reporter.record_downloads(ocr_successes, ocr_successes)
+                try:
+                    submit_result = pipeline_core.submit_candidates(
+                        processed, source=source,
+                    )
+                except Exception as exc:
+                    print(
+                        f"error: submission failed for source {source!r}: {exc}",
+                        file=sys.stderr,
+                    )
+                    exit_code = 1
+                    reporter.metrics.stats["submission_failures"] = 1
+                    reporter.record_error("submission_failed")
+                    reporter.complete(status="failed")
+                    continue
+
+                per_source_submitted[source] = submit_result.get("submitted", 0)
+                counts = submit_result.get("outcome_counts", {})
+                reporter.record_submission_outcomes(inserted=counts.get("inserted", 0), updated=counts.get("updated", 0), reactivated=counts.get("reactivated", 0), duplicates=counts.get("duplicates", 0), errors=counts.get("invalid", 0) + submit_result.get("failed_batches", 0))
+                reporter.metrics.stats.update(normalize_stats({**source_stats, **shared_stats}))
+                print(f"{source}: render submission: {submit_result}")
+
+                if submit_result.get("failed_batches", 0) > 0:
+                    print(
+                        f"error: {source} candidate submission was partial or failed",
+                        file=sys.stderr,
+                    )
+                    exit_code = 1
+                    reporter.record_error("submission_failed")
+                    if submit_result.get("submitted", 0) == 0:
+                        reporter.complete(status="failed")
+                if candidates and submit_result.get("submitted", 0) == 0:
+                    print(
+                        f"error: discovered {source} candidates produced no "
+                        "Render submissions",
+                        file=sys.stderr,
+                    )
+                    exit_code = 1
+                    reporter.record_error("submission_failed")
+                    if submit_result.get("submitted", 0) == 0:
+                        reporter.complete(status="failed")
+
+        except Exception:
+            reporter.record_error("scraping_failed")
+            reporter.complete(status="failed")
+            exit_code = 1
+        finally:
+            if reporter.telemetry_failed:
                 exit_code = 1
-                continue
-            per_source_submitted[source] = submit_result.get("submitted", 0)
-            print(f"{source}: opportunity submission: {submit_result}")
-            if opportunities and submit_result.get("submitted", 0) == 0:
-                exit_code = 1
-            continue
-
-        if not candidates:
-            continue
-
-        processed = process_source_candidates(
-            candidates,
-            extractor=extractor,
-            stats=shared_stats,
-        )
-        per_source_processed[source] = sum(
-            1 for r in processed if r.get("worker_result")
-        )
-
-        ocr_successes = per_source_processed[source]
-        if candidates and ocr_successes == 0:
-            print(
-                f"error: all {source} candidates failed download/OCR; "
-                "nothing will be submitted for this source",
-                file=sys.stderr,
-            )
-            exit_code = 1
-            continue
-
-        try:
-            submit_result = pipeline_core.submit_candidates(
-                processed, source=source,
-            )
-        except Exception as exc:
-            print(
-                f"error: submission failed for source {source!r}: {exc}",
-                file=sys.stderr,
-            )
-            exit_code = 1
-            continue
-
-        per_source_submitted[source] = submit_result.get("submitted", 0)
-        print(f"{source}: render submission: {submit_result}")
-
-        if submit_result.get("failed_batches", 0) > 0:
-            print(
-                f"error: {source} candidate submission was partial or failed",
-                file=sys.stderr,
-            )
-            exit_code = 1
-        if candidates and submit_result.get("submitted", 0) == 0:
-            print(
-                f"error: discovered {source} candidates produced no "
-                "Render submissions",
-                file=sys.stderr,
-            )
-            exit_code = 1
 
     print(f"shared_stats={shared_stats}")
     print(f"per_source_stats={per_source_stats}")

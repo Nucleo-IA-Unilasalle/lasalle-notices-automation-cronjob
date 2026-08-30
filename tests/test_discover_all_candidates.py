@@ -19,7 +19,43 @@ import pytest
 from conftest import make_response  # noqa: F401  (re-exported for fixture reuse)
 
 
+@pytest.fixture(autouse=True)
+def reset_telemetry_breaker():
+    import source_run_reporting as reporting
+    reporting._process_breaker = reporting._TelemetryCircuitBreaker()
+
+
 SCRIPTS_DIR = "scripts"
+
+
+def test_stats_adapters_match_candidate_discoverer_shape() -> None:
+    from discover_all_candidates import normalize_inventory_seen, normalize_in_scope, normalize_policy_rejected, normalize_stats
+    stats = {"candidates": 3, "year_rejected": 2, "prefilter_rejected": 1, "ocr_failures": 1, "pdf_download_cap_reached": 1}
+    assert normalize_inventory_seen(stats) == 3
+    assert normalize_in_scope(stats) == 3
+    assert normalize_policy_rejected(stats) == 3
+    assert normalize_stats(stats)["cap_reached"] is True
+    assert normalize_stats(stats)["ocr_failures"] == 1
+
+
+def test_stats_adapters_keep_structured_inventory_distinct() -> None:
+    from discover_all_candidates import normalize_inventory_seen, normalize_in_scope, normalize_policy_rejected
+    stats = {"records": 9, "opportunities": 4, "year_rejected": 2, "prefilter_rejected": 1}
+    assert normalize_inventory_seen(stats) == 9
+    assert normalize_in_scope(stats) == 4
+    assert normalize_policy_rejected(stats) == 3
+
+
+def test_remaining_stats_adapters_and_fidelity_mapping() -> None:
+    from discover_all_candidates import normalize_fidelity_blockers, normalize_stats
+    stats = {"section_parse_failed": 1, "inventory_parse_failed": 2,
+             "download_failures": 3, "submission_failures": 4,
+             "detail_parse_failures": 5}
+    normalized = normalize_stats(stats)
+    assert normalized["parser_failures"] == 8
+    assert normalized["download_failures"] == 3
+    assert normalized["submission_failures"] == 4
+    assert normalize_fidelity_blockers(stats) == 3
 
 
 # ---------------------------------------------------------------------------
@@ -526,6 +562,60 @@ def _processed(url: str, *, ok: bool = True) -> dict[str, Any]:
 
 
 class TestMainOrchestration:
+    def test_telemetry_failure_preserves_ingestion_but_propagates_exit_code(self) -> None:
+        from discover_all_candidates import main
+        _stub_ocr_modules()
+        d = MagicMock(); candidate = _candidate("https://x/a.pdf", "bndes")
+        env = {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "tok",
+               "SOURCES": "bndes", "SOURCE_RUN_REPORTING_ENABLED": "true"}
+        with patch.dict(os.environ, env, clear=True), patch("discover_all_candidates.load_discoverer", return_value=d), patch("discover_all_candidates.discover_source", return_value=({"candidates": 1}, [candidate])), patch("discover_all_candidates.process_source_candidates", return_value=[_processed(candidate["url"])]), patch("discover_all_candidates.pipeline_core.submit_candidates", return_value={"submitted": 1, "failed_batches": 0}), patch("discover_all_candidates.pipeline_core.make_default_ocr_extractor", return_value=(MagicMock(), MagicMock())), patch("source_run_reporting.requests.post", side_effect=__import__('requests').ConnectionError), patch("source_run_reporting.time.sleep"):
+            assert main() != 0
+
+    def test_discovery_failure_is_reported_as_failed(self) -> None:
+        from discover_all_candidates import main
+        _stub_ocr_modules(); d = MagicMock()
+        env = {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "tok", "SOURCES": "bndes", "SOURCE_RUN_REPORTING_ENABLED": "true"}
+        start = MagicMock(status_code=201); start.json.return_value = {"id": "r"}
+        finish = MagicMock(status_code=200); finish.json.return_value = {"status": "failed"}
+        with patch.dict(os.environ, env, clear=True), patch("discover_all_candidates.load_discoverer", return_value=d), patch("discover_all_candidates.discover_source", side_effect=RuntimeError("boom")), patch("discover_all_candidates.pipeline_core.make_default_ocr_extractor", return_value=(MagicMock(), MagicMock())), patch("source_run_reporting.requests.post", return_value=start), patch("source_run_reporting.requests.patch", return_value=finish) as p:
+            assert main() == 1
+        assert p.call_args.kwargs["json"]["status"] == "failed"
+        assert p.call_args.kwargs["json"]["error_code"] == "scraping_failed"
+
+    def test_parser_failure_is_reported_failed_not_warning(self) -> None:
+        from discover_all_candidates import main
+        _stub_ocr_modules(); d = MagicMock(); env = {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "tok", "SOURCES": "bndes", "SOURCE_RUN_REPORTING_ENABLED": "true"}
+        start = MagicMock(status_code=201); start.json.return_value = {"id": "r"}; finish = MagicMock(status_code=200); finish.json.return_value = {"status": "failed"}
+        with patch.dict(os.environ, env, clear=True), patch("discover_all_candidates.load_discoverer", return_value=d), patch("discover_all_candidates.discover_source", return_value=({"candidates": 0, "section_parse_failed": 1}, [])), patch("discover_all_candidates.pipeline_core.make_default_ocr_extractor", return_value=(MagicMock(), MagicMock())), patch("source_run_reporting.requests.post", return_value=start), patch("source_run_reporting.requests.patch", return_value=finish) as p:
+            assert main() == 1
+        assert p.call_args.kwargs["json"]["status"] == "failed"
+
+    def test_cap_skipped_sources_do_not_open_source_runs(self) -> None:
+        from discover_all_candidates import main
+        import pipeline_core
+        original = pipeline_core.SCRAPE_MAX_PDFS_PER_RUN; pipeline_core.SCRAPE_MAX_PDFS_PER_RUN = 0
+        try:
+            env = {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "tok", "SOURCES": "bndes,brde", "SOURCE_RUN_REPORTING_ENABLED": "true"}
+            with patch.dict(os.environ, env, clear=True), patch("discover_all_candidates.pipeline_core.make_default_ocr_extractor", return_value=(MagicMock(), MagicMock())), patch("source_run_reporting.requests.post") as post:
+                main()
+            post.assert_not_called()
+        finally: pipeline_core.SCRAPE_MAX_PDFS_PER_RUN = original
+
+    def test_submission_counts_map_invalid_and_failed_batches_to_errors(self) -> None:
+        from discover_all_candidates import main
+        _stub_ocr_modules(); c = _candidate("https://x/a.pdf", "bndes"); env = {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "tok", "SOURCES": "bndes", "SOURCE_RUN_REPORTING_ENABLED": "true"}
+        start = MagicMock(status_code=201); start.json.return_value = {"id": "r"}; finish = MagicMock(status_code=200); finish.json.return_value = {"status": "warning"}
+        with patch.dict(os.environ, env, clear=True), patch("discover_all_candidates.load_discoverer", return_value=MagicMock()), patch("discover_all_candidates.discover_source", return_value=({"candidates": 1}, [c])), patch("discover_all_candidates.process_source_candidates", return_value=[_processed(c["url"])]), patch("discover_all_candidates.pipeline_core.submit_candidates", return_value={"submitted": 1, "failed_batches": 1, "outcome_counts": {"invalid": 2}}), patch("discover_all_candidates.pipeline_core.make_default_ocr_extractor", return_value=(MagicMock(), MagicMock())), patch("source_run_reporting.requests.post", return_value=start), patch("source_run_reporting.requests.patch", return_value=finish) as p:
+            assert main() == 1
+        body = p.call_args.kwargs["json"]; assert body["errors"] == 4 and body["status"] == "warning"
+
+    def test_flag_off_does_not_call_telemetry(self) -> None:
+        from discover_all_candidates import main
+        _stub_ocr_modules(); env = {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "tok", "SOURCES": "bndes"}
+        with patch.dict(os.environ, env, clear=True), patch("discover_all_candidates.discover_source", return_value=({"candidates": 0}, [])), patch("discover_all_candidates.pipeline_core.make_default_ocr_extractor", return_value=(MagicMock(), MagicMock())), patch("source_run_reporting.requests.post") as post:
+            assert main() == 0
+        post.assert_not_called()
+
     def test_ibama_requires_explicit_structured_opt_in_for_submission(self) -> None:
         from discover_all_candidates import main
 

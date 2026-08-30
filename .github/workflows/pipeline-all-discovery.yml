@@ -75,6 +75,7 @@ jobs:
         env:
           RENDER_APP_URL: ${{ secrets.RENDER_APP_URL }}
           PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}
+          SOURCE_RUN_REPORTING_ENABLED: ${{ vars.SOURCE_RUN_REPORTING_ENABLED || 'false' }}
           SOURCES: ${{ env.DISCOVERY_SOURCES }}
           FILTER_POLICY: ${{ env.DISCOVERY_FILTER_POLICY }}
           MIN_NOTICE_YEAR: ${{ env.DISCOVERY_MIN_NOTICE_YEAR }}

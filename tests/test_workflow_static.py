@@ -96,7 +96,7 @@ def _uses_values(document: dict[str, Any]) -> list[str]:
 
 
 def test_all_workflows_parse_with_read_only_permissions_and_concurrency() -> None:
-    assert len(WORKFLOWS) == 25
+    assert len(WORKFLOWS) == 26
     for path in WORKFLOWS:
         document = _load(path)
         assert document["permissions"] == {"contents": "read"}, path.name
@@ -127,6 +127,21 @@ def test_canonical_schedule_has_no_duplicate_source_fallbacks() -> None:
             assert crons == [SCHEDULES[path.name]], path.name
         elif path.name in MANUAL_SOURCE_FALLBACKS:
             assert crons == [], path.name
+
+
+def test_instrumented_entrypoints_use_default_off_repository_telemetry_flag() -> None:
+    instrumented = {
+        "pipeline-all-discovery.yml": "python scripts/discover_all_candidates.py",
+        "pipeline-pncp-discovery.yml": "python scripts/discover_pncp_candidates.py",
+    }
+    expected = "${{ vars.SOURCE_RUN_REPORTING_ENABLED || 'false' }}"
+    for name, command in instrumented.items():
+        document = _load(WORKFLOW_DIR / name)
+        steps = [step for job in document["jobs"].values() for step in job["steps"]]
+        matching = [step for step in steps if step.get("run") == command]
+        assert len(matching) == 1, name
+        assert matching[0]["env"]["SOURCE_RUN_REPORTING_ENABLED"] == expected, name
+        assert _env_values(document, "SOURCE_RUN_REPORTING_ENABLED") == [expected], name
 
 
 def test_pdf_workflows_declare_the_per_run_safety_cap() -> None:

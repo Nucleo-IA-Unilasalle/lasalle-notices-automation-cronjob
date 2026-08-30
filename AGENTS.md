@@ -18,7 +18,7 @@ FastAPI service.
 ## Local Contracts
 
 - Repo A has no URL-level API version prefix. The deployed `APP_VERSION` identifies the backend deployment; worker compatibility is defined by Repo A's deployed OpenAPI artifact and worker-facing Pydantic models, not by a Repo B version.
-- The current coordinated Repo A baseline is `master` commit `f8762de3d45d8301a0836074f0af74eedd3a97ea`. If the deployed contract moves, verify the worker against the new Repo A commit and update this reference.
+- The source-transparency contract target is Repo A commit `a0f4175731f0fa4b3e0007b4d7f0348203847770`. This is a tested code target, not a claim that it is deployed. Verify the live OpenAPI contract and seeded catalog before enabling telemetry; if the target moves, rerun the compatibility checks and update this reference.
 - Candidate submissions use authenticated `POST /api/pipeline/candidates` with `Authorization: Bearer $PIPELINE_SECRET` and the `source` plus `candidates` payload defined by Repo A.
 - Structured submissions use authenticated `POST /api/pipeline/opportunities`. The worker must preserve source identity, timezone-aware timestamps, normalized source Markdown, SHA-256 content hashes, and validated document metadata. Documentless submissions remain disabled on Repo A by default until the deployment flag is coordinated.
 - OCR claim, renew, complete, and fail requests use the same Bearer pipeline secret plus the claim token required by Repo A. Do not invent alternate headers or endpoint paths.
@@ -44,3 +44,29 @@ FastAPI service.
 This repository currently has no child `AGENTS.md` files. Keep this root
 contract current when adding a durable documentation, workflow, or test
 boundary.
+
+## Telemetry
+
+- `scripts/source_run_reporting.py` implements the `contract_version=1` source
+  run protocol: authenticated `POST /api/pipeline/source-runs` followed by a
+  `PATCH` of the returned run. It reports inventory, scope, policy rejection,
+  downloads/OCR, submission outcomes, errors, fidelity blockers, and the v1
+  stats allowlist shared with the backend.
+- Audit-only orchestration runs the offline fidelity verifier against its
+  inventory/discovery artifacts before terminal telemetry. Blocking findings
+  or an incomplete verifier fail closed; parser counters alone are not proof
+  that an audit passed. Structured submission failures use the submitter's
+  `failed` count; candidate submissions use `failed_batches`.
+- `SOURCE_RUN_REPORTING_ENABLED` defaults to `false` and is the rollback lever;
+  disabled telemetry does not change ingestion. `RENDER_APP_URL` and
+  `PIPELINE_SECRET` configure callbacks.
+- The canonical all-source and PNCP discovery workflows read the telemetry
+  flag from the GitHub repository variable of the same name. Enable it only
+  after Repo A's source-run contract and source catalog are deployed and
+  verified; older standalone discoverers do not report source runs.
+
+## Worker CI
+
+- `.github/workflows/ci.yml` is the Worker CI workflow. The repository has 26
+  workflows and runs the offline Python 3.13 test suite with read-only
+  permissions, pinned actions, bounded concurrency, and a 20-minute timeout.

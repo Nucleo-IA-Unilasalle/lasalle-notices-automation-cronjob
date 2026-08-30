@@ -292,6 +292,25 @@ class TestSubmitCandidates:
         body = mock_post.call_args.kwargs["json"]
         assert body["source"] == "pncp"
 
+    def test_aggregates_outcomes_across_batches(self, monkeypatch) -> None:
+        monkeypatch.setenv("RENDER_APP_URL", "https://r.example.com")
+        monkeypatch.setenv("PIPELINE_SECRET", "tok")
+        responses = []
+        for counts in ({"inserted": 1, "updated": 2}, {"inserted": 3, "duplicates": 4}):
+            r = MagicMock(status_code=200); r.json.return_value = {"outcome_counts": counts}; responses.append(r)
+        candidates = [_valid_candidate(f"https://example.com/{i}.pdf") for i in range(6)]
+        with patch("pipeline_core.requests.post", side_effect=responses) as post:
+            result = pipeline_core.submit_candidates(candidates, source="bndes")
+        assert post.call_count == 2
+        assert result["outcome_counts"] == {"inserted": 4, "updated": 2, "reactivated": 0, "duplicates": 4, "invalid": 0}
+
+    def test_singular_duplicate_is_canonicalized(self, monkeypatch) -> None:
+        monkeypatch.setenv("RENDER_APP_URL", "https://r.example.com"); monkeypatch.setenv("PIPELINE_SECRET", "tok")
+        r = MagicMock(status_code=200); r.json.return_value = {"outcome_counts": {"duplicate": 2}}
+        with patch("pipeline_core.requests.post", return_value=r):
+            result = pipeline_core.submit_candidates([_valid_candidate()], source="bndes")
+        assert result["outcome_counts"]["duplicates"] == 2
+
     def test_http_200_invalid_item_outcome_is_a_failed_submission(self) -> None:
         response = MagicMock()
         response.status_code = 200

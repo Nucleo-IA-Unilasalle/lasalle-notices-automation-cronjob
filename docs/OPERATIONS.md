@@ -69,9 +69,9 @@ manual-only operational paths. They are not part of the hourly discovery
 schedule and should be used only for controlled rollback, audit, or backlog
 drain work.
 
-Post-fix inventory: this checkout contains 25 workflow files, all 25 with an
-explicit job timeout; 12 are scheduled and 13 are manual-only after duplicate
-schedule removal.
+Post-fix inventory: this checkout contains 26 workflow files, all with an
+explicit job timeout; 12 are scheduled, 13 are manual-only, and Worker CI runs
+on pushes and pull requests after duplicate schedule removal.
 
 ## Monitoring
 
@@ -114,6 +114,37 @@ Do not disable or re-enable one of the eight per-source schedules: those
 workflows are manual fallbacks, while `pipeline-all-discovery.yml` owns their
 hourly schedule.
 
+### Source-run telemetry rollout
+
+Deploy Repo A's source-run endpoints and database migrations first. Seed and
+verify stable source keys for the PNCP source and every source selected in the
+unified orchestrator; a source need not be activated merely to receive telemetry.
+Confirm the existing `RENDER_APP_URL` and `PIPELINE_SECRET` secrets target that
+deployment. The worker production branch is `main`.
+
+The `pipeline-all-discovery.yml` and `pipeline-pncp-discovery.yml` workflows
+pass the repository variable `SOURCE_RUN_REPORTING_ENABLED` into their
+instrumented Python entrypoints, defaulting to `false`. Standalone per-source
+discoverers are not instrumented and are not made observable by this toggle.
+After deploying compatible code in both repositories, enable reporting with:
+
+```powershell
+gh variable set SOURCE_RUN_REPORTING_ENABLED --body true --repo Nucleo-IA-Unilasalle/lasalle-notices-automation-cronjob
+gh workflow run pipeline-all-discovery.yml --ref main -f sources=bndes -f audit_only=true --repo Nucleo-IA-Unilasalle/lasalle-notices-automation-cronjob
+```
+
+Verify that the no-submit canary creates and completes one source run, and
+inspect its fidelity artifact and public metrics before relying on production
+health indicators. Enabling the repository flag also affects subsequent
+scheduled PNCP/unified runs. It does not approve or activate a source and does
+not replace the two reviewed clean audit runs required for activation.
+
+To roll back telemetry without stopping ingestion:
+
+```powershell
+gh variable set SOURCE_RUN_REPORTING_ENABLED --body false --repo Nucleo-IA-Unilasalle/lasalle-notices-automation-cronjob
+```
+
 ## Environment variables
 
 ### GitHub Actions (PNCP discovery)
@@ -122,6 +153,7 @@ hourly schedule.
 |----------|---------|-------------|
 | `RENDER_APP_URL` | (required) | Render service base URL |
 | `PIPELINE_SECRET` | (required) | Bearer token for Render API |
+| `SOURCE_RUN_REPORTING_ENABLED` | `false` | GitHub repository variable enabling source-run callbacks in PNCP and unified discovery workflows |
 | `PNCP_UPDATE_CHECKPOINT_PATH` | `.cache/pncp-last-successful-update.json` | Checkpoint file path |
 | `PNCP_MIN_NOTICE_YEAR` | `2026` | Earliest `anoCompra` eligible for processing |
 | `PNCP_MAX_CANDIDATES_PER_RUN` | `50` | Maximum candidates discovered in one Actions run |
@@ -405,6 +437,14 @@ Manual runs of `pipeline-all-discovery.yml` default to
 `DISCOVERY_AUDIT_ONLY=true`, which skips OCR and all Render submissions. After
 two reviewed passing runs, add the source key to the `OPPORTUNITY_SOURCES`
 repository variable to opt it into the structured submission contract.
+
+Audit-only orchestration verifies the emitted inventory/discovery artifacts
+in-process before reporting terminal source-run telemetry. Fidelity blockers
+produce a failed run with the actual blocker count; invalid inputs or verifier
+errors also fail closed and cannot reuse an earlier passing report. Reports
+are written under each source's `fidelity/` directory. Submission exceptions
+and partial structured submissions return a nonzero workflow exit code;
+partial acceptance is reported as `warning`, not `success`.
 
 FINEP uses API item `id`; FBDS uses the portal record identity; DOPA uses
 `idConteudo` (falling back to detail `protocolo`); TNC uses the
