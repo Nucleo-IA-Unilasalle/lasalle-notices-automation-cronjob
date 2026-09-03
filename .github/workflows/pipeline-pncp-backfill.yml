@@ -4,28 +4,33 @@ on:
   workflow_dispatch:
     inputs:
       claim_limit:
-        description: "Maximum active pending PNCP candidates to claim"
+        description: "Candidates to claim (1-100; must be <= process_limit)"
         required: false
-        default: "5"
+        default: "1"
+        type: number
       process_limit:
-        description: "Maximum claimed candidates to download/OCR"
+        description: "Candidates to process (1-100; must be >= claim_limit)"
         required: false
-        default: "5"
+        default: "1"
+        type: number
+
+permissions:
+  contents: read
 
 concurrency:
-  group: pncp-backfill
+  group: pipeline-trigger
   cancel-in-progress: false
 
 jobs:
   backfill-pncp:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 80
     steps:
       - name: Checkout scheduler repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: "3.13"
           cache: pip
@@ -52,6 +57,6 @@ jobs:
           KREUZBERG_PADDLE_MODEL_TIER: "tiny"
           KREUZBERG_USE_GPU: "false"
           KREUZBERG_FORCE_OCR_DEFAULT: "false"
-          KREUZBERG_EXTRACTION_TIMEOUT_SECONDS: "120"
+          KREUZBERG_EXTRACTION_TIMEOUT_SECONDS: "300"
           FLAGS_use_mkldnn: "0"
           PADDLE_PDX_ENABLE_MKLDNN_BYDEFAULT: "0"

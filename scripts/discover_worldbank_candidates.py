@@ -286,7 +286,6 @@ def discover_candidates(
     """
     stats: dict[str, int] = {
         "listings_fetched": 0,
-        "details_fetched": 0,
         "candidates": 0,
         "prefilter_rejected": 0,
         "year_rejected": 0,
@@ -321,7 +320,6 @@ def discover_candidates(
     pdf_urls: list[str] = []
     if listing_html is not None:
         pdf_urls = extract_worldbank_pdf_urls(listing_html, WORLDBANK_LISTING_URL)
-        stats["details_fetched"] += 1
 
     if not pdf_urls:
         stats["playwright_fallback_used"] = 1

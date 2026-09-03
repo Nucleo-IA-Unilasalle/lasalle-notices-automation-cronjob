@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns="http://purl.org/rss/1.0/">
+  <channel><title>Chamamentos Públicos</title><link>https://www.gov.br/ibama/pt-br/acesso-a-informacao/editais-e-convites/chamamentos-publicos</link>
+    <item rdf:about="https://www.gov.br/ibama/pt-br/assuntos/notas/2026/orientacoes-sobre-o-edital-de-chamamento-publico-no-22-2026-2013-credenciamento-de-projetos-para-recuperacao-de-vegetacao-nativa"><title>Orientações sobre o Edital nº 22/2026</title><link>https://www.gov.br/ibama/pt-br/assuntos/notas/2026/orientacoes-sobre-o-edital-de-chamamento-publico-no-22-2026-2013-credenciamento-de-projetos-para-recuperacao-de-vegetacao-nativa</link><dc:date>2026-07-08T21:08:00Z</dc:date></item>
+    <item rdf:about="https://www.gov.br/ibama/pt-br/assuntos/notas/2026/resultado-do-edital-22-2026"><title>Resultado do Edital nº 22/2026</title><link>https://www.gov.br/ibama/pt-br/assuntos/notas/2026/resultado-do-edital-22-2026</link><dc:date>2026-10-01T12:00:00Z</dc:date></item>
+  </channel>
+</rdf:RDF>

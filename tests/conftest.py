@@ -32,9 +32,11 @@ import pytest
 import requests
 
 
-SCRIPTS_DIR = Path(__file__).resolve().parent.parent / "scripts"
-if str(SCRIPTS_DIR) not in sys.path:
-    sys.path.insert(0, str(SCRIPTS_DIR))
+REPO_ROOT = Path(__file__).resolve().parent.parent
+SCRIPTS_DIR = REPO_ROOT / "scripts"
+for import_path in (REPO_ROOT, SCRIPTS_DIR):
+    if str(import_path) not in sys.path:
+        sys.path.insert(0, str(import_path))
 
 
 ResponseLike = Union[MagicMock, Exception]
@@ -132,22 +134,32 @@ def patch_request_with_safe_redirects(
 
 
 _TRACKED_MODULES = (
-    "discover_bndes_candidates",
     "pipeline_core",
-    "discover_pncp_candidates",
+    "discover_bndes_candidates",
+    "discover_brde_candidates",
+    "discover_fao_candidates",
+    "discover_fapergs_candidates",
+    "discover_fbds_opportunities",
+    "discover_finep_opportunities",
+    "discover_dopa_opportunities",
+    "discover_canoas_opportunities",
+    "discover_ibama_candidates",
+    "discover_funbio_candidates",
+    "discover_funbio_news_leads",
+    "discover_fundacao_grupo_boticario_candidates",
+    "discover_govbr_mma_candidates",
     "discover_govbr_mma_public_calls_candidates",
     "discover_govbr_mma_fnma_candidates",
+    "discover_iis_rio_candidates",
+    "discover_kfw_candidates",
+    "discover_msgov_candidates",
+    "discover_pncp_candidates",
+    "discover_sema_rs_candidates",
+    "discover_tnc_candidates",
+    "discover_unep_candidates",
+    "discover_worldbank_candidates",
+    "discover_wwf_candidates",
 )
-_TRACKED_ENV_VARS = (
-    "BNDES_MIN_NOTICE_YEAR",
-    "SCRAPE_MAX_PDF_BYTES",
-    "SCRAPE_MAX_PDFS_PER_RUN",
-    "GOVBR_MMA_FNMA_INCLUDE_TDR",
-    "GOVBR_MMA_PUBLIC_CALLS_MIN_NOTICE_YEAR",
-    "GOVBR_MMA_FNMA_MIN_NOTICE_YEAR",
-)
-
-
 @pytest.fixture(autouse=True)
 def reset_module_env() -> None:
     """Restore env-driven module constants between tests.
@@ -163,9 +175,15 @@ def reset_module_env() -> None:
     (so test files that never import ``discover_bndes_candidates`` are
     not forced to import it just to satisfy the fixture).
     """
+    original_env = dict(os.environ)
     yield
-    for env_var in _TRACKED_ENV_VARS:
+    # Restore the complete environment, not only the historical allowlist.
+    # This also catches direct ``os.environ[...] = ...`` mutations and newly
+    # added import-time settings that would otherwise leak into later tests.
+    for env_var in set(os.environ) - set(original_env):
         os.environ.pop(env_var, None)
+    for env_var, value in original_env.items():
+        os.environ[env_var] = value
     for module_name in _TRACKED_MODULES:
         if module_name not in sys.modules:
             continue

@@ -52,6 +52,7 @@ class MarkdownConverter:
             language=self.ocr_config.language,
             model_tier=self.ocr_config.model_tier,
             use_gpu=self.ocr_config.use_gpu,
+            max_pages=self.ocr_config.max_pages,
         )
 
     def add_page_counters(self) -> None:

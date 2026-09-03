@@ -1,0 +1,29 @@
+{
+  "tituloEdicao": "Edicao Ordinaria 7830",
+  "cabecalhoPrincipal": "Orgao de Divulgacao do Municipio - Edicao 7830",
+  "dataDivulgacao": "Divulgacao: quarta-feira, 19 de agosto de 2026",
+  "dataPublicacao": "Publicacao: quinta-feira, 20 de agosto de 2026",
+  "hierarquiaPoderSecao": "Executivo - EDITAIS",
+  "hierarquiaTipoConteudo": "Editais",
+  "hierarquiaOrgao": "Secretaria Municipal do Meio Ambiente",
+  "protocolo": 9001,
+  "textoConteudo": "<div><strong>EDITAL 010/2026</strong></div><p>Chamamento Publico para Apoio a Projetos Ambientais.</p><p>Inscricoes abertas ate 30/09/2026.</p>",
+  "linkDiarioCompleto": "/api/diarios/edicao/6154/download?tipo=executivo",
+  "anexos": [
+    {
+      "texto": "Anexo I - Edital completo",
+      "url": "https://dopaonlineupload.procempa.com.br/dopaonlineupload/6154_ce_9001_1.pdf"
+    },
+    {
+      "texto": "Resultado final",
+      "url": "https://dopaonlineupload.procempa.com.br/dopaonlineupload/6154_ce_9001_2.pdf"
+    },
+    {
+      "texto": "Modelo de formulario",
+      "url": "https://dopaonlineupload.procempa.com.br/dopaonlineupload/6154_ce_9001_3.docx"
+    }
+  ],
+  "assinatura": {
+    "status": "VALIDA"
+  }
+}

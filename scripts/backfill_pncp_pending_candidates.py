@@ -2,16 +2,48 @@ from __future__ import annotations
 
 import os
 import sys
+from pathlib import Path
 from typing import Any
 
 import requests
 
-import pipeline_core
+if __package__:
+    _SCRIPTS_DIR = Path(__file__).resolve().parent
+    if str(_SCRIPTS_DIR) not in sys.path:
+        sys.path.insert(0, str(_SCRIPTS_DIR))
+    from . import pipeline_core
+else:
+    import pipeline_core
 
 
-PNCP_BACKFILL_CLAIM_LIMIT = int(os.getenv("PNCP_BACKFILL_CLAIM_LIMIT", "20"))
-PNCP_MAX_PROCESSED_CANDIDATES_PER_RUN = int(os.getenv("PNCP_MAX_PROCESSED_CANDIDATES_PER_RUN", "20"))
+DEFAULT_PNCP_BACKFILL_CLAIM_LIMIT = 20
+DEFAULT_PNCP_MAX_PROCESSED_CANDIDATES_PER_RUN = 20
+MAX_PNCP_BACKFILL_LIMIT = 100
 RENDER_CLAIM_TIMEOUT = int(os.getenv("RENDER_CLAIM_TIMEOUT", "60"))
+
+
+def _validate_limit(name: str, value: int) -> int:
+    if isinstance(value, bool) or not isinstance(value, int):
+        raise ValueError(f"{name} must be an integer between 1 and 100")
+    if not 1 <= value <= MAX_PNCP_BACKFILL_LIMIT:
+        raise ValueError(f"{name} must be between 1 and {MAX_PNCP_BACKFILL_LIMIT}")
+    return value
+
+
+def resolve_backfill_limits(claim_limit: int, process_limit: int) -> tuple[int, int]:
+    claim_limit = _validate_limit("claim_limit", claim_limit)
+    process_limit = _validate_limit("process_limit", process_limit)
+    if claim_limit > process_limit:
+        raise ValueError("claim_limit must be less than or equal to process_limit")
+    return claim_limit, process_limit
+
+
+def _env_limit(name: str, default: int) -> int:
+    raw = os.getenv(name, str(default))
+    try:
+        return int(raw)
+    except (TypeError, ValueError) as exc:
+        raise ValueError(f"{name} must be an integer between 1 and 100") from exc
 
 
 def fetch_claimed_candidates(
@@ -20,6 +52,7 @@ def fetch_claimed_candidates(
     token: str,
     limit: int,
 ) -> list[dict[str, Any]]:
+    _validate_limit("claim_limit", limit)
     response = requests.post(
         f"{render_url.rstrip('/')}/api/pipeline/candidates/backfill/claim",
         headers={"Authorization": f"Bearer {token}"},
@@ -49,6 +82,7 @@ def run_backfill(
     claim_limit: int,
     process_limit: int,
 ) -> int:
+    claim_limit, process_limit = resolve_backfill_limits(claim_limit, process_limit)
     candidates = fetch_claimed_candidates(
         render_url=render_url,
         token=token,
@@ -110,11 +144,22 @@ def main() -> int:
     if not token:
         print("error: PIPELINE_SECRET is required", file=sys.stderr)
         return 2
+    try:
+        claim_limit, process_limit = resolve_backfill_limits(
+            _env_limit("PNCP_BACKFILL_CLAIM_LIMIT", DEFAULT_PNCP_BACKFILL_CLAIM_LIMIT),
+            _env_limit(
+                "PNCP_MAX_PROCESSED_CANDIDATES_PER_RUN",
+                DEFAULT_PNCP_MAX_PROCESSED_CANDIDATES_PER_RUN,
+            ),
+        )
+    except ValueError as exc:
+        print(f"error: invalid PNCP backfill limits: {exc}", file=sys.stderr)
+        return 2
     return run_backfill(
         render_url=render_url,
         token=token,
-        claim_limit=PNCP_BACKFILL_CLAIM_LIMIT,
-        process_limit=PNCP_MAX_PROCESSED_CANDIDATES_PER_RUN,
+        claim_limit=claim_limit,
+        process_limit=process_limit,
     )
 
 

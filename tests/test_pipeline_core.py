@@ -258,6 +258,9 @@ def _error_candidate(url: str = "https://example.com/bad.pdf") -> dict[str, obje
 
 
 class TestSubmitCandidates:
+    def test_default_batch_size_is_safe_for_repo_a_payload_cap(self) -> None:
+        assert pipeline_core.RENDER_SUBMIT_BATCH_SIZE == 5
+
     def test_uses_provided_source_field(self) -> None:
         mock_resp = MagicMock()
         mock_resp.status_code = 200
@@ -288,6 +291,94 @@ class TestSubmitCandidates:
 
         body = mock_post.call_args.kwargs["json"]
         assert body["source"] == "pncp"
+
+    def test_aggregates_outcomes_across_batches(self, monkeypatch) -> None:
+        monkeypatch.setenv("RENDER_APP_URL", "https://r.example.com")
+        monkeypatch.setenv("PIPELINE_SECRET", "tok")
+        responses = []
+        for counts in ({"inserted": 1, "updated": 2}, {"inserted": 3, "duplicates": 4}):
+            r = MagicMock(status_code=200); r.json.return_value = {"outcome_counts": counts}; responses.append(r)
+        candidates = [_valid_candidate(f"https://example.com/{i}.pdf") for i in range(6)]
+        with patch("pipeline_core.requests.post", side_effect=responses) as post:
+            result = pipeline_core.submit_candidates(candidates, source="bndes")
+        assert post.call_count == 2
+        assert result["outcome_counts"] == {"inserted": 4, "updated": 2, "reactivated": 0, "duplicates": 4, "invalid": 0}
+
+    def test_singular_duplicate_is_canonicalized(self, monkeypatch) -> None:
+        monkeypatch.setenv("RENDER_APP_URL", "https://r.example.com"); monkeypatch.setenv("PIPELINE_SECRET", "tok")
+        r = MagicMock(status_code=200); r.json.return_value = {"outcome_counts": {"duplicate": 2}}
+        with patch("pipeline_core.requests.post", return_value=r):
+            result = pipeline_core.submit_candidates([_valid_candidate()], source="bndes")
+        assert result["outcome_counts"]["duplicates"] == 2
+
+    def test_http_200_invalid_item_outcome_is_a_failed_submission(self) -> None:
+        response = MagicMock()
+        response.status_code = 200
+        response.json.return_value = {
+            "inserted": 0,
+            "updated": 0,
+            "reactivated": 0,
+            "duplicates": 0,
+            "invalid": 1,
+            "items": [{
+                "url": "https://example.com/doc.pdf",
+                "pncp_control_number": None,
+                "pncp_document_sequence": None,
+                "outcome": "invalid",
+            }],
+        }
+
+        with patch.dict(os.environ, {
+            "RENDER_APP_URL": "https://r.example.com",
+            "PIPELINE_SECRET": "tok",
+        }):
+            with patch("pipeline_core.requests.post", return_value=response):
+                result = pipeline_core.submit_candidates(
+                    [_valid_candidate()], source="pncp"
+                )
+
+        assert result["submitted"] == 0
+        assert result["failed_batches"] == 1
+        assert "invalid candidate outcomes" in result["errors"][0]
+
+    def test_http_200_mixed_item_outcomes_are_reported_as_partial(self) -> None:
+        candidates = [
+            _valid_candidate("https://example.com/valid.pdf"),
+            _valid_candidate("https://example.com/invalid.pdf"),
+        ]
+        response = MagicMock()
+        response.status_code = 200
+        response.json.return_value = {
+            "inserted": 1,
+            "updated": 0,
+            "reactivated": 0,
+            "duplicates": 0,
+            "invalid": 1,
+            "items": [
+                {
+                    "url": "https://example.com/valid.pdf",
+                    "pncp_control_number": None,
+                    "pncp_document_sequence": None,
+                    "outcome": "inserted",
+                },
+                {
+                    "url": "https://example.com/invalid.pdf",
+                    "pncp_control_number": None,
+                    "pncp_document_sequence": None,
+                    "outcome": "invalid",
+                },
+            ],
+        }
+
+        with patch.dict(os.environ, {
+            "RENDER_APP_URL": "https://r.example.com",
+            "PIPELINE_SECRET": "tok",
+        }):
+            with patch("pipeline_core.requests.post", return_value=response):
+                result = pipeline_core.submit_candidates(candidates, source="bndes")
+
+        assert result["submitted"] == 1
+        assert result["failed_batches"] == 1
 
     def test_only_valid_candidates_are_submitted(self) -> None:
         mock_resp = MagicMock()
@@ -395,6 +486,282 @@ class TestSubmitCandidates:
         assert result["total"] == 3
         assert result["filtered_out"] == 2
         assert result["submitted"] == 1
+
+    def test_batches_are_split_by_serialized_worker_and_metadata_size(self, monkeypatch) -> None:
+        monkeypatch.setattr(pipeline_core, "RENDER_SUBMIT_MAX_PAYLOAD_CHARS", 500)
+        candidates = [
+            {
+                **_valid_candidate(f"https://example.com/{index}.pdf"),
+                "metadata": {"description": "x" * 100},
+            }
+            for index in range(2)
+        ]
+        response = MagicMock()
+        response.status_code = 200
+        response.json.return_value = {"inserted": 1}
+
+        with patch.dict(os.environ, {
+            "RENDER_APP_URL": "https://r.example.com",
+            "PIPELINE_SECRET": "tok",
+        }):
+            with patch("pipeline_core.requests.post", return_value=response) as mock_post:
+                result = pipeline_core.submit_candidates(candidates, source="bndes")
+
+        assert mock_post.call_count == 2
+        assert result["submitted"] == 2
+        for call in mock_post.call_args_list:
+            body = call.kwargs["json"]
+            assert sum(
+                len(pipeline_core.json.dumps(value, ensure_ascii=False, default=str))
+                for candidate in body["candidates"]
+                for value in (candidate.get("worker_result"), candidate.get("metadata"))
+                if value
+            ) <= 500
+
+    def test_422_batch_is_split_without_repeating_the_oversized_payload(self) -> None:
+        response_422 = MagicMock()
+        response_422.status_code = 422
+        response_ok = MagicMock()
+        response_ok.status_code = 200
+        response_ok.json.return_value = {"inserted": 1}
+        candidates = [_valid_candidate(f"https://example.com/{index}.pdf") for index in range(2)]
+
+        with patch.dict(os.environ, {
+            "RENDER_APP_URL": "https://r.example.com",
+            "PIPELINE_SECRET": "tok",
+        }):
+            with patch(
+                "pipeline_core.requests.post",
+                side_effect=[response_422, response_ok, response_ok],
+            ) as mock_post:
+                result = pipeline_core.submit_candidates(candidates, source="bndes")
+
+        assert mock_post.call_count == 3
+        assert len(mock_post.call_args_list[0].kwargs["json"]["candidates"]) == 2
+        assert all(
+            len(call.kwargs["json"]["candidates"]) == 1
+            for call in mock_post.call_args_list[1:]
+        )
+        assert result["submitted"] == 2
+
+    def test_documentless_preflight_skips_disabled_payload_but_submits_valid_pdf(self) -> None:
+        documentless = {
+            "source_key": "tnc",
+            "source_record_id": "docless-1",
+            "source_kind": "web",
+            "opportunity_type": "funding",
+            "title": "Documentless call",
+            "source_snapshot_at": "2026-08-02T00:00:00+00:00",
+            "source_markdown": "# Call",
+            "source_content_hash": "",
+            "documents": [],
+        }
+        documentless["source_content_hash"] = __import__("hashlib").sha256(
+            documentless["source_markdown"].encode()
+        ).hexdigest()
+        pdf = {
+            **documentless,
+            "source_record_id": "pdf-1",
+            "documents": [{
+                "document_kind": "pdf",
+                "url": "https://example.com/call.pdf",
+                "is_renderable": True,
+                "is_principal": True,
+                "content_hash": "a" * 64,
+                "validation_outcome": "valid_pdf",
+            }],
+        }
+        capability_response = MagicMock()
+        capability_response.status_code = 200
+        capability_response.json.return_value = {
+            "status": "ok",
+            "documentless_opportunities_enabled": False,
+            "documentless_opportunity_rollout": "disabled",
+        }
+        submit_response = MagicMock()
+        submit_response.status_code = 200
+        submit_response.json.return_value = {"outcome": "inserted"}
+
+        with patch.dict(os.environ, {
+            "RENDER_APP_URL": "https://r.example.com",
+            "PIPELINE_SECRET": "tok",
+        }):
+            with patch("pipeline_core.requests.get", return_value=capability_response) as mock_get:
+                with patch("pipeline_core.requests.post", return_value=submit_response) as mock_post:
+                    result = pipeline_core.submit_opportunities([documentless, pdf])
+
+        mock_get.assert_called_once()
+        assert mock_get.call_args.kwargs["headers"] == {"Authorization": "Bearer tok"}
+        assert mock_get.call_args.args[0] == "https://r.example.com/api/pipeline/capabilities"
+        assert mock_post.call_count == 1
+        assert mock_post.call_args.kwargs["json"]["source_record_id"] == "pdf-1"
+        assert result["submitted"] == 1
+        assert result["failed"] == 1
+        assert "disabled" in result["errors"][0]
+
+    def test_documentless_preflight_allows_payload_when_repo_a_enables_rollout(self) -> None:
+        opportunity = {
+            "source_key": "tnc",
+            "source_record_id": "docless-enabled",
+            "source_kind": "web",
+            "opportunity_type": "funding",
+            "title": "Documentless call",
+            "source_snapshot_at": "2026-08-02T00:00:00+00:00",
+            "source_markdown": "# Call",
+            "source_content_hash": __import__("hashlib").sha256(b"# Call").hexdigest(),
+            "documents": [],
+        }
+        capability_response = MagicMock()
+        capability_response.status_code = 200
+        capability_response.json.return_value = {
+            "status": "ok",
+            "documentless_opportunities_enabled": True,
+            "documentless_opportunity_rollout": "enabled",
+        }
+        submit_response = MagicMock()
+        submit_response.status_code = 200
+        submit_response.json.return_value = {"outcome": "inserted"}
+
+        with patch.dict(os.environ, {
+            "RENDER_APP_URL": "https://r.example.com",
+            "PIPELINE_SECRET": "tok",
+        }):
+            with patch("pipeline_core.requests.get", return_value=capability_response) as mock_get:
+                with patch("pipeline_core.requests.post", return_value=submit_response) as mock_post:
+                    result = pipeline_core.submit_opportunities([opportunity])
+
+        mock_get.assert_called_once()
+        mock_post.assert_called_once()
+        assert result["submitted"] == 1
+        assert result["failed"] == 0
+
+
+class TestDocumentlessCapability:
+    @pytest.mark.parametrize(
+        ("enabled", "rollout"),
+        [(True, "enabled"), (False, "disabled")],
+    )
+    def test_reads_repo_a_contract(self, enabled: bool, rollout: str) -> None:
+        assert pipeline_core._read_documentless_capability(
+            {
+                "status": "ok",
+                "documentless_opportunities_enabled": enabled,
+                "documentless_opportunity_rollout": rollout,
+            }
+        ) is enabled
+
+    @pytest.mark.parametrize(
+        "payload",
+        [
+            {"documentless_opportunities_enabled": True},
+            {
+                "status": "ok",
+                "documentless_opportunities": True,
+                "documentless_opportunity_rollout": "enabled",
+            },
+            {
+                "status": "ok",
+                "documentless_opportunities_enabled": True,
+                "documentless_opportunity_rollout": "enabled",
+                "capabilities": {},
+            },
+            {
+                "status": "ready",
+                "documentless_opportunities_enabled": True,
+                "documentless_opportunity_rollout": "enabled",
+            },
+            {
+                "status": "ok",
+                "documentless_opportunities_enabled": 1,
+                "documentless_opportunity_rollout": "enabled",
+            },
+            {
+                "status": "ok",
+                "documentless_opportunities_enabled": True,
+                "documentless_opportunity_rollout": "disabled",
+            },
+            {
+                "status": "ok",
+                "documentless_opportunities_enabled": True,
+                "documentless_opportunity_rollout": [],
+            },
+        ],
+    )
+    def test_rejects_non_contract_shapes(self, payload: dict[str, object]) -> None:
+        with pytest.raises(pipeline_core.CapabilityPreflightError):
+            pipeline_core._read_documentless_capability(payload)
+
+    def test_preflight_uses_hardcoded_contract_path(self, monkeypatch) -> None:
+        response = MagicMock()
+        response.status_code = 200
+        response.json.return_value = {
+            "status": "ok",
+            "documentless_opportunities_enabled": True,
+            "documentless_opportunity_rollout": "enabled",
+        }
+        monkeypatch.setenv("RENDER_CAPABILITIES_PATH", "/wrong/path")
+
+        with patch("pipeline_core.requests.get", return_value=response) as mock_get:
+            assert pipeline_core._preflight_documentless_opportunities(
+                "https://r.example.com", "tok"
+            ) is True
+
+        assert mock_get.call_args.args[0] == (
+            "https://r.example.com/api/pipeline/capabilities"
+        )
+
+
+class TestSubmitOpportunities:
+    def test_oversized_source_markdown_is_rejected_without_post(self) -> None:
+        opportunity = {
+            "source_key": "tnc",
+            "source_record_id": "oversized-source",
+            "source_markdown": "x" * (pipeline_core.OPPORTUNITY_MARKDOWN_MAX_CHARS + 1),
+            "documents": [],
+        }
+
+        with patch.dict(os.environ, {
+            "RENDER_APP_URL": "https://r.example.com",
+            "PIPELINE_SECRET": "tok",
+        }):
+            with patch("pipeline_core.requests.get") as mock_get:
+                with patch("pipeline_core.requests.post") as mock_post:
+                    result = pipeline_core.submit_opportunities([opportunity])
+
+        mock_get.assert_not_called()
+        mock_post.assert_not_called()
+        assert result["submitted"] == 0
+        assert result["failed"] == 1
+        assert "source_markdown" in result["errors"][0]
+        assert str(pipeline_core.OPPORTUNITY_MARKDOWN_MAX_CHARS) in result["errors"][0]
+
+    def test_oversized_document_markdown_is_rejected_without_post(self) -> None:
+        opportunity = {
+            "source_key": "tnc",
+            "source_record_id": "oversized-document",
+            "source_markdown": "# Call",
+            "documents": [{
+                "document_kind": "pdf",
+                "url": "https://example.com/call.pdf",
+                "extracted_markdown": "x" * (
+                    pipeline_core.OPPORTUNITY_MARKDOWN_MAX_CHARS + 1
+                ),
+            }],
+        }
+
+        with patch.dict(os.environ, {
+            "RENDER_APP_URL": "https://r.example.com",
+            "PIPELINE_SECRET": "tok",
+        }):
+            with patch("pipeline_core.requests.get") as mock_get:
+                with patch("pipeline_core.requests.post") as mock_post:
+                    result = pipeline_core.submit_opportunities([opportunity])
+
+        mock_get.assert_not_called()
+        mock_post.assert_not_called()
+        assert result["submitted"] == 0
+        assert result["failed"] == 1
+        assert "documents[0].extracted_markdown" in result["errors"][0]
 
 
 # ---------------------------------------------------------------------------
@@ -506,3 +873,29 @@ class TestMakeDefaultOcrExtractor:
         assert captured["use_gpu"] is True
         assert captured["force_ocr"] is True
         assert captured["extraction_timeout_seconds"] == 120
+
+    @pytest.mark.parametrize("timeout_value", ["0", "-1", "not-an-integer"])
+    def test_uses_same_default_for_invalid_ocr_timeout(
+        self,
+        monkeypatch: pytest.MonkeyPatch,
+        timeout_value: str,
+    ) -> None:
+        monkeypatch.setenv("KREUZBERG_EXTRACTION_TIMEOUT_SECONDS", timeout_value)
+
+        captured: dict[str, object] = {}
+
+        class FakeConfig:
+            def __init__(self, **kwargs: object) -> None:
+                captured.update(kwargs)
+
+        class FakeExtractor:
+            def __init__(self, *, ocr_config: object) -> None:
+                captured["extractor_ocr_config"] = ocr_config
+
+        with patch.dict(sys.modules, {
+            "ocr_worker.ocr_extraction_config": MagicMock(OCRExtractionConfig=FakeConfig),
+            "ocr_worker.pdf_markdown_extractor": MagicMock(PDFMarkdownExtractor=FakeExtractor),
+        }):
+            pipeline_core.make_default_ocr_extractor()
+
+        assert captured["extraction_timeout_seconds"] == 300

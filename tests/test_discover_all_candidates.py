@@ -19,7 +19,43 @@ import pytest
 from conftest import make_response  # noqa: F401  (re-exported for fixture reuse)
 
 
+@pytest.fixture(autouse=True)
+def reset_telemetry_breaker():
+    import source_run_reporting as reporting
+    reporting._process_breaker = reporting._TelemetryCircuitBreaker()
+
+
 SCRIPTS_DIR = "scripts"
+
+
+def test_stats_adapters_match_candidate_discoverer_shape() -> None:
+    from discover_all_candidates import normalize_inventory_seen, normalize_in_scope, normalize_policy_rejected, normalize_stats
+    stats = {"candidates": 3, "year_rejected": 2, "prefilter_rejected": 1, "ocr_failures": 1, "pdf_download_cap_reached": 1}
+    assert normalize_inventory_seen(stats) == 3
+    assert normalize_in_scope(stats) == 3
+    assert normalize_policy_rejected(stats) == 3
+    assert normalize_stats(stats)["cap_reached"] is True
+    assert normalize_stats(stats)["ocr_failures"] == 1
+
+
+def test_stats_adapters_keep_structured_inventory_distinct() -> None:
+    from discover_all_candidates import normalize_inventory_seen, normalize_in_scope, normalize_policy_rejected
+    stats = {"records": 9, "opportunities": 4, "year_rejected": 2, "prefilter_rejected": 1}
+    assert normalize_inventory_seen(stats) == 9
+    assert normalize_in_scope(stats) == 4
+    assert normalize_policy_rejected(stats) == 3
+
+
+def test_remaining_stats_adapters_and_fidelity_mapping() -> None:
+    from discover_all_candidates import normalize_fidelity_blockers, normalize_stats
+    stats = {"section_parse_failed": 1, "inventory_parse_failed": 2,
+             "download_failures": 3, "submission_failures": 4,
+             "detail_parse_failures": 5}
+    normalized = normalize_stats(stats)
+    assert normalized["parser_failures"] == 8
+    assert normalized["download_failures"] == 3
+    assert normalized["submission_failures"] == 4
+    assert normalize_fidelity_blockers(stats) == 3
 
 
 # ---------------------------------------------------------------------------
@@ -101,6 +137,7 @@ ALL_REGISTERED_SOURCES = (
     "fundacao_grupo_boticario",
     "kfw",
     "msgov",
+    "ibama",
 )
 
 
@@ -525,6 +562,178 @@ def _processed(url: str, *, ok: bool = True) -> dict[str, Any]:
 
 
 class TestMainOrchestration:
+    def test_telemetry_failure_preserves_ingestion_but_propagates_exit_code(self) -> None:
+        from discover_all_candidates import main
+        _stub_ocr_modules()
+        d = MagicMock(); candidate = _candidate("https://x/a.pdf", "bndes")
+        env = {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "tok",
+               "SOURCES": "bndes", "SOURCE_RUN_REPORTING_ENABLED": "true"}
+        with patch.dict(os.environ, env, clear=True), patch("discover_all_candidates.load_discoverer", return_value=d), patch("discover_all_candidates.discover_source", return_value=({"candidates": 1}, [candidate])), patch("discover_all_candidates.process_source_candidates", return_value=[_processed(candidate["url"])]), patch("discover_all_candidates.pipeline_core.submit_candidates", return_value={"submitted": 1, "failed_batches": 0}), patch("discover_all_candidates.pipeline_core.make_default_ocr_extractor", return_value=(MagicMock(), MagicMock())), patch("source_run_reporting.requests.post", side_effect=__import__('requests').ConnectionError), patch("source_run_reporting.time.sleep"):
+            assert main() != 0
+
+    def test_discovery_failure_is_reported_as_failed(self) -> None:
+        from discover_all_candidates import main
+        _stub_ocr_modules(); d = MagicMock()
+        env = {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "tok", "SOURCES": "bndes", "SOURCE_RUN_REPORTING_ENABLED": "true"}
+        start = MagicMock(status_code=201); start.json.return_value = {"id": "r"}
+        finish = MagicMock(status_code=200); finish.json.return_value = {"status": "failed"}
+        with patch.dict(os.environ, env, clear=True), patch("discover_all_candidates.load_discoverer", return_value=d), patch("discover_all_candidates.discover_source", side_effect=RuntimeError("boom")), patch("discover_all_candidates.pipeline_core.make_default_ocr_extractor", return_value=(MagicMock(), MagicMock())), patch("source_run_reporting.requests.post", return_value=start), patch("source_run_reporting.requests.patch", return_value=finish) as p:
+            assert main() == 1
+        assert p.call_args.kwargs["json"]["status"] == "failed"
+        assert p.call_args.kwargs["json"]["error_code"] == "scraping_failed"
+
+    def test_parser_failure_is_reported_failed_not_warning(self) -> None:
+        from discover_all_candidates import main
+        _stub_ocr_modules(); d = MagicMock(); env = {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "tok", "SOURCES": "bndes", "SOURCE_RUN_REPORTING_ENABLED": "true"}
+        start = MagicMock(status_code=201); start.json.return_value = {"id": "r"}; finish = MagicMock(status_code=200); finish.json.return_value = {"status": "failed"}
+        with patch.dict(os.environ, env, clear=True), patch("discover_all_candidates.load_discoverer", return_value=d), patch("discover_all_candidates.discover_source", return_value=({"candidates": 0, "section_parse_failed": 1}, [])), patch("discover_all_candidates.pipeline_core.make_default_ocr_extractor", return_value=(MagicMock(), MagicMock())), patch("source_run_reporting.requests.post", return_value=start), patch("source_run_reporting.requests.patch", return_value=finish) as p:
+            assert main() == 1
+        assert p.call_args.kwargs["json"]["status"] == "failed"
+
+    def test_cap_skipped_sources_do_not_open_source_runs(self) -> None:
+        from discover_all_candidates import main
+        import pipeline_core
+        original = pipeline_core.SCRAPE_MAX_PDFS_PER_RUN; pipeline_core.SCRAPE_MAX_PDFS_PER_RUN = 0
+        try:
+            env = {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "tok", "SOURCES": "bndes,brde", "SOURCE_RUN_REPORTING_ENABLED": "true"}
+            with patch.dict(os.environ, env, clear=True), patch("discover_all_candidates.pipeline_core.make_default_ocr_extractor", return_value=(MagicMock(), MagicMock())), patch("source_run_reporting.requests.post") as post:
+                main()
+            post.assert_not_called()
+        finally: pipeline_core.SCRAPE_MAX_PDFS_PER_RUN = original
+
+    def test_submission_counts_map_invalid_and_failed_batches_to_errors(self) -> None:
+        from discover_all_candidates import main
+        _stub_ocr_modules(); c = _candidate("https://x/a.pdf", "bndes"); env = {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "tok", "SOURCES": "bndes", "SOURCE_RUN_REPORTING_ENABLED": "true"}
+        start = MagicMock(status_code=201); start.json.return_value = {"id": "r"}; finish = MagicMock(status_code=200); finish.json.return_value = {"status": "warning"}
+        with patch.dict(os.environ, env, clear=True), patch("discover_all_candidates.load_discoverer", return_value=MagicMock()), patch("discover_all_candidates.discover_source", return_value=({"candidates": 1}, [c])), patch("discover_all_candidates.process_source_candidates", return_value=[_processed(c["url"])]), patch("discover_all_candidates.pipeline_core.submit_candidates", return_value={"submitted": 1, "failed_batches": 1, "outcome_counts": {"invalid": 2}}), patch("discover_all_candidates.pipeline_core.make_default_ocr_extractor", return_value=(MagicMock(), MagicMock())), patch("source_run_reporting.requests.post", return_value=start), patch("source_run_reporting.requests.patch", return_value=finish) as p:
+            assert main() == 1
+        body = p.call_args.kwargs["json"]; assert body["errors"] == 4 and body["status"] == "warning"
+
+    def test_flag_off_does_not_call_telemetry(self) -> None:
+        from discover_all_candidates import main
+        _stub_ocr_modules(); env = {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "tok", "SOURCES": "bndes"}
+        with patch.dict(os.environ, env, clear=True), patch("discover_all_candidates.discover_source", return_value=({"candidates": 0}, [])), patch("discover_all_candidates.pipeline_core.make_default_ocr_extractor", return_value=(MagicMock(), MagicMock())), patch("source_run_reporting.requests.post") as post:
+            assert main() == 0
+        post.assert_not_called()
+
+    def test_ibama_requires_explicit_structured_opt_in_for_submission(self) -> None:
+        from discover_all_candidates import main
+
+        ibama = MagicMock()
+        ibama.__dict__["discover_opportunities"] = lambda: (
+            {"opportunities": 1},
+            [{"source_key": "ibama"}],
+        )
+        ibama.__dict__["discover_candidates"] = lambda **_: (
+            {"inventory_parse_failed": 1},
+            [],
+        )
+        env = {
+            "RENDER_APP_URL": "https://r.example.com",
+            "PIPELINE_SECRET": "tok",
+            "SOURCES": "ibama",
+        }
+        with patch.dict(os.environ, env, clear=True), patch(
+            "discover_all_candidates.load_discoverer", return_value=ibama,
+        ), patch(
+            "discover_all_candidates.pipeline_core.make_default_ocr_extractor",
+            return_value=(MagicMock(), MagicMock()),
+        ), patch(
+            "discover_all_candidates.pipeline_core.submit_opportunities",
+        ) as submit:
+            assert main() == 1
+        submit.assert_not_called()
+
+        env["OPPORTUNITY_SOURCES"] = "ibama"
+        with patch.dict(os.environ, env, clear=True), patch(
+            "discover_all_candidates.load_discoverer", return_value=ibama,
+        ), patch(
+            "discover_all_candidates.pipeline_core.make_default_ocr_extractor",
+            return_value=(MagicMock(), MagicMock()),
+        ), patch(
+            "discover_all_candidates.pipeline_core.process_opportunity",
+            side_effect=lambda opportunity, **_: opportunity,
+        ), patch(
+            "discover_all_candidates.pipeline_core.submit_opportunities",
+            return_value={"submitted": 1},
+        ) as submit:
+            assert main() == 0
+        submit.assert_called_once()
+
+    def test_manual_finep_and_fbds_use_structured_route_without_allowlist(self) -> None:
+        from discover_all_candidates import main
+
+        def structured_discover():
+            return {"opportunities": 1}, [{"source_key": "structured"}]
+
+        finep = MagicMock()
+        finep.__dict__["discover_opportunities"] = structured_discover
+        fbds = MagicMock()
+        fbds.__dict__["discover_opportunities"] = structured_discover
+
+        with patch.dict(os.environ, {
+            "RENDER_APP_URL": "https://r.example.com",
+            "PIPELINE_SECRET": "tok",
+            "SOURCES": "finep,fbds",
+        }, clear=True), patch(
+            "discover_all_candidates.load_discoverer",
+            side_effect={"finep": finep, "fbds": fbds}.get,
+        ), patch(
+            "discover_all_candidates.pipeline_core.make_default_ocr_extractor",
+            return_value=(MagicMock(), MagicMock()),
+        ), patch(
+            "discover_all_candidates.pipeline_core.process_opportunity",
+            side_effect=lambda opportunity, **_: opportunity,
+        ), patch(
+            "discover_all_candidates.pipeline_core.submit_opportunities",
+            return_value={"submitted": 1},
+        ) as submit:
+            assert main() == 0
+
+        assert [call.args[0][0]["source_key"] for call in submit.call_args_list] == [
+            "structured", "structured"
+        ]
+
+    def test_dopa_requires_explicit_structured_opt_in_for_submission(self) -> None:
+        from discover_all_candidates import main
+
+        dopa = MagicMock()
+        dopa.__dict__["discover_opportunities"] = lambda: (
+            {"opportunities": 1},
+            [{"source_key": "dopa"}],
+        )
+        env = {
+            "RENDER_APP_URL": "https://r.example.com",
+            "PIPELINE_SECRET": "tok",
+            "SOURCES": "dopa",
+        }
+        with patch.dict(os.environ, env, clear=True), patch(
+            "discover_all_candidates.load_discoverer", return_value=dopa,
+        ), patch(
+            "discover_all_candidates.pipeline_core.make_default_ocr_extractor",
+            return_value=(MagicMock(), MagicMock()),
+        ), patch(
+            "discover_all_candidates.pipeline_core.submit_opportunities",
+        ) as submit:
+            assert main() == 1
+        submit.assert_not_called()
+
+        env["OPPORTUNITY_SOURCES"] = "dopa"
+        with patch.dict(os.environ, env, clear=True), patch(
+            "discover_all_candidates.load_discoverer", return_value=dopa,
+        ), patch(
+            "discover_all_candidates.pipeline_core.make_default_ocr_extractor",
+            return_value=(MagicMock(), MagicMock()),
+        ), patch(
+            "discover_all_candidates.pipeline_core.process_opportunity",
+            side_effect=lambda opportunity, **_: opportunity,
+        ), patch(
+            "discover_all_candidates.pipeline_core.submit_opportunities",
+            return_value={"submitted": 1},
+        ) as submit:
+            assert main() == 0
+        submit.assert_called_once()
+
     def test_audit_only_never_processes_or_submits_opportunities(
         self, tmp_path,
     ) -> None:
@@ -596,6 +805,28 @@ class TestMainOrchestration:
                 ),
             ):
                 assert main() == 1
+
+    def test_returns_1_when_candidate_submission_is_partial(self) -> None:
+        from discover_all_candidates import main
+
+        _stub_ocr_modules()
+        candidate = _candidate("https://example.com/edital.pdf", "bndes")
+        env = {
+            "RENDER_APP_URL": "https://r.example.com",
+            "PIPELINE_SECRET": "tok",
+            "SOURCES": "bndes",
+        }
+        with patch.dict(os.environ, env, clear=True), patch(
+            "discover_all_candidates.discover_source",
+            return_value=({"candidates": 1}, [candidate]),
+        ), patch(
+            "discover_all_candidates.process_source_candidates",
+            return_value=[_processed(candidate["url"])],
+        ), patch(
+            "discover_all_candidates.pipeline_core.submit_candidates",
+            return_value={"submitted": 1, "failed_batches": 1},
+        ):
+            assert main() == 1
 
     def test_partial_source_error_does_not_discard_valid_candidates(self) -> None:
         from discover_all_candidates import main

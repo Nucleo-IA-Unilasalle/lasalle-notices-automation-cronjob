@@ -4,6 +4,7 @@ import hashlib
 from typing import Any
 
 import pipeline_core
+from unittest.mock import MagicMock, patch
 
 
 def test_process_opportunity_normalizes_markdown_before_hashing() -> None:
@@ -26,6 +27,17 @@ def test_process_opportunity_normalizes_markdown_before_hashing() -> None:
         normalized.encode("utf-8")
     ).hexdigest()
     assert processed["documents"] == []
+
+
+def test_submit_opportunities_aggregates_outcomes_and_no_reactivation(monkeypatch) -> None:
+    monkeypatch.setenv("RENDER_APP_URL", "https://r.example.com"); monkeypatch.setenv("PIPELINE_SECRET", "tok")
+    responses = []
+    for outcome in ("inserted", "duplicate"):
+        r = MagicMock(status_code=200); r.json.return_value = {"outcome": outcome}; responses.append(r)
+    opportunities = [{"documents": [{"document_kind": "pdf", "is_renderable": True}]} for _ in responses]
+    with patch("pipeline_core.requests.post", side_effect=responses):
+        result = pipeline_core.submit_opportunities(opportunities)
+    assert result["outcome_counts"] == {"inserted": 1, "updated": 0, "reactivated": 0, "duplicates": 1, "invalid": 0}
 
 
 def test_process_opportunity_promotes_first_validated_pdf_to_principal(

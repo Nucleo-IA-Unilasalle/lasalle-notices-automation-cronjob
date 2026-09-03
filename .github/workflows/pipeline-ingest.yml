@@ -3,6 +3,9 @@ name: PNCP ingestion
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 concurrency:
   group: pipeline-trigger
   cancel-in-progress: false
@@ -10,14 +13,15 @@ concurrency:
 jobs:
   ingest-pncp:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 50
     steps:
       - name: Trigger PNCP ingestion
         shell: bash
         run: |
           set -euo pipefail
 
-          URL="${RENDER_APP_URL}/api/pipeline/ingest?source=pncp&candidate_limit=100&download_limit=5"
+          BASE_URL="${RENDER_APP_URL%/}"
+          URL="${BASE_URL}/api/pipeline/ingest?source=pncp&candidate_limit=25&download_limit=5"
           MAX_ATTEMPTS=4
           SLEEP_SECONDS=120
 

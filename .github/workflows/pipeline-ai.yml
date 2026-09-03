@@ -5,8 +5,11 @@ on:
     workflows: ["PNCP discovery"]
     types: [completed]
   schedule:
-    - cron: '15 * * * *'
+    - cron: '16 * * * *'
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 concurrency:
   group: pipeline-trigger
@@ -15,7 +18,7 @@ concurrency:
 jobs:
   trigger:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 50
     if: >
       github.event_name != 'workflow_run' ||
       github.event.workflow_run.conclusion == 'success'
@@ -49,7 +52,8 @@ jobs:
 
           echo "Inside daytime Pacific window — proceeding to trigger Render."
 
-          URL="${RENDER_APP_URL}/api/pipeline/${PIPELINE_STEP}"
+          BASE_URL="${RENDER_APP_URL%/}"
+          URL="${BASE_URL}/api/pipeline/${PIPELINE_STEP}"
           MAX_ATTEMPTS=4
           SLEEP_SECONDS=120
 

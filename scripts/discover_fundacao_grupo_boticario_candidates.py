@@ -23,10 +23,10 @@ The Fundação Grupo Boticário source uses two paths and two stages:
 
 When the listing BS4 path yields no detail URLs, a Playwright fallback
 rebuilds an HTML fragment from the listing's ``<a>`` elements and feeds
-it back into the BS4 detail extractor. Detail pages keep the BS4
-path because the FastAPI source itself only falls back to Playwright
-for the detail page when the BS4 fetch yields no PDFs — a case the
-cronjob keeps simple by reporting the fallback as the origin.
+it back into the BS4 detail extractor. Foundation-host detail pages
+skip static extraction and use a Playwright PDF-anchor fallback, while
+other detail hosts try the static path first and use the same fallback
+when it yields no PDFs.
 
 The detail-URL helpers are inlined from the FastAPI helper-only module
 ``app/services/scraper/sources/fundacao_grupo_boticario.py``. That
@@ -41,6 +41,7 @@ endpoint can ingest it unchanged.
 from __future__ import annotations
 
 import asyncio
+import inspect
 import os
 import re
 import sys
@@ -53,6 +54,7 @@ from bs4 import BeautifulSoup, Tag
 import pipeline_core
 from scraper_transport import (
     discover_pdf_urls_on_page,
+    ensure_safe_url,
     log_source_failure,
     looks_like_pdf_url,
 )
@@ -181,6 +183,12 @@ async def _collect_listing_anchors(listing_url: str) -> str:
     from playwright.async_api import async_playwright  # type: ignore[import-not-found]
 
     listing_html = "<html><body>"
+
+    async def _read_async_or_value(value: Any) -> str:
+        if inspect.isawaitable(value):
+            value = await value
+        return value if isinstance(value, str) else ""
+
     async with async_playwright() as pw:
         browser = await pw.chromium.launch()
         try:
@@ -189,11 +197,20 @@ async def _collect_listing_anchors(listing_url: str) -> str:
             await page.goto(listing_url)
             listing_links = await page.query_selector_all("a")
             for link in listing_links:
-                href = await link.get_attribute("href")
+                href = await _read_async_or_value(link.get_attribute("href"))
                 if not href:
                     continue
+                link_text = await _read_async_or_value(link.inner_text())
+                title = await _read_async_or_value(link.get_attribute("title"))
+                aria_label = await _read_async_or_value(link.get_attribute("aria-label"))
                 safe_href = href.replace('"', "&quot;")
-                listing_html += f'<a href="{safe_href}"></a>'
+                safe_text = (link_text or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+                safe_title = (title or "").replace('"', "&quot;")
+                safe_aria_label = (aria_label or "").replace('"', "&quot;")
+                listing_html += (
+                    f'<a href="{safe_href}" title="{safe_title}" '
+                    f'aria-label="{safe_aria_label}">{safe_text}</a>'
+                )
         finally:
             await browser.close()
     listing_html += "</body></html>"
@@ -233,6 +250,57 @@ def _run_playwright_fallback(
     return extract_fundacao_grupo_boticario_detail_urls(listing_html, listing_url)
 
 
+async def _collect_detail_pdf_urls(detail_url: str) -> list[str]:
+    """Extract PDF anchors from a detail page rendered by Playwright.
+
+    The foundation host serves some detail pages with client-side content, so
+    a successful static response is not evidence that its PDF anchors are
+    present in the response HTML.
+    """
+    from playwright.async_api import async_playwright  # type: ignore[import-not-found]
+
+    ensure_safe_url(detail_url)
+    async with async_playwright() as pw:
+        browser = await pw.chromium.launch()
+        try:
+            context = await browser.new_context()
+            page = await context.new_page()
+            await page.goto(detail_url)
+            detail_links = await page.query_selector_all("a")
+            pdf_urls: list[str] = []
+            for link in detail_links:
+                href = await link.get_attribute("href")
+                if href and looks_like_pdf_url(href):
+                    pdf_urls.append(urljoin(detail_url, href))
+            return pdf_urls
+        finally:
+            await browser.close()
+
+
+def _run_playwright_detail_fallback(
+    detail_url: str, *, stats: dict[str, int],
+) -> list[str]:
+    """Resolve detail-page PDF anchors through the dynamic browser path."""
+    try:
+        return asyncio.run(_collect_detail_pdf_urls(detail_url))
+    except ImportError:
+        log_source_failure(
+            "Playwright is not installed; skipping Fundação Grupo Boticário "
+            "detail fallback for %s",
+            detail_url,
+            exc=ImportError("playwright"),
+        )
+    except Exception as exc:
+        log_source_failure(
+            "Failed processing Fundação Grupo Boticário detail page %s: %s",
+            detail_url,
+            exc,
+            exc=exc,
+        )
+    stats["errors"] = stats.get("errors", 0) + 1
+    return []
+
+
 def build_candidate(
     url: str,
     *,
@@ -263,8 +331,9 @@ def discover_candidates() -> tuple[dict[str, int], list[dict[str, Any]]]:
     Returns ``(stats, candidates)``. The listing BS4 path is tried
     first; if it yields no detail URLs, the Playwright fallback runs
     only if Playwright is importable in the current environment.
-    Each detail URL is then resolved through the shared BS4 PDF
-    discovery.
+    Each detail URL is resolved through static BS4 discovery when its
+    host is not the foundation, followed by the dynamic Playwright
+    fallback when no PDFs are returned.
     """
     stats: dict[str, int] = {
         "listings_fetched": 0,
@@ -312,9 +381,27 @@ def discover_candidates() -> tuple[dict[str, int], list[dict[str, Any]]]:
         )
 
     for detail_url in detail_urls[:FUNDACAO_GRUPO_BOTICARIO_MAX_DETAILS_PER_RUN]:
-        pdf_urls = discover_pdf_urls_on_page(
-            detail_url, stats=stats,
-        )
+        try:
+            # Foundation-host detail pages can render their document anchors
+            # only after JavaScript runs. Match Repo A by skipping the static
+            # extractor there and always using the dynamic fallback.
+            if is_fundacao_grupo_boticario_host(detail_url):
+                pdf_urls: list[str] = []
+            else:
+                pdf_urls = discover_pdf_urls_on_page(detail_url, stats=stats)
+            if not pdf_urls:
+                pdf_urls = _run_playwright_detail_fallback(
+                    detail_url, stats=stats,
+                )
+        except Exception as exc:
+            log_source_failure(
+                "Failed to discover PDFs on Fundação Grupo Boticário detail %s: %s",
+                detail_url,
+                exc,
+                exc=exc,
+            )
+            stats["errors"] = stats.get("errors", 0) + 1
+            continue
         stats["details_fetched"] += 1
         for pdf_url in pdf_urls:
             if pdf_url in seen_pdfs:

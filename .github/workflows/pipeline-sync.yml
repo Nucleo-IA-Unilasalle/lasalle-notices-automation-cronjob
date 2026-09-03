@@ -5,14 +5,17 @@ on:
     - cron: '37 * * * *'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 concurrency:
-  group: pipeline-trigger
+  group: pipeline-sync
   cancel-in-progress: false
 
 jobs:
   trigger:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 50
     env:
       RENDER_APP_URL: ${{ secrets.RENDER_APP_URL }}
       PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}
@@ -24,9 +27,52 @@ jobs:
         run: |
           set -euo pipefail
 
-          URL="${RENDER_APP_URL}/api/pipeline/${PIPELINE_STEP}"
+          BASE_URL="${RENDER_APP_URL%/}"
+          URL="${BASE_URL}/api/pipeline/${PIPELINE_STEP}"
           MAX_ATTEMPTS=4
           SLEEP_SECONDS=120
+          POLL_INTERVAL_SECONDS=10
+          POLL_MAX_ATTEMPTS=240
+
+          poll_pipeline_run() {
+            local run_id="$1"
+
+            for poll_attempt in $(seq 1 "$POLL_MAX_ATTEMPTS"); do
+              sleep "$POLL_INTERVAL_SECONDS"
+              poll_http_code=$(curl -sS -o runs.json -w "%{http_code}" \
+                -H "Authorization: Bearer ${PIPELINE_SECRET}" \
+                --connect-timeout 30 \
+                --max-time 60 \
+                "${BASE_URL}/api/pipeline/runs?job_name=${PIPELINE_STEP}&limit=20" || true)
+
+              if [ "$poll_http_code" != "200" ]; then
+                echo "Poll ${poll_attempt}/${POLL_MAX_ATTEMPTS}: HTTP ${poll_http_code}"
+                continue
+              fi
+
+              run=$(jq -c --arg run_id "$run_id" '.[] | select(.id == $run_id)' runs.json | head -n 1 || true)
+              if [ -z "$run" ]; then
+                echo "Poll ${poll_attempt}/${POLL_MAX_ATTEMPTS}: run ${run_id} not visible yet"
+                continue
+              fi
+
+              status=$(printf '%s' "$run" | jq -r '.status')
+              echo "Poll ${poll_attempt}/${POLL_MAX_ATTEMPTS}: run ${run_id} is ${status}"
+              case "$status" in
+                success|skipped)
+                  printf '%s\n' "$run" | jq .
+                  return 0
+                  ;;
+                failed)
+                  printf '%s\n' "$run" | jq .
+                  return 1
+                  ;;
+              esac
+            done
+
+            echo "Timed out waiting for pipeline run ${run_id}"
+            return 1
+          }
 
           for attempt in $(seq 1 "$MAX_ATTEMPTS"); do
             echo "Attempt ${attempt}/${MAX_ATTEMPTS}: POST ${URL}"
@@ -42,8 +88,18 @@ jobs:
             cat response.json || true
             echo
 
-            if [ "$http_code" = "200" ] || [ "$http_code" = "202" ]; then
+            if [ "$http_code" = "200" ]; then
               exit 0
+            fi
+
+            if [ "$http_code" = "202" ]; then
+              run_id=$(jq -r '.run_id // empty' response.json)
+              if [ -z "$run_id" ]; then
+                echo "Accepted response did not include run_id"
+                exit 1
+              fi
+              poll_pipeline_run "$run_id"
+              exit $?
             fi
 
             if [ "$http_code" = "401" ] || [ "$http_code" = "403" ] || [ "$http_code" = "404" ]; then
