@@ -76,6 +76,11 @@ Render accepts the request with `202`, the workflow polls the authenticated
 pipeline history by `run_id` and succeeds only after the backend records a
 terminal `success` or `skipped` status; a failed Drive batch fails the workflow.
 
+Discovery, AI, backfill, and manual OCR workflows share the non-canceling
+`pipeline-trigger` concurrency group with `queue: max`. This preserves their
+serialized execution while allowing pending runs to wait instead of replacing
+one another when the hourly schedules overlap.
+
 ## Secrets
 
 - `RENDER_APP_URL` — Render service base URL

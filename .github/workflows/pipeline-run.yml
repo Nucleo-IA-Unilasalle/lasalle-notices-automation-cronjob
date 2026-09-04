@@ -12,6 +12,7 @@ permissions:
 # This workflow is retained for manual rollback / legacy use only.
 concurrency:
   group: pipeline-trigger
+  queue: max
   cancel-in-progress: false
 
 jobs:

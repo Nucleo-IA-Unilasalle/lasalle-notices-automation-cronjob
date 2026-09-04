@@ -8,6 +8,7 @@ permissions:
 
 concurrency:
   group: pipeline-trigger
+  queue: max
   cancel-in-progress: false
 
 jobs:

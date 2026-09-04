@@ -104,6 +104,8 @@ def test_all_workflows_parse_with_read_only_permissions_and_concurrency() -> Non
         assert isinstance(concurrency, dict), path.name
         assert isinstance(concurrency.get("group"), str) and concurrency["group"], path.name
         assert concurrency["cancel-in-progress"] is False, path.name
+        if concurrency["group"] == "pipeline-trigger":
+            assert concurrency.get("queue") == "max", path.name
         jobs = document.get("jobs")
         assert isinstance(jobs, dict) and jobs, path.name
         for job_name, job in jobs.items():
