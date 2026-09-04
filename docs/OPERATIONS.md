@@ -59,6 +59,13 @@ does not report success until the backend records a terminal successful or
 skipped result. A failed Drive batch therefore remains visible as a failed
 Actions run instead of a successful trigger-only run.
 
+All workflows in the shared `pipeline-trigger` concurrency group use
+`queue: max` with `cancel-in-progress: false`. Runs remain serialized, but an
+overlapping cron or manual dispatch waits in the bounded GitHub Actions queue
+instead of replacing the existing pending run. Apply this setting to every new
+workflow that joins the group; a member that uses the default single pending
+slot can reintroduce scheduler cancellations.
+
 The eight per-source workflows above intentionally retain `workflow_dispatch`
 but no `schedule`. Do not add a source-specific cron without first removing it
 from the canonical orchestrator and updating this table.
