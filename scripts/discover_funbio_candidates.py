@@ -475,7 +475,7 @@ def discover_opportunities(
 
     resolutions: list[dict[str, Any]] = []
     if include_news:
-        news = parse_news_inventory(fetch(FUNBIO_NEWS_URL))
+        news = parse_news_inventory(fetch(FUNBIO_NEWS_URL), now=snapshot_at)
         resolutions = resolve_news_leads(news, opportunities)
         by_id = {item["source_record_id"]: item for item in opportunities}
         for resolution in resolutions:
