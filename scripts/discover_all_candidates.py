@@ -411,6 +411,13 @@ def main() -> int:
         return 2
 
     try:
+        offset = int(os.environ.get("SOURCE_ROTATION_OFFSET", "0")) % len(sources)
+    except ValueError:
+        print("error: SOURCE_ROTATION_OFFSET must be an integer", file=sys.stderr)
+        return 2
+    sources = sources[offset:] + sources[:offset]
+
+    try:
         min_year = _resolve_min_year()
     except ValueError as exc:
         print(f"error: {exc}", file=sys.stderr)
@@ -447,14 +454,6 @@ def main() -> int:
     exit_code = 0
 
     for source in sources:
-        if pipeline_core.pdf_download_limit_reached(shared_stats):
-            print(
-                f"Stopping before source {source}: shared PDF cap "
-                f"{pipeline_core.SCRAPE_MAX_PDFS_PER_RUN} already reached",
-                file=sys.stderr,
-            )
-            break
-
         reporter = SourceRunReporter(
             source_key=source,
             trigger_kind="audit" if audit_only else None,
@@ -588,6 +587,14 @@ def main() -> int:
                         reporter.record_error("fidelity_violation")
                         reporter.complete(status="failed")
                         exit_code = 1
+                    continue
+
+                if pipeline_core.pdf_download_limit_reached(shared_stats):
+                    per_source_processed[source] = 0
+                    per_source_submitted[source] = 0
+                    reporter.metrics.stats["cap_reached"] = True
+                    reporter.complete(status="warning")
+                    print(f"{source}: discovered; processing deferred by shared PDF cap")
                     continue
 
                 if opportunities is not None:

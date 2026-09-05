@@ -590,15 +590,22 @@ class TestMainOrchestration:
             assert main() == 1
         assert p.call_args.kwargs["json"]["status"] == "failed"
 
-    def test_cap_skipped_sources_do_not_open_source_runs(self) -> None:
+    def test_cap_deferred_sources_are_discovered_and_reported(self) -> None:
         from discover_all_candidates import main
         import pipeline_core
         original = pipeline_core.SCRAPE_MAX_PDFS_PER_RUN; pipeline_core.SCRAPE_MAX_PDFS_PER_RUN = 0
         try:
             env = {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "tok", "SOURCES": "bndes,brde", "SOURCE_RUN_REPORTING_ENABLED": "true"}
-            with patch.dict(os.environ, env, clear=True), patch("discover_all_candidates.pipeline_core.make_default_ocr_extractor", return_value=(MagicMock(), MagicMock())), patch("source_run_reporting.requests.post") as post:
-                main()
-            post.assert_not_called()
+            start = MagicMock(status_code=201)
+            start.json.return_value = {"id": "run"}
+            finish = MagicMock(status_code=200)
+            finish.json.return_value = {"status": "warning"}
+            with patch.dict(os.environ, env, clear=True), patch("discover_all_candidates.pipeline_core.make_default_ocr_extractor", return_value=(MagicMock(), MagicMock())), patch("discover_all_candidates.load_discoverer", return_value=MagicMock()), patch("discover_all_candidates.discover_source", return_value=({"candidates": 1}, [_candidate("https://example.org/a.pdf", "bndes")])) as discover, patch("source_run_reporting.requests.post", return_value=start) as post, patch("source_run_reporting.requests.patch", return_value=finish) as complete:
+                assert main() == 0
+            assert post.call_count == 2
+            assert discover.call_count == 2
+            assert all(call.kwargs["json"]["status"] == "warning" for call in complete.call_args_list)
+            assert all(call.kwargs["json"]["stats"]["cap_reached"] for call in complete.call_args_list)
         finally: pipeline_core.SCRAPE_MAX_PDFS_PER_RUN = original
 
     def test_submission_counts_map_invalid_and_failed_batches_to_errors(self) -> None:

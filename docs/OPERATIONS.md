@@ -508,3 +508,17 @@ production backup in isolation and run the backend reconciliation rehearsal.
 Review exported analyses and every association action, add `reviewed: true` to
 the exact rehearsal report, then pass it as `--reviewed-report` in apply mode.
 Any distinct uploaded Drive file conflict aborts the transaction.
+# Source Budget Fairness
+
+The all-source workflow passes its run number as `SOURCE_ROTATION_OFFSET`.
+The orchestrator rotates the configured priority list without increasing the
+shared PDF budget. Manual invocations default to offset zero and can override
+it explicitly. Discovery continues after the processing cap; deferred sources
+emit warning telemetry with `stats.cap_reached=true` rather than disappearing
+from source-run history. This does not guarantee every source is processed in
+every run; verify freshness over a full rotation and inspect repeated failures.
+
+Repo A's accepted pipeline jobs require its separately supervised durable
+executor. A 202 is not completion; keep polling the run's existing terminal
+status contract. Coordinate its schema/API/frontend rollout using Repo A's
+`docs/ARCHITECTURE.md` release procedure before resuming production triggers.

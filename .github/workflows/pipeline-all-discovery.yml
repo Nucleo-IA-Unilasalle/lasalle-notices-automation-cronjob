@@ -78,6 +78,7 @@ jobs:
           PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}
           SOURCE_RUN_REPORTING_ENABLED: ${{ vars.SOURCE_RUN_REPORTING_ENABLED || 'false' }}
           SOURCES: ${{ env.DISCOVERY_SOURCES }}
+          SOURCE_ROTATION_OFFSET: ${{ github.run_number }}
           FILTER_POLICY: ${{ env.DISCOVERY_FILTER_POLICY }}
           MIN_NOTICE_YEAR: ${{ env.DISCOVERY_MIN_NOTICE_YEAR }}
           SCRAPE_MAX_PDF_BYTES: "15000000"
