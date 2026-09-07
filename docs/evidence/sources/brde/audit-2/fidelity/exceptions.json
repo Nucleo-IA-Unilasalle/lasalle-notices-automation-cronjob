@@ -1,0 +1,12 @@
+[
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "status",
+      "inventory": "open",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  }
+]
