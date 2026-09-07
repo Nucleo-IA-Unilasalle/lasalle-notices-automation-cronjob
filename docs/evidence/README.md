@@ -1,7 +1,9 @@
-# Staging Evidence Index (scaffold — zero results claimed)
+# Staging Evidence Index
 
-Status: **NOT STARTED**. Every slot below is an explicit `TODO` placeholder.
-No audit, soak, or live-traffic evidence exists. RR-01 through RR-05 remain
+Status: **IN PROGRESS**. [Hosted staging report](STAGING-2026-09-07.md) records
+deployment, catalog parity, BRDE ingestion/replay, BNDES audit failure and
+aggregate admission. Per-source independent-audit and soak slots below remain
+unfulfilled; adapter self-audits are not independent ground truth. RR-01 through RR-05 remain
 **OPEN**. Paused (`canoas`, `dopa`, `fbds`, `finep`, `ibama`) and audit-only
 (`tnc`, `funbio`, `govbr_mma_fnma`, `govbr_mma_public_calls`, `unep`) holds are preserved; evidence scaffolding never activates a
 source.
@@ -22,7 +24,9 @@ source.
 - Redact credentials before storing anything (validator rejects
   `Authorization` / bearer / `PIPELINE_SECRET` / private-key material).
 - Live parity observations from executed live runs go under
-  `snapshots/<YYYY-MM-DD>/` (see [snapshots](snapshots/README.md)); none exist yet.
+  `snapshots/<YYYY-MM-DD>/` (see [snapshots](snapshots/README.md)); the first
+  hosted observation is currently retained in the private workspace location
+  identified by the staging report.
 - Ordered flow: [staging runbook](../STAGING-RUNBOOK.md) → snapshot → audits → 48 h observation.
 
 ## Per-source slots

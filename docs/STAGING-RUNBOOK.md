@@ -1,18 +1,26 @@
-# Staging Runbook (scaffold — no staging run performed)
+# Staging Runbook
 
-Status: **NOT STARTED**. No staging deployment, soak, audit, or live-traffic
-verification is claimed. RR-01 through RR-05 remain **OPEN**. Paused sources
+Status: **IN PROGRESS**. Hosted deployment, parity, BRDE ingestion/replay and
+aggregate admission were exercised on 2026-09-07; see the
+[staging report](evidence/STAGING-2026-09-07.md). Independent audits, full
+failure-injection/load gates and the soak are incomplete. RR-01 through RR-05
+remain **OPEN**. Paused sources
 (`canoas`, `dopa`, `fbds`, `finep`, `ibama`) and audit-only sources (`tnc`,
 `funbio`, `govbr_mma_fnma`, `govbr_mma_public_calls`, `unep`) keep their holds;
 this runbook never authorizes activation.
 
-## Prerequisites (all TODO)
+## Prerequisites
 
-- [ ] Release authorization recorded: `TODO: link/decision ref`
-- [ ] Staging Repo A deployment commit: `TODO`
-- [ ] Staging database: `TODO: isolated Postgres URL ref (no production data)`
-- [ ] Worker secrets targeting staging: `RENDER_APP_URL=TODO`, `PIPELINE_SECRET=TODO`
-- [ ] Reviewed catalog pin: `config/source_catalog_contract.json` exported_at `TODO`
+- [x] Staging authorization recorded: user approved free-only replacement and
+      preferred reuse of the existing setup on 2026-09-07. Not production activation.
+- [x] Staging Repo A deployment commit: `e9422dca8cd9c77f4bf23bc89d7e211ae8bcc693`.
+- [x] Staging database: isolated free Render PostgreSQL 17, named
+      `lasalle-notices-staging-db`; expires 2026-10-07. Catalog fixtures only;
+      no production users/data restored into hosted staging.
+- [x] Worker target: `https://lasalle-notices-api-staging.onrender.com`;
+      newly generated staging-only secret remains in Render, not this document.
+- [x] Catalog pin: `config/source_catalog_contract.json`, export 2026-09-06;
+      live hosted comparison passed on 2026-09-07.
 - [ ] Database identity verified distinct from production, backup recorded,
       and restore verified in isolation before any production migration.
 - [ ] Exact A/B release commits and offline verification results recorded.
@@ -21,7 +29,7 @@ this runbook never authorizes activation.
       target is explicitly verified. Never replace production repository secrets
       just to run a staging check.
 
-## Ordered checklist (all TODO)
+## Ordered checklist (partial evidence does not check off compound gates)
 
 1. [ ] Apply `python -m scripts.migrate_schema` (Repo A) on the staging database; confirm schema v3, including the v1-to-v2-to-v3 upgrade path. API startup only verifies schema; it does not migrate it.
 2. [ ] Pinned parity: `py -3.13 scripts/check_source_catalog_parity.py` passes.
