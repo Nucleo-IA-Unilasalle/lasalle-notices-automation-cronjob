@@ -82,6 +82,22 @@ def sanitize_stats(stats: dict[str, Any]) -> dict[str, int | bool]:
         sanitized[key] = max(0, value) if expected_type is int else value
     return sanitized
 
+def derive_terminal_status(metrics: "SourceRunMetrics") -> str:
+    """Reducer único de status terminal, compartilhado por todos os entrypoints.
+
+    Tabela de desfechos (Plano 02): cap atingido ou inventário parcial deixam
+    trabalho elegível pendente e não podem ser relatados como success; erros ou
+    blockers de fidelidade também degradam para warning. Apenas uma execução
+    sem resíduos é success.
+    """
+    if metrics.errors > 0 or metrics.fidelity_blockers > 0:
+        return "warning"
+    stats = metrics.stats if isinstance(metrics.stats, dict) else {}
+    if bool(stats.get("cap_reached")) or bool(stats.get("partial_inventory")):
+        return "warning"
+    return "success"
+
+
 @dataclass
 class SourceRunMetrics:
     inventory_seen: int = 0
@@ -176,9 +192,7 @@ class SourceRunReporter:
             # tentada e falhou por rede, não repetimos aqui — o orçamento de
             # retries pertence a complete(); o workflow registra
             # telemetry_failed e encerra o run como não-reportado.
-            target_status = self._terminal_status or (
-                "warning" if (self.metrics.errors > 0 or self.metrics.fidelity_blockers > 0) else "success"
-            )
+            target_status = self._terminal_status or derive_terminal_status(self.metrics)
             self.complete(status=target_status)
 
     def _headers(self) -> dict[str, str]:

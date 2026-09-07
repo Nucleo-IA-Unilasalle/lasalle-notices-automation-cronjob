@@ -36,6 +36,7 @@ from typing import Any
 import audit_source_fidelity
 import pipeline_core
 from scraper_filters import FilterPolicy, VALID_FILTER_POLICIES
+from source_control import AdmissionConflict
 from source_run_reporting import SourceRunReporter
 
 
@@ -71,6 +72,31 @@ STRUCTURED_OPPORTUNITY_SOURCES = {"finep", "fbds"}
 # IBAMA exposes a compatibility candidate wrapper, but production must never
 # fall back to it. Keep structured submission behind an explicit operator opt-in.
 STRUCTURED_ONLY_SOURCES = frozenset({"ibama"})
+
+# Registry-declared structured contracts (Plan 04 task 2). When SUBMISSION_CONTRACT
+# is unset (multi-source manual runs), these sources still require the structured
+# path and never silently fall back to legacy candidates.
+REGISTRY_OPPORTUNITY_SOURCES = frozenset({"canoas", "dopa", "fbds", "finep", "ibama", "tnc", "funbio"})
+
+
+def _registry_opportunity_contract(source: str) -> bool:
+    """Return True when the declarative registry requires structured submission.
+
+    Reads config/source_schedule.json best-effort; falls back to the compiled
+    REGISTRY_OPPORTUNITY_SOURCES set when the file is unavailable (tests).
+    """
+    try:
+        import json as _json
+        from pathlib import Path as _Path
+
+        reg_path = _Path(__file__).resolve().parents[1] / "config" / "source_schedule.json"
+        reg = _json.loads(reg_path.read_text(encoding="utf-8"))
+        for entry in reg.get("sources", []):
+            if entry.get("source_key") == source:
+                return entry.get("submission_contract") == "opportunity"
+    except Exception:
+        pass
+    return source in REGISTRY_OPPORTUNITY_SOURCES
 
 
 DEFAULT_MIN_NOTICE_YEAR = 2026
@@ -346,9 +372,54 @@ def normalize_policy_rejected(stats: dict[str, Any]) -> int:
         value = sum(int(stats.get(key, 0) or 0) for key in ("filtered", "year_rejected", "prefilter_rejected"))
     return max(0, int(value or 0))
 
+# Cap flags are the only shared-run state allowed to leak into a source's
+# telemetry: the PDF/processing caps are enforced once for the whole run, so a
+# later source legitimately reports cap_reached. All other counters
+# (failures, parse errors) stay strictly per-source — never cumulative
+# shared_stats from prior sources.
+SHARED_CAP_KEYS = (
+    "candidate_cap_reached",
+    "pdf_download_cap_reached",
+    "search_result_cap_reached",
+    "detail_cap_reached",
+    "processing_cap_reached",
+    "submittable_cap_reached",
+)
+
+
+def merge_shared_caps(source_stats: dict[str, Any], shared_stats: dict[str, Any]) -> dict[str, Any]:
+    merged = dict(source_stats)
+    for key in SHARED_CAP_KEYS:
+        if shared_stats.get(key):
+            merged[key] = shared_stats[key]
+    return merged
+
+
+def count_processed_outcomes(processed: list[dict[str, Any]]) -> tuple[int, int, int, int]:
+    """Return (downloaded, ocr_ok, download_failures, ocr_failures) per source.
+
+    A result without ``worker_result`` failed either the download (no bytes)
+    or the OCR (bytes downloaded but extraction failed); both facts stay
+    distinct instead of reporting ocr_successes twice.
+    """
+    ocr_ok = sum(1 for r in processed if r.get("worker_result"))
+    download_failures = 0
+    ocr_failures = 0
+    for r in processed:
+        if r.get("worker_result"):
+            continue
+        error = r.get("error")
+        if isinstance(error, str) and error.startswith("ocr:"):
+            ocr_failures += 1
+        else:
+            download_failures += 1
+    downloaded = ocr_ok + ocr_failures
+    return downloaded, ocr_ok, download_failures, ocr_failures
+
+
 def normalize_stats(stats: dict[str, Any]) -> dict[str, int | bool]:
     return {
-        "cap_reached": bool(stats.get("candidate_cap_reached") or stats.get("pdf_download_cap_reached") or stats.get("search_result_cap_reached") or stats.get("detail_cap_reached")),
+        "cap_reached": bool(stats.get("candidate_cap_reached") or stats.get("pdf_download_cap_reached") or stats.get("search_result_cap_reached") or stats.get("detail_cap_reached") or stats.get("processing_cap_reached") or stats.get("submittable_cap_reached")),
         "partial_inventory": bool(stats.get("section_parse_failed") or stats.get("inventory_parse_failed")),
         "parser_failures": sum(int(stats.get(k, 0) or 0) for k in ("section_parse_failed", "inventory_parse_failed", "detail_parse_failures", "detail_parse_failed")),
         "download_failures": int(stats.get("download_failures", stats.get("search_failures", stats.get("attachment_failures", 0))) or 0),
@@ -380,6 +451,10 @@ def verify_source_fidelity(source: str) -> int:
 
 def main() -> int:
     audit_only = _env_flag("DISCOVERY_AUDIT_ONLY")
+    drain_only = _env_flag("SOURCE_DRAIN_ONLY")
+    if drain_only and audit_only:
+        print("error: SOURCE_DRAIN_ONLY cannot be combined with DISCOVERY_AUDIT_ONLY", file=sys.stderr)
+        return 2
     if not audit_only and not os.environ.get("RENDER_APP_URL"):
         print("error: RENDER_APP_URL is required", file=sys.stderr)
         return 2
@@ -410,6 +485,19 @@ def main() -> int:
         )
         return 2
 
+    # Multi-source ingest in a single process cannot hold the per-source
+    # GitHub concurrency locks (discovery-<source>) that the group matrix
+    # uses to serialize scheduled vs manual writers. This is the emergency-only
+    # legacy path (Plan 08): allowed for manual recovery with operator approval
+    # but never the steady-state schedule. Production hourly ingest uses one
+    # source per job via pipeline-discovery-source.yml.
+    if not audit_only and len(sources) > 1:
+        print(
+            f"error: multi-source ingest ({len(sources)} sources) is not supported; use one managed source per job",
+            file=sys.stderr,
+        )
+        return 2
+
     try:
         offset = int(os.environ.get("SOURCE_ROTATION_OFFSET", "0")) % len(sources)
     except ValueError:
@@ -432,15 +520,55 @@ def main() -> int:
         f"discover_all_candidates: sources={sources} "
         f"min_year={min_year} filter_policy={filter_policy} "
         f"pdf_cap={pipeline_core.SCRAPE_MAX_PDFS_PER_RUN} "
-        f"audit_only={audit_only}",
+        f"audit_only={audit_only} drain_only={drain_only}",
     )
 
+    if drain_only:
+        import durable_source_work
+        if not durable_source_work.enabled():
+            print("error: SOURCE_DRAIN_ONLY requires SOURCE_WORK_ENABLED=true", file=sys.stderr)
+            return 2
+        # Drain-only recovery skips discovery so a slow/failing listing cannot
+        # starve pending work. Recovery ticks via the supervisor are NOT enabled:
+        # admission still gates on next_due; run this manually with a held claim.
+        drain_exit = 0
+        for source in sources:
+            reporter = SourceRunReporter(source_key=source)
+            try:
+                with reporter:
+                    shared_stats: dict[str, int] = {}
+                    try:
+                        failures = durable_source_work.drain(source, reporter, shared_stats)
+                    except AdmissionConflict as exc:
+                        if durable_source_work.abort_drain_on_lease_conflict(exc):
+                            reporter.record_error("scraping_failed")
+                            reporter.complete(status="failed")
+                            drain_exit = 1
+                            continue
+                        raise
+                    if failures or reporter.metrics.stats.get("cap_reached"):
+                        reporter.complete(status="warning")
+                    drain_exit = drain_exit or (1 if failures else 0)
+            except Exception as exc:
+                print(f"error: drain failed for source {source!r}: {exc}", file=sys.stderr)
+                drain_exit = 1
+        return drain_exit
+
     extractor = None
-    if not audit_only:
-        _, extractor = pipeline_core.make_default_ocr_extractor()
     opportunity_sources = set(
         parse_sources(os.environ.get("OPPORTUNITY_SOURCES"))
     )
+    # Registry contract enforcement (Plan 04 task 2): single-source group jobs
+    # export SUBMISSION_CONTRACT=<candidate|opportunity>. When it is
+    # "opportunity", the worker must use the structured path and never silently
+    # fall back to the legacy candidate route.
+    expected_contract = (os.environ.get("SUBMISSION_CONTRACT") or "").strip().lower()
+    if expected_contract not in ("", "candidate", "opportunity"):
+        print(
+            f"error: SUBMISSION_CONTRACT must be candidate|opportunity, got {expected_contract!r}",
+            file=sys.stderr,
+        )
+        return 2
 
     # Shared across feeds so a PDF that appears in more than one MMA source is
     # not double-submitted within a single run.
@@ -516,9 +644,23 @@ def main() -> int:
                             audit_only
                             or source in opportunity_sources
                             or source in STRUCTURED_OPPORTUNITY_SOURCES
+                            or expected_contract == "opportunity"
+                            or _registry_opportunity_contract(source)
                         )
                         else None
                     )
+                    if (expected_contract == "opportunity" or _registry_opportunity_contract(source)) and opportunity_result is None and not audit_only:
+                        print(
+                            f"error: source {source!r} requires the structured "
+                            "opportunity contract but exposes no "
+                            "discover_opportunities(); refusing candidate fallback",
+                            file=sys.stderr,
+                        )
+                        per_source_stats[source] = {"errors": 1}
+                        exit_code = 1
+                        reporter.record_error("submission_failed")
+                        reporter.complete(status="failed")
+                        continue
                     if opportunity_result is None:
                         source_stats, candidates = discover_source(
                             discoverer,
@@ -589,6 +731,34 @@ def main() -> int:
                         exit_code = 1
                     continue
 
+                import durable_source_work
+                if durable_source_work.enabled():
+                    complete = durable_source_work.register_collection(
+                        source, "opportunity" if opportunities is not None else "candidate",
+                        opportunities if opportunities is not None else candidates, source_stats,
+                        scope=durable_source_work.scope_for_adapter(source),
+                    )
+                    if not complete:
+                        reporter.metrics.stats["partial_inventory"] = True
+                    try:
+                        failures = durable_source_work.drain(source, reporter, shared_stats)
+                    except AdmissionConflict as exc:
+                        if durable_source_work.abort_drain_on_lease_conflict(exc):
+                            # Same telemetry as any other per-source failure: the
+                            # run is failed, never a silently derived success.
+                            reporter.record_error("scraping_failed")
+                            reporter.complete(status="failed")
+                            exit_code = 1
+                            continue
+                        raise
+                    if failures:
+                        exit_code = 1
+                    if failures or not complete or reporter.metrics.stats.get("cap_reached"):
+                        reporter.complete(status="warning")
+                    continue
+
+                if extractor is None:
+                    _, extractor = pipeline_core.make_default_ocr_extractor()
                 if pipeline_core.pdf_download_limit_reached(shared_stats):
                     per_source_processed[source] = 0
                     per_source_submitted[source] = 0
@@ -611,7 +781,7 @@ def main() -> int:
                         sum(1 for item in processed_opportunities for d in item.get("documents", []) if d.get("is_renderable")),
                         sum(1 for item in processed_opportunities for d in item.get("documents", []) if d.get("extracted_markdown")),
                     )
-                    reporter.metrics.stats.update(normalize_stats({**source_stats, **shared_stats}))
+                    reporter.metrics.stats.update(normalize_stats(merge_shared_caps(source_stats, shared_stats)))
                     try:
                         submit_result = pipeline_core.submit_opportunities(
                             processed_opportunities
@@ -651,11 +821,9 @@ def main() -> int:
                     extractor=extractor,
                     stats=shared_stats,
                 )
-                per_source_processed[source] = sum(
-                    1 for r in processed if r.get("worker_result")
-                )
+                downloaded, ocr_successes, download_failures, ocr_failures = count_processed_outcomes(processed)
+                per_source_processed[source] = ocr_successes
 
-                ocr_successes = per_source_processed[source]
                 if candidates and ocr_successes == 0:
                     print(
                         f"error: all {source} candidates failed download/OCR; "
@@ -663,11 +831,18 @@ def main() -> int:
                         file=sys.stderr,
                     )
                     exit_code = 1
+                    # Failed downloads/OCR are still this source's telemetry even
+                    # when nothing is submitted.
+                    reporter.metrics.stats.update(normalize_stats(merge_shared_caps(
+                        {**source_stats, "download_failures": download_failures, "ocr_failures": ocr_failures},
+                        shared_stats,
+                    )))
+                    reporter.record_downloads(downloaded, ocr_successes)
                     reporter.record_error("download_failed")
                     reporter.complete(status="failed")
                     continue
 
-                reporter.record_downloads(ocr_successes, ocr_successes)
+                reporter.record_downloads(downloaded, ocr_successes)
                 try:
                     submit_result = pipeline_core.submit_candidates(
                         processed, source=source,
@@ -686,7 +861,11 @@ def main() -> int:
                 per_source_submitted[source] = submit_result.get("submitted", 0)
                 counts = submit_result.get("outcome_counts", {})
                 reporter.record_submission_outcomes(inserted=counts.get("inserted", 0), updated=counts.get("updated", 0), reactivated=counts.get("reactivated", 0), duplicates=counts.get("duplicates", 0), errors=counts.get("invalid", 0) + submit_result.get("failed_batches", 0))
-                reporter.metrics.stats.update(normalize_stats({**source_stats, **shared_stats}))
+                reporter.metrics.stats.update(normalize_stats(merge_shared_caps(
+                    {**source_stats, "download_failures": download_failures, "ocr_failures": ocr_failures},
+                    shared_stats,
+                )))
+                reporter.metrics.stats["submission_failures"] = counts.get("invalid", 0) + submit_result.get("failed_batches", 0)
                 print(f"{source}: render submission: {submit_result}")
 
                 if submit_result.get("failed_batches", 0) > 0:

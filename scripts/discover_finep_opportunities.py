@@ -159,8 +159,15 @@ def record_to_opportunity(
 def fetch_api_pages(
     *,
     fetch_json: Callable[[str], dict[str, Any]] | None = None,
+    progress: dict[str, Any] | None = None,
 ) -> list[dict[str, Any]]:
-    """Fetch bounded, explicitly paginated API records."""
+    """Fetch bounded, explicitly paginated API records.
+
+    When ``progress`` is provided it is filled with the resumable
+    pagination position: ``pages_completed`` (ascending page numbers
+    successfully parsed), ``last_page`` (as advertised by the API, when
+    known), and ``page_size``.
+    """
     if fetch_json is None:
         def fetch_json(url: str) -> dict[str, Any]:
             response = request_with_safe_redirects(
@@ -176,6 +183,8 @@ def fetch_api_pages(
             return payload
 
     records: list[dict[str, Any]] = []
+    pages_completed: list[int] = []
+    last_page: int | None = None
     for page in range(1, FINEP_MAX_PAGES_PER_RUN + 1):
         url = (
             f"{FINEP_API_URL}?sort=dataDePublicacao:desc"
@@ -186,8 +195,17 @@ def fetch_api_pages(
         if not isinstance(items, list):
             raise ValueError("FINEP API response is missing items")
         records.extend(item for item in items if isinstance(item, dict))
-        if page >= int(payload.get("lastPage") or page):
+        pages_completed.append(page)
+        try:
+            last_page = int(payload.get("lastPage") or page)
+        except (TypeError, ValueError):
+            last_page = page
+        if page >= last_page:
             break
+    if progress is not None:
+        progress["pages_completed"] = list(pages_completed)
+        progress["last_page"] = last_page
+        progress["page_size"] = FINEP_PAGE_SIZE
     return records
 
 
@@ -197,13 +215,15 @@ def discover_opportunities(
     snapshot_at: datetime | None = None,
     min_year: int | None = None,
 ) -> tuple[dict[str, int], list[dict[str, Any]]]:
-    records = fetch_api_pages(fetch_json=fetch_json)
+    progress: dict[str, Any] = {}
+    records = fetch_api_pages(fetch_json=fetch_json, progress=progress)
     if not records:
         return {"inventory_parse_failed": 1, "records": 0, "opportunities": 0}, []
 
     opportunities: list[dict[str, Any]] = []
     rejected = 0
-    for record in records:
+    capped = False
+    for index, record in enumerate(records):
         if not record.get("id") or not str(record.get("titulo") or "").strip():
             rejected += 1
             continue
@@ -219,9 +239,19 @@ def discover_opportunities(
             record_to_opportunity(record, snapshot_at=snapshot_at)
         )
         if len(opportunities) >= FINEP_MAX_OPPORTUNITIES_PER_RUN:
+            capped = index < len(records) - 1
             break
     return {
         "records": len(records),
         "opportunities": len(opportunities),
         "policy_rejected": rejected,
+        "candidate_cap_reached": int(capped),
+        "page_cap_reached": int(bool(progress.get("last_page")) and
+                                max(progress.get("pages_completed") or [0]) < progress["last_page"]),
+        # Resumable pagination position for the versioned Finep cursor.
+        # Telemetry normalization ignores these keys; the managed path
+        # builds the scope-bound cursor from them.
+        "finep_pages_completed": progress.get("pages_completed", []),
+        "finep_last_page": progress.get("last_page"),
+        "finep_page_size": progress.get("page_size", FINEP_PAGE_SIZE),
     }, opportunities

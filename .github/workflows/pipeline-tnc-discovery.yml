@@ -7,7 +7,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: pipeline-trigger
+  group: discovery-tnc-${{ github.repository }}
   queue: max
   cancel-in-progress: false
 
@@ -29,9 +29,16 @@ jobs:
       - name: Install OCR worker dependencies
         run: pip install -r requirements-ocr-worker.txt
 
-      - name: Run TNC discovery, download, OCR, and submission
-        run: python scripts/discover_tnc_candidates.py
+      - name: Run TNC discovery (structured consultancy route only)
+        run: python scripts/discover_all_candidates.py
         env:
+          SOURCES: "tnc"
+          SUBMISSION_CONTRACT: "opportunity"
+          OPPORTUNITY_SOURCES: ${{ vars.OPPORTUNITY_SOURCES || '' }}
+          DISCOVERY_AUDIT_DIR: artifacts/source-audits/tnc
+          SOURCE_RUN_REPORTING_ENABLED: ${{ vars.SOURCE_RUN_REPORTING_ENABLED || 'false' }}
+          MIN_NOTICE_YEAR: "2026"
+          FILTER_POLICY: "default"
           RENDER_APP_URL: ${{ secrets.RENDER_APP_URL }}
           PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}
           TNC_MIN_NOTICE_YEAR: "2026"

@@ -236,7 +236,7 @@ def _post_batch(
         try:
             response = requests.post(
                 url,
-                headers={"Authorization": f"Bearer {token}"},
+                headers=submission_headers(token),
                 json={"source": source, "candidates": batch},
                 timeout=RENDER_SUBMIT_TIMEOUT,
             )
@@ -419,6 +419,13 @@ def _outcome_counts(result: dict[str, Any] | None) -> dict[str, int]:
     return output
 
 
+def submission_headers(token):
+    headers = {"Authorization": f"Bearer {token}"}
+    if os.environ.get("SOURCE_CLAIM_TOKEN"):
+        headers["X-Source-Claim"] = os.environ["SOURCE_CLAIM_TOKEN"]
+    return headers
+
+
 def submit_candidates(
     candidates: list[dict[str, Any]],
     source: str,
@@ -532,6 +539,7 @@ def process_opportunity(
         document = dict(descriptor)
         url = str(document.get("url") or "")
         kind = document.get("document_kind")
+        stage = "download"
         try:
             if kind == "pdf":
                 if pdf_download_limit_reached(stats):
@@ -548,7 +556,11 @@ def process_opportunity(
                         max_bytes=SCRAPE_MAX_PDF_BYTES,
                     )
                     worker = result.get("worker_result")
+                    ocr_failed = str(result.get("error") or "").startswith("ocr:")
+                    if worker or ocr_failed:
+                        stats["documents_downloaded"] = stats.get("documents_downloaded", 0) + 1
                     if worker:
+                        stats["ocr_succeeded"] = stats.get("ocr_succeeded", 0) + 1
                         record_pdf_download(stats)
                         document.update(
                             content_hash=worker["content_hash"],
@@ -559,6 +571,8 @@ def process_opportunity(
                             extracted_markdown=worker["ocr_markdown"],
                         )
                     else:
+                        failure_key = "ocr_failures" if ocr_failed else "download_failures"
+                        stats[failure_key] = stats.get(failure_key, 0) + 1
                         document.update(
                             is_principal=False,
                             is_renderable=False,
@@ -568,6 +582,8 @@ def process_opportunity(
                 archive_bytes = _download_attachment(
                     url, max_bytes=OPPORTUNITY_ATTACHMENT_MAX_BYTES
                 )
+                stats["documents_downloaded"] = stats.get("documents_downloaded", 0) + 1
+                stage = "validation"
                 inspection = inspect_zip_archive(
                     archive_bytes,
                     limits=ArchiveLimits(
@@ -576,10 +592,18 @@ def process_opportunity(
                 )
                 extracted_sections: list[str] = []
                 for member in inspection.pdf_members:
+                    if pdf_download_limit_reached(stats):
+                        stats["pdf_download_cap_reached"] = 1
+                        raise ValueError("Archive PDF budget exhausted")
+                    record_pdf_download(stats)
+                    stage = "ocr"
                     markdown = asyncio.run(extractor.extract(member.content))
+                    stage = "validation"
                     extracted_sections.append(
                         f"## Arquivo: {member.filename}\n\n{markdown.strip()}"
                     )
+                if extracted_sections:
+                    stats["ocr_succeeded"] = stats.get("ocr_succeeded", 0) + 1
                 document.update(
                     content_hash=hashlib.sha256(archive_bytes).hexdigest(),
                     content_length=len(archive_bytes),
@@ -593,6 +617,9 @@ def process_opportunity(
             else:
                 document.update(is_renderable=False)
         except Exception as exc:
+            if stage in {"download", "ocr"}:
+                key = "ocr_failures" if stage == "ocr" else "download_failures"
+                stats[key] = stats.get(key, 0) + 1
             document.update(
                 is_principal=False,
                 is_renderable=False,
@@ -825,7 +852,7 @@ def _post_opportunity(
         try:
             response = requests.post(
                 url,
-                headers={"Authorization": f"Bearer {token}"},
+                headers=submission_headers(token),
                 json=payload,
                 timeout=RENDER_SUBMIT_TIMEOUT,
             )

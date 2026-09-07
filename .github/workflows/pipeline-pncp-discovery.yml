@@ -20,7 +20,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: pipeline-trigger
+  group: discovery-pncp-${{ github.repository }}
   queue: max
   cancel-in-progress: false
 
@@ -29,6 +29,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
+      - name: Record job budget start
+        run: echo "SOURCE_JOB_STARTED_AT=$(date +%s)" >> "$GITHUB_ENV"
       - name: Checkout scheduler repository
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
 
@@ -51,7 +53,7 @@ jobs:
             pncp-update-checkpoint-${{ runner.os }}-
 
       - name: Run PNCP discovery, download, OCR, and submission
-        run: python scripts/discover_pncp_candidates.py
+        run: python scripts/run_managed_source.py --source pncp scripts/discover_pncp_candidates.py
         env:
           RENDER_APP_URL: ${{ secrets.RENDER_APP_URL }}
           PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}

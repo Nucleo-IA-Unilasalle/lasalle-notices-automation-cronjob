@@ -7,7 +7,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: pipeline-trigger
+  group: discovery-iis_rio-${{ github.repository }}
   queue: max
   cancel-in-progress: false
 
@@ -30,8 +30,12 @@ jobs:
         run: pip install -r requirements-ocr-worker.txt
 
       - name: Run IIS-Rio discovery, download, OCR, and submission
-        run: python scripts/discover_iis_rio_candidates.py
+        run: python scripts/discover_all_candidates.py
         env:
+          SOURCES: "iis_rio"
+          SOURCE_RUN_REPORTING_ENABLED: ${{ vars.SOURCE_RUN_REPORTING_ENABLED || 'false' }}
+          MIN_NOTICE_YEAR: "2026"
+          FILTER_POLICY: "default"
           RENDER_APP_URL: ${{ secrets.RENDER_APP_URL }}
           PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}
           IIS_RIO_MIN_NOTICE_YEAR: "2026"

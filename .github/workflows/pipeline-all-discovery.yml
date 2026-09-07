@@ -1,8 +1,6 @@
 name: All-sources discovery (unified orchestrator)
 
 on:
-  schedule:
-    - cron: "8 * * * *"
   workflow_dispatch:
     inputs:
       sources:
@@ -39,7 +37,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: pipeline-trigger
+  group: discovery-manual-multi-source
   queue: max
   cancel-in-progress: false
 

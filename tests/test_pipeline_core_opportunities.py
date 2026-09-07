@@ -40,6 +40,73 @@ def test_submit_opportunities_aggregates_outcomes_and_no_reactivation(monkeypatc
     assert result["outcome_counts"] == {"inserted": 1, "updated": 0, "reactivated": 0, "duplicates": 1, "invalid": 0}
 
 
+def _zip_inspection(*filenames):
+    from archive_validation import ArchiveInspection, ExtractedPdf
+
+    return ArchiveInspection(
+        outcome="accepted",
+        rejection_reason=None,
+        members=(),
+        pdf_members=tuple(
+            ExtractedPdf(name, b"%PDF-1.4 " + name.encode(), f"hash-{name}")
+            for name in filenames
+        ),
+    )
+
+
+def test_zip_pdf_members_consume_the_shared_pdf_cap(monkeypatch) -> None:
+    monkeypatch.setattr(pipeline_core, "SCRAPE_MAX_PDFS_PER_RUN", 10)
+    monkeypatch.setattr(pipeline_core, "_download_attachment", lambda url, **kwargs: b"zip-bytes")
+
+    async def _extract(content):
+        return "# extracted"
+
+    extractor = MagicMock()
+    extractor.extract = _extract
+    monkeypatch.setattr(pipeline_core, "inspect_zip_archive",
+                        lambda data, **kwargs: _zip_inspection("a.pdf", "b.pdf"))
+    stats: dict[str, int] = {}
+    processed = pipeline_core.process_opportunity(
+        {
+            "source_key": "demo",
+            "source_record_id": "zip-1",
+            "source_markdown": "# Call",
+            "documents": [{"document_kind": "zip", "url": "https://example.com/a.zip"}],
+        },
+        extractor=extractor,
+        stats=stats,
+    )
+    assert stats["pdfs_downloaded"] == 2, "every ZIP member OCR must consume the PDF cap"
+    markdown = processed["documents"][0]["extracted_markdown"]
+    assert "## Arquivo: a.pdf" in markdown
+    assert "## Arquivo: b.pdf" in markdown
+    assert processed["documents"][0]["validation_outcome"] == "accepted"
+
+
+def test_zip_members_are_skipped_once_the_pdf_cap_is_reached(monkeypatch) -> None:
+    monkeypatch.setattr(pipeline_core, "SCRAPE_MAX_PDFS_PER_RUN", 1)
+    monkeypatch.setattr(pipeline_core, "_download_attachment", lambda url, **kwargs: b"zip-bytes")
+    extractor = MagicMock()
+    monkeypatch.setattr(pipeline_core, "inspect_zip_archive",
+                        lambda data, **kwargs: _zip_inspection("a.pdf"))
+    stats: dict[str, int] = {"pdfs_downloaded": 1}
+    processed = pipeline_core.process_opportunity(
+        {
+            "source_key": "demo",
+            "source_record_id": "zip-capped",
+            "source_markdown": "# Call",
+            "documents": [{"document_kind": "zip", "url": "https://example.com/a.zip"}],
+        },
+        extractor=extractor,
+        stats=stats,
+    )
+    document = processed["documents"][0]
+    assert document["validation_outcome"] == "zip_validation_failed"
+    assert document["is_renderable"] is False
+    assert stats["pdf_download_cap_reached"] == 1
+    extractor.extract.assert_not_called()
+
+
 def test_process_opportunity_promotes_first_validated_pdf_to_principal(
     monkeypatch,
 ) -> None:

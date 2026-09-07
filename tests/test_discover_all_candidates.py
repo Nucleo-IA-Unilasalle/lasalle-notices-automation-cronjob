@@ -590,23 +590,13 @@ class TestMainOrchestration:
             assert main() == 1
         assert p.call_args.kwargs["json"]["status"] == "failed"
 
-    def test_cap_deferred_sources_are_discovered_and_reported(self) -> None:
+    def test_multi_source_ingest_is_rejected_before_discovery(self) -> None:
         from discover_all_candidates import main
-        import pipeline_core
-        original = pipeline_core.SCRAPE_MAX_PDFS_PER_RUN; pipeline_core.SCRAPE_MAX_PDFS_PER_RUN = 0
-        try:
-            env = {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "tok", "SOURCES": "bndes,brde", "SOURCE_RUN_REPORTING_ENABLED": "true"}
-            start = MagicMock(status_code=201)
-            start.json.return_value = {"id": "run"}
-            finish = MagicMock(status_code=200)
-            finish.json.return_value = {"status": "warning"}
-            with patch.dict(os.environ, env, clear=True), patch("discover_all_candidates.pipeline_core.make_default_ocr_extractor", return_value=(MagicMock(), MagicMock())), patch("discover_all_candidates.load_discoverer", return_value=MagicMock()), patch("discover_all_candidates.discover_source", return_value=({"candidates": 1}, [_candidate("https://example.org/a.pdf", "bndes")])) as discover, patch("source_run_reporting.requests.post", return_value=start) as post, patch("source_run_reporting.requests.patch", return_value=finish) as complete:
-                assert main() == 0
-            assert post.call_count == 2
-            assert discover.call_count == 2
-            assert all(call.kwargs["json"]["status"] == "warning" for call in complete.call_args_list)
-            assert all(call.kwargs["json"]["stats"]["cap_reached"] for call in complete.call_args_list)
-        finally: pipeline_core.SCRAPE_MAX_PDFS_PER_RUN = original
+        env = {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "tok", "SOURCES": "bndes,brde"}
+        with patch.dict(os.environ, env, clear=True), patch("discover_all_candidates.load_discoverer") as discover, patch("discover_all_candidates.pipeline_core.make_default_ocr_extractor") as ocr:
+            assert main() == 2
+        discover.assert_not_called()
+        ocr.assert_not_called()
 
     def test_submission_counts_map_invalid_and_failed_batches_to_errors(self) -> None:
         from discover_all_candidates import main
@@ -695,6 +685,9 @@ class TestMainOrchestration:
             "discover_all_candidates.pipeline_core.submit_opportunities",
             return_value={"submitted": 1},
         ) as submit:
+            os.environ["SOURCES"] = "finep"
+            assert main() == 0
+            os.environ["SOURCES"] = "fbds"
             assert main() == 0
 
         assert [call.args[0][0]["source_key"] for call in submit.call_args_list] == [
@@ -791,6 +784,9 @@ class TestMainOrchestration:
                 "discover_all_candidates.discover_source",
                 return_value=({"candidates": 0}, []),
             ) as mock_disc:
+                os.environ["SOURCES"] = "bndes"
+                assert main() == 0
+                os.environ["SOURCES"] = "brde"
                 assert main() == 0
                 assert mock_disc.call_count == 2
 
@@ -932,6 +928,9 @@ class TestMainOrchestration:
                                 ".make_default_ocr_extractor",
                                 return_value=(MagicMock(), MagicMock()),
                             ):
+                                os.environ["SOURCES"] = "bndes"
+                                assert main() == 0
+                                os.environ["SOURCES"] = "brde"
                                 assert main() == 0
 
         assert mock_submit.call_count == 2
@@ -1006,103 +1005,23 @@ class TestMainOrchestration:
                                 ".make_default_ocr_extractor",
                                 return_value=(MagicMock(), MagicMock()),
                             ):
+                                os.environ["SOURCES"] = "bndes"
+                                assert main() == 1
+                                os.environ["SOURCES"] = "brde"
+                                assert main() == 0
+                                os.environ["SOURCES"] = "wwf"
                                 assert main() == 1
 
         assert mock_submit.call_count == 1
         assert mock_submit.call_args.kwargs["source"] == "brde"
 
-    def test_respects_shared_pdf_download_cap_across_sources(self) -> None:
+    def test_multi_source_ingest_never_initializes_ocr(self) -> None:
         from discover_all_candidates import main
-        import pipeline_core
-
-        _stub_ocr_modules()
-        original_cap = pipeline_core.SCRAPE_MAX_PDFS_PER_RUN
-        pipeline_core.SCRAPE_MAX_PDFS_PER_RUN = 1
-        try:
-            env = {
-                "RENDER_APP_URL": "https://r.example.com",
-                "PIPELINE_SECRET": "tok",
-                "SOURCES": "bndes,brde,wwf",
-            }
-
-            candidates_bndes = [_candidate("https://x.com/b.pdf", "bndes")]
-            candidates_brde = [_candidate("https://x.com/r.pdf", "brde")]
-
-            discoverer_bndes = MagicMock()
-            discoverer_brde = MagicMock()
-            discoverer_wwf = MagicMock()
-            discoverer_bndes._source = "bndes"
-            discoverer_brde._source = "brde"
-            discoverer_wwf._source = "wwf"
-            discoverer_bndes.discover_candidates.return_value = (
-                {"candidates": 1}, candidates_bndes,
-            )
-            discoverer_brde.discover_candidates.return_value = (
-                {"candidates": 1}, candidates_brde,
-            )
-            discoverer_wwf.discover_candidates.return_value = (
-                {"candidates": 1}, [_candidate("https://x.com/w.pdf", "wwf")],
-            )
-
-            def fake_load(source: str):
-                return {
-                    "bndes": discoverer_bndes,
-                    "brde": discoverer_brde,
-                    "wwf": discoverer_wwf,
-                }[source]
-
-            def fake_discover(discoverer, **_: Any):
-                return discoverer.discover_candidates()
-
-            submitted_sources: list[str] = []
-
-            def fake_process(candidates, *, stats, **_: Any):
-                # Pretend the first candidate succeeded, cap is reached
-                # after that, so the next call short-circuits with [].
-                if "pdfs_downloaded" not in stats:
-                    stats["pdfs_downloaded"] = 1
-                    return [_processed(c["url"]) for c in candidates]
-                return []
-
-            def fake_submit(processed, **kwargs: Any):
-                submitted_sources.append(kwargs["source"])
-                return {
-                    "total": len(processed),
-                    "submitted": sum(
-                        1 for p in processed if p.get("worker_result")
-                    ),
-                    "failed_batches": 0,
-                    "errors": [],
-                }
-
-            with patch.dict(os.environ, env, clear=True):
-                with patch(
-                    "discover_all_candidates.load_discoverer",
-                    side_effect=fake_load,
-                ):
-                    with patch(
-                        "discover_all_candidates.discover_source",
-                        side_effect=fake_discover,
-                    ):
-                        with patch(
-                            "discover_all_candidates.process_source_candidates",
-                            side_effect=fake_process,
-                        ):
-                            with patch(
-                                "discover_all_candidates.pipeline_core"
-                                ".submit_candidates",
-                                side_effect=fake_submit,
-                            ):
-                                with patch(
-                                    "discover_all_candidates.pipeline_core"
-                                    ".make_default_ocr_extractor",
-                                    return_value=(MagicMock(), MagicMock()),
-                                ):
-                                    main()
-        finally:
-            pipeline_core.SCRAPE_MAX_PDFS_PER_RUN = original_cap
-
-        assert submitted_sources == ["bndes"]
+        env = {"RENDER_APP_URL": "https://r.example.com", "PIPELINE_SECRET": "tok", "SOURCES": "bndes,brde"}
+        with patch.dict(os.environ, env, clear=True), patch("discover_all_candidates.load_discoverer") as discover, patch("discover_all_candidates.pipeline_core.make_default_ocr_extractor") as ocr:
+            assert main() == 2
+        discover.assert_not_called()
+        ocr.assert_not_called()
 
     def test_returns_1_when_all_candidates_fail_ocr(self) -> None:
         from discover_all_candidates import main
@@ -1235,3 +1154,44 @@ class TestModuleReload:
         with patch.dict(os.environ, {}, clear=True):
             module = importlib.import_module("discover_all_candidates")
             assert module.SOURCE_MODULES["bndes"] == "discover_bndes_candidates"
+
+
+class TestPerSourceTelemetryIsolation:
+    """Plan 02: per-source counters must never absorb cumulative shared_stats,
+    and downloads must be counted separately from OCR successes."""
+
+    def test_merge_shared_caps_keeps_only_cap_flags_from_shared_stats(self):
+        from discover_all_candidates import merge_shared_caps
+
+        source_stats = {"download_failures": 2, "detail_parse_failures": 1}
+        shared_stats = {
+            "pdfs_downloaded": 9,
+            "pdf_download_cap_reached": 1,
+            "download_failures": 7,  # accumulated from prior sources
+        }
+        merged = merge_shared_caps(source_stats, shared_stats)
+        assert merged["download_failures"] == 2
+        assert merged["detail_parse_failures"] == 1
+        assert merged["pdf_download_cap_reached"] == 1
+        assert "pdfs_downloaded" not in merged
+
+    def test_merge_shared_caps_without_shared_flags_is_pure_source_stats(self):
+        from discover_all_candidates import merge_shared_caps
+
+        source_stats = {"ocr_failures": 3}
+        assert merge_shared_caps(source_stats, {"pdfs_downloaded": 5}) == {"ocr_failures": 3}
+
+    def test_count_processed_outcomes_separates_downloads_from_ocr(self):
+        from discover_all_candidates import count_processed_outcomes
+
+        processed = [
+            {"url": "a", "worker_result": {"ocr_markdown": "x"}},
+            {"url": "b", "worker_result": {"ocr_markdown": "y"}},
+            {"url": "c", "error": "ocr: paddle exploded"},
+            {"url": "d", "error": "download: connection reset"},
+            {"url": "e", "error": "download: http 403"},
+        ]
+        downloaded, ocr_ok, download_failures, ocr_failures = count_processed_outcomes(processed)
+        # 2 OCR successes + 1 OCR failure downloaded bytes; the 2 download
+        # failures consumed no bytes and are not counted as downloads.
+        assert (downloaded, ocr_ok, download_failures, ocr_failures) == (3, 2, 2, 1)
