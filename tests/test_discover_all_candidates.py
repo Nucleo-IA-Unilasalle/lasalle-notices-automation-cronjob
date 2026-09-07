@@ -1195,3 +1195,42 @@ class TestPerSourceTelemetryIsolation:
         # 2 OCR successes + 1 OCR failure downloaded bytes; the 2 download
         # failures consumed no bytes and are not counted as downloads.
         assert (downloaded, ocr_ok, download_failures, ocr_failures) == (3, 2, 2, 1)
+
+    def test_write_candidate_audit_preserves_unique_canonical_urls_for_shared_detail(self, tmp_path, monkeypatch):
+        import json
+        from discover_all_candidates import write_candidate_audit
+        from source_fidelity import run_audit
+
+        monkeypatch.setenv("DISCOVERY_AUDIT_DIR", str(tmp_path))
+        candidates = [
+            {
+                "url": "https://example.com/edital-1.pdf",
+                "kind": "pdf",
+                "metadata": {
+                    "source": "bndes",
+                    "detail_url": "https://example.com/detail-page",
+                },
+            },
+            {
+                "url": "https://example.com/edital-2.pdf",
+                "kind": "pdf",
+                "metadata": {
+                    "source": "bndes",
+                    "detail_url": "https://example.com/detail-page",
+                },
+            },
+        ]
+        write_candidate_audit("bndes", {"candidates": 2}, candidates)
+        inv = json.loads((tmp_path / "bndes" / "source_inventory.json").read_text(encoding="utf-8"))
+        disc = json.loads((tmp_path / "bndes" / "discovery.json").read_text(encoding="utf-8"))
+
+        # Both records have their own unique canonical_url matching their candidate URL
+        assert inv[0]["canonical_url"] == "https://example.com/edital-1.pdf"
+        assert inv[1]["canonical_url"] == "https://example.com/edital-2.pdf"
+        assert inv[0]["source_record_id"] == "https://example.com/edital-1.pdf"
+        assert inv[1]["source_record_id"] == "https://example.com/edital-2.pdf"
+
+        # The fidelity audit succeeds with zero duplicate_identity and zero identity_mismatch
+        result = run_audit(inv, disc)
+        assert [e.reason_code for e in result.blocking_exceptions()] == []
+        assert len(result.matches) == 2

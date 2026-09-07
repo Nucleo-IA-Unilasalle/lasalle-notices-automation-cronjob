@@ -35,7 +35,7 @@ import re
 import sys
 from datetime import datetime, timezone
 from typing import Any
-from urllib.parse import parse_qs, urljoin, urlsplit, urlunsplit
+from urllib.parse import parse_qs, unquote, urljoin, urlsplit, urlunsplit
 
 from bs4 import BeautifulSoup, Tag
 
@@ -90,21 +90,31 @@ BNDES_FETCH_TIMEOUT_SECONDS = int(os.environ.get("BNDES_FETCH_TIMEOUT_SECONDS", 
 #     ``MMXXIV``, ``fy-2026-q1`` where ``q1`` is adjacent) — Phase 3
 #     sources using any of these encodings need a per-source override.
 _YEAR_PATTERN = re.compile(r"(?<!\d)(19|20)\d{2}(?!\d)")
+_DATE_8DIGIT_PATTERN = re.compile(r"(?<!\d)(?:\d{4}((?:19|20)\d{2})|((?:19|20)\d{2})\d{4})(?!\d)")
+_MONTH_YEAR_PATTERN = re.compile(
+    r"(?<![a-z])(?:jan(?:eiro)?|fev(?:ereiro)?|mar(?:co)?|abr(?:il)?|mai(?:o)?|jun(?:ho)?|jul(?:ho)?|ago(?:sto)?|set(?:embro)?|out(?:ubro)?|nov(?:embro)?|dez(?:embro)?)[._-](\d{2}|\d{4})(?![a-z0-9])",
+    re.IGNORECASE,
+)
 
 
 def _extract_year_from_url(url: str) -> int | None:
-    """Return the first 4-digit year found in the URL, or ``None``.
-
-    Searches the URL path and query string for any year in the 1900-2099
-    range. Returns the most recent year if multiple are present, since
-    the BNDE listing slugs typically carry the edital year in the
-    trailing segment (e.g. ``chamada-publica-periferias-2026``).
-    """
+    """Return the most recent 4-digit year found in the URL, or ``None``."""
     parsed = urlsplit(url)
-    haystack = f"{parsed.path} {parsed.query}"
+    haystack = unquote(f"{parsed.path} {parsed.query}")
     candidates: list[int] = []
     for match in _YEAR_PATTERN.finditer(haystack):
         year = int(match.group(0))
+        if 1900 <= year <= 2099:
+            candidates.append(year)
+    for match in _DATE_8DIGIT_PATTERN.finditer(haystack):
+        y_str = match.group(1) or match.group(2)
+        if y_str:
+            year = int(y_str)
+            if 1900 <= year <= 2099:
+                candidates.append(year)
+    for match in _MONTH_YEAR_PATTERN.finditer(haystack):
+        raw_year = match.group(1)
+        year = int(raw_year) if len(raw_year) == 4 else 2000 + int(raw_year)
         if 1900 <= year <= 2099:
             candidates.append(year)
     if not candidates:
@@ -134,10 +144,12 @@ def extract_bndes_detail_and_pdf_urls(listing_html: str, listing_url: str) -> li
     discovered: list[str] = []
     seen: set[str] = set()
     signal_pattern = re.compile(
-        r"\b(edital|chamada|cpsi|inovacao|fundo-socioambiental|periferias|corais|sertao)\b",
+        r"\b(edital|chamada|cpsi|inovacao|fundo-socioambiental|periferias|corais|sertao|bioinsumos)\b",
         re.IGNORECASE,
     )
-    allowed_urile_segments = frozenset({"bndes-periferias", "bndes-corais", "sertao-mais-produtivo"})
+    allowed_urile_segments = frozenset(
+        {"bndes-periferias", "bndes-corais", "sertao-mais-produtivo", "bndes-bioinsumos"}
+    )
 
     def _normalize_host(host: str) -> str:
         normalized = host.lower()
@@ -230,10 +242,24 @@ def extract_bndes_detail_and_pdf_urls(listing_html: str, listing_url: str) -> li
     return discovered
 
 
+BNDES_NON_EDITAL_PATTERNS = re.compile(
+    r"\b(folheto|cartilha|perguntas.?e.?respostas|perguntas.?respostas|faq|apresentacao|projetos.?em.?andamento)\b",
+    re.IGNORECASE,
+)
+
+
 def _candidate_passes_edital_prefilter(
     url: str, filter_policy: FilterPolicy = "default"
 ) -> bool:
     """Apply the EDITAL inclusion/exclusion patterns to a candidate URL."""
+    if filter_policy != "no_prefilter":
+        text = unquote(url).lower()
+        text = text.replace("á", "a").replace("é", "e").replace("í", "i")
+        text = text.replace("ó", "o").replace("ú", "u").replace("ã", "a")
+        text = text.replace("õ", "o").replace("ç", "c")
+        text = text.replace("+", " ").replace("_", " ")
+        if BNDES_NON_EDITAL_PATTERNS.search(text):
+            return False
     parsed = urlsplit(url)
     filename = parsed.path.rsplit("/", 1)[-1]
     return is_likely_edital(filename, url, filter_policy=filter_policy)

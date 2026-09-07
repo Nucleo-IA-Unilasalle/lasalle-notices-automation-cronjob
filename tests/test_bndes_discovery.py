@@ -144,6 +144,24 @@ class TestExtractBndesDetailAndPdfUrls:
             ),
         ]
 
+    def test_bioinsumos_route_is_discovered(self) -> None:
+        from discover_bndes_candidates import extract_bndes_detail_and_pdf_urls
+
+        listing_html = """
+        <html><body>
+          <a href="?1dmy&amp;urile=wcm:path:/bndes_institucional/home/onde-atuamos/social/bndes-bioinsumos">Bioinsumos</a>
+        </body></html>
+        """
+        discovered = extract_bndes_detail_and_pdf_urls(listing_html, FUNDO_LISTING_URL)
+        assert discovered == [
+            (
+                "https://www.bndes.gov.br/wps/portal/site/home/"
+                "financiamento/produto/bndes-fundo-socioambiental?"
+                "urile=wcm:path:/bndes_institucional/home/onde-atuamos/"
+                "social/bndes-bioinsumos"
+            ),
+        ]
+
     def test_canonicalises_query_style_urls_for_dedup_stability(self) -> None:
         from discover_bndes_candidates import extract_bndes_detail_and_pdf_urls
 
@@ -264,6 +282,23 @@ class TestYearGuard:
         # passes through for downstream filtering.
         assert _passes_year_guard(url_unknown, min_year=2026) is True
 
+    def test_year_extracted_from_8digit_date(self) -> None:
+        from discover_bndes_candidates import _extract_year_from_url, _passes_year_guard
+
+        url = "https://www.bndes.gov.br/site/Perguntas+e+Respostas+03072024.pdf"
+        assert _extract_year_from_url(url) == 2024
+        assert _passes_year_guard(url, min_year=2026) is False
+
+    def test_year_extracted_from_month_year_slug(self) -> None:
+        from discover_bndes_candidates import _extract_year_from_url, _passes_year_guard
+
+        url_2023 = "https://www.bndes.gov.br/site/Folheto%2BPortal%2Bdo%2BCliente%2B-%2Bmaio.23%2B.pdf"
+        assert _extract_year_from_url(url_2023) == 2023
+        assert _passes_year_guard(url_2023, min_year=2026) is False
+
+        url_2026 = "https://www.bndes.gov.br/site/_Projetos+em+andamento_agosto_26.pdf"
+        assert _extract_year_from_url(url_2026) == 2026
+
 
 # ---------------------------------------------------------------------------
 # Edital prefilter integration
@@ -287,6 +322,19 @@ class TestEditalPrefilter:
             "abc123/resultado-final-2026.pdf"
         )
         assert _candidate_passes_edital_prefilter(url, "default") is False
+
+    def test_candidate_rejected_for_bndes_non_edital_patterns(self) -> None:
+        from discover_bndes_candidates import _candidate_passes_edital_prefilter
+
+        non_editais = [
+            "https://www.bndes.gov.br/site/Folheto%2BPortal%2Bdo%2BCliente.pdf",
+            "https://www.bndes.gov.br/site/Perguntas+e+Respostas+03072024.pdf",
+            "https://www.bndes.gov.br/site/Apresenta%C3%A7%C3%A3o+BNDES_Periferias_perguntas+e+respostas.pdf",
+            "https://www.bndes.gov.br/site/_Projetos+em+andamento_agosto_26.pdf",
+            "https://www.bndes.gov.br/site/Edital+Sertao+Produtivo-Retifica%C3%A7%C3%A3o+Cronograma.pdf",
+        ]
+        for url in non_editais:
+            assert _candidate_passes_edital_prefilter(url, "default") is False, f"should reject: {url}"
 
     def test_no_prefilter_policy_accepts_everything(self) -> None:
         from discover_bndes_candidates import _candidate_passes_edital_prefilter

@@ -303,8 +303,7 @@ def write_candidate_audit(
                 "source_record_id": metadata.get("source_record_id")
                 or metadata.get("external_id")
                 or url,
-                "canonical_url": metadata.get("detail_url")
-                or metadata.get("canonical_url")
+                "canonical_url": metadata.get("canonical_url")
                 or url,
                 "title": metadata.get("title") or candidate.get("title"),
                 "status": metadata.get("status")
