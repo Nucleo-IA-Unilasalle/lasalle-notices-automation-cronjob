@@ -40,6 +40,7 @@ FastAPI service.
 - Tests must be offline and deterministic. Do not call production endpoints from tests; use the workflow-pinned Python 3.13 interpreter.
 - Staging/evidence scaffolding lives in `docs/STAGING-RUNBOOK.md` (NOT STARTED checklist) and `docs/evidence/` (index, snapshot validation, two-independent-audit template with the official-source ground-truth rule, per-source TODO folders, 48 h template). Placeholders only; RR-01 through RR-05 stay OPEN and paused/audit holds are preserved.
 - Release cutover is A-first: explicitly migrate to schema v3, verify compatibility and live parity, then transfer schedule ownership. Merging group workflows to `main` activates cron configuration, not dormant code. Standard rollback preserves telemetry, pending work and accepted records; callback disabling is emergency-only with an explicit observability incident. Staging checks must never replace production repository secrets.
+- Live parity compares all pinned operational identities exactly. The nine explicitly named historical archive identities may appear outside the 23-source pin only with archived lifecycle and null cadence/timeout; unknown extra keys and changed archive configuration fail closed.
 - `requirements-ocr-worker.txt` pins runtime dependencies, including `lxml` for BeautifulSoup's XML/RDF feed parsing. CI installs the same dependency file as production discovery workflows.
 
 ## Verification

@@ -48,6 +48,30 @@ def test_pinned_parity_passes(registry, pin):
     validate_parity(registry, pin)
 
 
+def test_live_catalog_accepts_unchanged_historical_archives(pin):
+    live = copy.deepcopy(pin)
+    live["items"].extend(
+        {"source_key": key, "catalog_status": "archived",
+         "expected_interval_minutes": None, "max_run_minutes": None}
+        for key in check_source_catalog_parity.ARCHIVED_SOURCE_KEYS
+    )
+    compare_pinned_to_live(pin, live)
+
+
+@pytest.mark.parametrize("field,value", [
+    ("catalog_status", "active"), ("expected_interval_minutes", 60),
+    ("max_run_minutes", 30),
+])
+def test_live_catalog_rejects_changed_historical_archive(pin, field, value):
+    live = copy.deepcopy(pin)
+    archive = {"source_key": "cnpq", "catalog_status": "archived",
+               "expected_interval_minutes": None, "max_run_minutes": None}
+    archive[field] = value
+    live["items"].append(archive)
+    with pytest.raises(ValueError, match="Live catalog keys differ"):
+        compare_pinned_to_live(pin, live)
+
+
 def test_duplicate_catalog_identities_rejected(registry, pin):
     pin["items"].append(copy.deepcopy(pin["items"][0]))
     with pytest.raises(ValueError, match="Duplicate"):

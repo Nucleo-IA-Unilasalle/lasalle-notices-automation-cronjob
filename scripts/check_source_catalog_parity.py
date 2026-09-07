@@ -13,6 +13,10 @@ PIN = Path(__file__).resolve().parents[1] / "config/source_catalog_contract.json
 PIN_MAX_AGE_DAYS = 14
 EXPECTED_MAX_CONCURRENT_SOURCE_RUNS = 3
 REQUIRED_ITEM_FIELDS = ("source_key", "catalog_status", "expected_interval_minutes", "max_run_minutes")
+ARCHIVED_SOURCE_KEYS = frozenset({
+    "cnpq", "floresta_mais_amazonia", "fundacao_cargill", "fundo_amazonia",
+    "govbr_mcti", "govbr_mma_cop17", "govbr_sfb", "iadb", "thegef",
+})
 
 
 def _require_contract_items(contract):
@@ -64,6 +68,14 @@ def compare_pinned_to_live(pin, live):
     # A dict build silently collapses duplicate keys; fail closed instead.
     if len(pinned) != len(pinned_items) or len(observed) != len(observed_items):
         raise ValueError("Duplicate catalog identities in pinned or live exports")
+    # The operational pin covers 23 sources; A also returns nine historical
+    # identities. Only the exact unchanged archived rows are outside that pin.
+    for key in ARCHIVED_SOURCE_KEYS - pinned.keys():
+        if observed.get(key) == {
+            "source_key": key, "catalog_status": "archived",
+            "expected_interval_minutes": None, "max_run_minutes": None,
+        }:
+            observed.pop(key)
     if set(observed) != set(pinned):
         missing = sorted(set(pinned) - set(observed))
         extra = sorted(set(observed) - set(pinned))
