@@ -11,6 +11,11 @@ source.
 offline integration checks and read-only staging preflight, including the
 unresolved direct schema-verification connection failure.
 
+[Staging continuation](STAGING-CONTINUATION-2026-09-08.md) resolves fresh SQL
+schema-v3 verification via a temporary operator /32 with guaranteed cleanup
+and records the corrected staging failure-injection probes (one cold-start
+failure, one full pass with sanitized artifact).
+
 ## Conventions
 
 - One folder per source: `docs/evidence/sources/<source_key>/` with a

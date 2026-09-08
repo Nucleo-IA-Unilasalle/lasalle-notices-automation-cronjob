@@ -1,0 +1,245 @@
+{
+  "timestamp_utc": "2026-09-08T01:22:11.866370+00:00",
+  "target_url": "https://lasalle-notices-api-staging.onrender.com",
+  "task_1_concurrency_limit": {
+    "gate_passed": true,
+    "admitted_count": 3,
+    "rejected_count": 1,
+    "capacity_full_count": 1,
+    "claim_responses": [
+      {
+        "source": "brde",
+        "status_code": 201,
+        "duration_ms": 467.42,
+        "body": {
+          "claim_token": "[REDACTED sha256:aaffdf43c77e7d25188ea78987e6ea3b06cdce7fa2a2559796dd2766658e6db7]",
+          "expires_at": "2026-09-08T01:23:35.920297Z",
+          "claim_generation": 5,
+          "config_generation": 0,
+          "config_fingerprint": "b7ac1180c46f06a5bd0e6a48b11352cc40758ef816528177d9678026d2a8f1eb",
+          "scope": "default",
+          "purpose": "collection"
+        }
+      },
+      {
+        "source": "fapergs",
+        "status_code": 201,
+        "duration_ms": 521.18,
+        "body": {
+          "claim_token": "[REDACTED sha256:7193ff2222d3d5cb90ee0d99d3d67e93ab8368ea1532864d19b5ff1710e09791]",
+          "expires_at": "2026-09-08T01:23:36.044162Z",
+          "claim_generation": 3,
+          "config_generation": 0,
+          "config_fingerprint": "57ea2740dcedb887f9507af6b649b94d3225bcf08ba6b2bf393cdf25d7cdd349",
+          "scope": "default",
+          "purpose": "collection"
+        }
+      },
+      {
+        "source": "iis_rio",
+        "status_code": 201,
+        "duration_ms": 524.95,
+        "body": {
+          "claim_token": "[REDACTED sha256:f71ad78f76be54640b3a594d4b39e4689659f670f83c4a56200ae22d09288706]",
+          "expires_at": "2026-09-08T01:23:36.069360Z",
+          "claim_generation": 2,
+          "config_generation": 0,
+          "config_fingerprint": "8d6f83f9faf79db1214e667635c3bef2a4e2b1a31764eb925b62a178eee33cdd",
+          "scope": "default",
+          "purpose": "collection"
+        }
+      },
+      {
+        "source": "worldbank",
+        "status_code": 409,
+        "duration_ms": 524.8,
+        "body": {
+          "detail": {
+            "reason": "capacity_full",
+            "message": "Source capacity is occupied"
+          }
+        }
+      }
+    ],
+    "release_responses": [
+      {
+        "source": "brde",
+        "status_code": 200,
+        "duration_ms": 328.75,
+        "body": {
+          "accepted": true,
+          "next_due_at": "2026-09-08T01:21:35.920297Z",
+          "retry_after_at": null,
+          "last_complete_collection_at": "2026-09-07T21:01:34.527751Z",
+          "config_generation": 0,
+          "config_fingerprint": "b7ac1180c46f06a5bd0e6a48b11352cc40758ef816528177d9678026d2a8f1eb"
+        }
+      },
+      {
+        "source": "fapergs",
+        "status_code": 200,
+        "duration_ms": 290.12,
+        "body": {
+          "accepted": true,
+          "next_due_at": "2026-09-08T01:21:36.044162Z",
+          "retry_after_at": null,
+          "last_complete_collection_at": null,
+          "config_generation": 0,
+          "config_fingerprint": "57ea2740dcedb887f9507af6b649b94d3225bcf08ba6b2bf393cdf25d7cdd349"
+        }
+      },
+      {
+        "source": "iis_rio",
+        "status_code": 200,
+        "duration_ms": 333.79,
+        "body": {
+          "accepted": true,
+          "next_due_at": "2026-09-08T01:21:36.069360Z",
+          "retry_after_at": null,
+          "last_complete_collection_at": null,
+          "config_generation": 0,
+          "config_fingerprint": "8d6f83f9faf79db1214e667635c3bef2a4e2b1a31764eb925b62a178eee33cdd"
+        }
+      }
+    ]
+  },
+  "task_2_stale_owner_fencing": {
+    "gate_passed": true,
+    "empraba_check": {
+      "source_key": "empraba",
+      "status_code": 404,
+      "body": {
+        "detail": "Unknown source_key: empraba"
+      }
+    },
+    "fencing_steps": {
+      "step1_alpha_claim": {
+        "status_code": 201,
+        "body": {
+          "claim_token": "[REDACTED sha256:c34a7607e86ff39874fe0d025d2b7cdde4f9b24da032a37e08c81bea0182d794]",
+          "expires_at": "2026-09-08T01:23:37.687717Z",
+          "claim_generation": 4,
+          "config_generation": 0,
+          "config_fingerprint": "277eac96ad3572ea66f28a9cfba14f4e70cde1f89ed930e5e0325d0910bf2982",
+          "scope": "default",
+          "purpose": "collection"
+        }
+      },
+      "step2_beta_claim_noforce": {
+        "status_code": 409,
+        "body": {
+          "detail": {
+            "reason": "claim_active",
+            "message": "Source already has a live claim"
+          }
+        },
+        "reason": "claim_active"
+      },
+      "step3_beta_claim_force": {
+        "status_code": 409,
+        "body": {
+          "detail": {
+            "reason": "claim_active",
+            "message": "Source already has a live claim"
+          }
+        },
+        "reason": "claim_active"
+      },
+      "step4_beta_renew_invalid_token": {
+        "status_code": 409,
+        "body": {
+          "detail": {
+            "reason": "claim_missing",
+            "message": "No active claim for this source"
+          }
+        },
+        "reason": "claim_missing"
+      },
+      "step5_alpha_clean_release": {
+        "status_code": 200,
+        "body": {
+          "accepted": true,
+          "next_due_at": "2026-09-08T01:21:37.687717Z",
+          "retry_after_at": null,
+          "last_complete_collection_at": null,
+          "config_generation": 0,
+          "config_fingerprint": "277eac96ad3572ea66f28a9cfba14f4e70cde1f89ed930e5e0325d0910bf2982"
+        }
+      }
+    }
+  },
+  "task_3_lease_expiry_and_renewal": {
+    "gate_passed": true,
+    "step1_claim": {
+      "status_code": 201,
+      "expires_at": "2026-09-08T01:22:09.226561Z",
+      "body": {
+        "claim_token": "[REDACTED sha256:0ee39b5343990ef4d9fcf3067ad7f73ff067c5f5aa70ae78e58071de2498486e]",
+        "expires_at": "2026-09-08T01:22:09.226561Z",
+        "claim_generation": 8,
+        "config_generation": 0,
+        "config_fingerprint": "2ea082d699881cf7b9f2e2e5119b77416fff2c27ba5d7b299e7a81826cb026b1",
+        "scope": "default",
+        "purpose": "collection"
+      }
+    },
+    "step2_renew": {
+      "status_code": 200,
+      "expires_at": "2026-09-08T01:23:39.546115Z",
+      "lease_extended": true,
+      "body": {
+        "claim_token": "[REDACTED sha256:0ee39b5343990ef4d9fcf3067ad7f73ff067c5f5aa70ae78e58071de2498486e]",
+        "expires_at": "2026-09-08T01:23:39.546115Z",
+        "claim_generation": 8,
+        "config_generation": 0,
+        "config_fingerprint": "2ea082d699881cf7b9f2e2e5119b77416fff2c27ba5d7b299e7a81826cb026b1",
+        "scope": "default",
+        "purpose": "collection"
+      }
+    },
+    "step3_release": {
+      "status_code": 200,
+      "body": {
+        "accepted": true,
+        "next_due_at": "2026-09-08T01:21:39.226561Z",
+        "retry_after_at": null,
+        "last_complete_collection_at": "2026-09-07T22:51:21.227992Z",
+        "config_generation": 0,
+        "config_fingerprint": "2ea082d699881cf7b9f2e2e5119b77416fff2c27ba5d7b299e7a81826cb026b1"
+      }
+    },
+    "step4_expired_lease_fencing": {
+      "renew_after_expiry_status": 409,
+      "renew_after_expiry_reason": "claim_expired",
+      "renew_after_expiry_body": {
+        "detail": {
+          "reason": "claim_expired",
+          "message": "Claim lease expired"
+        }
+      },
+      "reclaim_post_expiry_status": 201,
+      "reclaim_post_expiry_body": {
+        "claim_token": "[REDACTED sha256:d23a2893b34109b2b19ee185b55ba5fcc624024154854599e40d8248f8479aaa]",
+        "expires_at": "2026-09-08T01:23:11.752290Z",
+        "claim_generation": 10,
+        "config_generation": 0,
+        "config_fingerprint": "2ea082d699881cf7b9f2e2e5119b77416fff2c27ba5d7b299e7a81826cb026b1",
+        "scope": "default",
+        "purpose": "collection"
+      },
+      "reclaim_release_status": 200,
+      "reclaim_release_body": {
+        "accepted": true,
+        "next_due_at": "2026-09-08T01:22:11.752290Z",
+        "retry_after_at": null,
+        "last_complete_collection_at": "2026-09-07T22:51:21.227992Z",
+        "config_generation": 0,
+        "config_fingerprint": "2ea082d699881cf7b9f2e2e5119b77416fff2c27ba5d7b299e7a81826cb026b1"
+      }
+    }
+  },
+  "all_probe_gates_passed": true,
+  "all_gates_passed": true,
+  "exception_cleanup": [],
+  "cleanup_succeeded": true
+}
