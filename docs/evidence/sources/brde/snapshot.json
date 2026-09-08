@@ -1,0 +1,20 @@
+{
+  "source_key": "brde",
+  "observed_at": "2026-09-07T23:02:09.655045+00:00",
+  "registry_ref": "15501bf37908b0968112299966792011b6b0d81d",
+  "pin_ref": "2026-09-06T03:22:11.102329+00:00",
+  "runs": [],
+  "audits": [
+    {
+      "result": "TODO",
+      "report_path": "",
+      "historical_diagnostic_path": "docs/evidence/sources/brde/audit-1/fidelity"
+    },
+    {
+      "result": "TODO",
+      "report_path": "",
+      "historical_diagnostic_path": "docs/evidence/sources/brde/audit-2/fidelity"
+    }
+  ],
+  "notes": "RR-05 remains open. Historical repository-owned comparisons had 0 blockers but were not independent audits. The three real run IDs remain documented in STAGING-2026-09-07.md; their exact started_at timestamps were not retained, so unsupported round-hour values were removed here."
+}

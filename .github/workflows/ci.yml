@@ -33,3 +33,5 @@ jobs:
           pip install pytest pytest-mock pyyaml==6.0.2
       - name: Run Pytest Test Suite
         run: python -m pytest tests/ -v
+      - name: Check pinned A catalog against execution registry
+        run: python scripts/check_source_catalog_parity.py

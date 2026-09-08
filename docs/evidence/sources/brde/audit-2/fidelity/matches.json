@@ -1,0 +1,55 @@
+[
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.brde.com.br/palacete/wp-content/uploads/2025/05/Edital-de-Patrocinio-BRDE-Cultural-–-Palacete-dos-Leoes-2026-1.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://www.brde.com.br/palacete/wp-content/uploads/2025/05/Edital-de-Patrocinio-BRDE-Cultural-–-Palacete-dos-Leoes-2026-1.pdf"
+      ],
+      "published_at": null,
+      "source_key": "brde",
+      "source_record_id": "https://www.brde.com.br/palacete/wp-content/uploads/2025/05/Edital-de-Patrocinio-BRDE-Cultural-–-Palacete-dos-Leoes-2026-1.pdf",
+      "status": null,
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://www.brde.com.br/palacete/wp-content/uploads/2025/05/Edital-de-Patrocinio-BRDE-Cultural-–-Palacete-dos-Leoes-2026-1.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://www.brde.com.br/palacete/wp-content/uploads/2025/05/Edital-de-Patrocinio-BRDE-Cultural-–-Palacete-dos-Leoes-2026-1.pdf"
+      ],
+      "published_at": null,
+      "source_key": "brde",
+      "source_record_id": "https://www.brde.com.br/palacete/wp-content/uploads/2025/05/Edital-de-Patrocinio-BRDE-Cultural-–-Palacete-dos-Leoes-2026-1.pdf",
+      "status": "open",
+      "title": "Edital de Patrocínio BRDE Cultural – Palacete dos Leões 2026"
+    },
+    "match_key": "('brde', 'https://www.brde.com.br/palacete/wp-content/uploads/2025/05/Edital-de-Patrocinio-BRDE-Cultural-–-Palacete-dos-Leoes-2026-1.pdf')",
+    "match_method": "stable_id"
+  }
+]

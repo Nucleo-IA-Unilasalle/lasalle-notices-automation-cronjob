@@ -1,0 +1,146 @@
+{
+  "contract_version": 1,
+  "exported_at": "2026-09-06T03:22:11.102329+00:00",
+  "source_commit": "dd608ccce7d5aec587b8bc6bdfd1fc8e6ab8fcd5",
+  "manifest_sha256": "286f86ec654c35f7b5f340f123979cf520412a3f391ec1242958246e2a349f99",
+  "items": [
+    {
+      "source_key": "bndes",
+      "catalog_status": "active",
+      "expected_interval_minutes": 60,
+      "max_run_minutes": 30
+    },
+    {
+      "source_key": "brde",
+      "catalog_status": "active",
+      "expected_interval_minutes": 60,
+      "max_run_minutes": 30
+    },
+    {
+      "source_key": "canoas",
+      "catalog_status": "active",
+      "expected_interval_minutes": 60,
+      "max_run_minutes": 30
+    },
+    {
+      "source_key": "dopa",
+      "catalog_status": "active",
+      "expected_interval_minutes": 60,
+      "max_run_minutes": 30
+    },
+    {
+      "source_key": "fao",
+      "catalog_status": "active",
+      "expected_interval_minutes": 60,
+      "max_run_minutes": 30
+    },
+    {
+      "source_key": "fapergs",
+      "catalog_status": "active",
+      "expected_interval_minutes": 60,
+      "max_run_minutes": 30
+    },
+    {
+      "source_key": "fbds",
+      "catalog_status": "active",
+      "expected_interval_minutes": 60,
+      "max_run_minutes": 30
+    },
+    {
+      "source_key": "finep",
+      "catalog_status": "active",
+      "expected_interval_minutes": 60,
+      "max_run_minutes": 30
+    },
+    {
+      "source_key": "funbio",
+      "catalog_status": "active",
+      "expected_interval_minutes": 60,
+      "max_run_minutes": 30
+    },
+    {
+      "source_key": "fundacao_grupo_boticario",
+      "catalog_status": "active",
+      "expected_interval_minutes": 60,
+      "max_run_minutes": 30
+    },
+    {
+      "source_key": "govbr_mma",
+      "catalog_status": "active",
+      "expected_interval_minutes": 60,
+      "max_run_minutes": 30
+    },
+    {
+      "source_key": "govbr_mma_fnma",
+      "catalog_status": "active",
+      "expected_interval_minutes": 60,
+      "max_run_minutes": 30
+    },
+    {
+      "source_key": "govbr_mma_public_calls",
+      "catalog_status": "active",
+      "expected_interval_minutes": 60,
+      "max_run_minutes": 30
+    },
+    {
+      "source_key": "ibama",
+      "catalog_status": "active",
+      "expected_interval_minutes": 60,
+      "max_run_minutes": 30
+    },
+    {
+      "source_key": "iis_rio",
+      "catalog_status": "active",
+      "expected_interval_minutes": 60,
+      "max_run_minutes": 30
+    },
+    {
+      "source_key": "kfw",
+      "catalog_status": "active",
+      "expected_interval_minutes": 60,
+      "max_run_minutes": 30
+    },
+    {
+      "source_key": "msgov",
+      "catalog_status": "active",
+      "expected_interval_minutes": 60,
+      "max_run_minutes": 30
+    },
+    {
+      "source_key": "pncp",
+      "catalog_status": "active",
+      "expected_interval_minutes": 60,
+      "max_run_minutes": 30
+    },
+    {
+      "source_key": "sema_rs",
+      "catalog_status": "active",
+      "expected_interval_minutes": 60,
+      "max_run_minutes": 30
+    },
+    {
+      "source_key": "tnc",
+      "catalog_status": "active",
+      "expected_interval_minutes": 60,
+      "max_run_minutes": 30
+    },
+    {
+      "source_key": "unep",
+      "catalog_status": "active",
+      "expected_interval_minutes": 60,
+      "max_run_minutes": 30
+    },
+    {
+      "source_key": "worldbank",
+      "catalog_status": "active",
+      "expected_interval_minutes": 60,
+      "max_run_minutes": 30
+    },
+    {
+      "source_key": "wwf",
+      "catalog_status": "active",
+      "expected_interval_minutes": 60,
+      "max_run_minutes": 30
+    }
+  ]
+}

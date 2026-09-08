@@ -364,3 +364,6 @@ merged.
 ## Documentation
 
 - [Operations guide](docs/OPERATIONS.md) — runbooks, monitoring, rollback procedures
+- [Staging runbook](docs/STAGING-RUNBOOK.md) — NOT STARTED ordered release checklist
+- [Staging evidence index](docs/evidence/README.md) — per-source evidence slots (placeholders only)
+- [Live A catalog parity](docs/OPERATIONS.md#catalog-parity-pinnedlive-ci) — pinned/live CI gate and pin-refresh procedure

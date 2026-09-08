@@ -2,10 +2,11 @@
 
 ## Pipeline overview
 
-The PNCP pipeline runs hourly via `pipeline-pncp-discovery.yml`; the eight
-non-PNCP sources `bndes`, `brde`, `fapergs`, `funbio`, `iis_rio`, `sema_rs`,
-`tnc`, and `wwf` run hourly through the canonical
-`pipeline-all-discovery.yml` orchestrator:
+The PNCP pipeline runs hourly via `pipeline-pncp-discovery.yml`; the 22
+non-PNCP sources run hourly through the three canonical group workflows
+(`pipeline-discovery-group-a/b/c.yml`) sharing the reusable single-source job
+(`pipeline-discovery-source.yml`). `pipeline-all-discovery.yml` is manual-only
+audit/recovery and never owns scheduled production traffic:
 
 1. **Discover** — queries PNCP API for active procurement records across modalities 6 (Pregão Eletrônico), 8 (Dispensa de Licitação), and 4 (Concorrência Eletrônica)
 2. **Filter** - keeps only notices with `anoCompra >= 2026`
@@ -21,33 +22,44 @@ After successful discovery, Render AI processing is triggered via
 
 ## Schedule
 
+Scheduled discovery ownership is declarative: `config/source_schedule.json`
+assigns every operational source to exactly one owner group. The three group
+workflows build a strict per-source matrix from that registry with
+`scripts/build_source_matrix.py` and run each source through the reusable
+single-source job in `pipeline-discovery-source.yml`, which serializes on a
+per-source concurrency lock (`discovery-<source>`) shared with the manual
+fallback workflows. Sources with `rollout_mode: paused` stay visible in the
+registry but are omitted from scheduled execution; `audit` sources run
+discovery and fidelity verification without ingestion.
+
 | Workflow | Schedule | Notes |
 |----------|----------|-------|
-| `pipeline-pncp-discovery.yml` | `05 * * * *` UTC + manual | Dedicated PNCP discover/download/OCR/submit pipeline |
-| `pipeline-all-discovery.yml` | `08 * * * *` UTC + manual | Canonical hourly scheduler for BNDES, BRDE, FAPERGS, FUNBIO, IIS-Rio, SEMA-RS, TNC, and WWF |
+| `pipeline-pncp-discovery.yml` | `05 * * * *` UTC + manual | Dedicated PNCP discover/download/OCR/submit pipeline; own `discovery-pncp` lock |
+| `pipeline-discovery-group-a.yml` | `07 * * * *` UTC + manual | bndes, brde, fao, fapergs, govbr_mma_fnma, iis_rio (canoas paused) |
+| `pipeline-discovery-group-b.yml` | `17 * * * *` UTC + manual | funbio, fundacao_grupo_boticario, govbr_mma, govbr_mma_public_calls, sema_rs, tnc (dopa paused) |
+| `pipeline-discovery-group-c.yml` | `27 * * * *` UTC + manual | kfw, msgov, unep, worldbank, wwf (fbds, finep, ibama paused) |
+| `pipeline-all-discovery.yml` | Manual only | Manual multi-source audit/recovery; no scheduled ownership |
 | `pipeline-ai.yml` | `16 * * * *` UTC + after PNCP discovery + manual | Pacific daytime gate (08:00–19:00 year-round) |
-| `pipeline-fao-discovery.yml` | `12 * * * *` UTC + manual | FAO source workflow |
-| `pipeline-fundacao-grupo-boticario-discovery.yml` | `17 * * * *` UTC + manual | Fundação Grupo Boticário source workflow |
-| `pipeline-kfw-discovery.yml` | `28 * * * *` UTC + manual | KfW source workflow |
-| `pipeline-msgov-discovery.yml` | `38 * * * *` UTC + manual | MSGOV source workflow |
-| `pipeline-govbr-mma-discovery.yml` | `50 * * * *` UTC + manual | GOVBR-MMA source workflow |
-| `pipeline-unep-discovery.yml` | `45 * * * *` UTC + manual | UNEP source workflow |
-| `pipeline-worldbank-discovery.yml` | `55 * * * *` UTC + manual | WorldBank source workflow |
 | `pipeline-backfill.yml` | `23 11 * * 6` UTC + manual | Legacy Render backfill rollback path |
 | `pipeline-sync.yml` | `37 * * * *` UTC + manual | Render sync trigger |
-| `pipeline-bndes-discovery.yml` | Manual only | Per-source fallback; no duplicate cron |
-| `pipeline-brde-discovery.yml` | Manual only | Per-source fallback; no duplicate cron |
-| `pipeline-fapergs-discovery.yml` | Manual only | Per-source fallback; no duplicate cron |
-| `pipeline-funbio-discovery.yml` | Manual only | Per-source fallback; no duplicate cron |
-| `pipeline-iis-rio-discovery.yml` | Manual only | Per-source fallback; no duplicate cron |
-| `pipeline-sema-rs-discovery.yml` | Manual only | Per-source fallback; no duplicate cron |
-| `pipeline-tnc-discovery.yml` | Manual only | Per-source fallback; no duplicate cron |
-| `pipeline-wwf-discovery.yml` | Manual only | Per-source fallback; no duplicate cron |
+| `pipeline-*-discovery.yml` (22 per-source workflows) | Manual only | Instrumented per-source manual fallbacks on the same orchestrator path and per-source lock |
+| `pipeline-discovery-source.yml` | Reusable only | Single-source job shared by the three group matrices (per-source `discovery-<source>` lock) |
+| `pipeline-source-monitor.yml` | `*/15 * * * *` UTC + manual | Read-only freshness check; never triggers ingestion |
+| `source-catalog-parity.yml` | Push to `main` + daily `43 8 * * *` UTC + manual | Pinned/live A-catalog parity; uploads `catalog-observation.json` (7-day retention) |
 | `pipeline-pncp-backfill.yml` | Manual only | Active PNCP pending-candidate backfill |
 | `pipeline-ingest.yml` | Manual only | Legacy Render ingest rollback path |
 | `pipeline-ocr.yml` | Manual only | Legacy Render OCR worker |
 | `pipeline-scrape.yml` | Manual only | Legacy Render scrape rollback path |
 | `pipeline-run.yml` | Manual only | Legacy full-pipeline rollback path |
+
+Recovery ticks (`37`, `47`, `57` minutes) are declared in the registry with
+`recovery_enabled: false`; enabling them waits for durable due-state/lease
+integration (Plan 03/R5) and a reviewed aggregate-concurrency proof. Group
+`max-parallel: 3` is per group, not a global cap; the effective global admission
+limit is Repo A's advisory lock **910012** with a hard cap of **3** concurrent
+source claims (due/backoff checked under the lock, UTC-bucket cadence, forced
+runs clamped). The per-run PDF cap (`SCRAPE_MAX_PDFS_PER_RUN=5`) bounds work
+inside one job only and is not an aggregate concurrency guarantee.
 
 All cron expressions are UTC. The AI cron uses 16:00 UTC, which is 08:00 in
 Pacific Standard Time and 09:00 in Pacific Daylight Time, so both sides of the
@@ -66,7 +78,7 @@ instead of replacing the existing pending run. Apply this setting to every new
 workflow that joins the group; a member that uses the default single pending
 slot can reintroduce scheduler cancellations.
 
-The eight per-source workflows above intentionally retain `workflow_dispatch`
+The 22 per-source workflows above intentionally retain `workflow_dispatch`
 but no `schedule`. Do not add a source-specific cron without first removing it
 from the canonical orchestrator and updating this table.
 
@@ -76,9 +88,165 @@ manual-only operational paths. They are not part of the hourly discovery
 schedule and should be used only for controlled rollback, audit, or backlog
 drain work.
 
-Post-fix inventory: this checkout contains 26 workflow files, all with an
-explicit job timeout; 12 are scheduled, 13 are manual-only, and Worker CI runs
-on pushes and pull requests after duplicate schedule removal.
+Post-fix inventory: this checkout contains 39 workflow files, all with an
+explicit job timeout; 9 have schedules (3 groups + PNCP + AI + sync + backfill
++ 15-min monitor + catalog parity), 1 is Worker CI (push/PR plus the pinned
+parity gate), 1 is the reusable single-source job, and the remainder are
+manual-only (22 per-source fallbacks + all-discovery + PNCP backfill +
+legacy/operational paths). Worker CI runs on pushes and pull requests.
+
+## Source reliability coordination (Repo A schedule/work contract)
+
+Repo A schema **v3** owns the coordination tables (`source_schedule_state`,
+`source_work_items`, `source_collection_checkpoints` with RLS; the schedule
+state adds `config_fingerprint`, `claim_config_fingerprint`, `claim_scope`,
+`claim_purpose`) behind the
+versioned release command `python -m scripts.migrate_schema`. Web startup runs
+read-only `verify_db_schema()` and never applies DDL. The v1 baseline is never
+rerun on an already-versioned database; v2 adds the three satellites and v3
+adds the fingerprint/scope/purpose columns in ordered migrations.
+
+- **Aggregate admission:** advisory key **910012**, hard cap **3** concurrent
+  source claims. Due (`next_due_at`) and backoff (`retry_after_at`) are checked
+  under the lock. Successful completion anchors `next_due_at` to the next UTC
+  interval bucket of the admitted window (not completion + 60 min); forced
+  early runs are clamped to the current bucket. `force` never bypasses capacity
+  or source lifecycle. `not_due`/`claim_active` skips record no success;
+  `capacity_full` waits in 15 s increments only while more than 450 s of budget
+  remains.
+- **Supervisor** (`scripts/run_managed_source.py`): takes one central claim
+  (300 s lease, 60 s renewals), runs discovery in a subprocess, and kills the
+  process tree on deadline or renewal uncertainty. The application budget is
+  `min(1080 s, job_minutes*60 - setup_elapsed - 120 s cleanup reserve)`; the
+  child receives source/contract/PDF cap/filter policy from the registry.
+  Outcomes are `complete` (collection marker present), `failed`, or `noop`
+  (audit). Registry `paused`/`audit` entries reject ingestion; audit runs must
+  set `DISCOVERY_AUDIT_ONLY=true`.
+- **Source-work API** (`POST /api/pipeline/source-work`, Bearer
+  `PIPELINE_SECRET`, 512 KiB body limit; actions
+  `register`/`take`/`finish`/`checkpoint`/`retry_quarantined`): mutations
+  require an `active` source and the current lease token. Queue contract:
+  256 KiB/item, 1000 items/source, 32 MiB aggregate JSON payload, 16 KiB cursor,
+  at-most-3 attempts with 5-minute doubling backoff (max 60 min) then
+  quarantine, fenced finish by claim generation + revision, accepted items
+  pruned only after 30 days unseen, unchanged accepted snapshots rechecked
+  after 24 h. Pending/quarantined work is never silently deleted.
+- **Backlog DTO** (public source detail `backlog`, nullable): pending,
+  retrying, quarantined counts, oldest pending time, last checkpoint, observed
+  time, payload size. `null` means unknown, which is distinct from an empty
+  backlog. Raw payloads and claim tokens are never exposed.
+- **Ingestion fencing:** candidate/opportunity submissions accept an optional
+  `X-Source-Claim` header. `SOURCE_CLAIM_ENFORCEMENT=compatible` (default):
+  absent headers stay legacy-compatible; supplied invalid tokens fail with 409
+  `claim_invalid`. `strict`: every write requires a live claim (missing header
+  → 409 `claim_missing`). Strict mode is the rollout gate for universal
+  enforcement; flip it only after all worker paths send the header. Renewals
+  recheck the claim's pinned config fingerprint (interval/timeout/URL/status)
+  and reject `config_changed`; releases never fail on config drift. Claims
+  carry `scope` (checkpoint writes must match it) and `purpose`
+  (`collection` respects next_due; `recovery` is drain-only, ignores next_due
+  while respecting backoff, requires actionable pending work, cannot register
+  new descriptors, and releases as noop without advancing cadence).
+- **Watermark limits:** collection cursors are scope watermarks (for example
+  PNCP `last_successful_update`), not pagination guarantees. A capped listing
+  can repeat its prefix forever. Never advance a cursor beyond
+  unregistered/failed records and never treat the watermark as proof of full
+  enumeration. PNCP queue identity uses
+  `numeroControlePNCP`/`sequencialDocumento` (legacy `pncp_control_number`/
+  `pncp_document_sequence` accepted).
+- **Drain-only recovery:** `SOURCE_DRAIN_ONLY=true` together with
+  `SOURCE_WORK_ENABLED=true` skips discovery and drains the existing spool one
+  item at a time with a 420 s preflight and lazy OCR init. It rejects the
+  `DISCOVERY_AUDIT_ONLY=true` combination and requires work mode enabled.
+  Recovery claims (`purpose=recovery`) bypass `next_due` but respect failure
+  backoff and require actionable pending work; `GET /api/pipeline/source-schedule/recovery-candidates`
+  lists them read-only. Supervisor recovery ticks remain disabled; do not
+  enable them until the drain/collection separation is reviewed against real
+  backlog telemetry.
+- **Drain PDF cap, error codes, and lease aborts:** the drain enforces the
+  shared per-run PDF cap (`SCRAPE_MAX_PDFS_PER_RUN`) for candidate items the
+  same way the legacy loop does: `pdf_download_limit_reached` is checked
+  before taking work and again after taking a candidate (before OCR init),
+  `record_pdf_download` runs only on successful extractions, and a capped
+  candidate is finished `deferred` (stays pending, no error code) with
+  `cap_reached` telemetry while the drain stops — mirroring opportunity
+  cap-deferred semantics. Failed finishes carry one of Repo A's spool error
+  codes: candidate-path download/OCR failures use `download_failed`/
+  `ocr_failed`, partial attachment snapshots use `attachment_validation_failed`
+  (any `*_validation_failed` attachment outcome — download, OCR, size-cap, or
+  archive-inspection failure — never conflated with candidate download
+  failures), unexpected processing exceptions use `processing_failed`, and
+  submission/ACK failures use `submission_failed`. The codes are additive over
+  the legacy four: against an older server a finish carrying a new code 422s,
+  aborting that drain run while the server keeps the item pending (the take
+  already set its retry backoff) — deploy Repo A before the worker. A
+  lease-fencing 409 mid-drain (`claim_expired`/`claim_missing`/
+  `claim_invalid`; set `LEASE_EXPIRED_REASONS` in `scripts/source_control.py`)
+  prints `drain aborted: source lease expired mid-drain (<reason>); server
+  keeps work pending` to stderr, exits 1 without a traceback, and removes the
+  collection-success marker so the supervisor outcome stays `failed`; every
+  other conflict reason keeps propagating as before.
+
+## Catalog parity: pinned/live CI
+
+- **Pinned gate (offline, always):** `config/source_catalog_contract.json`
+  (contract_version 1, `exported_at`, `source_commit`, `manifest_sha256`,
+  23 items) is compared against `config/source_schedule.json` by
+  `scripts/check_source_catalog_parity.py`. Worker CI (`.github/workflows/ci.yml`)
+  runs this gate on every push/PR. Paused registry entries are explicit local
+  execution holds, printed as `Locally paused (not covered)` and excluded from
+  the healthy coverage gate; they never waive cadence for active sources.
+- **Live gate (main push / daily / manual):**
+  `.github/workflows/source-catalog-parity.yml` runs
+  `python scripts/check_source_catalog_parity.py --live --output catalog-observation.json`
+  with `RENDER_APP_URL` + `PIPELINE_SECRET`, and uploads the observation
+  artifact (7-day retention). It checks the pin, the live
+  `GET /api/pipeline/source-schedule/catalog` (identity/lifecycle/cadence/
+  run-timeout plus `max_concurrent_source_runs == 3`), and exact pin-vs-live
+  equality. Pins older than **14 days** are rejected.
+- **Live validation steps (run manually, not from unit tests):**
+  1. Confirm repository secrets exist and target the intended Repo A
+     deployment: `gh secret list --repo Nucleo-IA-Unilasalle/lasalle-notices-automation-cronjob`
+     must show `RENDER_APP_URL` and `PIPELINE_SECRET` (never print values).
+  2. Confirm the Repo A deployment commit and its `operational_manifest.json`
+     hash match the reviewed pin's `source_commit`/`manifest_sha256`
+     (`config/source_catalog_contract.json`).
+  3. Run the offline pinned gate first:
+     `py -3.13 scripts/check_source_catalog_parity.py` — it must pass before
+     any live attempt.
+  4. Dispatch the live workflow manually:
+     `gh workflow run source-catalog-parity.yml --ref main --repo Nucleo-IA-Unilasalle/lasalle-notices-automation-cronjob`,
+     then watch the run to a green conclusion
+     (`gh run watch` or the Actions tab; 5-minute job timeout).
+  5. Download the `catalog-parity-<run-id>` artifact (`catalog-observation.json`)
+     and store it under `docs/evidence/snapshots/<date>/` as the parity
+     observation for that release.
+  6. Investigate any `Lifecycle mismatch`, `Cadence mismatch`, run-timeout,
+     capacity (`!= 3`), auth (401/403), network, or pin-age failure before
+     proceeding; the daily live workflow has not yet been validated end to end
+     and no deployed contract has been verified.
+- **Weekly pin refresh (14-day gate):** regenerate the pin from the Repo A
+  checkout with `py -3.13 scripts/export_source_contract.py --output <pin>`,
+  review the diff (identity, lifecycle, cadence, timeouts, commit hash,
+  manifest SHA256). The pin records the exporting checkout's `source_commit`
+  (git HEAD) plus the manifest SHA256: **HEAD does not include uncommitted
+  dirty changes**, so export from a clean checkout or verify the working tree
+  has no relevant dirty edits first. Copy the reviewed file to
+  `config/source_catalog_contract.json`, rerun the pinned gate plus the full
+  worker suite, and reset the 14-day age clock on the commit that lands it.
+  The pin is a reviewed bootstrap-manifest export, not live evidence.
+
+## Staging and evidence scaffolding (NOT STARTED)
+
+Placeholders only; no staging run, audit, soak, or live traffic is claimed.
+RR-01 through RR-05 remain OPEN and paused/audit holds are preserved. See
+[staging runbook](STAGING-RUNBOOK.md) for the ordered checklist,
+[evidence index](evidence/README.md) for per-source TODO slots,
+[snapshot validation](evidence/SNAPSHOT-VALIDATION.md) plus
+`scripts/validate_staging_snapshot.py` for the offline structural check,
+[two-audit template](evidence/AUDIT-TEMPLATE.md) for the independent
+ground-truth requirement, and
+[48 h template](evidence/OBSERVATION-48H-TEMPLATE.md) for the soak log.
 
 ## Monitoring
 
@@ -112,14 +280,14 @@ If the combined GitHub Actions pipeline fails:
 
 ### Disable combined pipeline
 
-To pause the hourly combined pipeline:
+To pause the hourly discovery:
 
-1. Disable the `pipeline-pncp-discovery.yml` and `pipeline-all-discovery.yml` schedules in GitHub Actions
-2. Manually trigger a per-source or legacy workflow only when needed
+1. Disable the `pipeline-discovery-group-a/b/c.yml` and `pipeline-pncp-discovery.yml` schedules in GitHub Actions
+2. Manually trigger a per-source fallback workflow only when needed
 
-Do not disable or re-enable one of the eight per-source schedules: those
-workflows are manual fallbacks, while `pipeline-all-discovery.yml` owns their
-hourly schedule.
+Do not add a source-specific cron without first removing it from the canonical
+group matrix and updating the registry (`config/source_schedule.json`) plus
+this table. `pipeline-all-discovery.yml` never owns scheduled traffic.
 
 ### Source-run telemetry rollout
 
@@ -129,10 +297,13 @@ unified orchestrator; a source need not be activated merely to receive telemetry
 Confirm the existing `RENDER_APP_URL` and `PIPELINE_SECRET` secrets target that
 deployment. The worker production branch is `main`.
 
-The `pipeline-all-discovery.yml` and `pipeline-pncp-discovery.yml` workflows
+The `pipeline-all-discovery.yml`, `pipeline-pncp-discovery.yml`, group
+workflows (via the reusable job), and all 22 per-source fallback workflows
 pass the repository variable `SOURCE_RUN_REPORTING_ENABLED` into their
-instrumented Python entrypoints, defaulting to `false`. Standalone per-source
-discoverers are not instrumented and are not made observable by this toggle.
+instrumented Python entrypoints, defaulting to `false`. Every fallback runs
+the same `discover_all_candidates.py` path and shares the per-source
+concurrency lock with its scheduled group writer, so manual/scheduled runs of
+the same source serialize.
 After deploying compatible code in both repositories, enable reporting with:
 
 ```powershell
@@ -275,10 +446,12 @@ selected; other sources require an explicitly enabled `OPPORTUNITY_SOURCES`
 key or an audit-only run. Otherwise the scheduled legacy candidate path
 remains the default.
 
-On the canonical `pipeline-all-discovery.yml` schedule, `DISCOVERY_AUDIT_ONLY`
-is false and the eight default sources run through the live legacy candidate
-path. A manual dispatch defaults to audit-only and does not download, OCR, or
-submit. Keep other structured opportunity keys out of `OPPORTUNITY_SOURCES`
+On the canonical group schedules, `DISCOVERY_AUDIT_ONLY`
+is derived from the registry `rollout_mode` (`audit=true`, `ingest=false`).
+A manual dispatch of a per-source fallback defaults to audit-only and does
+not download, OCR, or submit unless explicitly set to ingest. Multi-source
+manual ingest is rejected fail-closed (use one source per job); keep other
+structured opportunity keys out of `OPPORTUNITY_SOURCES`
 until their fidelity gates and the Repo A documentless capability are
 coordinated.
 
@@ -508,3 +681,33 @@ production backup in isolation and run the backend reconciliation rehearsal.
 Review exported analyses and every association action, add `reviewed: true` to
 the exact rehearsal report, then pass it as `--reviewed-report` in apply mode.
 Any distinct uploaded Drive file conflict aborts the transaction.
+# Source Budget Fairness
+
+Managed collection checkpoints advance only on complete coverage. PNCP preserves
+the last successful update watermark on page/lookup/candidate caps, upstream
+failures, and registration failures; already registered descriptors remain
+drainable. Historical versioned incomplete PNCP checkpoints are ignored, causing
+the configured initial lookback to be scanned again. This does not reconstruct
+updates older than that lookback: inspect prior partial runs before rollout and
+use an explicitly reviewed backfill if needed. Finep checkpoints include its
+complete page metadata; capped collections do not claim completion.
+
+Durable processing reports actual download/OCR and acknowledged submission
+outcomes independently of spool completion. Ambiguous submission acknowledgments
+remain failures/retries, not accepted counts. The freshness report separates
+recent but failing/warning/checking/unknown sources into `unhealthy`; recent run
+timestamps alone do not pass monitoring. These fixes do not close RR-01 through
+RR-05 or change any paused/audit rollout holds.
+
+The all-source workflow passes its run number as `SOURCE_ROTATION_OFFSET`.
+The orchestrator rotates the configured priority list without increasing the
+shared PDF budget. Manual invocations default to offset zero and can override
+it explicitly. Discovery continues after the processing cap; deferred sources
+emit warning telemetry with `stats.cap_reached=true` rather than disappearing
+from source-run history. This does not guarantee every source is processed in
+every run; verify freshness over a full rotation and inspect repeated failures.
+
+Repo A's accepted pipeline jobs require its separately supervised durable
+executor. A 202 is not completion; keep polling the run's existing terminal
+status contract. Coordinate its schema/API/frontend rollout using Repo A's
+`docs/ARCHITECTURE.md` release procedure before resuming production triggers.

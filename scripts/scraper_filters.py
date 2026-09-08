@@ -13,6 +13,9 @@ from __future__ import annotations
 
 import re
 from typing import Literal, NotRequired, TypedDict
+import unicodedata
+from urllib.parse import unquote
+
 
 
 FilterPolicy = Literal["default", "include_tdr", "no_prefilter"]
@@ -51,10 +54,8 @@ def resolve_filter_policy(filter_policy: FilterPolicy) -> tuple[bool, list[str]]
 
 
 def is_likely_edital(filename: str, url: str, filter_policy: FilterPolicy = "default") -> bool:
-    text = f"{filename} {url}".lower()
-    text = text.replace("á", "a").replace("é", "e").replace("í", "i")
-    text = text.replace("ó", "o").replace("ú", "u").replace("ã", "a")
-    text = text.replace("õ", "o").replace("ç", "c")
+    raw = unquote(f"{filename} {url}")
+    text = unicodedata.normalize("NFKD", raw).encode("ASCII", "ignore").decode("utf-8").lower()
     should_prefilter, exclusion_patterns = resolve_filter_policy(filter_policy)
     if not should_prefilter:
         return True

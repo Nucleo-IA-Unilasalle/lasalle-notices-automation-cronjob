@@ -1,0 +1,44 @@
+{
+  "audit_slot": 1,
+  "captured_at_utc": "2026-09-07T23:02:25.336124+00:00",
+  "inspected_urls": {
+    "https://www.bndes.gov.br/wps/portal/site/home/financiamento/produto/bndes-fundo-socioambiental": {
+      "bytes": 99694,
+      "sha256": "aa98971f1bd3219ce72e6f8724ae9523cd6172f8e0e821fbeea13cf31bb5a648",
+      "status_code": 200
+    },
+    "https://www.bndes.gov.br/wps/portal/site/home/financiamento/produto/bndes-fundo-socioambiental?1dmy&urile=wcm%3apath%3a%2Fbndes_institucional%2Fhome%2Fonde-atuamos%2Fmeio-ambiente%2Fbndes-azul%2Fbndes-corais": {
+      "bytes": 86239,
+      "sha256": "fb0a9a16174bceaea06c643a903f105ebde83add0816934792f6bd7826c97295",
+      "slug": "bndes-corais",
+      "status_code": 200
+    },
+    "https://www.bndes.gov.br/wps/portal/site/home/financiamento/produto/bndes-fundo-socioambiental?1dmy&urile=wcm%3apath%3a%2Fbndes_institucional%2Fhome%2Fonde-atuamos%2Fsocial%2Fbndes-bioinsumos": {
+      "bytes": 80494,
+      "sha256": "7b37c0b00c370063264941ba82f49e07568b09c3f0792bd019532f0bd1d34244",
+      "slug": "bndes-bioinsumos",
+      "status_code": 200
+    },
+    "https://www.bndes.gov.br/wps/portal/site/home/financiamento/produto/bndes-fundo-socioambiental?1dmy&urile=wcm%3apath%3a%2Fbndes_institucional%2Fhome%2Fonde-atuamos%2Fsocial%2Fbndes-periferias": {
+      "bytes": 81020,
+      "sha256": "4a06e0410ee51205e369c22299f6f805c324cad057cb62403ac22512c4a8bfc2",
+      "slug": "bndes-periferias",
+      "status_code": 200
+    },
+    "https://www.bndes.gov.br/wps/portal/site/home/financiamento/produto/bndes-fundo-socioambiental?1dmy&urile=wcm%3apath%3a%2Fbndes_institucional%2Fhome%2Fonde-atuamos%2Fsocial%2Fsertao-mais-produtivo": {
+      "bytes": 83408,
+      "sha256": "20d0d93b4029e57b6a19759bdc34e626ddd955e24940136c625aadcaca3649d9",
+      "slug": "sertao-mais-produtivo",
+      "status_code": 200
+    },
+    "https://www.bndes.gov.br/wps/vanityurl/chamadadeinovacao": {
+      "bytes": 72824,
+      "note": "External worldlabs.org redirect; no bndes.gov.br hosted PDFs",
+      "sha256": "fc4c5492dc9295fdcfeca0c4b7ca813f5a171fff9166c1bc39925e5f72cfd3e7",
+      "status_code": 200
+    }
+  },
+  "method": "Direct official portal HTTP capture & DOM extraction",
+  "operator": "Independent Auditor (Antigravity)",
+  "source": "bndes"
+}

@@ -35,7 +35,9 @@ import re
 import sys
 from datetime import datetime, timezone
 from typing import Any
-from urllib.parse import parse_qs, urljoin, urlsplit, urlunsplit
+import unicodedata
+from urllib.parse import parse_qs, unquote, urljoin, urlsplit, urlunsplit
+
 
 from bs4 import BeautifulSoup, Tag
 
@@ -90,26 +92,61 @@ BNDES_FETCH_TIMEOUT_SECONDS = int(os.environ.get("BNDES_FETCH_TIMEOUT_SECONDS", 
 #     ``MMXXIV``, ``fy-2026-q1`` where ``q1`` is adjacent) — Phase 3
 #     sources using any of these encodings need a per-source override.
 _YEAR_PATTERN = re.compile(r"(?<!\d)(19|20)\d{2}(?!\d)")
+_DATE_8DIGIT_PATTERN = re.compile(r"(?<!\d)(\d{8})(?!\d)")
+_MONTH_YEAR_PATTERN = re.compile(
+    r"(?<![a-z])(?:jan(?:eiro)?|fev(?:ereiro)?|mar(?:co)?|abr(?:il)?|mai(?:o)?|jun(?:ho)?|jul(?:ho)?|ago(?:sto)?|set(?:embro)?|out(?:ubro)?|nov(?:embro)?|dez(?:embro)?)[._-]((?:19|20)\d{2})(?![a-z0-9])",
+    re.IGNORECASE,
+)
+
+
+def _extract_year_from_compact_date(token: str) -> int | None:
+    """Return a year only when an eight-digit token is a valid calendar date.
+
+    BNDES URLs include opaque eight-digit identifiers as well as both Brazilian
+    ``DDMMYYYY`` and ISO-like ``YYYYMMDD`` dates. Treating every numeric token
+    as a date can reject a current notice simply because its identifier starts
+    or ends with an older-looking year.
+    """
+    candidates = (
+        (token[:4], token[4:6], token[6:]),
+        (token[4:], token[2:4], token[:2]),
+    )
+    years: list[int] = []
+    for raw_year, raw_month, raw_day in candidates:
+        year, month, day = int(raw_year), int(raw_month), int(raw_day)
+        if not 1900 <= year <= 2099:
+            continue
+        try:
+            datetime(year, month, day)
+        except ValueError:
+            continue
+        years.append(year)
+    return max(years) if years else None
 
 
 def _extract_year_from_url(url: str) -> int | None:
-    """Return the first 4-digit year found in the URL, or ``None``.
-
-    Searches the URL path and query string for any year in the 1900-2099
-    range. Returns the most recent year if multiple are present, since
-    the BNDE listing slugs typically carry the edital year in the
-    trailing segment (e.g. ``chamada-publica-periferias-2026``).
-    """
+    """Return the most recent 4-digit year found in the URL, or ``None``."""
     parsed = urlsplit(url)
-    haystack = f"{parsed.path} {parsed.query}"
+    raw_haystack = unquote(f"{parsed.path} {parsed.query}")
+    haystack = unicodedata.normalize("NFKD", raw_haystack).encode("ASCII", "ignore").decode("utf-8").lower()
     candidates: list[int] = []
     for match in _YEAR_PATTERN.finditer(haystack):
         year = int(match.group(0))
         if 1900 <= year <= 2099:
             candidates.append(year)
+    for match in _DATE_8DIGIT_PATTERN.finditer(haystack):
+        year = _extract_year_from_compact_date(match.group(1))
+        if year is not None:
+            candidates.append(year)
+    for match in _MONTH_YEAR_PATTERN.finditer(haystack):
+        raw_year = match.group(1)
+        year = int(raw_year) if len(raw_year) == 4 else 2000 + int(raw_year)
+        if 1900 <= year <= 2099:
+            candidates.append(year)
     if not candidates:
         return None
     return max(candidates)
+
 
 
 def _passes_year_guard(url: str, *, min_year: int) -> bool:
@@ -134,10 +171,12 @@ def extract_bndes_detail_and_pdf_urls(listing_html: str, listing_url: str) -> li
     discovered: list[str] = []
     seen: set[str] = set()
     signal_pattern = re.compile(
-        r"\b(edital|chamada|cpsi|inovacao|fundo-socioambiental|periferias|corais|sertao)\b",
+        r"\b(edital|chamada|cpsi|inovacao|fundo-socioambiental|periferias|corais|sertao|bioinsumos)\b",
         re.IGNORECASE,
     )
-    allowed_urile_segments = frozenset({"bndes-periferias", "bndes-corais", "sertao-mais-produtivo"})
+    allowed_urile_segments = frozenset(
+        {"bndes-periferias", "bndes-corais", "sertao-mais-produtivo", "bndes-bioinsumos"}
+    )
 
     def _normalize_host(host: str) -> str:
         normalized = host.lower()
@@ -230,13 +269,26 @@ def extract_bndes_detail_and_pdf_urls(listing_html: str, listing_url: str) -> li
     return discovered
 
 
+BNDES_NON_EDITAL_PATTERNS = re.compile(
+    r"\b(folheto|cartilha|perguntas.?e.?respostas|perguntas.?respostas|faq|apresentacao(?![\s_-]+(?:de[\s_-]+)?propostas?\b|[\s_-]+(?:de[\s_-]+)?projetos?\b)|projetos.?em.?andamento)\b",
+    re.IGNORECASE,
+)
+
+
 def _candidate_passes_edital_prefilter(
     url: str, filter_policy: FilterPolicy = "default"
 ) -> bool:
     """Apply the EDITAL inclusion/exclusion patterns to a candidate URL."""
+    if filter_policy != "no_prefilter":
+        raw = unquote(url)
+        text = unicodedata.normalize("NFKD", raw).encode("ASCII", "ignore").decode("utf-8").lower()
+        text = text.replace("+", " ").replace("_", " ")
+        if BNDES_NON_EDITAL_PATTERNS.search(text):
+            return False
     parsed = urlsplit(url)
     filename = parsed.path.rsplit("/", 1)[-1]
     return is_likely_edital(filename, url, filter_policy=filter_policy)
+
 
 
 def _fetch_listing_html(listing_url: str) -> str:

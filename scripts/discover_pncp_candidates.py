@@ -13,6 +13,7 @@ import requests
 
 import pipeline_core
 from source_run_reporting import SourceRunReporter
+from source_control import AdmissionConflict
 from pncp_filters import DROP_EXPIRED, FEDERAL_CNPJS, UF_FILTER
 from pipeline_core import process_candidate
 
@@ -131,10 +132,13 @@ def fetch_pncp_search_pages(
 ) -> list[dict[str, Any]]:
     records: list[dict[str, Any]] = []
     page = 1
+    last_total_pages = 1
 
     while page <= PNCP_MAX_PAGES_PER_QUERY:
         params = {**base_params, "pagina": page, "tamanhoPagina": PNCP_PAGE_SIZE}
         url = f"{base_url}?{urlencode(params)}"
+        if stats is not None:
+            stats["pncp_pages_attempted"] = int(stats.get("pncp_pages_attempted", 0) or 0) + 1
         try:
             payload = fetch_json(url)
         except Exception as exc:
@@ -150,16 +154,25 @@ def fetch_pncp_search_pages(
         page_records = payload.get("data", [])
         if isinstance(page_records, list):
             records.extend(record for record in page_records if isinstance(record, dict))
+        if stats is not None:
+            stats["pncp_pages_completed"] = int(stats.get("pncp_pages_completed", 0) or 0) + 1
 
         total_pages = payload.get("totalPaginas") or page
         try:
             total_pages_int = int(total_pages)
         except (TypeError, ValueError):
             total_pages_int = page
+        last_total_pages = total_pages_int
 
         if page >= total_pages_int:
             break
         page += 1
+
+    if stats is not None and page >= PNCP_MAX_PAGES_PER_QUERY and last_total_pages > PNCP_MAX_PAGES_PER_QUERY:
+        # The listing was truncated by the per-query page cap: the tail was
+        # never enumerated, so the collection cursor must stay incomplete.
+        stats["page_cap_reached"] = 1
+        stats["pncp_page_cap_reached"] = 1
 
     return records
 
@@ -254,6 +267,22 @@ def validate_pncp_record_for_download(record: dict[str, Any]) -> bool:
 
 
 def _load_update_checkpoint() -> datetime | None:
+    import durable_source_work
+    if durable_source_work.enabled():
+        from source_control import SourceControl
+        cursor = SourceControl("pncp").work("checkpoint", scope="pncp-updates-v1").get("cursor") or {}
+        versioned, adapter, scope = durable_source_work.parse_collection_cursor(cursor)
+        if versioned and adapter == "pncp" and scope == durable_source_work.PNCP_SCOPE:
+            # Older workers wrote the scan start even for uncollected tails.
+            # Such rows are not safe update watermarks; rescan the lookback.
+            if cursor.get("complete") is not True:
+                return None
+            return parse_pncp_datetime(cursor.get("last_successful_update")) if cursor.get("last_successful_update") else None
+        # Legacy watermark rows predate versioned cursors: honor the time
+        # watermark for overlap, but never treat it as pagination position.
+        if isinstance(cursor.get("last_successful_update"), str):
+            return parse_pncp_datetime(cursor.get("last_successful_update"))
+        return None
     try:
         with open(PNCP_UPDATE_CHECKPOINT_PATH, "r", encoding="utf-8") as handle:
             payload = json.load(handle)
@@ -410,6 +439,9 @@ def fetch_pncp_records(
         r for r in deduplicated
         if is_pncp_record_actionable(r, drop_expired=drop_expired)
     ]
+    if stats is not None:
+        stats["pncp_raw_records"] = len(raw_records)
+        stats["pncp_records_enumerated"] = len(records)
 
     return records, now_utc
 
@@ -618,6 +650,7 @@ def discover_opportunities() -> tuple[dict[str, int], list[dict[str, Any]], date
     opportunities: list[dict[str, Any]] = []
     for record in records:
         if stats["document_lookups"] >= PNCP_MAX_DOCUMENT_LOOKUPS_PER_RUN:
+            stats["detail_cap_reached"] = 1
             break
         documents, failed = fetch_pncp_documents(record)
         stats["document_lookups"] += 1
@@ -698,6 +731,7 @@ def discover_candidates() -> tuple[dict[str, int], list[dict[str, Any]], datetim
     for record in records:
         if stats["document_lookups"] >= PNCP_MAX_DOCUMENT_LOOKUPS_PER_RUN:
             print(f"warning: stopping after document lookup cap {PNCP_MAX_DOCUMENT_LOOKUPS_PER_RUN}", file=sys.stderr)
+            stats["detail_cap_reached"] = 1
             break
 
         if not validate_pncp_record_for_download(record):
@@ -762,15 +796,43 @@ def _main_impl(reporter: SourceRunReporter | None = None) -> int:
         print("error: PIPELINE_SECRET is required", file=sys.stderr)
         return 2
     if PNCP_OPPORTUNITY_V2_ENABLED:
+        if os.environ.get("SOURCE_WORK_ENABLED") == "true" and not PNCP_OPPORTUNITY_V2_SHADOW:
+            print("Managed PNCP v2 ingestion is not enabled; use the validated candidate contract", file=sys.stderr)
+            return 2
         return _main_opportunities()
+
+    if os.environ.get("SOURCE_DRAIN_ONLY", "").strip().lower() in {"1", "true", "yes", "on"}:
+        import durable_source_work
+        if os.environ.get("SOURCE_WORK_ENABLED") != "true" or reporter is None:
+            print("error: SOURCE_DRAIN_ONLY requires SOURCE_WORK_ENABLED=true and managed reporting", file=sys.stderr)
+            return 2
+        # Recovery drain: the spool is oldest-first, so pending work resumes
+        # in registration order. No search-pagination position is restored
+        # here; the stored versioned cursor keeps the last committed prefix
+        # for the next collection cycle.
+        try:
+            failures = durable_source_work.drain("pncp", reporter, {})
+        except AdmissionConflict as exc:
+            if durable_source_work.abort_drain_on_lease_conflict(exc):
+                return 1
+            raise
+        if failures or reporter.metrics.stats.get("cap_reached"):
+            reporter.complete("warning")
+        return 1 if failures else 0
 
     stats, candidates, discovery_time = discover_candidates()
     if reporter is not None:
         reporter.record_inventory(
             seen=int(stats.get("records", stats.get("candidates", 0)) or 0),
             in_scope=int(stats.get("candidates", 0) or 0),
-            policy_rejected=int(stats.get("year_rejected", 0) or 0) + int(stats.get("prefilter_rejected", 0) or 0),
+            policy_rejected=int(stats.get("pre_download_rejected", 0) or 0) + int(stats.get("year_rejected", 0) or 0) + int(stats.get("prefilter_rejected", 0) or 0),
         )
+        # Populate partial-inventory telemetry before any early return so a
+        # failed search stream is never reported without its coverage flag.
+        reporter.metrics.stats.update({
+            "partial_inventory": bool(stats.get("search_failures")),
+            "download_failures": int(stats.get("document_failures", 0) or 0),
+        })
     print(f"PNCP discovery stats: {stats}")
     print(f"PNCP candidates discovered: {len(candidates)}")
 
@@ -780,7 +842,51 @@ def _main_impl(reporter: SourceRunReporter | None = None) -> int:
             "treating as workflow failure instead of no eligible notices",
             file=sys.stderr,
         )
+        if reporter is not None:
+            reporter.metrics.stats["partial_inventory"] = True
         return 1
+
+    import durable_source_work
+    if durable_source_work.enabled() and reporter is not None:
+        # Keep the previous completed watermark until this entire scan is
+        # registered. Partial descriptor progress remains in the spool.
+        watermark = discovery_time.isoformat()
+        enumerated = int(stats.get("records", 0) or 0)
+        lookups = int(stats.get("document_lookups", 0) or 0)
+        pages_completed = int(stats.get("pncp_pages_completed", 0) or 0)
+        truncated = bool(stats.get("page_cap_reached") or stats.get("search_failures"))
+
+        def _pncp_cursor(prefix, complete):
+            # Descriptors are durable independently. Only a fully registered,
+            # uncapped scan may replace the last successful update watermark.
+            if not complete:
+                return None
+            return durable_source_work.build_pncp_cursor(
+                last_successful_update=watermark,
+                records_enumerated=enumerated,
+                records_registered=prefix,
+                document_lookups_completed=lookups,
+                documents_selected=prefix,
+                search_pages_completed=pages_completed,
+                search_truncated=truncated,
+                complete=complete,
+            )
+
+        complete = durable_source_work.register_collection(
+            "pncp", "candidate", candidates, stats, scope=durable_source_work.PNCP_SCOPE,
+            cursor_builder=_pncp_cursor,
+        )
+        if not complete:
+            reporter.metrics.stats["partial_inventory"] = True
+        try:
+            failures = durable_source_work.drain("pncp", reporter, stats)
+        except AdmissionConflict as exc:
+            if durable_source_work.abort_drain_on_lease_conflict(exc):
+                return 1
+            raise
+        if not complete or failures or reporter.metrics.stats.get("cap_reached"):
+            reporter.complete("warning")
+        return 1 if failures else 0
 
     if not candidates:
         print("No new candidates to submit")
@@ -827,9 +933,30 @@ def _main_impl(reporter: SourceRunReporter | None = None) -> int:
 
     stats["processed"] = len(processed)
     stats["ocr_successes"] = sum(1 for r in processed if r.get("worker_result"))
-    stats["ocr_failures"] = sum(1 for r in processed if r.get("error"))
+    # Downloads and OCR are distinct facts: a "download:" error consumed no
+    # bytes, an "ocr:" error downloaded but failed extraction.
+    stats["download_failures"] = sum(
+        1 for r in processed
+        if not r.get("worker_result") and not str(r.get("error", "")).startswith("ocr:")
+    )
+    stats["ocr_failures"] = sum(
+        1 for r in processed if str(r.get("error", "")).startswith("ocr:")
+    )
     if reporter is not None:
-        reporter.record_downloads(stats.get("pdfs_downloaded", 0), stats.get("ocr_successes", 0))
+        reporter.record_downloads(
+            stats["ocr_successes"] + stats["ocr_failures"], stats.get("ocr_successes", 0)
+        )
+        reporter.metrics.stats.update({
+            "cap_reached": bool(
+                stats.get("processing_cap_reached")
+                or stats.get("pdf_download_cap_reached")
+                or stats.get("submittable_cap_reached")
+            ),
+            # A failed search stream leaves the declared scope uncovered.
+            "partial_inventory": bool(stats.get("search_failures")),
+            "download_failures": stats["download_failures"],
+            "ocr_failures": stats["ocr_failures"],
+        })
     print(f"PNCP processing stats: {stats}")
 
     if candidates and stats["ocr_successes"] == 0:
@@ -848,6 +975,7 @@ def _main_impl(reporter: SourceRunReporter | None = None) -> int:
             reactivated=counts.get("reactivated", 0), duplicates=counts.get("duplicates", 0),
             errors=counts.get("invalid", 0) + result.get("failed_batches", 0),
         )
+        reporter.metrics.stats["submission_failures"] = counts.get("invalid", 0) + result.get("failed_batches", 0)
     print(f"Render candidate submission: {result}")
 
     if candidates and result.get("submitted", 0) == 0:

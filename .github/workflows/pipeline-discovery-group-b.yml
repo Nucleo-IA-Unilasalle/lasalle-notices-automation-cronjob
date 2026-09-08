@@ -1,0 +1,43 @@
+name: Discovery group B (funbio, fundacao_grupo_boticario, govbr_mma, govbr_mma_public_calls, sema_rs, tnc, dopa)
+
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: discovery-group-b
+  queue: max
+  cancel-in-progress: false
+
+jobs:
+  matrix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      includes: ${{ steps.build.outputs.includes }}
+    steps:
+      - name: Checkout scheduler repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Build strict source matrix from the registry
+        id: build
+        run: echo "includes=$(python scripts/build_source_matrix.py --group b --format github)" >> "$GITHUB_OUTPUT"
+
+  discover:
+    needs: matrix
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        include: ${{ fromJSON(needs.matrix.outputs.includes) }}
+    uses: ./.github/workflows/pipeline-discovery-source.yml
+    with:
+      source: ${{ matrix.source }}
+      browser_required: ${{ matrix.browser_required && 'true' || 'false' }}
+      rollout_mode: ${{ matrix.rollout_mode }}
+      submission_contract: ${{ matrix.submission_contract }}
+    secrets: inherit

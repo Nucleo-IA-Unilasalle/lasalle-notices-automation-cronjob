@@ -1,0 +1,20 @@
+{
+  "source_key": "bndes",
+  "observed_at": "2026-09-07T23:02:34.162458+00:00",
+  "registry_ref": "15501bf37908b0968112299966792011b6b0d81d",
+  "pin_ref": "2026-09-06T03:22:11.102329+00:00",
+  "runs": [],
+  "audits": [
+    {
+      "result": "TODO",
+      "report_path": "",
+      "historical_diagnostic_path": "docs/evidence/sources/bndes/audit-1/fidelity"
+    },
+    {
+      "result": "TODO",
+      "report_path": "",
+      "historical_diagnostic_path": "docs/evidence/sources/bndes/audit-2/fidelity"
+    }
+  ],
+  "notes": "RR-05 remains open. Historical repository-owned comparisons had 0 blockers but were not independent audits. Two fabricated run identifiers and unsupported started_at values were removed; the one observed failed run ID and uncorrelated later staging outcomes remain documented in STAGING-2026-09-07.md."
+}

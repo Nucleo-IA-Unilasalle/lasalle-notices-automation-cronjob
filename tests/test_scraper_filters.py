@@ -113,6 +113,19 @@ class TestIsLikelyEdital:
             filter_policy="include_tdr",
         ) is True
 
+    def test_handles_accented_and_encoded_exclusions(self) -> None:
+        assert scraper_filters.is_likely_edital(
+            "termo_de_referência.pdf",
+            "https://example.org/termo_de_refer%C3%AAncia.pdf",
+            filter_policy="default",
+        ) is False
+        assert scraper_filters.is_likely_edital(
+            "retificação_cronograma.pdf",
+            "https://example.org/retifica%C3%A7%C3%A3o_cronograma.pdf",
+            filter_policy="default",
+        ) is False
+
+
     def test_no_prefilter_policy_accepts_everything(self) -> None:
         assert scraper_filters.is_likely_edital(
             "resultado_final.pdf",

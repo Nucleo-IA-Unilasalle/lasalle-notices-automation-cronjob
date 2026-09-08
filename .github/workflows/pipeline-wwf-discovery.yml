@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: pipeline-trigger
+  group: discovery-wwf-${{ github.repository }}
   queue: max
   cancel-in-progress: false
 
@@ -57,8 +57,12 @@ jobs:
 
       - name: Run WWF discovery, download, OCR, and submission
         if: ${{ github.event_name != 'workflow_dispatch' || !inputs.audit_only }}
-        run: python scripts/discover_wwf_candidates.py
+        run: python scripts/discover_all_candidates.py
         env:
+          SOURCES: "wwf"
+          SOURCE_RUN_REPORTING_ENABLED: ${{ vars.SOURCE_RUN_REPORTING_ENABLED || 'false' }}
+          MIN_NOTICE_YEAR: "2026"
+          FILTER_POLICY: "default"
           RENDER_APP_URL: ${{ secrets.RENDER_APP_URL }}
           PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}
           WWF_MIN_NOTICE_YEAR: "2026"

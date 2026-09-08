@@ -101,3 +101,37 @@ def test_invalid_json_and_divergent_patch_are_not_retried(monkeypatch):
     with patch("source_run_reporting.requests.post", return_value=start), patch("source_run_reporting.requests.patch", return_value=divergent) as p:
         run = SourceRunReporter("y"); run.start(); run.complete("success")
     assert p.call_count == 1 and run.telemetry_failed
+
+
+def test_cap_reached_derives_warning_not_success(monkeypatch):
+    """Terminal Outcome Table: a cap that leaves eligible work pending is warning."""
+    monkeypatch.setenv("SOURCE_RUN_REPORTING_ENABLED", "true"); monkeypatch.setenv("RENDER_APP_URL", "https://b"); monkeypatch.setenv("PIPELINE_SECRET", "s")
+    with patch("source_run_reporting.requests.post", return_value=response(body={"id": "r"})), patch("source_run_reporting.requests.patch", return_value=response(body={"status": "warning"})) as p:
+        from source_run_reporting import SourceRunReporter
+        with SourceRunReporter("x") as r:
+            r.metrics.stats["cap_reached"] = True
+    assert p.call_args.kwargs["json"]["status"] == "warning"
+    assert p.call_args.kwargs["json"]["stats"]["cap_reached"] is True
+
+
+def test_partial_inventory_derives_warning(monkeypatch):
+    monkeypatch.setenv("SOURCE_RUN_REPORTING_ENABLED", "true"); monkeypatch.setenv("RENDER_APP_URL", "https://b"); monkeypatch.setenv("PIPELINE_SECRET", "s")
+    with patch("source_run_reporting.requests.post", return_value=response(body={"id": "r"})), patch("source_run_reporting.requests.patch", return_value=response(body={"status": "warning"})) as p:
+        from source_run_reporting import SourceRunReporter
+        with SourceRunReporter("x") as r:
+            r.metrics.stats["partial_inventory"] = True
+    assert p.call_args.kwargs["json"]["status"] == "warning"
+
+
+def test_derive_terminal_status_is_the_single_reducer():
+    from source_run_reporting import SourceRunMetrics, derive_terminal_status
+
+    assert derive_terminal_status(SourceRunMetrics()) == "success"
+    m = SourceRunMetrics(errors=1)
+    assert derive_terminal_status(m) == "warning"
+    m = SourceRunMetrics(fidelity_blockers=2)
+    assert derive_terminal_status(m) == "warning"
+    m = SourceRunMetrics(stats={"cap_reached": True})
+    assert derive_terminal_status(m) == "warning"
+    m = SourceRunMetrics(stats={"partial_inventory": True})
+    assert derive_terminal_status(m) == "warning"

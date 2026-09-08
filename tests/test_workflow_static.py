@@ -15,39 +15,57 @@ SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 
 SCHEDULES = {
     "pipeline-ai.yml": "16 * * * *",
-    "pipeline-all-discovery.yml": "8 * * * *",
     "pipeline-backfill.yml": "23 11 * * 6",
-    "pipeline-fao-discovery.yml": "12 * * * *",
-    "pipeline-fundacao-grupo-boticario-discovery.yml": "17 * * * *",
-    "pipeline-govbr-mma-discovery.yml": "50 * * * *",
-    "pipeline-kfw-discovery.yml": "28 * * * *",
-    "pipeline-msgov-discovery.yml": "38 * * * *",
+    "pipeline-discovery-group-a.yml": "7 * * * *",
+    "pipeline-discovery-group-b.yml": "17 * * * *",
+    "pipeline-discovery-group-c.yml": "27 * * * *",
     "pipeline-pncp-discovery.yml": "05 * * * *",
+    "pipeline-source-monitor.yml": "*/15 * * * *",
     "pipeline-sync.yml": "37 * * * *",
-    "pipeline-unep-discovery.yml": "45 * * * *",
-    "pipeline-worldbank-discovery.yml": "55 * * * *",
 }
 
 MANUAL_SOURCE_FALLBACKS = {
     "pipeline-bndes-discovery.yml",
     "pipeline-brde-discovery.yml",
+    "pipeline-canoas-discovery.yml",
+    "pipeline-dopa-discovery.yml",
+    "pipeline-fao-discovery.yml",
     "pipeline-fapergs-discovery.yml",
+    "pipeline-fbds-discovery.yml",
+    "pipeline-finep-discovery.yml",
     "pipeline-funbio-discovery.yml",
+    "pipeline-fundacao-grupo-boticario-discovery.yml",
+    "pipeline-govbr-mma-discovery.yml",
+    "pipeline-govbr-mma-fnma-discovery.yml",
+    "pipeline-govbr-mma-public-calls-discovery.yml",
+    "pipeline-ibama-discovery.yml",
     "pipeline-iis-rio-discovery.yml",
+    "pipeline-kfw-discovery.yml",
+    "pipeline-msgov-discovery.yml",
     "pipeline-sema-rs-discovery.yml",
     "pipeline-tnc-discovery.yml",
+    "pipeline-unep-discovery.yml",
+    "pipeline-worldbank-discovery.yml",
     "pipeline-wwf-discovery.yml",
 }
 
 PDF_WORKFLOWS = {
     "pipeline-all-discovery.yml",
+    "pipeline-discovery-source.yml",
     "pipeline-bndes-discovery.yml",
     "pipeline-brde-discovery.yml",
+    "pipeline-canoas-discovery.yml",
+    "pipeline-dopa-discovery.yml",
     "pipeline-fao-discovery.yml",
     "pipeline-fapergs-discovery.yml",
+    "pipeline-fbds-discovery.yml",
+    "pipeline-finep-discovery.yml",
     "pipeline-funbio-discovery.yml",
     "pipeline-fundacao-grupo-boticario-discovery.yml",
     "pipeline-govbr-mma-discovery.yml",
+    "pipeline-govbr-mma-fnma-discovery.yml",
+    "pipeline-govbr-mma-public-calls-discovery.yml",
+    "pipeline-ibama-discovery.yml",
     "pipeline-iis-rio-discovery.yml",
     "pipeline-kfw-discovery.yml",
     "pipeline-msgov-discovery.yml",
@@ -96,7 +114,7 @@ def _uses_values(document: dict[str, Any]) -> list[str]:
 
 
 def test_all_workflows_parse_with_read_only_permissions_and_concurrency() -> None:
-    assert len(WORKFLOWS) == 26
+    assert len(WORKFLOWS) == 39
     for path in WORKFLOWS:
         document = _load(path)
         assert document["permissions"] == {"contents": "read"}, path.name
@@ -110,12 +128,24 @@ def test_all_workflows_parse_with_read_only_permissions_and_concurrency() -> Non
         assert isinstance(jobs, dict) and jobs, path.name
         for job_name, job in jobs.items():
             assert isinstance(job, dict), f"{path.name}:{job_name}"
-            assert isinstance(job.get("timeout-minutes"), int), f"{path.name}:{job_name}"
+            if str(job.get("uses", "")).startswith("./.github/workflows/"):
+                # Reusable job: the timeout is enforced inside the called workflow.
+                continue
+            timeout = job.get("timeout-minutes")
+            if isinstance(timeout, str):
+                # Reusable input expression; the input itself must be typed number.
+                assert timeout == "${{ inputs.run_timeout_minutes || 20 }}", f"{path.name}:{job_name}"
+                inputs = (_trigger(document).get("workflow_call", {}) or {}).get("inputs", {})
+                assert inputs.get("run_timeout_minutes", {}).get("type") == "number", path.name
+            else:
+                assert isinstance(timeout, int), f"{path.name}:{job_name}"
 
 
 def test_all_action_references_are_commit_sha_pinned() -> None:
     for path in WORKFLOWS:
         for reference in _uses_values(_load(path)):
+            if reference.startswith("./.github/workflows/"):
+                continue  # local reusable workflow, versioned with the repository
             action, separator, revision = reference.partition("@")
             assert separator and action.startswith("actions/"), f"{path.name}: {reference}"
             assert SHA_RE.fullmatch(revision), f"{path.name}: {reference}"
@@ -134,8 +164,12 @@ def test_canonical_schedule_has_no_duplicate_source_fallbacks() -> None:
 def test_instrumented_entrypoints_use_default_off_repository_telemetry_flag() -> None:
     instrumented = {
         "pipeline-all-discovery.yml": "python scripts/discover_all_candidates.py",
-        "pipeline-pncp-discovery.yml": "python scripts/discover_pncp_candidates.py",
+        "pipeline-pncp-discovery.yml": "python scripts/run_managed_source.py --source pncp scripts/discover_pncp_candidates.py",
+        "pipeline-discovery-source.yml": 'python scripts/run_managed_source.py --source "$DISCOVERY_SOURCE" scripts/discover_all_candidates.py',
     }
+    instrumented.update(
+        {name: "python scripts/discover_all_candidates.py" for name in MANUAL_SOURCE_FALLBACKS}
+    )
     expected = "${{ vars.SOURCE_RUN_REPORTING_ENABLED || 'false' }}"
     for name, command in instrumented.items():
         document = _load(WORKFLOW_DIR / name)

@@ -1,0 +1,22 @@
+{
+  "blocking_reason_counts": {
+    "authoritative_deadline_mismatch": 0,
+    "authoritative_status_mismatch": 0,
+    "duplicate_identity": 0,
+    "extra_submission": 0,
+    "identity_mismatch": 0,
+    "missing_open": 0,
+    "parser_failure": 0,
+    "renderability_mismatch": 0
+  },
+  "candidate_traceability_pct": 100.0,
+  "candidates_traced_denominator": 5,
+  "candidates_traced_numerator": 5,
+  "inventory_accounted_denominator": 5,
+  "inventory_accounted_numerator": 5,
+  "inventory_accounting_pct": 100.0,
+  "inventory_open_in_scope_total": 5,
+  "non_blocking_exception_count": 5,
+  "pass": true,
+  "total_blocking_exceptions": 0
+}

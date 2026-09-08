@@ -1,8 +1,6 @@
 name: All-sources discovery (unified orchestrator)
 
 on:
-  schedule:
-    - cron: "8 * * * *"
   workflow_dispatch:
     inputs:
       sources:
@@ -39,7 +37,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: pipeline-trigger
+  group: discovery-manual-multi-source
   queue: max
   cancel-in-progress: false
 
@@ -78,6 +76,7 @@ jobs:
           PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}
           SOURCE_RUN_REPORTING_ENABLED: ${{ vars.SOURCE_RUN_REPORTING_ENABLED || 'false' }}
           SOURCES: ${{ env.DISCOVERY_SOURCES }}
+          SOURCE_ROTATION_OFFSET: ${{ github.run_number }}
           FILTER_POLICY: ${{ env.DISCOVERY_FILTER_POLICY }}
           MIN_NOTICE_YEAR: ${{ env.DISCOVERY_MIN_NOTICE_YEAR }}
           SCRAPE_MAX_PDF_BYTES: "15000000"
