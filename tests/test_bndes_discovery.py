@@ -299,6 +299,23 @@ class TestYearGuard:
         url_2026 = "https://www.bndes.gov.br/site/_Projetos+em+andamento_agosto_26.pdf"
         assert _extract_year_from_url(url_2026) == 2026
 
+    def test_month_followed_by_day_or_sequence_not_parsed_as_historical_year(self) -> None:
+        from discover_bndes_candidates import _extract_year_from_url, _passes_year_guard
+
+        url_day = "https://www.bndes.gov.br/site/Edital-Selecao-mai-15.pdf"
+        assert _extract_year_from_url(url_day) is None
+        assert _passes_year_guard(url_day, min_year=2026) is True
+
+        url_seq = "https://www.bndes.gov.br/site/Edital-marco-01.pdf"
+        assert _extract_year_from_url(url_seq) is None
+        assert _passes_year_guard(url_seq, min_year=2026) is True
+
+    def test_month_with_diacritic_parses_year(self) -> None:
+        from discover_bndes_candidates import _extract_year_from_url
+
+        url_marco = "https://www.bndes.gov.br/site/Edital-mar%C3%A7o-26.pdf"
+        assert _extract_year_from_url(url_marco) == 2026
+
 
 # ---------------------------------------------------------------------------
 # Edital prefilter integration
@@ -313,6 +330,16 @@ class TestEditalPrefilter:
             "4f71d4b2/edital-fundo-socioambiental-2026.pdf"
         )
         assert _candidate_passes_edital_prefilter(url, "default") is True
+
+    def test_apresentacao_de_propostas_or_projetos_accepted(self) -> None:
+        from discover_bndes_candidates import _candidate_passes_edital_prefilter
+
+        url_prop = "https://www.bndes.gov.br/site/Edital_Chamada_Publica_Apresentacao_de_Propostas_2026.pdf"
+        assert _candidate_passes_edital_prefilter(url_prop, "default") is True
+
+        url_proj = "https://www.bndes.gov.br/site/Apresentacao_de_Projetos_Edital_2026.pdf"
+        assert _candidate_passes_edital_prefilter(url_proj, "default") is True
+
 
     def test_candidate_rejected_when_filename_matches_exclusion(self) -> None:
         from discover_bndes_candidates import _candidate_passes_edital_prefilter

@@ -35,7 +35,9 @@ import re
 import sys
 from datetime import datetime, timezone
 from typing import Any
+import unicodedata
 from urllib.parse import parse_qs, unquote, urljoin, urlsplit, urlunsplit
+
 
 from bs4 import BeautifulSoup, Tag
 
@@ -92,7 +94,7 @@ BNDES_FETCH_TIMEOUT_SECONDS = int(os.environ.get("BNDES_FETCH_TIMEOUT_SECONDS", 
 _YEAR_PATTERN = re.compile(r"(?<!\d)(19|20)\d{2}(?!\d)")
 _DATE_8DIGIT_PATTERN = re.compile(r"(?<!\d)(?:\d{4}((?:19|20)\d{2})|((?:19|20)\d{2})\d{4})(?!\d)")
 _MONTH_YEAR_PATTERN = re.compile(
-    r"(?<![a-z])(?:jan(?:eiro)?|fev(?:ereiro)?|mar(?:co)?|abr(?:il)?|mai(?:o)?|jun(?:ho)?|jul(?:ho)?|ago(?:sto)?|set(?:embro)?|out(?:ubro)?|nov(?:embro)?|dez(?:embro)?)[._-](\d{2}|\d{4})(?![a-z0-9])",
+    r"(?<![a-z])(?:jan(?:eiro)?|fev(?:ereiro)?|mar(?:co)?|abr(?:il)?|mai(?:o)?|jun(?:ho)?|jul(?:ho)?|ago(?:sto)?|set(?:embro)?|out(?:ubro)?|nov(?:embro)?|dez(?:embro)?)[._-]((?:19|20)\d{2}|2[0-9])(?![a-z0-9])",
     re.IGNORECASE,
 )
 
@@ -100,7 +102,8 @@ _MONTH_YEAR_PATTERN = re.compile(
 def _extract_year_from_url(url: str) -> int | None:
     """Return the most recent 4-digit year found in the URL, or ``None``."""
     parsed = urlsplit(url)
-    haystack = unquote(f"{parsed.path} {parsed.query}")
+    raw_haystack = unquote(f"{parsed.path} {parsed.query}")
+    haystack = unicodedata.normalize("NFKD", raw_haystack).encode("ASCII", "ignore").decode("utf-8").lower()
     candidates: list[int] = []
     for match in _YEAR_PATTERN.finditer(haystack):
         year = int(match.group(0))
@@ -120,6 +123,7 @@ def _extract_year_from_url(url: str) -> int | None:
     if not candidates:
         return None
     return max(candidates)
+
 
 
 def _passes_year_guard(url: str, *, min_year: int) -> bool:
@@ -243,7 +247,7 @@ def extract_bndes_detail_and_pdf_urls(listing_html: str, listing_url: str) -> li
 
 
 BNDES_NON_EDITAL_PATTERNS = re.compile(
-    r"\b(folheto|cartilha|perguntas.?e.?respostas|perguntas.?respostas|faq|apresentacao|projetos.?em.?andamento)\b",
+    r"\b(folheto|cartilha|perguntas.?e.?respostas|perguntas.?respostas|faq|apresentacao(?!\s*(?:de\s*)?(?:proposta|projeto))|projetos.?em.?andamento)\b",
     re.IGNORECASE,
 )
 
@@ -253,16 +257,15 @@ def _candidate_passes_edital_prefilter(
 ) -> bool:
     """Apply the EDITAL inclusion/exclusion patterns to a candidate URL."""
     if filter_policy != "no_prefilter":
-        text = unquote(url).lower()
-        text = text.replace("á", "a").replace("é", "e").replace("í", "i")
-        text = text.replace("ó", "o").replace("ú", "u").replace("ã", "a")
-        text = text.replace("õ", "o").replace("ç", "c")
+        raw = unquote(url)
+        text = unicodedata.normalize("NFKD", raw).encode("ASCII", "ignore").decode("utf-8").lower()
         text = text.replace("+", " ").replace("_", " ")
         if BNDES_NON_EDITAL_PATTERNS.search(text):
             return False
     parsed = urlsplit(url)
     filename = parsed.path.rsplit("/", 1)[-1]
     return is_likely_edital(filename, url, filter_policy=filter_policy)
+
 
 
 def _fetch_listing_html(listing_url: str) -> str:
