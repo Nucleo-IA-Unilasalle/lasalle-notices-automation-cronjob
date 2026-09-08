@@ -3,32 +3,18 @@
   "observed_at": "2026-09-07T23:02:09.655045+00:00",
   "registry_ref": "15501bf37908b0968112299966792011b6b0d81d",
   "pin_ref": "2026-09-06T03:22:11.102329+00:00",
-  "runs": [
-    {
-      "run_id": "731343ca-453c-4f2c-86a4-7e29c63e5dc3",
-      "started_at": "2026-09-07T12:00:00+00:00",
-      "status": "success"
-    },
-    {
-      "run_id": "da824048-181e-4653-9570-096ef1177073",
-      "started_at": "2026-09-07T13:00:00+00:00",
-      "status": "success"
-    },
-    {
-      "run_id": "204538a5-9ac5-469d-a062-3618967c29e5",
-      "started_at": "2026-09-07T14:00:00+00:00",
-      "status": "success"
-    }
-  ],
+  "runs": [],
   "audits": [
     {
-      "result": "pass",
-      "report_path": "docs/evidence/sources/brde/audit-1/fidelity"
+      "result": "TODO",
+      "report_path": "",
+      "historical_diagnostic_path": "docs/evidence/sources/brde/audit-1/fidelity"
     },
     {
-      "result": "pass",
-      "report_path": "docs/evidence/sources/brde/audit-2/fidelity"
+      "result": "TODO",
+      "report_path": "",
+      "historical_diagnostic_path": "docs/evidence/sources/brde/audit-2/fidelity"
     }
   ],
-  "notes": "BRDE independent official ground-truth audits completed with 0 blocking exceptions (Gate RR-05). Ingestion and replay validated on hosted staging. 48-hour soak pending."
+  "notes": "RR-05 remains open. Historical repository-owned comparisons had 0 blockers but were not independent audits. The three real run IDs remain documented in STAGING-2026-09-07.md; their exact started_at timestamps were not retained, so unsupported round-hour values were removed here."
 }

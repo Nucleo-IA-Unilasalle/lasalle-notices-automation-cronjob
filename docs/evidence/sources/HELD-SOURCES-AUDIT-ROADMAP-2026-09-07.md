@@ -1,20 +1,25 @@
 # Held Sources Ground-Truth Audit Roadmap
 
+> Review qualification: Counts below are historical adapter probe results, not
+> independently verified complete open-call inventories. Zero returned records
+> does not prove zero open calls, capped results do not prove completeness, and
+> document counts need not equal opportunity counts. Reported availability is
+> not a current live check. All holds and RR-05 remain OPEN.
+
 **Date**: 2026-09-07  
-**Author**: Antigravity Independent Source Auditor  
+**Authorship**: Historical repository-runner draft; no independent reviewer sign-off
 **Gate**: RR-05 (Official Ground-Truth Audit & Baseline Verification)  
-**Parent Workspace**: `C:\Users\Vitor\Desktop\Vinicius\Projetos\lasalle-notices`  
-**Cronjob Repo**: `C:\Users\Vitor\Desktop\Vinicius\Projetos\lasalle-notices\lasalle-notices-automation-cronjob`
+**Repository**: `lasalle-notices-automation-cronjob`
 
 ---
 
 ## Executive Summary
 
-As mandated by Gate RR-05 and the DOX verification contract, this document provides the comprehensive ground-truth assessment and audit roadmap for the 10 held sources across the pipeline:
+This document records historical adapter-probe observations and an audit roadmap for the 10 held sources across the pipeline. It is not a comprehensive ground-truth assessment:
 - **5 Paused Sources**: `canoas`, `dopa`, `fbds`, `finep`, `ibama`
 - **5 Audit-Only Sources**: `funbio`, `tnc`, `govbr_mma_fnma`, `govbr_mma_public_calls`, `unep`
 
-All 10 sources were empirically probed live against their official portals on 2026-09-07. This roadmap documents their current endpoint reachability, notice availability, contract requirements (`candidate` vs `opportunity`), exact independent capture methodology, and the preconditions necessary to achieve two clean independent audits prior to any catalog activation.
+All 10 source adapters were used in live probes against their configured official endpoints on 2026-09-07. This roadmap records the resulting point-in-time reachability and adapter counts, contract requirements (`candidate` vs `opportunity`), proposed independent capture methodologies, and the preconditions necessary to achieve two clean independent audits prior to any catalog activation.
 
 ---
 
@@ -74,9 +79,12 @@ All 10 sources were empirically probed live against their official portals on 20
   - Institutional Homepage: `https://www.fbds.org.br/`
 - **Current Live Availability (2026-09-07)**:
   - **CRITICAL FAILURE**: `https://restaura-amazonia.fbds.org.br/Editais` returned `DNS resolution failed: [Errno 11001] getaddrinfo failed`.
-  - The Restaura Amazônia dedicated sub-domain has been decommissioned or is in DNS outage.
+  - This records a local resolver failure only; authoritative NXDOMAIN,
+    upstream outage and permanent decommissioning were not established.
   - Institutional portal `https://www.fbds.org.br` is responsive (HTTP 200, SPIP CMS), but does not currently expose an active public tenders/editais directory.
-- **Hold Rationale**: Hard DNS outage / decommissioned portal URL. This source cannot operate until FBDS publishes a new official notices endpoint.
+- **Hold Rationale**: Endpoint reachability is unresolved. Recheck the configured
+  endpoint and independent DNS evidence before proposing an official replacement;
+  this observation alone does not justify retirement or require a new endpoint.
 - **Independent Ground-Truth Capture Methodology**:
   1. Monitor FBDS institutional announcements and identify if the Restaura Amazônia program has migrated to a new portal domain (or to BNDES/Fundo Amazônia).
   2. Once an active official URL is identified, capture the HTML listing independently, recording URL, HTTP headers, and SHA-256 digest.
@@ -255,7 +263,7 @@ All 10 sources were empirically probed live against their official portals on 20
 |------------|------|----------|-------------------|-----------------------|-------------------|----------------------|
 | **canoas** | paused | opportunity | 0 | OK (200) | **Ready** (zero-open) | Gazette parser validation |
 | **dopa** | paused | opportunity | 0 | OK (200) | **Ready** (zero-open) | Procempa query filter verification |
-| **fbds** | paused | opportunity | 0 (DNS down) | **BLOCKED** (NXDOMAIN) | **Blocked** | Identify new official URL or retire |
+| **fbds** | paused | opportunity | Unknown | Local resolution failure; authoritative DNS status unknown | **Blocked** | Verify reachability and official endpoint |
 | **finep** | paused | opportunity | 10 | OK (200) | **Ready** | Manage pagination cap in runner |
 | **ibama** | paused | opportunity | 6 | OK (200) | **Ready** | Disambiguate PNCP procurement |
 | **funbio** | audit | opportunity | 5 | OK (200) | **Ready** | Baseline inventory creation |
@@ -269,7 +277,11 @@ All 10 sources were empirically probed live against their official portals on 20
 ## 4. Next Steps for Source Activation
 
 Per project governance, two passing independent audits are **necessary but never sufficient** on their own for catalog activation. To promote any held source:
-1. **Complete Two Clean Audits**: Execute `run_independent_source_audit.py` (or source-specific equivalent) across two separate temporal capture sessions with zero blocking exceptions.
+1. **Complete Two Clean Audits**: Independently enumerate the complete declared
+   source scope, retaining exclusions and capture evidence, then compare against
+   discovery across two reviewed capture cycles. The historical
+   `run_independent_source_audit.py` selected known documents; running it twice
+   with zero blockers is not sufficient evidence of an independent audit.
 2. **Commit Evidence Artifacts**: Record `audits.md`, `snapshot.json`, and `checklist.md` under `docs/evidence/sources/<source_key>/`.
 3. **Execute 48-Hour Staging Soak**: Verify at least 48 hours of scheduled continuous execution on hosted staging without unhandled exceptions.
 4. **Authorized Lifecycle Transition**: Obtain operator signoff to transition `rollout_mode` from `paused`/`audit` to `ingest` in `config/source_schedule.json`.

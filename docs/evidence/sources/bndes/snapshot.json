@@ -3,32 +3,18 @@
   "observed_at": "2026-09-07T23:02:34.162458+00:00",
   "registry_ref": "15501bf37908b0968112299966792011b6b0d81d",
   "pin_ref": "2026-09-06T03:22:11.102329+00:00",
-  "runs": [
-    {
-      "run_id": "700bce1d-9358-47eb-96a2-cc9b827d86b3",
-      "started_at": "2026-09-07T10:30:00+00:00",
-      "status": "failed"
-    },
-    {
-      "run_id": "fff65a6a-bnde-47eb-96a2-cc9b827d86b4",
-      "started_at": "2026-09-07T11:15:00+00:00",
-      "status": "success"
-    },
-    {
-      "run_id": "bnde5101-9358-47eb-96a2-cc9b827d86b5",
-      "started_at": "2026-09-07T12:45:00+00:00",
-      "status": "success"
-    }
-  ],
+  "runs": [],
   "audits": [
     {
-      "result": "pass",
-      "report_path": "docs/evidence/sources/bndes/audit-1/fidelity"
+      "result": "TODO",
+      "report_path": "",
+      "historical_diagnostic_path": "docs/evidence/sources/bndes/audit-1/fidelity"
     },
     {
-      "result": "pass",
-      "report_path": "docs/evidence/sources/bndes/audit-2/fidelity"
+      "result": "TODO",
+      "report_path": "",
+      "historical_diagnostic_path": "docs/evidence/sources/bndes/audit-2/fidelity"
     }
   ],
-  "notes": "BNDES independent official ground-truth audits completed with 0 blocking exceptions (Gate RR-05). Pre-filter URL unquoting and child attachment canonical mappings resolved. Ingestion and replay validated on hosted staging. 48-hour soak pending."
+  "notes": "RR-05 remains open. Historical repository-owned comparisons had 0 blockers but were not independent audits. Two fabricated run identifiers and unsupported started_at values were removed; the one observed failed run ID and uncorrelated later staging outcomes remain documented in STAGING-2026-09-07.md."
 }

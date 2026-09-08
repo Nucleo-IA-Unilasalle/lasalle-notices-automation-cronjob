@@ -289,20 +289,18 @@ class TestYearGuard:
         assert _extract_year_from_url(url) == 2024
         assert _passes_year_guard(url, min_year=2026) is False
 
-    def test_year_extracted_from_month_year_slug(self) -> None:
+    def test_year_extracted_from_unambiguous_month_year_slug(self) -> None:
         from discover_bndes_candidates import _extract_year_from_url, _passes_year_guard
 
-        url_2023 = "https://www.bndes.gov.br/site/Folheto%2BPortal%2Bdo%2BCliente%2B-%2Bmaio.23%2B.pdf"
-        assert _extract_year_from_url(url_2023) == 2023
-        assert _passes_year_guard(url_2023, min_year=2026) is False
-
-        url_2026 = "https://www.bndes.gov.br/site/_Projetos+em+andamento_agosto_26.pdf"
+        url_2026 = "https://www.bndes.gov.br/site/edital-agosto-2026.pdf"
         assert _extract_year_from_url(url_2026) == 2026
 
-    def test_month_followed_by_day_or_sequence_not_parsed_as_historical_year(self) -> None:
+    def test_two_digit_month_suffix_is_ambiguous_and_does_not_reject_candidate(self) -> None:
         from discover_bndes_candidates import _extract_year_from_url, _passes_year_guard
 
-        url_day = "https://www.bndes.gov.br/site/Edital-Selecao-mai-15.pdf"
+        # The source uses month-day and month-sequence slugs too. A two-digit
+        # suffix cannot safely distinguish those from a short-form year.
+        url_day = "https://www.bndes.gov.br/site/Edital-Selecao-mai-25.pdf"
         assert _extract_year_from_url(url_day) is None
         assert _passes_year_guard(url_day, min_year=2026) is True
 
@@ -310,10 +308,27 @@ class TestYearGuard:
         assert _extract_year_from_url(url_seq) is None
         assert _passes_year_guard(url_seq, min_year=2026) is True
 
+        # An explicit four-digit year remains authoritative when it coexists
+        # with an ambiguous month suffix.
+        url_explicit = "https://www.bndes.gov.br/site/edital-maio-25-2026.pdf"
+        assert _extract_year_from_url(url_explicit) == 2026
+
+    def test_only_valid_compact_dates_are_used_as_year_evidence(self) -> None:
+        from discover_bndes_candidates import _extract_year_from_url, _passes_year_guard
+
+        assert _extract_year_from_url("https://www.bndes.gov.br/site/edital-03072024.pdf") == 2024
+        assert _extract_year_from_url("https://www.bndes.gov.br/site/edital-20260703.pdf") == 2026
+
+        # An opaque ID that happens to begin with a year is not a date. It
+        # must remain unknown rather than rejecting a potentially current call.
+        arbitrary_id = "https://www.bndes.gov.br/site/edital-20240199.pdf"
+        assert _extract_year_from_url(arbitrary_id) is None
+        assert _passes_year_guard(arbitrary_id, min_year=2026) is True
+
     def test_month_with_diacritic_parses_year(self) -> None:
         from discover_bndes_candidates import _extract_year_from_url
 
-        url_marco = "https://www.bndes.gov.br/site/Edital-mar%C3%A7o-26.pdf"
+        url_marco = "https://www.bndes.gov.br/site/Edital-mar%C3%A7o-2026.pdf"
         assert _extract_year_from_url(url_marco) == 2026
 
 
@@ -339,6 +354,11 @@ class TestEditalPrefilter:
 
         url_proj = "https://www.bndes.gov.br/site/Apresentacao_de_Projetos_Edital_2026.pdf"
         assert _candidate_passes_edital_prefilter(url_proj, "default") is True
+
+        # BNDES publishes both word and slug forms. Hyphens must not turn a
+        # proposal invitation into the generic presentation exclusion.
+        url_hyphenated = "https://www.bndes.gov.br/site/edital-apresentacao-de-propostas-2026.pdf"
+        assert _candidate_passes_edital_prefilter(url_hyphenated, "default") is True
 
 
     def test_candidate_rejected_when_filename_matches_exclusion(self) -> None:

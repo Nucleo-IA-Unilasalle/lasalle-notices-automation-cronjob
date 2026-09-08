@@ -14,9 +14,10 @@ this runbook never authorizes activation.
 - [x] Staging authorization recorded: user approved free-only replacement and
       preferred reuse of the existing setup on 2026-09-07. Not production activation.
 - [x] Staging Repo A deployment commit: `e9422dca8cd9c77f4bf23bc89d7e211ae8bcc693`.
-- [x] Staging database: isolated free Render PostgreSQL 17, named
-      `lasalle-notices-staging-db`; expires 2026-10-07. Catalog fixtures only;
-      no production users/data restored into hosted staging.
+- [x] Staging database provisioning recorded: free Render PostgreSQL 17, named
+      `lasalle-notices-staging-db`; expires 2026-10-07. The operator reported
+      loading catalog fixtures only and not restoring production users/data.
+      Independent confirmation that its identity is distinct remains open below.
 - [x] Worker target: `https://lasalle-notices-api-staging.onrender.com`;
       newly generated staging-only secret remains in Render, not this document.
 - [x] Catalog pin: `config/source_catalog_contract.json`, export 2026-09-06;

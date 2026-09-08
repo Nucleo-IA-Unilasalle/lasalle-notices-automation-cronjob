@@ -92,11 +92,36 @@ BNDES_FETCH_TIMEOUT_SECONDS = int(os.environ.get("BNDES_FETCH_TIMEOUT_SECONDS", 
 #     ``MMXXIV``, ``fy-2026-q1`` where ``q1`` is adjacent) — Phase 3
 #     sources using any of these encodings need a per-source override.
 _YEAR_PATTERN = re.compile(r"(?<!\d)(19|20)\d{2}(?!\d)")
-_DATE_8DIGIT_PATTERN = re.compile(r"(?<!\d)(?:\d{4}((?:19|20)\d{2})|((?:19|20)\d{2})\d{4})(?!\d)")
+_DATE_8DIGIT_PATTERN = re.compile(r"(?<!\d)(\d{8})(?!\d)")
 _MONTH_YEAR_PATTERN = re.compile(
-    r"(?<![a-z])(?:jan(?:eiro)?|fev(?:ereiro)?|mar(?:co)?|abr(?:il)?|mai(?:o)?|jun(?:ho)?|jul(?:ho)?|ago(?:sto)?|set(?:embro)?|out(?:ubro)?|nov(?:embro)?|dez(?:embro)?)[._-]((?:19|20)\d{2}|2[0-9])(?![a-z0-9])",
+    r"(?<![a-z])(?:jan(?:eiro)?|fev(?:ereiro)?|mar(?:co)?|abr(?:il)?|mai(?:o)?|jun(?:ho)?|jul(?:ho)?|ago(?:sto)?|set(?:embro)?|out(?:ubro)?|nov(?:embro)?|dez(?:embro)?)[._-]((?:19|20)\d{2})(?![a-z0-9])",
     re.IGNORECASE,
 )
+
+
+def _extract_year_from_compact_date(token: str) -> int | None:
+    """Return a year only when an eight-digit token is a valid calendar date.
+
+    BNDES URLs include opaque eight-digit identifiers as well as both Brazilian
+    ``DDMMYYYY`` and ISO-like ``YYYYMMDD`` dates. Treating every numeric token
+    as a date can reject a current notice simply because its identifier starts
+    or ends with an older-looking year.
+    """
+    candidates = (
+        (token[:4], token[4:6], token[6:]),
+        (token[4:], token[2:4], token[:2]),
+    )
+    years: list[int] = []
+    for raw_year, raw_month, raw_day in candidates:
+        year, month, day = int(raw_year), int(raw_month), int(raw_day)
+        if not 1900 <= year <= 2099:
+            continue
+        try:
+            datetime(year, month, day)
+        except ValueError:
+            continue
+        years.append(year)
+    return max(years) if years else None
 
 
 def _extract_year_from_url(url: str) -> int | None:
@@ -110,11 +135,9 @@ def _extract_year_from_url(url: str) -> int | None:
         if 1900 <= year <= 2099:
             candidates.append(year)
     for match in _DATE_8DIGIT_PATTERN.finditer(haystack):
-        y_str = match.group(1) or match.group(2)
-        if y_str:
-            year = int(y_str)
-            if 1900 <= year <= 2099:
-                candidates.append(year)
+        year = _extract_year_from_compact_date(match.group(1))
+        if year is not None:
+            candidates.append(year)
     for match in _MONTH_YEAR_PATTERN.finditer(haystack):
         raw_year = match.group(1)
         year = int(raw_year) if len(raw_year) == 4 else 2000 + int(raw_year)
@@ -247,7 +270,7 @@ def extract_bndes_detail_and_pdf_urls(listing_html: str, listing_url: str) -> li
 
 
 BNDES_NON_EDITAL_PATTERNS = re.compile(
-    r"\b(folheto|cartilha|perguntas.?e.?respostas|perguntas.?respostas|faq|apresentacao(?!\s*(?:de\s*)?(?:proposta|projeto))|projetos.?em.?andamento)\b",
+    r"\b(folheto|cartilha|perguntas.?e.?respostas|perguntas.?respostas|faq|apresentacao(?![\s_-]+(?:de[\s_-]+)?propostas?\b|[\s_-]+(?:de[\s_-]+)?projetos?\b)|projetos.?em.?andamento)\b",
     re.IGNORECASE,
 )
 

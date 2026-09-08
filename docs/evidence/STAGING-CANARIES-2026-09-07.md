@@ -3,23 +3,29 @@
 - **Execution Date / Window**: `2026-09-07T23:00:49Z` to `2026-09-07T23:01:06Z` (20:00:49 to 20:01:06 America/Sao_Paulo)
 - **Target Host**: `https://lasalle-notices-api-staging.onrender.com`
 - **Target Service ID**: `srv-d9i41fl8nd3s7397hcig` (Render Web Service)
-- **Environment**: Staging (PostgreSQL 17 `lasalle-notices-staging-db`, Python 3.13 on Render, Windows 11 runner)
-- **DOX Contract Compliance**: Bound. Zero secrets written to disk or logs; `PIPELINE_SECRET` fetched in-memory via Render REST API.
-- **Overall Verdict**: **24 / 24 PASSED (100% Pass Rate, 0 Failed)**.
+- **Environment**: Reported staging PostgreSQL 17 `lasalle-notices-staging-db`; checks ran from a Windows 11 / Python 3.13 local runner against the hosted API. Distinct database identity was not independently verified by this suite.
+- **Credential handling**: The historical runner obtained `PIPELINE_SECRET` in memory. This retained summary contains no raw secret or claim token.
+- **Overall Verdict**: **Historical observation: 24 / 24 scripted checks reported passed**.
 
 ---
 
 ## 1. Executive Summary
 
-This staging canary suite executed end-to-end live testing against the hosted LaSalle Notices staging API to validate:
+This staging canary suite recorded live checks against the hosted LaSalle Notices
+staging API. It provides point-in-time endpoint behavior, not a production
+security certification, a persistence audit, or an exhaustive compatibility
+claim. The original machine-local request/response log is not retained here;
+the status matrix below is the retained execution summary.
+
+The checks covered:
 1. **Capabilities Endpoint & Rollout Flags**: Worker preflight schema parity, authentication boundaries (401/403), and verification that staging currently operates under `ENABLE_DOCUMENTLESS_OPPORTUNITIES=False` and `SOURCE_CLAIM_ENFORCEMENT=compatible`.
 2. **Structured Opportunities Canary**: Verification of the source segregation barrier (structured sources cannot submit to legacy candidate route), documentless rollout gating on `/api/pipeline/opportunities`, opportunity model hash integrity, and successful candidate ingestion with rich edge-case attributes (Portuguese accents, unicode, mathematical symbols, emojis, special characters, long text) and duplicate idempotency.
-3. **Bounded Body & Payload Hardening**: Enforcement of `PipelineSourceRunBodyLimitMiddleware` (32 KB limit on schedule claims, 512 KB limit on source work returning HTTP 413), candidate payload upper bounds (10,000,000 characters returning HTTP 422), malformed JSON parsing resilience, Pydantic field-level guards (100 KB metadata limit, 100 item candidate limit, extra fields forbidden), and Edge WAF L7 inspection.
-4. **Old-Worker Compatibility Window**: Proof that legacy workers omitting `X-Source-Claim` succeed under `SOURCE_CLAIM_ENFORCEMENT=compatible`, invalid/forged claim tokens fail explicitly with HTTP 409 `claim_invalid`, and fenced claim lifecycle (acquire → write → release as noop) functions correctly without altering production schedules.
+3. **Bounded Body & Payload Hardening**: Observed enforcement of `PipelineSourceRunBodyLimitMiddleware` (32 KB limit on schedule claims, 512 KB limit on source work returning HTTP 413), candidate payload upper bounds (10,000,000 characters returning HTTP 422), malformed JSON parsing resilience, Pydantic field-level guards (100 KB metadata limit, 100 item candidate limit, extra fields forbidden), and one edge-or-upstream rejection whose provider was not identified.
+4. **Compatibility Protocol Probes**: A synthetic caller omitting `X-Source-Claim` succeeded under `SOURCE_CLAIM_ENFORCEMENT=compatible`, an invalid claim token failed with HTTP 409 `claim_invalid`, and one fenced claim lifecycle (acquire -> write -> release as noop) completed. This is not a genuine old-worker integration test and did not target production schedules.
 
 ---
 
-## 2. Test Execution Matrix (24/24 Passed)
+## 2. Test Execution Matrix (24 Recorded Checks)
 
 | Test ID | Suite | Method | Endpoint | HTTP Status | Verdict | Summary |
 |---|---|---|---|:---:|:---:|---|
@@ -41,12 +47,12 @@ This staging canary suite executed end-to-end live testing against the hosted La
 | **TC-3.5a**| Bounded Body | `POST` | `/api/pipeline/candidates` | `422 Unprocessable` | **PASS** | Single candidate metadata exceeding 100,000 characters rejected (`metadata exceeds 100000 characters`). |
 | **TC-3.5b**| Bounded Body | `POST` | `/api/pipeline/candidates` | `422 Unprocessable` | **PASS** | Candidate batch exceeding 100 items rejected (`at most 100 items`). |
 | **TC-3.5c**| Bounded Body | `POST` | `/api/pipeline/candidates` | `422 Unprocessable` | **PASS** | Forbidden extra fields rejected (`extra_forbidden`). |
-| **TC-3.8** | Bounded Body | `POST` | `/api/pipeline/candidates` | `403 Forbidden` | **PASS** | Render/Cloudflare Edge WAF intercepted SQL injection attack signature before application layer. |
-| **TC-4.1** | Old-Worker Compat | `POST` | `/api/pipeline/candidates` | `200 OK` | **PASS** | Legacy caller omitting `X-Source-Claim` accepted and processed under compatible mode (`inserted: 1`). |
-| **TC-4.2** | Old-Worker Compat | `POST` | `/api/pipeline/candidates` | `409 Conflict` | **PASS** | Caller providing invalid/forged claim token strictly rejected (`claim_invalid`). No silent fallback. |
-| **TC-4.3a**| Old-Worker Compat | `POST` | `/api/pipeline/source-schedule/claims` | `201 Created` | **PASS** | Acquired 300s collection lease for source `fao` returning unique `claim_token`. |
-| **TC-4.3b**| Old-Worker Compat | `POST` | `/api/pipeline/candidates` | `200 OK` | **PASS** | Fenced candidate write under active lease succeeded (`inserted: 1`). |
-| **TC-4.3c**| Old-Worker Compat | `POST` | `/api/pipeline/source-schedule/claims/release` | `200 OK` | **PASS** | Released claim with `outcome="noop"`, preserving schedule cadence. |
+| **TC-3.8** | Bounded Body | `POST` | `/api/pipeline/candidates` | `403 Forbidden` | **PASS** | An edge-or-upstream layer rejected this request; the rejecting provider and general coverage were not established. |
+| **TC-4.1** | Compatibility Probe | `POST` | `/api/pipeline/candidates` | `200 OK` | **PASS** | Synthetic caller omitting `X-Source-Claim` was accepted under compatible mode (`inserted: 1`); no legacy worker was executed. |
+| **TC-4.2** | Compatibility Probe | `POST` | `/api/pipeline/candidates` | `409 Conflict` | **PASS** | Caller providing invalid/forged claim token strictly rejected (`claim_invalid`). No silent fallback. |
+| **TC-4.3a**| Compatibility Probe | `POST` | `/api/pipeline/source-schedule/claims` | `201 Created` | **PASS** | Acquired 300s collection lease for source `fao` returning unique `claim_token`. |
+| **TC-4.3b**| Compatibility Probe | `POST` | `/api/pipeline/candidates` | `200 OK` | **PASS** | Fenced candidate write under active lease succeeded (`inserted: 1`). |
+| **TC-4.3c**| Compatibility Probe | `POST` | `/api/pipeline/source-schedule/claims/release` | `200 OK` | **PASS** | Released claim with `outcome="noop"`, preserving schedule cadence. |
 
 ---
 
@@ -84,10 +90,14 @@ Both `GET /api/pipeline/capabilities` and `GET /api/pipeline/health` were querie
   - Candidate metadata exceeding 100,000 characters was rejected with HTTP 422 `Value error, metadata exceeds 100000 characters`.
   - Batch exceeding 100 items was rejected with HTTP 422.
   - Malformed JSON was rejected with HTTP 422 without unhandled 5xx exceptions.
-- **Layer 7 Threat Defense**: Injection of SQL attack signatures (`'; DROP TABLE editais; --`) was intercepted at the Edge WAF layer returning HTTP 403 Forbidden (`<title>Blocked</title>`), demonstrating active edge filtering.
+- **Layer 7 rejection**: A request containing a SQL attack signature
+  (`'; DROP TABLE editais; --`) received HTTP 403 with `<title>Blocked</title>`.
+  The response establishes edge-or-upstream rejection for that request only;
+  without provider telemetry it does not identify the rejecting product or
+  certify general WAF coverage.
 
-### 3.4 Old-Worker Compatibility Window
-- **Legacy Compatibility**: Under `SOURCE_CLAIM_ENFORCEMENT=compatible`, callers submitting candidates without the `X-Source-Claim` header succeeded with HTTP 200 (`inserted: 1`).
+### 3.4 Compatibility Protocol Probes
+- **Header-Omission Probe**: Under `SOURCE_CLAIM_ENFORCEMENT=compatible`, a synthetic caller submitting a candidate without the `X-Source-Claim` header succeeded with HTTP 200 (`inserted: 1`). This did not execute a genuine legacy worker.
 - **Strict Fencing on Forged Claims**: Supplying an invalid or forged `X-Source-Claim` header failed with HTTP 409 `{"detail": {"reason": "claim_invalid"}}`. Legacy mode does not silently ignore invalid claim tokens.
 - **Fenced Claim Lifecycle**:
   1. `POST /api/pipeline/source-schedule/claims` successfully leased `source_key="fao"`.
@@ -98,6 +108,8 @@ Both `GET /api/pipeline/capabilities` and `GET /api/pipeline/health` were querie
 
 ## 4. Operational Sign-off Status
 
-- **Staging Canary Status**: **PASSED**.
-- **Production State**: Unchanged. Production databases and schedules remain untouched.
+- **Staging Canary Status**: The recorded 24 checks passed at the stated time.
+  Repeat them before relying on the result after a deploy or configuration
+  change.
+- **Production Scope**: The suite targeted the staging host and did not issue requests intended for production. It does not establish the absence of unrelated concurrent production changes.
 - **Release Readiness (RR-01 to RR-05)**: Remain **OPEN** pending independent source ground truth audits and 48-hour soak observation.

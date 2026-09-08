@@ -11,12 +11,31 @@ import json
 import os
 import sys
 import time
-from typing import Any, Dict, List
+from pathlib import Path
+from typing import Any, Dict
 
 import requests
 
-BASE_URL = "https://lasalle-notices-api-staging.onrender.com"
+STAGING_BASE_URL = "https://lasalle-notices-api-staging.onrender.com"
+BASE_URL = STAGING_BASE_URL
 RENDER_SERVICE_ID = "srv-d9i41fl8nd3s7397hcig"
+LIVE_MUTATION_ARGUMENT = "--allow-live-staging-mutation"
+LIVE_MUTATION_ACKNOWLEDGEMENT = "staging-only"
+SENSITIVE_KEY_PARTS = ("token", "secret", "authorization", "password", "cookie", "api_key")
+
+
+def require_live_mutation_consent(argv: list[str]) -> None:
+    """Fail closed: this probe changes staging lease state and is never a production tool."""
+    if BASE_URL != STAGING_BASE_URL:
+        raise RuntimeError("Failure injection is restricted to the fixed staging API URL")
+    if LIVE_MUTATION_ARGUMENT not in argv:
+        raise RuntimeError(
+            f"Refusing live staging mutation; pass {LIVE_MUTATION_ARGUMENT} explicitly"
+        )
+    if os.environ.get("STAGING_FAILURE_INJECTION_ACK") != LIVE_MUTATION_ACKNOWLEDGEMENT:
+        raise RuntimeError(
+            "Refusing live staging mutation; set STAGING_FAILURE_INJECTION_ACK=staging-only"
+        )
 
 
 def get_pipeline_secret() -> str:
@@ -41,16 +60,18 @@ def get_pipeline_secret() -> str:
 
 
 def mask_token(token: str) -> str:
-    if not token or len(token) < 8:
+    if not token:
         return "[REDACTED]"
-    return f"{token[:4]}...{token[-4:]} (sha256:{hashlib.sha256(token.encode()).hexdigest()[:8]})"
+    # Do not preserve token prefixes or suffixes in durable evidence.
+    return f"[REDACTED sha256:{hashlib.sha256(token.encode()).hexdigest()}]"
 
 
 def sanitize_dict(d: Any) -> Any:
     if isinstance(d, dict):
         out = {}
         for k, v in d.items():
-            if "token" in k.lower() or "secret" in k.lower():
+            normalized_key = k.lower().replace("-", "_")
+            if any(part in normalized_key for part in SENSITIVE_KEY_PARTS):
                 out[k] = mask_token(str(v))
             else:
                 out[k] = sanitize_dict(v)
@@ -68,10 +89,60 @@ class StagingTestRunner:
             "Content-Type": "application/json",
         }
         self.results: Dict[str, Any] = {}
+        self._active_claims: dict[tuple[str, str], None] = {}
 
     def post(self, path: str, payload: Dict[str, Any]) -> requests.Response:
         url = f"{BASE_URL}/api/pipeline/{path}"
-        return requests.post(url, json=payload, headers=self.headers, timeout=20)
+        response = requests.post(url, json=payload, headers=self.headers, timeout=20)
+        if path == "source-schedule/claims" and response.status_code == 201:
+            body = response.json()
+            token = body.get("claim_token") if isinstance(body, dict) else None
+            source_key = payload.get("source_key")
+            if isinstance(token, str) and isinstance(source_key, str):
+                # Register before returning so cleanup still runs if a later check crashes.
+                # A new 201 for this source necessarily fences any older tracked token.
+                for claim_key in list(self._active_claims):
+                    if claim_key[0] == source_key:
+                        self._active_claims.pop(claim_key, None)
+                self._active_claims[(source_key, token)] = None
+        elif path == "source-schedule/claims/release" and response.status_code == 200:
+            body = response.json()
+            source_key = payload.get("source_key")
+            token = payload.get("claim_token")
+            if isinstance(body, dict) and body.get("accepted") is True:
+                self._active_claims.pop((source_key, token), None)
+        elif path in {"source-schedule/claims/renew", "source-schedule/claims/release"}:
+            body = response.json()
+            detail = body.get("detail") if isinstance(body, dict) else None
+            reason = detail.get("reason") if isinstance(detail, dict) else None
+            if reason in {"claim_expired", "claim_missing", "claim_invalid"}:
+                # The server has already fenced this token, so retrying cleanup would
+                # turn a successful expiry test into a false cleanup failure.
+                self._active_claims.pop((payload.get("source_key"), payload.get("claim_token")), None)
+        return response
+
+    def cleanup_active_claims(self) -> list[Dict[str, Any]]:
+        """Best-effort `noop` release for every tracked lease, including error paths."""
+        cleanup_results: list[Dict[str, Any]] = []
+        for source_key, token in list(self._active_claims):
+            try:
+                response = self.post(
+                    "source-schedule/claims/release",
+                    {"source_key": source_key, "claim_token": token, "outcome": "noop"},
+                )
+                body = response.json()
+                cleanup_results.append(
+                    {
+                        "source_key": source_key,
+                        "status_code": response.status_code,
+                        "accepted": isinstance(body, dict) and body.get("accepted") is True,
+                    }
+                )
+            except Exception as exc:  # Cleanup must not hide the original test failure.
+                cleanup_results.append(
+                    {"source_key": source_key, "error_type": type(exc).__name__, "accepted": False}
+                )
+        return cleanup_results
 
     def run_task_1_concurrency_limit(self) -> Dict[str, Any]:
         """Task 1: Boundary Test - 4 concurrent claims for 3 slots."""
@@ -100,11 +171,20 @@ class StagingTestRunner:
                 "body": r.json() if r.headers.get("content-type", "").startswith("application/json") else r.text,
             }
 
+        claim_responses = []
         with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
-            futures = [pool.submit(_claim, s) for s in sources]
-            claim_responses = [f.result() for f in futures]
+            futures = {pool.submit(_claim, source): source for source in sources}
+            for future in concurrent.futures.as_completed(futures):
+                source = futures[future]
+                try:
+                    # `post` tracks a 201 lease before this result is recorded.
+                    claim_responses.append(future.result())
+                except Exception as exc:
+                    claim_responses.append(
+                        {"source": source, "status_code": None, "error_type": type(exc).__name__}
+                    )
 
-        admitted = [res for res in claim_responses if res["status_code"] in (200, 201)]
+        admitted = [res for res in claim_responses if res["status_code"] == 201]
         rejected = [res for res in claim_responses if res["status_code"] == 409]
 
         capacity_full_rejected = [
@@ -120,25 +200,33 @@ class StagingTestRunner:
         # Release all admitted claims
         release_results = []
         for res in admitted:
-            token = res["body"]["claim_token"]
+            token = res["body"].get("claim_token") if isinstance(res["body"], dict) else None
             src = res["source"]
+            if not isinstance(token, str):
+                release_results.append({"source": src, "status_code": None, "accepted": False})
+                continue
             rel_payload = {
                 "source_key": src,
                 "claim_token": token,
                 "outcome": "noop",
             }
             start = time.perf_counter()
-            r_rel = self.post("source-schedule/claims/release", rel_payload)
-            duration = time.perf_counter() - start
-            release_results.append({
-                "source": src,
-                "status_code": r_rel.status_code,
-                "duration_ms": round(duration * 1000, 2),
-                "body": r_rel.json() if r_rel.headers.get("content-type", "").startswith("application/json") else r_rel.text,
-            })
+            try:
+                r_rel = self.post("source-schedule/claims/release", rel_payload)
+                duration = time.perf_counter() - start
+                release_results.append({
+                    "source": src,
+                    "status_code": r_rel.status_code,
+                    "duration_ms": round(duration * 1000, 2),
+                    "body": r_rel.json() if r_rel.headers.get("content-type", "").startswith("application/json") else r_rel.text,
+                })
+            except Exception as exc:
+                release_results.append({"source": src, "status_code": None, "error_type": type(exc).__name__})
 
         all_released_cleanly = all(
-            r["status_code"] == 200 and r["body"].get("accepted") is True
+            r["status_code"] == 200
+            and isinstance(r.get("body"), dict)
+            and r["body"].get("accepted") is True
             for r in release_results
         )
         print(f"All admitted claims released cleanly (outcome=noop): {all_released_cleanly}")
@@ -162,7 +250,7 @@ class StagingTestRunner:
     def run_task_2_stale_owner_fencing(self) -> Dict[str, Any]:
         """Task 2: Stale-Owner Fencing."""
         print(f"[{datetime.now(timezone.utc).isoformat()}] Task 2: Stale-Owner Fencing")
-        
+
         # 2A: Test 'empraba' as requested
         empraba_payload = {
             "source_key": "empraba",
@@ -176,11 +264,19 @@ class StagingTestRunner:
             "status_code": r_empraba.status_code,
             "body": r_empraba.json() if r_empraba.headers.get("content-type", "").startswith("application/json") else r_empraba.text,
         }
-        print(f"Empraba claim status: {r_empraba.status_code}, body: {empraba_result['body']}")
+        print(
+            f"Empraba claim status: {r_empraba.status_code}, "
+            f"body: {sanitize_dict(empraba_result['body'])}"
+        )
+        empraba_detail = (
+            empraba_result["body"].get("detail")
+            if isinstance(empraba_result["body"], dict)
+            else None
+        )
 
         # 2B: Full fencing protocol on valid active source 'fao'
         source = "fao"
-        
+
         # Step 1: Owner Alpha claims
         payload_alpha = {
             "source_key": source,
@@ -248,10 +344,15 @@ class StagingTestRunner:
         r_release_alpha = self.post("source-schedule/claims/release", release_payload_alpha)
         release_alpha_status = r_release_alpha.status_code
         release_alpha_body = r_release_alpha.json()
-        print(f"Owner Alpha clean release status: {release_alpha_status}, body: {release_alpha_body}")
+        print(
+            f"Owner Alpha clean release status: {release_alpha_status}, "
+            f"body: {sanitize_dict(release_alpha_body)}"
+        )
 
         gate_passed = (
-            alpha_status in (200, 201)
+            r_empraba.status_code == 404
+            and empraba_detail == "Unknown source_key: empraba"
+            and alpha_status == 201
             and beta_noforce_status == 409 and beta_noforce_reason == "claim_active"
             and beta_force_status == 409 and beta_force_reason == "claim_active"
             and renew_invalid_status == 409 and renew_invalid_reason == "claim_missing"
@@ -375,21 +476,33 @@ class StagingTestRunner:
         reclaim_token = reclaim_body.get("claim_token")
         print(f"Post-expiry reclaim status: {reclaim_status}, new token: {bool(reclaim_token)}")
 
-        # Release reclaimed lease cleanly
+        # Release reclaimed lease cleanly and include cleanup in the verdict.
+        reclaim_release_status = None
+        reclaim_release_body: Any = None
         if reclaim_token:
-            self.post("source-schedule/claims/release", {
+            r_reclaim_release = self.post("source-schedule/claims/release", {
                 "source_key": source,
                 "claim_token": reclaim_token,
                 "outcome": "noop",
             })
+            reclaim_release_status = r_reclaim_release.status_code
+            reclaim_release_body = r_reclaim_release.json()
+        print(
+            "Post-expiry reclaim release status: "
+            f"{reclaim_release_status}, accepted: "
+            f"{reclaim_release_body.get('accepted') if isinstance(reclaim_release_body, dict) else None}"
+        )
 
         gate_passed = (
-            claim_status in (200, 201)
+            claim_status == 201
             and renew_status == 200
             and lease_extended
             and release_status == 200 and release_body.get("accepted") is True
             and renew_exp_status == 409 and renew_exp_reason == "claim_expired"
-            and reclaim_status in (200, 201)
+            and reclaim_status == 201
+            and reclaim_release_status == 200
+            and isinstance(reclaim_release_body, dict)
+            and reclaim_release_body.get("accepted") is True
         )
 
         return {
@@ -415,18 +528,30 @@ class StagingTestRunner:
                 "renew_after_expiry_body": sanitize_dict(renew_exp_body),
                 "reclaim_post_expiry_status": reclaim_status,
                 "reclaim_post_expiry_body": sanitize_dict(reclaim_body),
+                "reclaim_release_status": reclaim_release_status,
+                "reclaim_release_body": sanitize_dict(reclaim_release_body),
             },
         }
 
 
-def main():
+def main() -> int:
+    require_live_mutation_consent(sys.argv[1:])
     secret = get_pipeline_secret()
     runner = StagingTestRunner(secret)
 
-    print("=== STARTING STAGING FAILURE INJECTION & FENCING TEST SUITE ===")
-    t1 = runner.run_task_1_concurrency_limit()
-    t2 = runner.run_task_2_stale_owner_fencing()
-    t3 = runner.run_task_3_lease_expiry_and_renewal()
+    try:
+        print("=== STARTING STAGING FAILURE INJECTION & FENCING TEST SUITE ===")
+        t1 = runner.run_task_1_concurrency_limit()
+        t2 = runner.run_task_2_stale_owner_fencing()
+        t3 = runner.run_task_3_lease_expiry_and_renewal()
+    finally:
+        cleanup_results = runner.cleanup_active_claims()
+
+    cleanup_succeeded = all(
+        result.get("status_code") == 200 and result.get("accepted") is True
+        for result in cleanup_results
+    )
+    probe_gates_passed = t1["gate_passed"] and t2["gate_passed"] and t3["gate_passed"]
 
     summary = {
         "timestamp_utc": datetime.now(timezone.utc).isoformat(),
@@ -434,21 +559,27 @@ def main():
         "task_1_concurrency_limit": t1,
         "task_2_stale_owner_fencing": t2,
         "task_3_lease_expiry_and_renewal": t3,
-        "all_gates_passed": t1["gate_passed"] and t2["gate_passed"] and t3["gate_passed"],
+        "all_probe_gates_passed": probe_gates_passed,
+        "all_gates_passed": probe_gates_passed and cleanup_succeeded,
+        "exception_cleanup": cleanup_results,
+        "cleanup_succeeded": cleanup_succeeded,
     }
 
     print("\n=== SUMMARY OF TEST RESULTS ===")
     print(f"Task 1 Concurrency Limit Gate Passed: {t1['gate_passed']}")
     print(f"Task 2 Stale-Owner Fencing Gate Passed: {t2['gate_passed']}")
     print(f"Task 3 Lease Expiry / Renewal Gate Passed: {t3['gate_passed']}")
-    print(f"All Gates Passed: {summary['all_gates_passed']}")
+    print(f"All Probe Gates Passed: {summary['all_probe_gates_passed']}")
+    print(f"Overall Gates Passed: {summary['all_gates_passed']}")
+    print(f"Exception Cleanup Succeeded: {cleanup_succeeded}")
 
     # Save sanitized summary to a local json for easy report generation
-    out_file = r"C:\Users\Vitor\Desktop\Vinicius\Projetos\lasalle-notices\lasalle-notices-automation-cronjob\docs\evidence\failure_injection_results.json"
+    out_file = Path(__file__).resolve().parents[1] / "docs" / "evidence" / "failure_injection_results.json"
     with open(out_file, "w", encoding="utf-8") as f:
         json.dump(summary, f, indent=2)
     print(f"Sanitized test evidence saved to {out_file}")
+    return 0 if summary["all_gates_passed"] and cleanup_succeeded else 1
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

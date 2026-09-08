@@ -2,9 +2,14 @@
 
 Status: **IN PROGRESS**. [Hosted staging report](STAGING-2026-09-07.md) records
 deployment, catalog parity, BRDE ingestion/replay, BNDES audit resolution and
-aggregate admission. Independent official-source ground truth audits (Gate RR-05) have concluded `pass` with 0 blocking exceptions for **BRDE** and **BNDES** (two clean runs each). Paused (`canoas`, `dopa`, `fbds`, `finep`, `ibama`) and audit-only
+aggregate admission. The committed BRDE/BNDES URL comparisons are diagnostic
+outputs, not independent audits; both RR-05 audit slots remain `TODO`. Paused (`canoas`, `dopa`, `fbds`, `finep`, `ibama`) and audit-only
 (`tnc`, `funbio`, `govbr_mma_fnma`, `govbr_mma_public_calls`, `unep`) holds are preserved; baseline assessment and capture methodologies are documented in [Held Sources Audit Roadmap](sources/HELD-SOURCES-AUDIT-ROADMAP-2026-09-07.md). Evidence scaffolding never activates a
 source.
+
+[Post-review validation](POST-REVIEW-VALIDATION-2026-09-08.md) records the next
+offline integration checks and read-only staging preflight, including the
+unresolved direct schema-verification connection failure.
 
 ## Conventions
 
@@ -31,8 +36,8 @@ source.
 
 | Source | Mode | Snapshot | Audit 1 | Audit 2 | 48 h observation |
 |--------|------|----------|---------|---------|------------------|
-| bndes | ingest | [snapshot.json](sources/bndes/snapshot.json) | [PASS (0 blockers)](sources/bndes/audits.md#audit-slot-1) | [PASS (0 blockers)](sources/bndes/audits.md#audit-slot-2) | TODO (pending soak) |
-| brde | ingest | [snapshot.json](sources/brde/snapshot.json) | [PASS (0 blockers)](sources/brde/audits.md#audit-slot-1) | [PASS (0 blockers)](sources/brde/audits.md#audit-slot-2) | TODO (pending soak) |
+| bndes | ingest | [snapshot.json](sources/bndes/snapshot.json) | [TODO](sources/bndes/audits.md#audit-slot-1) | [TODO](sources/bndes/audits.md#audit-slot-2) | TODO (pending soak) |
+| brde | ingest | [snapshot.json](sources/brde/snapshot.json) | [TODO](sources/brde/audits.md#audit-slot-1) | [TODO](sources/brde/audits.md#audit-slot-2) | TODO (pending soak) |
 | fao | ingest | TODO | TODO | TODO | TODO |
 | fapergs | ingest | TODO | TODO | TODO | TODO |
 | fundacao_grupo_boticario | ingest | TODO | TODO | TODO | TODO |
