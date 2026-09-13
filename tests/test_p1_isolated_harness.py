@@ -139,9 +139,11 @@ def test_worker_parser_accepts_changed_replay_mode() -> None:
 def test_parent_parser_requires_safe_capacity_inputs() -> None:
     args = harness._parse_args([
         "--database-url", "postgresql://tester:secret@127.0.0.1/p1_test",
+        "--admitted-source", "brde",
         "--warm-samples", "5",
         "--arrival-rate-per-hour", "22",
     ])
     assert args.warm_samples == 5
+    assert args.admitted_source == "brde"
     with pytest.raises(SystemExit):
         harness._parse_args(["--warm-samples", "4"])

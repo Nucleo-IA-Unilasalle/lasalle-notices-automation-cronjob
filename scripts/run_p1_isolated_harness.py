@@ -1349,8 +1349,8 @@ def _run_termination_scenario(
     database_url: str,
     schema: str,
     temp_dir: Path,
+    source: str = "bndes",
 ) -> dict[str, Any]:
-    source = "bndes"
     items = [_descriptor(source, index) for index in range(1, 13)]
     before = _snapshot(api_python, api_repo, database_url, schema)
     worker = _spawn_worker(
@@ -1408,8 +1408,8 @@ def _run_replay_scenario(
     database_url: str,
     schema: str,
     temp_dir: Path,
+    source: str = "bndes",
 ) -> dict[str, Any]:
-    source = "bndes"
     candidate, _ = _make_candidate_payload(source, 100)
     before = _snapshot(api_python, api_repo, database_url, schema)
     worker = _spawn_worker(
@@ -1482,8 +1482,8 @@ def _run_finish_replay_scenario(
     database_url: str,
     schema: str,
     temp_dir: Path,
+    source: str = "bndes",
 ) -> dict[str, Any]:
-    source = "bndes"
     candidate, _ = _make_candidate_payload(source, 101)
     worker = _spawn_worker(
         api_url=api.base_url, secret=secret, source=source,
@@ -1544,9 +1544,9 @@ def _run_changed_content_replay_scenario(
     database_url: str,
     schema: str,
     temp_dir: Path,
+    source: str = "bndes",
 ) -> dict[str, Any]:
     """Prove same-identity content changes requeue one durable row only."""
-    source = "bndes"
     initial, _ = _make_candidate_payload(source, 200, variant="v1")
     changed, _ = _make_candidate_payload(source, 200, variant="v2")
     initial["metadata"].update({
@@ -1637,9 +1637,9 @@ def _run_poison_backoff_scenario(
     api_repo: Path,
     database_url: str,
     schema: str,
+    source: str = "bndes",
 ) -> dict[str, Any]:
     """Prove retry backoff lets eligible work proceed before quarantine."""
-    source = "bndes"
     poison = _descriptor(source, 300)
     healthy = _descriptor(source, 301)
     poison_record_id = poison["metadata"]["source_record_id"]
@@ -1991,6 +1991,10 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         "--warm-samples", type=int, default=20,
         help="Authenticated compact catalog reads for the warm p95 measurement",
     )
+    parser.add_argument(
+        "--admitted-source", choices=SOURCE_KEYS, default="bndes",
+        help="Closed-beta source exercised by correctness scenarios (default: bndes)",
+    )
     # Private child-process switches. They are intentionally hidden from the
     # normal help so operators invoke the parent command only.
     parser.add_argument("--worker-mode", choices=("register_hold", "submit_hold", "finish_hold", "changed_replay", "claim_hold", "drain"), help=argparse.SUPPRESS)
@@ -2045,6 +2049,7 @@ def run_harness(args: argparse.Namespace) -> tuple[int, dict[str, Any]]:
             "worker_python": Path(sys.executable).name,
         },
         "declared_workload": {
+            "admitted_source": args.admitted_source,
             "capacity_sources": list(CAPACITY_SOURCES),
             "descriptor_items_per_drain_worker": 4,
             "warm_samples": args.warm_samples,
@@ -2078,7 +2083,7 @@ def run_harness(args: argparse.Namespace) -> tuple[int, dict[str, Any]]:
         )
 
         closed_env = _api_env(
-            args.database_url, schema, mode="closed_beta", admitted_source="bndes",
+            args.database_url, schema, mode="closed_beta", admitted_source=args.admitted_source,
             pipeline_secret=pipeline_secret, api_repo=api_repo,
         )
         api = _start_api(api_python, api_repo, closed_env)
@@ -2101,22 +2106,27 @@ def run_harness(args: argparse.Namespace) -> tuple[int, dict[str, Any]]:
         report["scenarios"]["worker_termination_and_recovery"] = _run_termination_scenario(
             api=api, secret=pipeline_secret, api_python=api_python, api_repo=api_repo,
             database_url=args.database_url, schema=schema, temp_dir=temp_dir,
+            source=args.admitted_source,
         )
         report["scenarios"]["lost_submit_ack_replay_idempotency"] = _run_replay_scenario(
             api=api, secret=pipeline_secret, api_python=api_python, api_repo=api_repo,
             database_url=args.database_url, schema=schema, temp_dir=temp_dir,
+            source=args.admitted_source,
         )
         report["scenarios"]["lost_finish_ack_replay"] = _run_finish_replay_scenario(
             api=api, secret=pipeline_secret, api_python=api_python, api_repo=api_repo,
             database_url=args.database_url, schema=schema, temp_dir=temp_dir,
+            source=args.admitted_source,
         )
         report["scenarios"]["changed_content_replay"] = _run_changed_content_replay_scenario(
             api=api, secret=pipeline_secret, api_python=api_python, api_repo=api_repo,
             database_url=args.database_url, schema=schema, temp_dir=temp_dir,
+            source=args.admitted_source,
         )
         report["scenarios"]["poison_backoff_and_quarantine"] = _run_poison_backoff_scenario(
             api=api, secret=pipeline_secret, api_python=api_python, api_repo=api_repo,
             database_url=args.database_url, schema=schema,
+            source=args.admitted_source,
         )
         _stop_api(api)
         api = None

@@ -29,6 +29,11 @@ py -3.13 scripts/run_p1_isolated_harness.py \
   --storage-budget-bytes 1073741824
 ```
 
+Use `--admitted-source brde` when the frozen release source is BRDE. The
+selected source is recorded in the sanitized report and drives every
+closed-beta correctness scenario; capacity still uses the isolated legacy-mode
+multi-source fixture described below.
+
 The storage allowance and arrival rate must be declared from the disposable
 environment being measured. Omitting the storage allowance intentionally leaves
 the storage gate blocked. The JSON report is sanitized and contains no claim
