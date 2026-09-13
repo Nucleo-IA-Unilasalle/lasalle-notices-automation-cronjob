@@ -11,12 +11,10 @@ download / OCR / submit.
 The BRDE source fans out across two listings:
 
 1. ``https://www.brde.com.br/palacete/editais/`` — ``Palacete`` page
-   with direct PDF anchors; PDF URLs are discovered via
-   ``scraper_transport.discover_pdf_urls_on_page``.
-2. ``https://www.brde.com.br/fsa/chamadas-de-investimento/`` — FSA
-   listing with detail-page anchors; each detail page is fetched
-   via ``scraper_transport.discover_pdf_urls_on_page`` to discover
-   the edital PDFs hosted on it.
+   with direct PDF anchors grouped under explicit lifecycle headings.
+2. ``https://www.brde.com.br/producao/?tab=ci`` — the current FSA
+   Production listing. Each current detail page is checked for an active
+   application period before its principal edital PDF is admitted.
 
 Filter pipeline (per plan §9):
 - ``BRDE_MIN_NOTICE_YEAR`` (default ``2026``) drops URLs whose
@@ -36,16 +34,17 @@ from __future__ import annotations
 import os
 import re
 import sys
-from datetime import datetime, timezone
+import unicodedata
+from datetime import date, datetime, timezone
 from typing import Any
 from urllib.parse import urljoin, urlsplit, urlunsplit
+from zoneinfo import ZoneInfo
 
 from bs4 import BeautifulSoup, Tag
 
 import pipeline_core
 from scraper_filters import FilterPolicy, is_likely_edital
 from scraper_transport import (
-    discover_pdf_urls_on_page,
     fetch_html_with_retry,
     log_source_failure,
     looks_like_pdf_url,
@@ -53,7 +52,7 @@ from scraper_transport import (
 
 
 BRDE_PALACETE_LISTING_URL = "https://www.brde.com.br/palacete/editais/"
-BRDE_FSA_LISTING_URL = "https://www.brde.com.br/fsa/chamadas-de-investimento/"
+BRDE_FSA_LISTING_URL = "https://www.brde.com.br/producao/?tab=ci"
 
 BRDE_MIN_NOTICE_YEAR = int(os.environ.get("BRDE_MIN_NOTICE_YEAR", "2026"))
 
@@ -69,6 +68,27 @@ BRDE_FETCH_TIMEOUT_SECONDS = int(os.environ.get("BRDE_FETCH_TIMEOUT_SECONDS", "3
 # ``edital-de-patrocinio-brde-cultural-2026-1.pdf``, ``errata-edital-de-ocupacao-2024-2025-1.pdf``),
 # so this regex is sufficient for BRDE today.
 _YEAR_PATTERN = re.compile(r"(?<!\d)(19|20)\d{2}(?!\d)")
+_APPLICATION_PERIOD_PATTERN = re.compile(
+    r"periodo\s+de\s+inscricoes\s*:\s*"
+    r"(\d{2}/\d{2}/\d{4})\s+a\s+(\d{2}/\d{2}/\d{4})",
+    re.IGNORECASE,
+)
+
+
+def _normalized_text(value: str) -> str:
+    normalized = unicodedata.normalize("NFKD", value)
+    return " ".join(
+        normalized.encode("ascii", "ignore").decode("ascii").lower().split()
+    )
+
+
+def _normalized_brde_host(url: str) -> str:
+    host = (urlsplit(url).hostname or "").lower()
+    return host.removeprefix("www.")
+
+
+def _is_official_brde_url(url: str) -> bool:
+    return _normalized_brde_host(url) == "brde.com.br"
 
 
 def _extract_year_from_url(url: str) -> int | None:
@@ -102,37 +122,100 @@ def _passes_year_guard(url: str, *, min_year: int) -> bool:
     return year >= min_year
 
 
-def extract_brde_fsa_detail_urls(listing_html: str, listing_url: str) -> list[str]:
-    """Discover detail-page URLs from the BRDE FSA listing.
+def extract_brde_palacete_open_pdf_urls(
+    listing_html: str,
+    listing_url: str,
+    *,
+    min_year: int,
+) -> tuple[list[str], int]:
+    """Return PDFs from non-closed Palacete edital sections.
 
-    Verbatim port of ``extract_brde_fsa_detail_urls`` from the FastAPI
-    repo. The extractor matches anchors whose path starts with
-    ``/fsa/chamada-publica-brde-fsa-`` on the listing host and
-    deduplicates canonicalised URLs.
+    The page keeps closed editions online. A year guard alone therefore cannot
+    establish eligibility; the section heading is the lifecycle authority.
     """
     soup = BeautifulSoup(listing_html, "html.parser")
     discovered: list[str] = []
     seen: set[str] = set()
-    listing_host = (urlsplit(listing_url).hostname or "").lower()
+    closed_sections = 0
+
+    for heading in soup.find_all(["h2", "h3", "h4"]):
+        if not isinstance(heading, Tag):
+            continue
+        heading_text = _normalized_text(heading.get_text(" ", strip=True))
+        years = [int(match.group(0)) for match in _YEAR_PATTERN.finditer(heading_text)]
+        if not years or max(years) < min_year or not heading_text.startswith("edital"):
+            continue
+        is_closed = "encerrad" in heading_text
+        if is_closed:
+            closed_sections += 1
+
+        for sibling in heading.find_next_siblings():
+            if isinstance(sibling, Tag) and sibling.name in {"h2", "h3", "h4"}:
+                break
+            if not isinstance(sibling, Tag):
+                continue
+            for link in sibling.find_all("a"):
+                if not isinstance(link, Tag):
+                    continue
+                href = link.get("href")
+                if not isinstance(href, str) or not href.strip():
+                    continue
+                resolved = urljoin(listing_url, href.strip())
+                if (
+                    not looks_like_pdf_url(resolved)
+                    or not _is_official_brde_url(resolved)
+                    or is_closed
+                ):
+                    continue
+                if resolved not in seen:
+                    seen.add(resolved)
+                    discovered.append(resolved)
+
+    return discovered, closed_sections
+
+
+def extract_brde_fsa_detail_urls(
+    listing_html: str,
+    listing_url: str,
+    *,
+    min_year: int | None = None,
+) -> list[str]:
+    """Discover detail-page URLs from the BRDE FSA listing.
+
+    BRDE moved current calls from ``/fsa/chamada-publica-...`` to root-level
+    ``/chamada-publica-...`` pages and occasionally publishes whitespace in
+    an absolute href. Both official path forms are accepted, while unrelated
+    BRDE pages and cross-host links remain excluded.
+    """
+    soup = BeautifulSoup(listing_html, "html.parser")
+    discovered: list[str] = []
+    seen: set[str] = set()
+    listing_host = _normalized_brde_host(listing_url)
 
     for link in soup.find_all("a"):
         if not isinstance(link, Tag):
             continue
 
         href = link.get("href")
-        if not isinstance(href, str) or not href:
+        if not isinstance(href, str) or not href.strip():
             continue
 
-        resolved = urljoin(listing_url, href)
+        resolved = urljoin(listing_url, href.strip())
         normalized = urlsplit(resolved)
-        if (normalized.hostname or "").lower() != listing_host:
+        if _normalized_brde_host(resolved) != listing_host:
             continue
 
-        path = normalized.path.rstrip("/")
-        if not path.startswith("/fsa/chamada-publica-brde-fsa-"):
+        # The live Portugal 2026 link contains one erroneous space after the
+        # host slash. Repair only that bounded leading-path defect.
+        path = re.sub(r"^/\s+", "/", normalized.path).rstrip("/")
+        if not re.match(r"^/(?:fsa/)?chamada-publica-brde-fsa-", path):
+            continue
+        if min_year is not None and not _passes_year_guard(
+            resolved, min_year=min_year,
+        ):
             continue
 
-        canonical = urlunsplit((normalized.scheme, normalized.netloc, path, "", ""))
+        canonical = urlunsplit(("https", normalized.netloc, path, "", ""))
         if canonical in seen:
             continue
 
@@ -140,6 +223,69 @@ def extract_brde_fsa_detail_urls(listing_html: str, listing_url: str) -> list[st
         discovered.append(canonical)
 
     return discovered
+
+
+def extract_brde_application_period(detail_html: str) -> tuple[date, date] | None:
+    """Extract the official application period from an FSA detail page."""
+    text = _normalized_text(
+        BeautifulSoup(detail_html, "html.parser").get_text(" ", strip=True)
+    )
+    match = _APPLICATION_PERIOD_PATTERN.search(text)
+    if not match:
+        return None
+    try:
+        start = datetime.strptime(match.group(1), "%d/%m/%Y").date()
+        end = datetime.strptime(match.group(2), "%d/%m/%Y").date()
+    except ValueError:
+        return None
+    if end < start:
+        return None
+    return start, end
+
+
+def extract_brde_principal_edital_pdf_urls(
+    detail_html: str,
+    detail_url: str,
+) -> list[str]:
+    """Return only principal edital PDFs, excluding FAQs, results and annexes."""
+    soup = BeautifulSoup(detail_html, "html.parser")
+    exact: list[str] = []
+    complete: list[str] = []
+    for link in soup.find_all("a"):
+        if not isinstance(link, Tag):
+            continue
+        href = link.get("href")
+        if not isinstance(href, str) or not href.strip():
+            continue
+        resolved = urljoin(detail_url, href.strip())
+        if not looks_like_pdf_url(resolved) or not _is_official_brde_url(resolved):
+            continue
+        label = _normalized_text(link.get_text(" ", strip=True))
+        if label == "edital":
+            exact.append(resolved)
+        elif label.startswith("edital completo"):
+            complete.append(resolved)
+    return list(dict.fromkeys(exact or complete))
+
+
+def _fsa_listing_looks_valid(listing_html: str) -> bool:
+    soup = BeautifulSoup(listing_html, "html.parser")
+    content = soup.select_one(".page-content")
+    if content is None:
+        return False
+    text = _normalized_text(content.get_text(" ", strip=True))
+    return "producao" in text and "chamadas publicas" in text
+
+
+def _palacete_listing_looks_valid(listing_html: str) -> bool:
+    soup = BeautifulSoup(listing_html, "html.parser")
+    content = soup.select_one(".page-content")
+    if content is None:
+        return False
+    return any(
+        _normalized_text(heading.get_text(" ", strip=True)).startswith("edital")
+        for heading in content.find_all(["h1", "h2", "h3", "h4"])
+    )
 
 
 def _candidate_passes_edital_prefilter(
@@ -159,6 +305,8 @@ def build_candidate(
     filter_policy: FilterPolicy = "default",
     min_year: int = BRDE_MIN_NOTICE_YEAR,
     origin: str | None = None,
+    application_start: date | None = None,
+    application_deadline: date | None = None,
 ) -> dict[str, Any] | None:
     """Build a ``kind="pdf"`` candidate or return ``None`` if filtered out."""
     if not _passes_year_guard(url, min_year=min_year):
@@ -182,6 +330,11 @@ def build_candidate(
     }
     if detail_url is not None:
         metadata["detail_url"] = detail_url
+    if application_start is not None:
+        metadata["application_start"] = application_start.isoformat()
+    if application_deadline is not None:
+        metadata["application_deadline"] = application_deadline.isoformat()
+        metadata["status"] = "open"
 
     return {"url": url, "kind": "pdf", "metadata": metadata}
 
@@ -190,6 +343,7 @@ def discover_candidates(
     *,
     filter_policy: FilterPolicy = "default",
     min_year: int = BRDE_MIN_NOTICE_YEAR,
+    as_of_date: date | None = None,
 ) -> tuple[dict[str, int], list[dict[str, Any]]]:
     """Discover BRDE edital PDF candidates from the Palacete + FSA listings.
 
@@ -204,7 +358,15 @@ def discover_candidates(
         "errors": 0,
         "partial_inventory": 0,
         "candidate_cap_reached": 0,
+        "detail_cap_reached": 0,
+        "open_details": 0,
+        "closed_details": 0,
+        "upcoming_details": 0,
+        "missing_lifecycle": 0,
+        "palacete_closed_sections": 0,
     }
+    if as_of_date is None:
+        as_of_date = datetime.now(ZoneInfo("America/Sao_Paulo")).date()
     candidates: list[dict[str, Any]] = []
     seen_urls: set[str] = set()
     details_fetched = 0
@@ -215,6 +377,7 @@ def discover_candidates(
         listing_url: str,
         detail_url: str | None,
         origin: str,
+        application_period: tuple[date, date] | None = None,
     ) -> bool:
         if pdf_url in seen_urls:
             return True
@@ -226,6 +389,8 @@ def discover_candidates(
             filter_policy=filter_policy,
             min_year=min_year,
             origin=origin,
+            application_start=application_period[0] if application_period else None,
+            application_deadline=application_period[1] if application_period else None,
         )
         if candidate is None:
             if not _passes_year_guard(pdf_url, min_year=min_year):
@@ -256,11 +421,22 @@ def discover_candidates(
 
     palacete_pdfs: list[str] = []
     try:
-        palacete_pdfs = discover_pdf_urls_on_page(
+        palacete_html = fetch_html_with_retry(
             BRDE_PALACETE_LISTING_URL,
-            stats=stats,
+            timeout=BRDE_FETCH_TIMEOUT_SECONDS,
+            max_attempts=BRDE_FETCH_MAX_ATTEMPTS,
+            backoff_seconds=BRDE_FETCH_BACKOFF_SECONDS,
+            allowed_status_codes=(401, 403, 404, 410),
         )
         stats["listings_fetched"] += 1
+        if not _palacete_listing_looks_valid(palacete_html):
+            raise RuntimeError("BRDE Palacete listing structure is unrecognized")
+        palacete_pdfs, closed_sections = extract_brde_palacete_open_pdf_urls(
+            palacete_html,
+            BRDE_PALACETE_LISTING_URL,
+            min_year=min_year,
+        )
+        stats["palacete_closed_sections"] = closed_sections
     except Exception as exc:
         log_source_failure(
             "Failed to fetch BRDE Palacete listing %s: %s",
@@ -293,7 +469,13 @@ def discover_candidates(
             allowed_status_codes=(401, 403, 404, 410),
         )
         stats["listings_fetched"] += 1
-        fsa_detail_urls = extract_brde_fsa_detail_urls(fsa_html, BRDE_FSA_LISTING_URL)
+        if not _fsa_listing_looks_valid(fsa_html):
+            raise RuntimeError("BRDE FSA Production listing structure is unrecognized")
+        fsa_detail_urls = extract_brde_fsa_detail_urls(
+            fsa_html,
+            BRDE_FSA_LISTING_URL,
+            min_year=min_year,
+        )
     except Exception as exc:
         log_source_failure(
             "Failed to fetch BRDE FSA listing %s: %s",
@@ -309,9 +491,17 @@ def discover_candidates(
                 f"Stopping after detail fetch cap {BRDE_MAX_DETAILS_PER_RUN}",
                 file=sys.stderr,
             )
+            stats["detail_cap_reached"] = 1
+            stats["partial_inventory"] = 1
             break
         try:
-            detail_pdfs = discover_pdf_urls_on_page(detail_url, stats=stats)
+            detail_html = fetch_html_with_retry(
+                detail_url,
+                timeout=BRDE_FETCH_TIMEOUT_SECONDS,
+                max_attempts=BRDE_FETCH_MAX_ATTEMPTS,
+                backoff_seconds=BRDE_FETCH_BACKOFF_SECONDS,
+                allowed_status_codes=(401, 403, 404, 410),
+            )
         except Exception as exc:
             log_source_failure(
                 "Failed to discover PDFs on BRDE FSA detail %s: %s",
@@ -323,12 +513,32 @@ def discover_candidates(
             continue
         details_fetched += 1
         stats["details_fetched"] += 1
+        application_period = extract_brde_application_period(detail_html)
+        if application_period is None:
+            stats["missing_lifecycle"] += 1
+            _record_discovery_error()
+            continue
+        application_start, application_deadline = application_period
+        if as_of_date < application_start:
+            stats["upcoming_details"] += 1
+            continue
+        if as_of_date >= application_deadline:
+            stats["closed_details"] += 1
+            continue
+        stats["open_details"] += 1
+        detail_pdfs = extract_brde_principal_edital_pdf_urls(
+            detail_html, detail_url,
+        )
+        if not detail_pdfs:
+            _record_discovery_error()
+            continue
         for pdf_url in detail_pdfs:
             if _ingest_pdf(
                 pdf_url,
                 listing_url=BRDE_FSA_LISTING_URL,
                 detail_url=detail_url,
                 origin="detail_page",
+                application_period=application_period,
             ):
                 continue
             if _hit_candidate_cap():
