@@ -33,6 +33,14 @@ jobs:
       PACIFIC_WINDOW_START: "8"
       PACIFIC_WINDOW_END: "19"
     steps:
+      - name: Checkout scheduler repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Block unfenced legacy AI trigger in closed beta
+        run: python scripts/beta_admission.py --source pncp --legacy-route
+        env:
+          CLOSED_BETA_SOURCE_ALLOWLIST: ${{ vars.CLOSED_BETA_SOURCE_ALLOWLIST || '' }}
+
       - name: Check Pacific daytime window and trigger
         shell: bash
         run: |

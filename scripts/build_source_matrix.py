@@ -3,12 +3,13 @@
 The registry (``config/source_schedule.json``) is the only place source
 execution configuration lives. This builder validates it fail-closed and
 emits the GitHub Actions matrix for one group. Paused entries remain visible
-in the registry but are omitted from the executable matrix; audit entries are
-emitted and the workflow runs them without ingestion (``DISCOVERY_AUDIT_ONLY``).
+in the registry. During the closed beta, the operator allowlist must select one
+known ingest-mode candidate source; only that source is emitted and all other
+groups return an empty matrix without starting a discovery worker.
 
 Exit codes:
   0 - matrix emitted
-  1 - registry invalid (unknown/duplicate keys, invalid groups, bad modes,
+  1 - registry/admission invalid (unknown/duplicate keys, invalid groups, bad modes,
       modules that do not match the orchestrator registry, or a group that is
       not exactly 7/7/8 non-PNCP entries)
 """
@@ -17,6 +18,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 from typing import Any
@@ -28,6 +30,7 @@ VALID_ROLLOUT_MODES = {"audit", "ingest", "paused"}
 VALID_SUBMISSION_CONTRACTS = {"candidate", "opportunity"}
 VALID_GROUPS = {"a", "b", "c", "pncp"}
 VALID_FILTER_POLICIES = {"default", "include_tdr", "no_prefilter"}
+ADMISSION_ENV = "CLOSED_BETA_SOURCE_ALLOWLIST"
 
 # Mirrors scripts/discover_all_candidates.py SOURCE_MODULES; kept as a literal
 # list of module stems so validation never imports heavy source dependencies.
@@ -156,8 +159,32 @@ def validate_registry(registry: dict[str, Any]) -> list[dict[str, Any]]:
     return sources
 
 
-def build_matrix(registry: dict[str, Any], group: str) -> dict[str, Any]:
-    """Return the executable matrix for one group plus a paused-by-mode report."""
+def admitted_source_key(
+    registry: dict[str, Any], *, environ: dict[str, str] | None = None
+) -> str:
+    """Validate and return the one closed-beta source selected by the operator."""
+    environment = os.environ if environ is None else environ
+    raw = environment.get(ADMISSION_ENV)
+    if raw is None or not raw:
+        raise ValueError(f"{ADMISSION_ENV} must name exactly one source")
+    if raw != raw.strip() or "," in raw or any(char.isspace() for char in raw):
+        raise ValueError(f"{ADMISSION_ENV} must be one canonical source key")
+
+    entries = {entry["source_key"]: entry for entry in validate_registry(registry)}
+    entry = entries.get(raw)
+    if entry is None:
+        raise ValueError(f"{ADMISSION_ENV} contains an unknown source key")
+    if entry["rollout_mode"] != "ingest":
+        raise ValueError("the selected source is held outside closed-beta ingestion")
+    if entry["submission_contract"] != "candidate":
+        raise ValueError("the first closed-beta source must use the candidate contract")
+    return raw
+
+
+def build_matrix(
+    registry: dict[str, Any], group: str, *, admitted_source: str
+) -> dict[str, Any]:
+    """Return only the admitted source when it belongs to this group."""
     defaults = registry["defaults"]
     includes: list[dict[str, Any]] = []
     paused: list[str] = []
@@ -166,6 +193,8 @@ def build_matrix(registry: dict[str, Any], group: str) -> dict[str, Any]:
             continue
         if entry["rollout_mode"] == "paused":
             paused.append(entry["source_key"])
+            continue
+        if entry["source_key"] != admitted_source:
             continue
         includes.append(
             {
@@ -184,9 +213,6 @@ def build_matrix(registry: dict[str, Any], group: str) -> dict[str, Any]:
                 "pdf_limit": defaults["pdf_limit"],
             }
         )
-    if not includes:
-        print(f"error: group {group} has no executable entries", file=sys.stderr)
-        raise SystemExit(1)
     return {"group": group, "includes": includes, "paused": paused}
 
 
@@ -196,7 +222,13 @@ def main() -> int:
     parser.add_argument("--format", choices=("json", "github"), default="json")
     args = parser.parse_args()
 
-    matrix = build_matrix(load_registry(), args.group)
+    registry = load_registry()
+    try:
+        admitted_source = admitted_source_key(registry)
+    except ValueError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
+    matrix = build_matrix(registry, args.group, admitted_source=admitted_source)
     if args.format == "github":
         # Compact single-line JSON for a GitHub Actions `fromJSON(...)` output.
         print(json.dumps(matrix["includes"], separators=(",", ":")))

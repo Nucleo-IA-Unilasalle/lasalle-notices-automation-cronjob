@@ -57,7 +57,7 @@ jobs:
 
       - name: Run WWF discovery, download, OCR, and submission
         if: ${{ github.event_name != 'workflow_dispatch' || !inputs.audit_only }}
-        run: python scripts/discover_all_candidates.py
+        run: python scripts/run_managed_source.py --source wwf scripts/discover_all_candidates.py
         env:
           SOURCES: "wwf"
           SOURCE_RUN_REPORTING_ENABLED: ${{ vars.SOURCE_RUN_REPORTING_ENABLED || 'false' }}
@@ -65,6 +65,7 @@ jobs:
           FILTER_POLICY: "default"
           RENDER_APP_URL: ${{ secrets.RENDER_APP_URL }}
           PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}
+          CLOSED_BETA_SOURCE_ALLOWLIST: ${{ vars.CLOSED_BETA_SOURCE_ALLOWLIST || '' }}
           WWF_MIN_NOTICE_YEAR: "2026"
           WWF_MAX_CANDIDATES_PER_RUN: "50"
           WWF_MAX_DETAILS_PER_RUN: "20"

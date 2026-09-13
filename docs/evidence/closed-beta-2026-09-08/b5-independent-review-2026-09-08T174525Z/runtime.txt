@@ -1,0 +1,4 @@
+command=py -3.13 --version
+Python 3.13.5
+interpreter_match_python_3_13=true
+credentials_or_raw_target_data_recorded=false

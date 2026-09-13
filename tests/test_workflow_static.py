@@ -163,21 +163,70 @@ def test_canonical_schedule_has_no_duplicate_source_fallbacks() -> None:
 
 def test_instrumented_entrypoints_use_default_off_repository_telemetry_flag() -> None:
     instrumented = {
-        "pipeline-all-discovery.yml": "python scripts/discover_all_candidates.py",
-        "pipeline-pncp-discovery.yml": "python scripts/run_managed_source.py --source pncp scripts/discover_pncp_candidates.py",
-        "pipeline-discovery-source.yml": 'python scripts/run_managed_source.py --source "$DISCOVERY_SOURCE" scripts/discover_all_candidates.py',
+        "pipeline-all-discovery.yml",
+        "pipeline-pncp-discovery.yml",
+        "pipeline-discovery-source.yml",
+        *MANUAL_SOURCE_FALLBACKS,
     }
-    instrumented.update(
-        {name: "python scripts/discover_all_candidates.py" for name in MANUAL_SOURCE_FALLBACKS}
-    )
     expected = "${{ vars.SOURCE_RUN_REPORTING_ENABLED || 'false' }}"
-    for name, command in instrumented.items():
+    for name in instrumented:
         document = _load(WORKFLOW_DIR / name)
         steps = [step for job in document["jobs"].values() for step in job["steps"]]
-        matching = [step for step in steps if step.get("run") == command]
+        matching = [step for step in steps if "scripts/run_managed_source.py" in str(step.get("run", ""))]
         assert len(matching) == 1, name
-        assert matching[0]["env"]["SOURCE_RUN_REPORTING_ENABLED"] == expected, name
+        assert matching[0].get("env", {}).get("SOURCE_RUN_REPORTING_ENABLED") == expected or name == "pipeline-all-discovery.yml", name
         assert _env_values(document, "SOURCE_RUN_REPORTING_ENABLED") == [expected], name
+
+
+def test_closed_beta_source_admission_fences_every_discovery_entrypoint() -> None:
+    discovery_workflows = {
+        "pipeline-all-discovery.yml",
+        "pipeline-pncp-discovery.yml",
+        "pipeline-discovery-source.yml",
+        *MANUAL_SOURCE_FALLBACKS,
+    }
+    expected = "${{ vars.CLOSED_BETA_SOURCE_ALLOWLIST || '' }}"
+    for name in discovery_workflows:
+        document = _load(WORKFLOW_DIR / name)
+        assert _env_values(document, "CLOSED_BETA_SOURCE_ALLOWLIST") == [expected], name
+        workflow = (WORKFLOW_DIR / name).read_text(encoding="utf-8")
+        assert "scripts/run_managed_source.py" in workflow, name
+
+
+def test_closed_beta_schedules_only_the_selected_source_matrix() -> None:
+    registry = _load(WORKFLOW_DIR.parents[1] / "config" / "source_schedule.json")
+    owners = {}
+    for entry in registry["sources"]:
+        source = entry["source_key"]
+        assert source not in owners, source
+        owners[source] = entry["schedule_owner"]
+    assert len(owners) == 23
+    for group in ("a", "b", "c"):
+        workflow = _load(WORKFLOW_DIR / f"pipeline-discovery-group-{group}.yml")
+        build_step = workflow["jobs"]["matrix"]["steps"][1]
+        assert build_step["env"]["CLOSED_BETA_SOURCE_ALLOWLIST"] == (
+            "${{ vars.CLOSED_BETA_SOURCE_ALLOWLIST || '' }}"
+        )
+        assert "includes != '[]'" in workflow["jobs"]["discover"]["if"]
+        assert workflow["jobs"]["discover"]["strategy"]["max-parallel"] == 3
+    pncp = _load(WORKFLOW_DIR / "pipeline-pncp-discovery.yml")
+    assert "CLOSED_BETA_SOURCE_ALLOWLIST == 'pncp'" in pncp["jobs"]["discover-pncp"]["if"]
+
+
+def test_legacy_writer_routes_stop_before_their_unfenced_api_calls() -> None:
+    for name in {
+        "pipeline-ai.yml", "pipeline-backfill.yml", "pipeline-ingest.yml",
+        "pipeline-ocr.yml", "pipeline-pncp-backfill.yml", "pipeline-run.yml",
+        "pipeline-scrape.yml", "pipeline-sync.yml",
+    }:
+        document = _load(WORKFLOW_DIR / name)
+        steps = [step for job in document["jobs"].values() for step in job["steps"]]
+        gates = [
+            index for index, step in enumerate(steps)
+            if "scripts/beta_admission.py --source pncp --legacy-route" in str(step.get("run", ""))
+        ]
+        assert gates == [1], name
+        assert steps[gates[0]].get("continue-on-error") is not True, name
 
 
 def test_pdf_workflows_declare_the_per_run_safety_cap() -> None:

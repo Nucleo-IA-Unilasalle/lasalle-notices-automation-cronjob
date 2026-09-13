@@ -141,12 +141,33 @@ def _take_batch(items):
     return {"items": items, "backlog": {"pending": 0, "quarantined": 0}}
 
 
-def test_stop_process_tree_is_noop_without_a_live_process():
+def test_stop_process_tree_is_noop_without_a_process():
     managed.stop_process_tree(None)
+
+
+def test_stop_process_tree_still_targets_descendants_after_parent_exit(monkeypatch):
+    import os as _os
+    import subprocess as _sp
+
+    kill_calls = []
+    if _os.name == "nt":
+        monkeypatch.setattr(
+            _sp,
+            "run",
+            lambda *args, **kwargs: kill_calls.append((args, kwargs)) or Mock(returncode=0),
+        )
+    else:
+        monkeypatch.setattr(
+            _os,
+            "killpg",
+            lambda pid, sig: kill_calls.append((pid, sig)),
+        )
     process = Mock()
+    process.pid = 4242
     process.poll.return_value = 3
     managed.stop_process_tree(process)
-    process.wait.assert_not_called()
+    assert kill_calls, "an exited session leader may still have live descendants"
+    process.wait.assert_called_once_with(timeout=15)
 
 
 def test_stop_process_tree_kills_running_tree_and_waits(monkeypatch):
@@ -234,6 +255,7 @@ def _managed_env(monkeypatch, monotonic_values=None, sleeps=None):
 
     monkeypatch.setenv("SOURCE_JOB_STARTED_AT", str(_time.time()))
     monkeypatch.setenv("SOURCE_JOB_TIMEOUT_MINUTES", "20")
+    monkeypatch.setenv("CLOSED_BETA_SOURCE_ALLOWLIST", "bndes")
     monkeypatch.delenv("DISCOVERY_AUDIT_ONLY", raising=False)
     monkeypatch.delenv("GITHUB_EVENT_NAME", raising=False)
     monkeypatch.setattr(_sp, "run", lambda *a, **k: Mock(returncode=0))
@@ -285,6 +307,23 @@ def test_subprocess_death_releases_failed_with_child_exit_code(monkeypatch):
     _managed_env(monkeypatch)
     result = managed.main(["--source", "bndes", "scripts/discover_all_candidates.py"])
     assert result == 3
+    assert _FakeControl.instances[-1].released == ["failed"]
+
+
+def test_cleanup_timeout_does_not_skip_lease_release(monkeypatch):
+    import subprocess as _sp
+
+    _FakeControl.instances.clear()
+    _managed_registry(monkeypatch)
+    monkeypatch.setattr(managed, "SourceControl", _FakeControl)
+    process = _FakeProcess(polls=[3], returncode=3)
+    process.wait = Mock(side_effect=_sp.TimeoutExpired("worker", 15))
+    monkeypatch.setattr("subprocess.Popen", lambda *a, **k: process)
+    _managed_env(monkeypatch)
+
+    result = managed.main(["--source", "bndes", "scripts/discover_all_candidates.py"])
+
+    assert result == 1
     assert _FakeControl.instances[-1].released == ["failed"]
 
 

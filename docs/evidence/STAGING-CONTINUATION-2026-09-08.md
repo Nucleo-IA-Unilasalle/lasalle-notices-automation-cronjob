@@ -26,7 +26,9 @@ merge, deployment, activation, or source-hold change occurred.
   PostgreSQL 17, expires `2026-10-07T20:55:22.077452Z`.
 - External allowlist count `0` (empty) before and after this continuation,
   verified via GET before mutation and via PATCH-response plus GET after
-  cleanup. No broad allowlist was ever added.
+  restoration. No broad allowlist was ever added. This is observed cleanup for
+  this completed path, not a guarantee if the control-plane restore failed or
+  the process terminated before `finally` ran.
 - Staging env identity (read via Render REST, credentials in memory only):
   DATABASE_URL hostname matches the replacement DB, dbname
   `lasalle_notices_staging_db_dzcn`; `APP_VERSION=2.0.0-staging-e9422dc`;
@@ -79,20 +81,27 @@ requires `--allow-live-staging-mutation` plus
   `brde`, `fapergs`, `iis_rio`, `worldbank`, `fao`, `bndes`: no dangling
   leases left by the failed attempt.
 - Warmed the service (`/health`, `/`, authenticated `due` + capabilities).
-- Attempt 2 at `2026-09-08T01:21:35Z`: PASSED, exit 0. Task 1 (3 admitted /
-  1 `capacity_full` / clean noop releases): pass. Task 2 stale-owner fencing
-  (`empraba` 404, alpha 201, beta 409 `claim_active` x2, invalid renew 409
-  `claim_missing`, alpha release 200 accepted): pass. Task 3 lease
-  expiry/renewal (extend verified, release accepted, post-expiry renew 409
-  `claim_expired`, reclaim 201 + release 200): pass. Cleanup succeeded.
+- Attempt 2 at `2026-09-08T01:21:35Z`: runner exit 0. Task 1 recorded 3
+  admitted claims and one `capacity_full` admission exclusion, followed by
+  accepted noop releases. Task 2 recorded unknown-source admission exclusion
+  (`empraba` 404), active-claim exclusion (`claim_active`), and a
+  fabricated/mismatched-token rejection (`claim_missing`); it did not expire
+  alpha and beta did not reclaim the same source. Task 3 recorded active-token
+  renewal, explicit expiry rejection (`claim_expired`), and a later reclaim,
+  but not an authentic superseded-token mutation attempt after takeover.
+  Release responses and the post-probe `due` check were observed; cleanup is
+  best-effort/observed for this run, not a general guarantee.
 - Sanitized artifact: `docs/evidence/failure_injection_results.json`
   (claim tokens stored as `[REDACTED sha256:...]`; bounded scan found no
   pipeline-secret, Render API-key, private-key, or local-path material).
 - Post-probe `due` check: `live_claim: False` for all involved sources. No
   staging leases retained.
 
-These probes establish live admission/fencing/expiry behavior only. They do
-not prove worker crash/replay, lost-ACK after acceptance, backlog
+These probes establish live admission exclusion, fabricated-token rejection,
+expiry rejection and one later reclaim sequence. They do not establish
+genuine post-takeover stale-owner fencing: no alpha claim was expired and
+reclaimed by beta before an alpha mutation was attempted. They also do not
+prove worker crash/replay, lost-ACK after acceptance, backlog
 persistence, capacity/latency SLOs, image-only OCR, independent audits,
 UI/monitoring, or soak. All such gates remain open.
 

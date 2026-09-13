@@ -1,0 +1,41 @@
+ci.yml	class=read-only-or-ci	scheduled=false	status=static-covered
+pipeline-ai.yml	class=always-denied-legacy	scheduled=true	status=static-covered
+pipeline-all-discovery.yml	class=managed-discovery	scheduled=false	status=static-covered
+pipeline-backfill.yml	class=always-denied-legacy	scheduled=true	status=static-covered
+pipeline-bndes-discovery.yml	class=managed-discovery	scheduled=false	status=static-covered
+pipeline-brde-discovery.yml	class=managed-discovery	scheduled=false	status=static-covered
+pipeline-canoas-discovery.yml	class=managed-discovery	scheduled=false	status=static-covered
+pipeline-discovery-group-a.yml	class=group-caller	scheduled=true	status=static-covered
+pipeline-discovery-group-b.yml	class=group-caller	scheduled=true	status=static-covered
+pipeline-discovery-group-c.yml	class=group-caller	scheduled=true	status=static-covered
+pipeline-discovery-source.yml	class=managed-discovery	scheduled=false	status=static-covered
+pipeline-dopa-discovery.yml	class=managed-discovery	scheduled=false	status=static-covered
+pipeline-fao-discovery.yml	class=managed-discovery	scheduled=false	status=static-covered
+pipeline-fapergs-discovery.yml	class=managed-discovery	scheduled=false	status=static-covered
+pipeline-fbds-discovery.yml	class=managed-discovery	scheduled=false	status=static-covered
+pipeline-finep-discovery.yml	class=managed-discovery	scheduled=false	status=static-covered
+pipeline-funbio-discovery.yml	class=managed-discovery	scheduled=false	status=static-covered
+pipeline-fundacao-grupo-boticario-discovery.yml	class=managed-discovery	scheduled=false	status=static-covered
+pipeline-govbr-mma-discovery.yml	class=managed-discovery	scheduled=false	status=static-covered
+pipeline-govbr-mma-fnma-discovery.yml	class=managed-discovery	scheduled=false	status=static-covered
+pipeline-govbr-mma-public-calls-discovery.yml	class=managed-discovery	scheduled=false	status=static-covered
+pipeline-ibama-discovery.yml	class=managed-discovery	scheduled=false	status=static-covered
+pipeline-iis-rio-discovery.yml	class=managed-discovery	scheduled=false	status=static-covered
+pipeline-ingest.yml	class=always-denied-legacy	scheduled=false	status=static-covered
+pipeline-kfw-discovery.yml	class=managed-discovery	scheduled=false	status=static-covered
+pipeline-msgov-discovery.yml	class=managed-discovery	scheduled=false	status=static-covered
+pipeline-ocr.yml	class=always-denied-legacy	scheduled=false	status=static-covered
+pipeline-pncp-backfill.yml	class=always-denied-legacy	scheduled=false	status=static-covered
+pipeline-pncp-discovery.yml	class=managed-discovery	scheduled=true	status=static-covered
+pipeline-run.yml	class=always-denied-legacy	scheduled=false	status=static-covered
+pipeline-scrape.yml	class=always-denied-legacy	scheduled=false	status=static-covered
+pipeline-sema-rs-discovery.yml	class=managed-discovery	scheduled=false	status=static-covered
+pipeline-source-monitor.yml	class=read-only-or-ci	scheduled=true	status=static-covered
+pipeline-sync.yml	class=always-denied-legacy	scheduled=true	status=static-covered
+pipeline-tnc-discovery.yml	class=managed-discovery	scheduled=false	status=static-covered
+pipeline-unep-discovery.yml	class=managed-discovery	scheduled=false	status=static-covered
+pipeline-worldbank-discovery.yml	class=managed-discovery	scheduled=false	status=static-covered
+Traceback (most recent call last):
+  File "<stdin>", line 55, in <module>
+AssertionError: pipeline-wwf-discovery.yml
+exit_code=1

@@ -7,14 +7,28 @@ outputs, not independent audits; both RR-05 audit slots remain `TODO`. Paused (`
 (`tnc`, `funbio`, `govbr_mma_fnma`, `govbr_mma_public_calls`, `unep`) holds are preserved; baseline assessment and capture methodologies are documented in [Held Sources Audit Roadmap](sources/HELD-SOURCES-AUDIT-ROADMAP-2026-09-07.md). Evidence scaffolding never activates a
 source.
 
+[Production-only admission candidate](production-only-2026-09-12/README.md)
+records the 2026-09-12 uncommitted server-side and workflow admission work, its
+local verification, and the remaining process/capacity gaps. It is a review
+record, not a passed release gate or production observation. The [P3 writer
+drain/fence readiness ledger](production-only-2026-09-12/p3-writer-drain-fence-ledger-2026-09-12T2342Z.md)
+adds the sanitized old-ref, queued/running, direct-CLI, API, scheduler, and
+executor inventory plus guarded operator commands; it is also not production
+evidence or release approval.
+
 [Post-review validation](POST-REVIEW-VALIDATION-2026-09-08.md) records the next
 offline integration checks and read-only staging preflight, including the
 unresolved direct schema-verification connection failure.
 
-[Staging continuation](STAGING-CONTINUATION-2026-09-08.md) resolves fresh SQL
-schema-v3 verification via a temporary operator /32 with guaranteed cleanup
-and records the corrected staging failure-injection probes (one cold-start
-failure, one full pass with sanitized artifact).
+[Staging continuation](STAGING-CONTINUATION-2026-09-08.md) records fresh SQL
+schema-v3 verification via a temporary operator /32 and restoration of the
+previous empty allowlist. The cleanup was observed in the recorded path, but
+is not a general guarantee under every exception or control-plane failure.
+The continuation also retains corrected staging failure-injection probes (one
+cold-start failure, one full pass with sanitized artifact). Those historical
+runner results are qualified in the [B1 evidence run](closed-beta-2026-09-08/b1-evidence-correction-2026-09-08T163541Z/evidence-correction.md):
+admission exclusion, fabricated-token rejection and expiry rejection are not
+genuine post-takeover stale-owner fencing.
 
 ## Conventions
 

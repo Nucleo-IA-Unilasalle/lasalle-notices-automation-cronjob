@@ -10,6 +10,7 @@ import time
 
 from source_control import SourceControl, AdmissionConflict
 from build_source_matrix import load_registry, validate_registry
+from beta_admission import BetaAdmissionDenied, require_admitted_source
 
 
 def remaining_budget(now, job_started, job_minutes=20, application_seconds=1080):
@@ -20,12 +21,15 @@ def remaining_budget(now, job_started, job_minutes=20, application_seconds=1080)
 
 
 def stop_process_tree(process):
-    if process is None or process.poll() is not None:
+    if process is None:
         return
     if os.name == "nt":
         subprocess.run(["taskkill", "/PID", str(process.pid), "/T", "/F"],
                        check=False, capture_output=True, timeout=15)
     else:
+        # The session leader may exit before one of its descendants. The
+        # process group retains the leader PID, so always signal that group
+        # instead of treating a reaped leader as proof that the tree is gone.
         try:
             os.killpg(process.pid, signal.SIGKILL)
         except ProcessLookupError:
@@ -43,6 +47,19 @@ def main(argv=None):
     entry = entries.get(args.source)
     if entry is None:
         parser.error("Source is not in the execution registry")
+    try:
+        require_admitted_source(args.source)
+    except BetaAdmissionDenied as exc:
+        print(f"Closed-beta admission denied: {exc}", file=sys.stderr)
+        return 2
+    expected_script = (
+        "scripts/discover_pncp_candidates.py"
+        if args.source == "pncp"
+        else "scripts/discover_all_candidates.py"
+    )
+    if args.script != expected_script:
+        print("Source/script pairing is not authorized", file=sys.stderr)
+        return 2
     audit = os.environ.get("DISCOVERY_AUDIT_ONLY", "false").lower() == "true"
     if entry["rollout_mode"] in {"paused", "audit"} and not audit:
         parser.error("Registry holds this source outside ingestion; use audit mode")
@@ -97,7 +114,11 @@ def main(argv=None):
         print(f"Managed source stopped: {type(exc).__name__}", file=sys.stderr)
         result = 1
     finally:
-        stop_process_tree(process)
+        try:
+            stop_process_tree(process)
+        except Exception as exc:
+            print(f"Source process-tree cleanup unconfirmed: {type(exc).__name__}", file=sys.stderr)
+            result = 1
         try:
             client.release(outcome)
         except Exception:

@@ -1,0 +1,5 @@
+mismatched_script_reaches_source_control_constructor=true
+network_attempted=false
+credentials_loaded=false
+expected_fix=bind_pncp_source_to_pncp_script_and_non_pncp_sources_to_all_source_script_before_claim
+exit_code=0

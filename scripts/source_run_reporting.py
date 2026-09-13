@@ -196,11 +196,15 @@ class SourceRunReporter:
             self.complete(status=target_status)
 
     def _headers(self) -> dict[str, str]:
-        return {
+        headers = {
             "Authorization": f"Bearer {self.pipeline_secret}",
             "Content-Type": "application/json",
             "X-Contract-Version": str(CONTRACT_VERSION),
         }
+        claim_token = os.environ.get("SOURCE_CLAIM_TOKEN")
+        if claim_token:
+            headers["X-Source-Claim"] = claim_token
+        return headers
 
     def start(self) -> None:
         """Notifica o backend com a chave idempotente; retry apenas para falhas transitórias."""

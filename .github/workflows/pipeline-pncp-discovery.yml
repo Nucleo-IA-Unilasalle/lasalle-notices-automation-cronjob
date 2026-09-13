@@ -26,6 +26,7 @@ concurrency:
 
 jobs:
   discover-pncp:
+    if: ${{ vars.CLOSED_BETA_SOURCE_ALLOWLIST == 'pncp' }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -57,6 +58,7 @@ jobs:
         env:
           RENDER_APP_URL: ${{ secrets.RENDER_APP_URL }}
           PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}
+          CLOSED_BETA_SOURCE_ALLOWLIST: ${{ vars.CLOSED_BETA_SOURCE_ALLOWLIST || '' }}
           SOURCE_RUN_REPORTING_ENABLED: ${{ vars.SOURCE_RUN_REPORTING_ENABLED || 'false' }}
           PNCP_UPDATE_CHECKPOINT_PATH: .cache/pncp-last-successful-update.json
           PNCP_MIN_NOTICE_YEAR: "2026"

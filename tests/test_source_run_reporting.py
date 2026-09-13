@@ -26,6 +26,27 @@ def test_context_starts_and_finishes(monkeypatch):
     post.assert_called_once(); patch_call.assert_called_once()
 
 
+def test_telemetry_uses_the_managed_source_claim(monkeypatch):
+    monkeypatch.setenv("SOURCE_RUN_REPORTING_ENABLED", "true")
+    monkeypatch.setenv("RENDER_APP_URL", "https://backend")
+    monkeypatch.setenv("PIPELINE_SECRET", "secret")
+    monkeypatch.setenv("SOURCE_CLAIM_TOKEN", "claim-token")
+    with patch(
+        "source_run_reporting.requests.post",
+        return_value=response(body={"id": "run-1"}),
+    ) as post, patch(
+        "source_run_reporting.requests.patch",
+        return_value=response(),
+    ) as patch_call:
+        from source_run_reporting import SourceRunReporter
+
+        with SourceRunReporter("x"):
+            pass
+
+    assert post.call_args.kwargs["headers"]["X-Source-Claim"] == "claim-token"
+    assert patch_call.call_args.kwargs["headers"]["X-Source-Claim"] == "claim-token"
+
+
 def test_exception_is_failed(monkeypatch):
     monkeypatch.setenv("SOURCE_RUN_REPORTING_ENABLED", "true"); monkeypatch.setenv("RENDER_APP_URL", "https://b"); monkeypatch.setenv("PIPELINE_SECRET", "s")
     with patch("source_run_reporting.requests.post", return_value=response(body={"id": "r"})), patch("source_run_reporting.requests.patch", return_value=response(body={"status": "failed"})) as p:

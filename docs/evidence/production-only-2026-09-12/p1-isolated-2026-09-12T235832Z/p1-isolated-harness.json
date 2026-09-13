@@ -1,0 +1,391 @@
+{
+  "api_closed_beta_capabilities": {
+    "admitted_contract": "candidate",
+    "admitted_source": "bndes",
+    "source_admission_mode": "closed_beta",
+    "source_admission_ready": true,
+    "source_claim_enforcement": "strict"
+  },
+  "candidate": {
+    "api_python": "python.exe",
+    "repo_a": "C:\\Users\\Vitor\\Desktop\\Vinicius\\Projetos\\lasalle-notices\\lasalle-notices-automation",
+    "repo_b": "C:\\Users\\Vitor\\Desktop\\Vinicius\\Projetos\\lasalle-notices\\lasalle-notices-automation-cronjob",
+    "worker_python": "python.exe"
+  },
+  "capacity": {
+    "accepted_claims": 3,
+    "claim_limit": 3,
+    "completed_descriptors": 12,
+    "drain_failures": 0,
+    "drain_wall_seconds": 0.9514046999975108,
+    "drain_workers": [
+      {
+        "claim_ms": 16.786,
+        "completed": 4,
+        "duration_seconds": 0.21172340000339318,
+        "mode": "drain",
+        "requests": {
+          "failures_5xx_or_transport": 0,
+          "max_ms": 35.60529999958817,
+          "p50_ms": 23.959300000569783,
+          "p95_ms": 33.82217999896966,
+          "requests": 9,
+          "status_counts": {
+            "200": 9
+          },
+          "timeouts": 0
+        },
+        "source": "bndes",
+        "status": "completed"
+      },
+      {
+        "claim_ms": 54.173,
+        "completed": 4,
+        "duration_seconds": 0.25886259999970207,
+        "mode": "drain",
+        "requests": {
+          "failures_5xx_or_transport": 0,
+          "max_ms": 54.161399995791726,
+          "p50_ms": 27.351000004273374,
+          "p95_ms": 48.69391999964136,
+          "requests": 9,
+          "status_counts": {
+            "200": 9
+          },
+          "timeouts": 0
+        },
+        "source": "brde",
+        "status": "completed"
+      },
+      {
+        "claim_ms": 13.809,
+        "completed": 4,
+        "duration_seconds": 0.23422620000201277,
+        "mode": "drain",
+        "requests": {
+          "failures_5xx_or_transport": 0,
+          "max_ms": 40.78660000232048,
+          "p50_ms": 27.71999999822583,
+          "p95_ms": 36.69115999946371,
+          "requests": 9,
+          "status_counts": {
+            "200": 9
+          },
+          "timeouts": 0
+        },
+        "source": "fao",
+        "status": "completed"
+      }
+    ],
+    "final_snapshot": {
+      "active_claims": 0,
+      "database_size_bytes": 13267427,
+      "db_connections": 4,
+      "editais": 2,
+      "edital_documents": 2,
+      "max_connections": 100,
+      "scrape_candidates": 2,
+      "scraping_sources": 32,
+      "source_collection_checkpoints": 0,
+      "source_schedule_state": 4,
+      "source_work_items": 26,
+      "superuser_reserved_connections": 3,
+      "tablespace_size_bytes": 36444088,
+      "work_status": {
+        "accepted": 26
+      }
+    },
+    "latency": {
+      "failures_5xx_or_transport": 0,
+      "max_ms": 29.132299998309463,
+      "p50_ms": 5.427700001746416,
+      "p95_ms": 24.550619999354236,
+      "requests": 5,
+      "status_counts": {
+        "200": 5
+      },
+      "timeouts": 0
+    },
+    "latency_scope": "warm authenticated catalog GETs; worker-call counts are aggregate below",
+    "memory": {
+      "peak_rss_bytes": 35491840,
+      "samples": 4,
+      "scope": "Repo A API plus four claim workers during the two-second capacity observation"
+    },
+    "peak_active_claims": 3,
+    "quantitative_gates": {
+      "capacity_ratio": 2063.9338481736545,
+      "checks": {
+        "api_5xx_and_timeout_rate_lt_1pct": true,
+        "db_connections_le_70pct_usable": true,
+        "service_capacity_ge_1_25x_declared_arrival": true,
+        "storage_headroom_ge_20pct": true,
+        "warm_claim_p95_le_1000ms": true
+      },
+      "claim_p95_ms": 24.550619999354236,
+      "declared_arrival_rate_per_hour": 22.0,
+      "error_rate": 0.0,
+      "peak_connections": 4,
+      "service_rate_per_hour": 45406.5446598204,
+      "status": "pass",
+      "storage_headroom_ratio": 0.9876437457278371,
+      "usable_connections": 97
+    },
+    "rejected_claims": 1,
+    "rejected_reasons": {
+      "capacity_full": 1
+    },
+    "request_aggregate": {
+      "failures_5xx_or_transport": 0,
+      "requests": 36,
+      "status_counts": {
+        "200": 35,
+        "409": 1
+      },
+      "timeouts": 0
+    },
+    "status": "pass",
+    "worker_claim_states": [
+      {
+        "claim_ms": 26.07,
+        "mode": "claim_hold",
+        "requests": {
+          "failures_5xx_or_transport": 0,
+          "max_ms": 26.05819999735104,
+          "p50_ms": 26.05819999735104,
+          "p95_ms": 26.05819999735104,
+          "requests": 1,
+          "status_counts": {
+            "200": 1
+          },
+          "timeouts": 0
+        },
+        "source": "bndes",
+        "status": "claimed"
+      },
+      {
+        "mode": "claim_hold",
+        "reason": "capacity_full",
+        "requests": {
+          "failures_5xx_or_transport": 0,
+          "max_ms": 39.46610000275541,
+          "p50_ms": 39.46610000275541,
+          "p95_ms": 39.46610000275541,
+          "requests": 1,
+          "status_counts": {
+            "409": 1
+          },
+          "timeouts": 0
+        },
+        "source": "brde",
+        "status": "rejected"
+      },
+      {
+        "claim_ms": 28.85,
+        "mode": "claim_hold",
+        "requests": {
+          "failures_5xx_or_transport": 0,
+          "max_ms": 28.83819999988191,
+          "p50_ms": 28.83819999988191,
+          "p95_ms": 28.83819999988191,
+          "requests": 1,
+          "status_counts": {
+            "200": 1
+          },
+          "timeouts": 0
+        },
+        "source": "fao",
+        "status": "claimed"
+      },
+      {
+        "claim_ms": 19.092,
+        "mode": "claim_hold",
+        "requests": {
+          "failures_5xx_or_transport": 0,
+          "max_ms": 19.08030000049621,
+          "p50_ms": 19.08030000049621,
+          "p95_ms": 19.08030000049621,
+          "requests": 1,
+          "status_counts": {
+            "200": 1
+          },
+          "timeouts": 0
+        },
+        "source": "fapergs",
+        "status": "claimed"
+      }
+    ]
+  },
+  "declared_workload": {
+    "arrival_rate_per_hour": 22.0,
+    "capacity_sources": [
+      "bndes",
+      "brde",
+      "fao"
+    ],
+    "descriptor_items_per_drain_worker": 4,
+    "storage_budget_bytes": 1073741824,
+    "warm_samples": 5
+  },
+  "finished_at": "2026-09-12T23:59:02.101776+00:00",
+  "gate": "P1",
+  "scenarios": {
+    "lost_finish_ack_replay": {
+      "after": {
+        "active_claims": 0,
+        "database_size_bytes": 13259235,
+        "db_connections": 2,
+        "editais": 2,
+        "edital_documents": 2,
+        "max_connections": 100,
+        "scrape_candidates": 2,
+        "scraping_sources": 32,
+        "source_collection_checkpoints": 0,
+        "source_schedule_state": 1,
+        "source_work_items": 14,
+        "superuser_reserved_connections": 3,
+        "tablespace_size_bytes": 36435896,
+        "work_status": {
+          "accepted": 14
+        }
+      },
+      "after_takeover": {
+        "active_claims": 1,
+        "database_size_bytes": 13259235,
+        "db_connections": 2,
+        "editais": 2,
+        "edital_documents": 2,
+        "max_connections": 100,
+        "scrape_candidates": 2,
+        "scraping_sources": 32,
+        "source_collection_checkpoints": 0,
+        "source_schedule_state": 1,
+        "source_work_items": 14,
+        "superuser_reserved_connections": 3,
+        "tablespace_size_bytes": 36435896,
+        "work_status": {
+          "accepted": 14
+        }
+      },
+      "finish_replay_ms": 18.323600001167506,
+      "finish_replay_reason": null,
+      "finish_replay_status": 200,
+      "lost_finish_ack_status": 200,
+      "note": "The worker drops the committed finish response; the parent retries the exact finish while the original lease remains live.",
+      "status": "pass",
+      "worker_exit_code": 1
+    },
+    "lost_submit_ack_replay_idempotency": {
+      "after": {
+        "active_claims": 0,
+        "database_size_bytes": 13251043,
+        "db_connections": 2,
+        "editais": 1,
+        "edital_documents": 1,
+        "max_connections": 100,
+        "scrape_candidates": 1,
+        "scraping_sources": 32,
+        "source_collection_checkpoints": 0,
+        "source_schedule_state": 1,
+        "source_work_items": 13,
+        "superuser_reserved_connections": 3,
+        "tablespace_size_bytes": 36427704,
+        "work_status": {
+          "accepted": 13
+        }
+      },
+      "before": {
+        "active_claims": 0,
+        "database_size_bytes": 13062627,
+        "db_connections": 2,
+        "editais": 0,
+        "edital_documents": 0,
+        "max_connections": 100,
+        "scrape_candidates": 0,
+        "scraping_sources": 32,
+        "source_collection_checkpoints": 0,
+        "source_schedule_state": 1,
+        "source_work_items": 12,
+        "superuser_reserved_connections": 3,
+        "tablespace_size_bytes": 36239288,
+        "work_status": {
+          "accepted": 12
+        }
+      },
+      "lost_submit_ack_status": 200,
+      "replay_outcomes": [
+        "duplicate"
+      ],
+      "replay_status": 200,
+      "status": "pass",
+      "worker_exit_code": 1
+    },
+    "worker_termination_and_recovery": {
+      "after_kill": {
+        "active_claims": 0,
+        "database_size_bytes": 13062627,
+        "db_connections": 2,
+        "editais": 0,
+        "edital_documents": 0,
+        "max_connections": 100,
+        "scrape_candidates": 0,
+        "scraping_sources": 32,
+        "source_collection_checkpoints": 0,
+        "source_schedule_state": 1,
+        "source_work_items": 12,
+        "superuser_reserved_connections": 3,
+        "tablespace_size_bytes": 36239288,
+        "work_status": {
+          "pending": 12
+        }
+      },
+      "after_recovery": {
+        "active_claims": 0,
+        "database_size_bytes": 13062627,
+        "db_connections": 2,
+        "editais": 0,
+        "edital_documents": 0,
+        "max_connections": 100,
+        "scrape_candidates": 0,
+        "scraping_sources": 32,
+        "source_collection_checkpoints": 0,
+        "source_schedule_state": 1,
+        "source_work_items": 12,
+        "superuser_reserved_connections": 3,
+        "tablespace_size_bytes": 36239288,
+        "work_status": {
+          "accepted": 12
+        }
+      },
+      "before": {
+        "active_claims": 0,
+        "database_size_bytes": 12947939,
+        "db_connections": 2,
+        "editais": 0,
+        "edital_documents": 0,
+        "max_connections": 100,
+        "scrape_candidates": 0,
+        "scraping_sources": 32,
+        "source_collection_checkpoints": 0,
+        "source_schedule_state": 0,
+        "source_work_items": 0,
+        "superuser_reserved_connections": 3,
+        "tablespace_size_bytes": 36124600,
+        "work_status": {}
+      },
+      "registered": 12,
+      "status": "pass",
+      "taken_after_successor_claim": 12,
+      "worker_exit_code": 1
+    }
+  },
+  "skipped": [],
+  "started_at": "2026-09-12T23:58:40.611085+00:00",
+  "status": "pass",
+  "target": {
+    "identity": "127.0.0.1:55432/lasalle_test",
+    "kind": "disposable_local_postgresql",
+    "schema": "p1_harness_65a588f1a0ac",
+    "schema_dropped": true
+  }
+}

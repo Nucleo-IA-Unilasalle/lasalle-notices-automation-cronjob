@@ -1,0 +1,4 @@
+run_local_files_scanned=true
+sensitive_value_pattern_matches=0
+sanitized=True
+raw_credentials_or_target_data_intentionally_recorded=false

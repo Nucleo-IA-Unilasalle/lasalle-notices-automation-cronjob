@@ -21,6 +21,14 @@ jobs:
       PIPELINE_STEP: scrape
       CURL_MAX_TIME_SECONDS: "2400"
     steps:
+      - name: Checkout scheduler repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Block unfenced legacy scrape in closed beta
+        run: python scripts/beta_admission.py --source pncp --legacy-route
+        env:
+          CLOSED_BETA_SOURCE_ALLOWLIST: ${{ vars.CLOSED_BETA_SOURCE_ALLOWLIST || '' }}
+
       - name: Trigger pipeline step
         shell: bash
         run: |

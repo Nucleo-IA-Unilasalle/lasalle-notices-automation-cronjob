@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import importlib
 import json
+import os
 import subprocess
 import sys
 
@@ -74,55 +75,67 @@ def test_group_crons_are_distinct_and_off_peak() -> None:
     assert pncp[0]["group"] == "pncp"
 
 
-def test_builder_matrices_cover_all_executable_entries_and_omit_paused() -> None:
+@pytest.mark.parametrize(
+    ("selected", "selected_group"),
+    [("bndes", "a"), ("govbr_mma", "b"), ("kfw", "c")],
+)
+def test_builder_matrices_emit_only_the_selected_closed_beta_source(
+    selected: str, selected_group: str
+) -> None:
     registry = _registry()
     executable: set[str] = set()
     for group_id in ("a", "b", "c"):
-        matrix = builder.build_matrix(registry, group_id)
+        matrix = builder.build_matrix(registry, group_id, admitted_source=selected)
         keys = [entry["source"] for entry in matrix["includes"]]
         assert len(keys) == len(set(keys))
         executable |= set(keys)
-        for entry in matrix["includes"]:
-            assert entry["rollout_mode"] in {"ingest", "audit"}
-            if entry["rollout_mode"] == "audit":
-                # audit entries execute; the reusable workflow enforces no-ingestion
-                assert entry["source"] in {s["source_key"] for s in registry["sources"]}
-    expected = {
-        s["source_key"] for s in registry["sources"]
-        if s["source_key"] != "pncp" and s["rollout_mode"] != "paused"
-    }
-    assert executable == expected
+        assert bool(keys) is (group_id == selected_group)
+    assert executable == {selected}
     paused = {s["source_key"] for s in registry["sources"] if s["rollout_mode"] == "paused"}
     assert paused == {"canoas", "dopa", "fbds", "finep", "ibama"}
+
+
+@pytest.mark.parametrize("value", [None, "", " bndes", "bndes,brde", "unknown", "funbio"])
+def test_builder_admission_fails_closed(value: str | None) -> None:
+    environ = {} if value is None else {builder.ADMISSION_ENV: value}
+    with pytest.raises(ValueError):
+        builder.admitted_source_key(_registry(), environ=environ)
+
+
+def test_builder_admission_accepts_one_ingest_candidate_source() -> None:
+    assert builder.admitted_source_key(
+        _registry(), environ={builder.ADMISSION_ENV: "bndes"}
+    ) == "bndes"
 
 
 def test_builder_fails_closed_on_duplicate_key(tmp_path) -> None:
     registry = _registry()
     registry["sources"].append(dict(registry["sources"][0]))
     with pytest.raises(SystemExit):
-        builder.build_matrix(registry, "a")
+        builder.build_matrix(registry, "a", admitted_source="bndes")
 
 
 def test_builder_fails_closed_on_unknown_key() -> None:
     registry = _registry()
     registry["sources"][0]["source_key"] = "not_a_real_source"
     with pytest.raises(SystemExit):
-        builder.build_matrix(registry, "a")
+        builder.build_matrix(registry, "a", admitted_source="bndes")
 
 
 def test_builder_fails_closed_on_invalid_rollout_mode() -> None:
     registry = _registry()
     registry["sources"][0]["rollout_mode"] = "silent_ingest"
     with pytest.raises(SystemExit):
-        builder.build_matrix(registry, "a")
+        builder.build_matrix(registry, "a", admitted_source="bndes")
 
 
 def test_builder_cli_emits_github_format(tmp_path) -> None:
     result = subprocess.run(
         [sys.executable, str(PROJECT_ROOT / "scripts" / "build_source_matrix.py"), "--group", "a", "--format", "github"],
         capture_output=True, text=True, cwd=PROJECT_ROOT,
+        env={**os.environ, builder.ADMISSION_ENV: "bndes"},
     )
     assert result.returncode == 0, result.stderr
     includes = json.loads(result.stdout.strip())
-    assert {e["source"] for e in includes} == {"bndes", "brde", "fao", "fapergs", "govbr_mma_fnma", "iis_rio"}
-    assert {e["rollout_mode"] for e in includes} == {"ingest", "audit"}
+    assert {e["source"] for e in includes} == {"bndes"}
+    assert {e["rollout_mode"] for e in includes} == {"ingest"}

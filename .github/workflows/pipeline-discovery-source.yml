@@ -100,6 +100,7 @@ jobs:
         env:
           RENDER_APP_URL: ${{ secrets.RENDER_APP_URL }}
           PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}
+          CLOSED_BETA_SOURCE_ALLOWLIST: ${{ vars.CLOSED_BETA_SOURCE_ALLOWLIST || '' }}
           SOURCE_RUN_REPORTING_ENABLED: ${{ vars.SOURCE_RUN_REPORTING_ENABLED || 'false' }}
           SOURCES: ${{ env.DISCOVERY_SOURCE }}
           SOURCE_JOB_TIMEOUT_MINUTES: ${{ inputs.run_timeout_minutes || 20 }}

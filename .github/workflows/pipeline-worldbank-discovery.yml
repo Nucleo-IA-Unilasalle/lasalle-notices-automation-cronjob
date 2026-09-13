@@ -30,7 +30,7 @@ jobs:
         run: pip install -r requirements-ocr-worker.txt
 
       - name: Run WorldBank discovery, download, OCR, and submission
-        run: python scripts/discover_all_candidates.py
+        run: python scripts/run_managed_source.py --source worldbank scripts/discover_all_candidates.py
         env:
           SOURCES: "worldbank"
           SOURCE_RUN_REPORTING_ENABLED: ${{ vars.SOURCE_RUN_REPORTING_ENABLED || 'false' }}
@@ -38,6 +38,7 @@ jobs:
           FILTER_POLICY: "default"
           RENDER_APP_URL: ${{ secrets.RENDER_APP_URL }}
           PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}
+          CLOSED_BETA_SOURCE_ALLOWLIST: ${{ vars.CLOSED_BETA_SOURCE_ALLOWLIST || '' }}
           WORLDBANK_MIN_NOTICE_YEAR: "2026"
           WORLDBANK_MAX_CANDIDATES_PER_RUN: "50"
           WORLDBANK_FETCH_MAX_ATTEMPTS: "3"

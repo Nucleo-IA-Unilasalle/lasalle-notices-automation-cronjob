@@ -1,0 +1,68 @@
+........................F............................................... [  6%]
+........................................................................ [ 13%]
+........................................................................ [ 20%]
+........................................................................ [ 27%]
+........................................................................ [ 34%]
+........................................................................ [ 40%]
+........................................................................ [ 47%]
+........................................................................ [ 54%]
+........................................................................ [ 61%]
+........................................................................ [ 68%]
+........................................................................ [ 74%]
+........................................................................ [ 81%]
+........................................................................ [ 88%]
+........................................................................ [ 95%]
+.................................................                        [100%]
+================================== FAILURES ===================================
+___ test_allowlist_rejects_a_selected_structured_source_for_the_first_wave ____
+
+    def test_allowlist_rejects_a_selected_structured_source_for_the_first_wave() -> None:
+        with pytest.raises(beta_admission.BetaAdmissionDenied, match="candidate contract"):
+>           beta_admission.admitted_source("finep", environ=_env("finep"))
+
+tests\test_beta_admission.py:32: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+source = 'finep'
+
+    def admitted_source(source: str, *, environ: dict[str, str] | None = None) -> str:
+        """Return the admitted source or fail closed on every invalid configuration.
+    
+        A one-source list is intentional for this release.  Rejecting whitespace,
+        commas, duplicates, and unknown keys prevents a partially valid value from
+        accidentally broadening the canary.
+        """
+        environment = os.environ if environ is None else environ
+        raw = environment.get(ALLOWLIST_ENV)
+        if raw is None or not raw:
+            raise BetaAdmissionDenied(f"{ALLOWLIST_ENV} must name exactly one source")
+        if raw != raw.strip() or "," in raw or any(char.isspace() for char in raw):
+            raise BetaAdmissionDenied(f"{ALLOWLIST_ENV} must be one canonical source key")
+    
+        entries = {entry["source_key"]: entry for entry in validate_registry(load_registry())}
+        known_sources = set(entries)
+        if raw not in known_sources:
+            raise BetaAdmissionDenied(f"{ALLOWLIST_ENV} contains an unknown source key")
+        if source not in known_sources:
+            raise BetaAdmissionDenied("requested source is not in the execution registry")
+        if source != raw:
+            raise BetaAdmissionDenied("requested source is not selected for the closed beta")
+        if entries[source]["rollout_mode"] != "ingest":
+>           raise BetaAdmissionDenied("the selected source is held outside closed-beta ingestion")
+E           beta_admission.BetaAdmissionDenied: the selected source is held outside closed-beta ingestion
+
+scripts\beta_admission.py:48: BetaAdmissionDenied
+
+During handling of the above exception, another exception occurred:
+
+    def test_allowlist_rejects_a_selected_structured_source_for_the_first_wave() -> None:
+>       with pytest.raises(beta_admission.BetaAdmissionDenied, match="candidate contract"):
+E       AssertionError: Regex pattern did not match.
+E        Regex: 'candidate contract'
+E        Input: 'the selected source is held outside closed-beta ingestion'
+
+tests\test_beta_admission.py:31: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_beta_admission.py::test_allowlist_rejects_a_selected_structured_source_for_the_first_wave
+1 failed, 1056 passed in 140.75s (0:02:20)
+exit_code=1

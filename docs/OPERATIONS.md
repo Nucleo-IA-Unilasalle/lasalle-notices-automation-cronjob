@@ -271,7 +271,47 @@ The PNCP update checkpoint (`.cache/pncp-last-successful-update.json`) is cached
 
 ### Rollback to legacy Render pipeline
 
-If the combined GitHub Actions pipeline fails:
+The closed-beta candidate intentionally rejects every legacy workflow before it
+calls Repo A. Triggering `pipeline-ingest.yml`, `pipeline-ocr.yml`,
+`pipeline-scrape.yml`, or `pipeline-run.yml` while that candidate is deployed
+will fail closed and is not a rollback.
+
+Use only the exact B-before-A rollback accepted in the release decision:
+
+1. Clear the one-source allowlist, disable the candidate group/PNCP schedules,
+   and capture every queued or running candidate run.
+2. Drain or cancel only individually reviewed run IDs and reconcile durable
+   work, source runs, claims, and accepted records.
+3. Restore Repo B to the named legacy-compatible ref and verify the deployed
+   SHA plus workflow contents before changing Repo A. For the 2026-09-12
+   baseline only, the prior B identity is
+   `553c67dcdb593550112470df8c76b0314fae3d4e`; P4 must approve the actual ref.
+4. Only after Repo B is verified, restore Repo A to the approved compatible
+   ref or legacy mode. For the same baseline, the prior A identity is
+   `d0394d3749c81fee85a224ab10e22448a8d02752`.
+5. Re-enable only the reviewed legacy workflows, then verify their exact ref,
+   target, and terminal result. Do not drop additive schema or restore an old
+   database dump over newer production changes.
+
+Read-only preflight for the current baseline:
+
+```powershell
+$LegacyBRef = '553c67dcdb593550112470df8c76b0314fae3d4e'
+$paths = @('pipeline-ingest.yml','pipeline-ocr.yml','pipeline-scrape.yml','pipeline-run.yml')
+git cat-file -e "$LegacyBRef^{commit}"
+foreach ($path in $paths) {
+  $body = (git show "${LegacyBRef}:.github/workflows/$path") -join "`n"
+  if ($LASTEXITCODE -ne 0 -or $body -notmatch 'workflow_dispatch') {
+    throw "Legacy workflow missing or not dispatchable at ${LegacyBRef}: $path"
+  }
+  if ($body -match 'beta_admission.py') {
+    throw "Ref is not legacy compatible: $path still has the closed-beta deny"
+  }
+}
+```
+
+After the B and A rollback identities are verified, the approved operator may
+use these legacy entry points as applicable:
 
 1. **Ingest**: Trigger `pipeline-ingest.yml` manually (workflow_dispatch) to run Render-side download
 2. **OCR**: Trigger `pipeline-ocr.yml` manually to run Render-side OCR worker

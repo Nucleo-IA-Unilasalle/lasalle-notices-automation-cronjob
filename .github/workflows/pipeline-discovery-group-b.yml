@@ -26,9 +26,12 @@ jobs:
       - name: Build strict source matrix from the registry
         id: build
         run: echo "includes=$(python scripts/build_source_matrix.py --group b --format github)" >> "$GITHUB_OUTPUT"
+        env:
+          CLOSED_BETA_SOURCE_ALLOWLIST: ${{ vars.CLOSED_BETA_SOURCE_ALLOWLIST || '' }}
 
   discover:
     needs: matrix
+    if: ${{ needs.matrix.outputs.includes != '[]' }}
     strategy:
       fail-fast: false
       max-parallel: 3

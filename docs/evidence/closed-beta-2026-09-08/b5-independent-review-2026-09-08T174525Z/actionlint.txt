@@ -1,0 +1,3 @@
+command=actionlint -format ... .github/workflows/*.yml
+status=not_run
+reason=actionlint_not_installed

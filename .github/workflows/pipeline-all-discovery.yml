@@ -6,7 +6,7 @@ on:
       sources:
         description: "Comma-separated sources; structured options include finep,fbds,dopa,canoas,ibama,tnc,funbio"
         required: false
-        default: "bndes,brde,fapergs,funbio,iis_rio,sema_rs,tnc,wwf"
+        default: ""
         type: string
       audit_only:
         description: "Discover and upload fidelity artifacts without OCR or submission"
@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      DISCOVERY_SOURCES: ${{ inputs.sources || 'bndes,brde,fapergs,funbio,iis_rio,sema_rs,tnc,wwf' }}
+      DISCOVERY_SOURCES: ${{ inputs.sources || '' }}
       DISCOVERY_FILTER_POLICY: ${{ inputs.filter_policy || 'default' }}
       DISCOVERY_MIN_NOTICE_YEAR: ${{ inputs.min_notice_year || '2026' }}
       DISCOVERY_AUDIT_ONLY: ${{ github.event_name == 'workflow_dispatch' && inputs.audit_only }}
@@ -69,11 +69,19 @@ jobs:
         if: ${{ contains(format(',{0},', env.DISCOVERY_SOURCES), ',fao,') || contains(format(',{0},', env.DISCOVERY_SOURCES), ',fundacao_grupo_boticario,') || contains(format(',{0},', env.DISCOVERY_SOURCES), ',kfw,') || contains(format(',{0},', env.DISCOVERY_SOURCES), ',msgov,') }}
         run: playwright install --with-deps chromium
 
-      - name: Run unified discovery orchestrator
-        run: python scripts/discover_all_candidates.py
+      - name: Run one admitted source through the managed orchestrator
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "$DISCOVERY_SOURCES" ] || [[ "$DISCOVERY_SOURCES" == *,* ]]; then
+            echo "Closed beta accepts exactly one source; all-source dispatch is disabled."
+            exit 2
+          fi
+          python scripts/run_managed_source.py --source "$DISCOVERY_SOURCES" scripts/discover_all_candidates.py
         env:
           RENDER_APP_URL: ${{ secrets.RENDER_APP_URL }}
           PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}
+          CLOSED_BETA_SOURCE_ALLOWLIST: ${{ vars.CLOSED_BETA_SOURCE_ALLOWLIST || '' }}
           SOURCE_RUN_REPORTING_ENABLED: ${{ vars.SOURCE_RUN_REPORTING_ENABLED || 'false' }}
           SOURCES: ${{ env.DISCOVERY_SOURCES }}
           SOURCE_ROTATION_OFFSET: ${{ github.run_number }}

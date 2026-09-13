@@ -1,0 +1,10 @@
+{
+  "contains_expected_tokens": true,
+  "elapsed_seconds": 6.363,
+  "image_only": true,
+  "markdown_chars": 48,
+  "markdown_sha256": "31a487e52bffe8f878dd247b8a83ed0a949da48fabcd0840b2d9eff2a5578705",
+  "pages": 1,
+  "pdf_sha256": "801a0a10495252011114760f17a45bd6a7f66e0eb9d736d7e0d80eb0cc989f6e",
+  "status": "pass"
+}

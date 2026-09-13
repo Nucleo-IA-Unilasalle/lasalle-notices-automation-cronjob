@@ -22,6 +22,14 @@ jobs:
       PIPELINE_STEP: sync
       CURL_MAX_TIME_SECONDS: "600"
     steps:
+      - name: Checkout scheduler repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Block unfenced legacy sync trigger in closed beta
+        run: python scripts/beta_admission.py --source pncp --legacy-route
+        env:
+          CLOSED_BETA_SOURCE_ALLOWLIST: ${{ vars.CLOSED_BETA_SOURCE_ALLOWLIST || '' }}
+
       - name: Trigger pipeline step
         shell: bash
         run: |
