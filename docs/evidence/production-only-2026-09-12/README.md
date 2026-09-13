@@ -10,11 +10,14 @@ or a passed P1/P3 gate.
 - [P1 isolated harness rerun](p1-isolated-2026-09-13T000802Z.md)
 - [Latest P1 isolated harness pass with changed-content and poison/backoff coverage](p1-isolated-2026-09-13T002232Z.md)
 - [P1 genuine image-only OCR fixture](p1-image-only-ocr-2026-09-13T0030Z.md)
+- [P1 frozen-code harness pass](p1-frozen-2026-09-13T005113Z.md)
 - [P3 writer drain/fence readiness ledger](p3-writer-drain-fence-ledger-2026-09-12T2342Z.md)
 - Repo A baseline: `e9422dca8cd9c77f4bf23bc89d7e211ae8bcc693`
 - Repo B baseline: `4211ddf6c99fa4b527f09ff3cad4f86996a1092c`
-- Both repositories contained uncommitted candidate changes when this record
-  was written; the baseline SHAs do not identify the resulting candidate.
+- Repo A tested code candidate: `49f1a34d4664cef4cd946237ff251f59bea4b8b0`
+- Repo B tested code candidate: `c6d6568009f8fa6a0de20b0ad4f66ff37ac9506a`
+- Both tested code candidates were committed and clean when the frozen P1
+  harness started. The harness then generated only the linked evidence files.
 - No production deployment, workflow/source activation, database mutation, or
   failure injection occurred. No credential value was read or recorded.
 - RR-01 through RR-05 remain OPEN.

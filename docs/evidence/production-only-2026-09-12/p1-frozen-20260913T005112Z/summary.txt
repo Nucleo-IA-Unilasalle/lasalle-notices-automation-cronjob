@@ -1,0 +1,3 @@
+P1 isolated harness: pass
+Target: 127.0.0.1:55432/lasalle_test/p1_harness_c48654a86cd1 (dropped=True)
+Evidence: C:\Users\Vitor\Desktop\Vinicius\Projetos\lasalle-notices\lasalle-notices-automation-cronjob\docs\evidence\production-only-2026-09-12\p1-frozen-20260913T005112Z\p1-isolated-harness.json

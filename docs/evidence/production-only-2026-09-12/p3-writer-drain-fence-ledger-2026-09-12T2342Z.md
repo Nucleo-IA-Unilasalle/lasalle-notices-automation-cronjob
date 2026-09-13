@@ -22,10 +22,10 @@ accepted P1 evidence, and immediate pre-transfer observations are supplied.
 | Read-only observation time | `2026-09-12T23:42:37Z` |
 | GitHub repository | `Nucleo-IA-Unilasalle/lasalle-notices-automation-cronjob` |
 | Repo B production ref | `main` at `553c67dcdb593550112470df8c76b0314fae3d4e` |
-| Repo B candidate ref | `feature/source-rotation-fairness` at `4211ddf6c99fa4b527f09ff3cad4f86996a1092c` |
+| Repo B tested code candidate | `feature/source-rotation-fairness` at `c6d6568009f8fa6a0de20b0ad4f66ff37ac9506a` |
 | Repo A production ref | `master` at `d0394d3749c81fee85a224ab10e22448a8d02752` |
-| Repo A candidate ref | `feature/durable-executor-and-review-hardening` at `e9422dca8cd9c77f4bf23bc89d7e211ae8bcc693` |
-| Candidate working-tree status | Both candidate repositories contain uncommitted changes; these SHAs do not identify the resulting candidate. |
+| Repo A tested code candidate | `feature/durable-executor-and-review-hardening` at `49f1a34d4664cef4cd946237ff251f59bea4b8b0` |
+| Candidate freeze update | Both code candidates were committed and clean when the frozen P1 harness started at `2026-09-13T00:51:12Z`. The harness then generated only the linked Repo B evidence files. |
 | Candidate source | `<fill exact approved source>`; `brde` was only a prior proposal, not an approval. |
 | Candidate contract | `<fill exact approved contract>`; the first-wave target is normally `candidate`. |
 | Release window | `<fill UTC start/end>` |
@@ -51,7 +51,7 @@ the database:
 | Repo B `main` runs | The latest 100 sampled runs were on `main` at SHA `553c67dcdb593550112470df8c76b0314fae3d4e`; no non-completed run was returned for `main`. | A point-in-time empty Actions sample is not a drain, does not cover API-side work, and does not prevent a new schedule or dispatch. |
 | Repo B all-ref queue | No non-completed run was found in the read performed for `main`; old refs and a run created after the read remain possible. | Re-read immediately before every mutation and after every drain action. |
 | Production schema finding | The live production read-only schema check reported `application_schema_versions`, `source_work_items`, and `source_schedule_state` absent. The additive schema migration is therefore required before candidate durable-work admission. | This is a schema finding, not an empty-queue or empty-backlog claim. No durable-work or schedule-claim rows from those absent tables were read. |
-| Candidate workflow tree | 39 local workflow files: 25 managed discovery paths, 3 group callers, 8 legacy-denied paths, and 3 passive/read-only paths. | The candidate tree is dirty and is not a frozen deploy artifact. |
+| Candidate workflow tree | 39 local workflow files: 25 managed discovery paths, 3 group callers, 8 legacy-denied paths, and 3 passive/read-only paths. | The behavior tree is frozen at the tested Repo B code candidate; generated evidence is committed separately. |
 | Candidate recovery registry | Group recovery crons `37/47/57 * * * *` and PNCP recovery `35 * * * *` are present but `recovery_enabled: false`. | Verify the deployed candidate after merge; a local registry is not a production control plane. |
 | Repo B PR | PR #8 is draft, head `4211ddf6c99fa4b527f09ff3cad4f86996a1092c`, base `main`, check `test` successful, merge state `CLEAN`. | A draft PR and a successful check are not release approval. |
 | Repo A PR | PR #29 is draft, head `e9422dca8cd9c77f4bf23bc89d7e211ae8bcc693`, base `master`, checks `backend` and `contract` successful, merge state `CLEAN`. | A draft PR and a successful check are not release approval. |
@@ -366,7 +366,7 @@ from an old image or environment.
 
 | Action | Exact evidence/action required | Owner | Approval/state |
 |---|---|---|---|
-| Freeze candidate identity | Record final A/B commit SHAs, branches/tags, dirty-tree result, candidate PR checks, selected source, contract, target services, and UTC window. | Release operator + independent reviewer | **OPEN**; current candidate trees are dirty. |
+| Freeze candidate identity | Record final A/B commit SHAs, branches/tags, dirty-tree result, candidate PR checks, selected source, contract, target services, and UTC window. | Release operator + independent reviewer | **PARTIAL**; tested code SHAs are frozen, but the selected source, contract, target confirmation, release window, final PR checks, and independent approval remain open. |
 | Disable old Repo B workflows | Revalidate the 25 exact IDs below, then disable every old operational workflow. Keep CI/Dependabot passive. | Repo B/GitHub operator | **PREPARED, NOT EXECUTED**; P4 approval required. |
 | Drain/cancel Actions work | Capture all queued/running/waiting/requested/pending run IDs immediately before disable; do not mass-cancel. Cancel only individually approved IDs, then watch terminal state. | Repo B run owner | **OPEN**; current sample had no non-completed `main` run, but no future guarantee. |
 | Fence old refs | Deploy A first and verify strict closed-beta capability. Old submissions without a current claim must return a conflict; legacy triggers must reject. | Repo A/Render operator | **OPEN**; isolated process/lost-ACK evidence exists, but the frozen candidate and production fence are not approved or deployed. |
@@ -378,7 +378,7 @@ from an old image or environment.
 | Verify scheduler/executor settings | Verify deployed A `SOURCE_ADMISSION_MODE=closed_beta`, one selected source, matching contract, effective strict claim, `ENABLE_SCHEDULER=false`, and executor process state. | Repo A/Render operator | **OPEN**; deployed env and process not observed. |
 | Verify candidate recovery | Verify deployed B registry has recovery disabled and only one schedule owner for the selected source; held sources have no enabled writer. | Repo B operator | **OPEN**; local registry is disabled, deployment not present. |
 | Activate one source | Only after A fence, old writer drain, B default-deny deployment, and P4/P5 approval, set exactly one matching allowlist value and enable only the approved candidate schedule. | Release operator | **NOT AUTHORIZED** by P3. |
-| P1 prerequisites | Review the isolated real-process termination, lost-ACK/replay, changed-content, poison/backoff, declared workload, quantitative capacity, and genuine image-only OCR evidence against the frozen heads. | P1 owner + reviewer | **EVIDENCE PRESENT / NOT ACCEPTED**; the isolated checks passed, but the working trees were not frozen and no independent P1 acceptance is recorded. |
+| P1 prerequisites | Review the isolated real-process termination, lost-ACK/replay, changed-content, poison/backoff, declared workload, quantitative capacity, and genuine image-only OCR evidence against the frozen heads. | P1 owner + reviewer | **EVIDENCE PRESENT / NOT ACCEPTED**; the isolated harness passed from clean committed code, but no independent P1 acceptance is recorded. |
 
 ### Coordinated rollback constraint
 
@@ -417,7 +417,7 @@ sanitized output in approved private evidence, not this repository.
 $ErrorActionPreference = 'Stop'
 $Repo = 'Nucleo-IA-Unilasalle/lasalle-notices-automation-cronjob'
 $ExpectedMain = '553c67dcdb593550112470df8c76b0314fae3d4e'
-$ExpectedCandidate = '4211ddf6c99fa4b527f09ff3cad4f86996a1092c'
+$ExpectedCandidate = 'c6d6568009f8fa6a0de20b0ad4f66ff37ac9506a'
 $ObservedAt = Get-Date -AsUTC -Format 'yyyy-MM-ddTHH:mm:ssZ'
 Write-Output "observed_at=$ObservedAt"
 
@@ -855,8 +855,10 @@ private evidence and invoke the named P2 recovery and rollback owners.
 The following values are required before P3 can be accepted and are currently
 unassigned or unproven:
 
-1. Final immutable Repo A and Repo B candidate SHAs after the dirty working
-   trees are committed, plus the exact intended merge/deploy order.
+1. Final release heads and current PR checks for the tested Repo A code SHA
+   `49f1a34d4664cef4cd946237ff251f59bea4b8b0` and Repo B code SHA
+   `c6d6568009f8fa6a0de20b0ad4f66ff37ac9506a`, plus the exact intended
+   merge/deploy order.
 2. One approved candidate-contract source and matching contract, with every
    other source explicitly held; `brde` is not approved merely because it was
    proposed in earlier evidence.
