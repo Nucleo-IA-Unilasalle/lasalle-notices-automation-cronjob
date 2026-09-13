@@ -247,7 +247,8 @@ with engine.begin() as connection:
         "claim_expires_at = now() - interval '1 second', "
         "retry_after_at = now() - interval '1 second' "
         "FROM scraping_sources AS source "
-        "WHERE state.source_id = source.id AND source.source_key = :source"
+        "WHERE state.source_id = source.id AND source.source_key = :source "
+        "AND state.claim_token_hash IS NOT NULL"
     ), {"source": os.environ["P1_SOURCE"]})
     connection.execute(text(
         "UPDATE source_work_items AS item SET "

@@ -125,6 +125,10 @@ def test_poison_expiry_helper_does_not_expire_the_source_claim() -> None:
     assert "claim_expires_at" not in harness._EXPIRE_WORK_SQL
 
 
+def test_source_expiry_helper_only_updates_live_claims() -> None:
+    assert "state.claim_token_hash IS NOT NULL" in harness._EXPIRE_SQL
+
+
 def test_worker_parser_accepts_changed_replay_mode() -> None:
     args = harness._parse_args([
         "--worker-mode", "changed_replay",
