@@ -36,6 +36,7 @@ def test_stats_adapters_match_candidate_discoverer_shape() -> None:
     assert normalize_policy_rejected(stats) == 3
     assert normalize_stats(stats)["cap_reached"] is True
     assert normalize_stats(stats)["ocr_failures"] == 1
+    assert normalize_stats({"errors": 1})["partial_inventory"] is True
 
 
 def test_stats_adapters_keep_structured_inventory_distinct() -> None:
@@ -831,7 +832,7 @@ class TestMainOrchestration:
         ):
             assert main() == 1
 
-    def test_partial_source_error_does_not_discard_valid_candidates(self) -> None:
+    def test_partial_source_error_submits_valid_candidates_but_warns(self) -> None:
         from discover_all_candidates import main
 
         _stub_ocr_modules()
@@ -841,7 +842,12 @@ class TestMainOrchestration:
             "RENDER_APP_URL": "https://r.example.com",
             "PIPELINE_SECRET": "tok",
             "SOURCES": "govbr_mma_public_calls",
+            "SOURCE_RUN_REPORTING_ENABLED": "true",
         }
+        start = MagicMock(status_code=201)
+        start.json.return_value = {"id": "r"}
+        finish = MagicMock(status_code=200)
+        finish.json.return_value = {"status": "warning"}
         with patch.dict(os.environ, env, clear=True):
             with patch(
                 "discover_all_candidates.discover_source",
@@ -852,10 +858,114 @@ class TestMainOrchestration:
             ) as mock_process, patch(
                 "discover_all_candidates.pipeline_core.submit_candidates",
                 return_value={"submitted": 1},
-            ) as mock_submit:
-                assert main() == 0
+            ) as mock_submit, patch(
+                "source_run_reporting.requests.post", return_value=start,
+            ), patch(
+                "source_run_reporting.requests.patch", return_value=finish,
+            ) as patch_finish:
+                assert main() == 1
         mock_process.assert_called_once()
         mock_submit.assert_called_once()
+        body = patch_finish.call_args.kwargs["json"]
+        assert body["status"] == "warning"
+        assert body["errors"] == 1
+        assert body["stats"]["partial_inventory"] is True
+
+    def test_zero_candidate_source_error_is_failed(self) -> None:
+        from discover_all_candidates import main
+
+        _stub_ocr_modules()
+        env = {
+            "RENDER_APP_URL": "https://r.example.com",
+            "PIPELINE_SECRET": "tok",
+            "SOURCES": "brde",
+            "SOURCE_RUN_REPORTING_ENABLED": "true",
+        }
+        start = MagicMock(status_code=201)
+        start.json.return_value = {"id": "r"}
+        finish = MagicMock(status_code=200)
+        finish.json.return_value = {"status": "failed"}
+        with patch.dict(os.environ, env, clear=True), patch(
+            "discover_all_candidates.discover_source",
+            return_value=({"candidates": 0, "errors": 1}, []),
+        ), patch(
+            "source_run_reporting.requests.post", return_value=start,
+        ), patch(
+            "source_run_reporting.requests.patch", return_value=finish,
+        ) as patch_finish:
+            assert main() == 1
+        body = patch_finish.call_args.kwargs["json"]
+        assert body["status"] == "failed"
+        assert body["errors"] == 1
+        assert body["stats"]["partial_inventory"] is True
+
+    def test_partial_source_error_durable_run_warns_without_completion_marker(self, tmp_path) -> None:
+        from discover_all_candidates import main
+
+        _stub_ocr_modules()
+        candidate = _candidate("https://example.com/edital.pdf", "brde")
+        marker = tmp_path / "collection-complete"
+        env = {
+            "RENDER_APP_URL": "https://r.example.com",
+            "PIPELINE_SECRET": "tok",
+            "SOURCES": "brde",
+            "SOURCE_RUN_REPORTING_ENABLED": "true",
+            "SOURCE_WORK_ENABLED": "true",
+            "SOURCE_COLLECTION_COMPLETE_FILE": str(marker),
+        }
+        start = MagicMock(status_code=201)
+        start.json.return_value = {"id": "r"}
+        finish = MagicMock(status_code=200)
+        finish.json.return_value = {"status": "warning"}
+        client = MagicMock()
+        with patch.dict(os.environ, env, clear=True), patch(
+            "discover_all_candidates.load_discoverer", return_value=MagicMock(),
+        ), patch(
+            "discover_all_candidates.discover_source",
+            return_value=({"candidates": 1, "errors": 1}, [candidate]),
+        ), patch(
+            "durable_source_work.SourceControl", return_value=client,
+        ), patch(
+            "durable_source_work.drain", return_value=0,
+        ), patch(
+            "source_run_reporting.requests.post", return_value=start,
+        ), patch(
+            "source_run_reporting.requests.patch", return_value=finish,
+        ) as patch_finish:
+            assert main() == 1
+        assert not marker.exists()
+        assert all("cursor" not in call.kwargs for call in client.work.call_args_list)
+        body = patch_finish.call_args.kwargs["json"]
+        assert body["status"] == "warning"
+        assert body["errors"] == 1
+        assert body["stats"]["partial_inventory"] is True
+
+    def test_clean_zero_inventory_remains_success(self) -> None:
+        from discover_all_candidates import main
+
+        _stub_ocr_modules()
+        env = {
+            "RENDER_APP_URL": "https://r.example.com",
+            "PIPELINE_SECRET": "tok",
+            "SOURCES": "brde",
+            "SOURCE_RUN_REPORTING_ENABLED": "true",
+        }
+        start = MagicMock(status_code=201)
+        start.json.return_value = {"id": "r"}
+        finish = MagicMock(status_code=200)
+        finish.json.return_value = {"status": "success"}
+        with patch.dict(os.environ, env, clear=True), patch(
+            "discover_all_candidates.discover_source",
+            return_value=({"candidates": 0}, []),
+        ), patch(
+            "source_run_reporting.requests.post", return_value=start,
+        ), patch(
+            "source_run_reporting.requests.patch", return_value=finish,
+        ) as patch_finish:
+            assert main() == 0
+        body = patch_finish.call_args.kwargs["json"]
+        assert body["status"] == "success"
+        assert body["errors"] == 0
 
     def test_calls_submit_candidates_with_correct_source_per_source(
         self,

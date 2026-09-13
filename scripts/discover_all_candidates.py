@@ -371,6 +371,15 @@ def normalize_policy_rejected(stats: dict[str, Any]) -> int:
         value = sum(int(stats.get(key, 0) or 0) for key in ("filtered", "year_rejected", "prefilter_rejected"))
     return max(0, int(value or 0))
 
+
+def normalize_discovery_errors(stats: dict[str, Any]) -> int:
+    """Return a non-negative count of errors reported by discovery."""
+    try:
+        return max(0, int(stats.get("errors", 0) or 0))
+    except (TypeError, ValueError):
+        # A malformed error counter is itself an untrusted discovery result.
+        return 1
+
 # Cap flags are the only shared-run state allowed to leak into a source's
 # telemetry: the PDF/processing caps are enforced once for the whole run, so a
 # later source legitimately reports cap_reached. All other counters
@@ -419,7 +428,7 @@ def count_processed_outcomes(processed: list[dict[str, Any]]) -> tuple[int, int,
 def normalize_stats(stats: dict[str, Any]) -> dict[str, int | bool]:
     return {
         "cap_reached": bool(stats.get("candidate_cap_reached") or stats.get("pdf_download_cap_reached") or stats.get("search_result_cap_reached") or stats.get("detail_cap_reached") or stats.get("processing_cap_reached") or stats.get("submittable_cap_reached")),
-        "partial_inventory": bool(stats.get("section_parse_failed") or stats.get("inventory_parse_failed")),
+        "partial_inventory": bool(stats.get("section_parse_failed") or stats.get("inventory_parse_failed") or normalize_discovery_errors(stats)),
         "parser_failures": sum(int(stats.get(k, 0) or 0) for k in ("section_parse_failed", "inventory_parse_failed", "detail_parse_failures", "detail_parse_failed")),
         "download_failures": int(stats.get("download_failures", stats.get("search_failures", stats.get("attachment_failures", 0))) or 0),
         "ocr_failures": int(stats.get("ocr_failures", 0) or 0),
@@ -691,6 +700,18 @@ def main() -> int:
                     write_opportunity_audit(source, source_stats, opportunities)
                 elif audit_only:
                     write_candidate_audit(source, source_stats, candidates)
+                discovery_errors = normalize_discovery_errors(source_stats)
+                discovery_error_status = None
+                if discovery_errors:
+                    discovered_records = opportunities if opportunities is not None else candidates
+                    discovery_error_status = "warning" if discovered_records else "failed"
+                    print(
+                        f"error: discovery reported {discovery_errors} error(s) for {source!r}; "
+                        "inventory is partial",
+                        file=sys.stderr,
+                    )
+                    reporter.record_error("scraping_failed")
+                    exit_code = 1
                 print(
                     f"{source}: discovered "
                     f"{len(opportunities) if opportunities is not None else len(candidates)} "
@@ -728,6 +749,8 @@ def main() -> int:
                         reporter.record_error("fidelity_violation")
                         reporter.complete(status="failed")
                         exit_code = 1
+                    elif discovery_error_status == "failed":
+                        reporter.complete(status="failed")
                     continue
 
                 import durable_source_work
@@ -753,7 +776,15 @@ def main() -> int:
                     if failures:
                         exit_code = 1
                     if failures or not complete or reporter.metrics.stats.get("cap_reached"):
-                        reporter.complete(status="warning")
+                        reporter.complete(
+                            status=(
+                                "failed"
+                                if discovery_error_status == "failed"
+                                else "warning"
+                            )
+                        )
+                    elif discovery_error_status:
+                        reporter.complete(status=discovery_error_status)
                     continue
 
                 if extractor is None:
@@ -810,9 +841,13 @@ def main() -> int:
                         if not failures:
                             reporter.record_error("submission_failed")
                             reporter.complete(status="failed")
+                    elif discovery_error_status == "failed":
+                        reporter.complete(status="failed")
                     continue
 
                 if not candidates:
+                    if discovery_error_status:
+                        reporter.complete(status=discovery_error_status)
                     continue
 
                 processed = process_source_candidates(

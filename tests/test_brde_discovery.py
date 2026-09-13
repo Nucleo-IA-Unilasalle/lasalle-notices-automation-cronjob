@@ -329,6 +329,7 @@ class TestDiscoverCandidates:
             stats, candidates = discover_candidates()
 
         assert stats["errors"] == 1
+        assert stats["partial_inventory"] == 1
         assert candidates == []
 
     def test_fsa_listing_failure_does_not_block_palacete_results(self) -> None:
@@ -343,6 +344,7 @@ class TestDiscoverCandidates:
             stats, candidates = discover_candidates()
 
         assert stats["errors"] == 1
+        assert stats["partial_inventory"] == 1
         assert stats["candidates"] == 1
 
 
@@ -420,3 +422,19 @@ class TestSubmitHandoff:
                 },
             ):
                 assert dpc.main() == 0
+
+    def test_main_returns_1_when_discovery_errors_without_candidates(self) -> None:
+        import discover_brde_candidates as dpc
+
+        with patch.object(
+            dpc,
+            "discover_candidates",
+            return_value=({"candidates": 0, "errors": 1}, []),
+        ), patch.dict(
+            "os.environ",
+            {
+                "RENDER_APP_URL": "https://r.example.com",
+                "PIPELINE_SECRET": "tok",
+            },
+        ):
+            assert dpc.main() == 1

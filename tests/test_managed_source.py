@@ -23,6 +23,25 @@ def test_partial_inventory_never_advances_checkpoint(monkeypatch):
     assert "cursor" not in client.work.call_args.kwargs
 
 
+def test_generic_discovery_error_never_advances_checkpoint_or_marker(monkeypatch, tmp_path):
+    client = Mock()
+    monkeypatch.setattr(durable, "SourceControl", lambda source: client)
+    marker = tmp_path / "collection-complete"
+    monkeypatch.setenv("SOURCE_COLLECTION_COMPLETE_FILE", str(marker))
+
+    assert not durable.register_collection(
+        "pncp",
+        "candidate",
+        [{"url": "https://example.com/a"}],
+        {"errors": 1},
+        scope=durable.PNCP_SCOPE,
+        cursor_builder=lambda count, complete: {"count": count, "complete": complete},
+    )
+    assert client.work.call_count == 1
+    assert all("cursor" not in call.kwargs for call in client.work.call_args_list)
+    assert not marker.exists()
+
+
 def test_collection_commits_descriptors_before_cursor(monkeypatch):
     client = Mock()
     monkeypatch.setattr(durable, "SourceControl", lambda source: client)

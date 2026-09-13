@@ -338,6 +338,11 @@ def drain(source, reporter, stats):
 def register_collection(source, contract, records, stats, scope="default", cursor=None,
                         cursor_builder=None):
     client = SourceControl(source)
+    partial = any(stats.get(key) for key in (
+        "section_parse_failed", "inventory_parse_failed", "detail_parse_failures", "detail_parse_failed",
+        "search_failures", "document_failures", "search_result_cap_reached", "detail_cap_reached", "candidate_cap_reached",
+        "partial_inventory", "page_cap_reached", "errors",
+    ))
     # One bounded descriptor per request: a lost response can be replayed by
     # stable identity. The cursor never advances beyond the last acknowledged
     # registration: any descriptor failure stops the run before any cursor
@@ -347,17 +352,12 @@ def register_collection(source, contract, records, stats, scope="default", curso
         for record in records:
             client.work("register", contract=contract, items=[record], scope=scope)
             acked += 1
-            if cursor_builder is not None:
+            if not partial and cursor_builder is not None:
                 prefix = cursor_builder(acked, False)
                 if prefix is not None:
                     _advance_cursor(client, contract, scope, prefix)
     except Exception:
         return False
-    partial = any(stats.get(key) for key in (
-        "section_parse_failed", "inventory_parse_failed", "detail_parse_failures", "detail_parse_failed",
-        "search_failures", "document_failures", "search_result_cap_reached", "detail_cap_reached", "candidate_cap_reached",
-        "partial_inventory", "page_cap_reached",
-    ))
     if partial:
         return False
     final = cursor_builder(acked, True) if cursor_builder is not None else cursor

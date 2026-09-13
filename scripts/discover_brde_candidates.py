@@ -202,6 +202,7 @@ def discover_candidates(
         "prefilter_rejected": 0,
         "year_rejected": 0,
         "errors": 0,
+        "partial_inventory": 0,
         "candidate_cap_reached": 0,
     }
     candidates: list[dict[str, Any]] = []
@@ -245,6 +246,14 @@ def discover_candidates(
         )
         return True
 
+    def _record_discovery_error() -> None:
+        stats["errors"] = stats.get("errors", 0) + 1
+        stats["partial_inventory"] = 1
+
+    def _mark_partial_inventory() -> None:
+        if stats.get("errors"):
+            stats["partial_inventory"] = 1
+
     palacete_pdfs: list[str] = []
     try:
         palacete_pdfs = discover_pdf_urls_on_page(
@@ -259,7 +268,7 @@ def discover_candidates(
             exc,
             exc=exc,
         )
-        stats["errors"] = stats.get("errors", 0) + 1
+        _record_discovery_error()
 
     for pdf_url in palacete_pdfs:
         if _ingest_pdf(
@@ -270,6 +279,7 @@ def discover_candidates(
         ):
             continue
         if _hit_candidate_cap():
+            _mark_partial_inventory()
             stats["candidates"] = len(candidates)
             return stats, candidates
 
@@ -291,7 +301,7 @@ def discover_candidates(
             exc,
             exc=exc,
         )
-        stats["errors"] = stats.get("errors", 0) + 1
+        _record_discovery_error()
 
     for detail_url in fsa_detail_urls:
         if details_fetched >= BRDE_MAX_DETAILS_PER_RUN:
@@ -309,7 +319,7 @@ def discover_candidates(
                 exc,
                 exc=exc,
             )
-            stats["errors"] = stats.get("errors", 0) + 1
+            _record_discovery_error()
             continue
         details_fetched += 1
         stats["details_fetched"] += 1
@@ -322,9 +332,11 @@ def discover_candidates(
             ):
                 continue
             if _hit_candidate_cap():
+                _mark_partial_inventory()
                 stats["candidates"] = len(candidates)
                 return stats, candidates
 
+    _mark_partial_inventory()
     stats["candidates"] = len(candidates)
     return stats, candidates
 
@@ -340,10 +352,16 @@ def main() -> int:
     stats, candidates = discover_candidates()
     print(f"BRDE discovery stats: {stats}")
     print(f"BRDE candidates discovered: {len(candidates)}")
+    discovery_incomplete = bool(stats.get("errors") or stats.get("partial_inventory"))
+    if discovery_incomplete:
+        print(
+            "error: BRDE discovery reported errors; inventory is partial",
+            file=sys.stderr,
+        )
 
     if not candidates:
         print("No new candidates to submit")
-        return 0
+        return 1 if discovery_incomplete else 0
 
     _ocr_config, extractor = pipeline_core.make_default_ocr_extractor()
     max_pdf_bytes = pipeline_core.SCRAPE_MAX_PDF_BYTES
@@ -389,7 +407,7 @@ def main() -> int:
         )
         return 1
 
-    return 0
+    return 1 if discovery_incomplete else 0
 
 
 if __name__ == "__main__":
