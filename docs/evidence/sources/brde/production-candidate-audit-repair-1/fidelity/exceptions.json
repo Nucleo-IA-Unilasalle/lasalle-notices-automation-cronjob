@@ -1,0 +1,338 @@
+[
+  {
+    "evidence": {
+      "document_capture": {
+        "bytes": 873888,
+        "content_type": "application/pdf",
+        "final_url": "https://brde.com.br/wp-content/uploads/2026/06/Edital-de-Incentivos-Fiscais-2026.pdf",
+        "http_status": 200,
+        "kind": "out_of_scope_fiscal_incentive",
+        "magic_hex": "255044462d312e37",
+        "requested_url": "https://brde.com.br/wp-content/uploads/2026/06/Edital-de-Incentivos-Fiscais-2026.pdf",
+        "sha256": "4b7e258182e356fe31178fca7f93be87b8e874f6d5bcead3963cf6dbb131ec2b"
+      },
+      "document_link": {
+        "label": "EDITAL INCENTIVOS FISCAIS 2026",
+        "raw_href": "https://brde.com.br/wp-content/uploads/2026/06/Edital-de-Incentivos-Fiscais-2026.pdf",
+        "resolved_url": "https://brde.com.br/wp-content/uploads/2026/06/Edital-de-Incentivos-Fiscais-2026.pdf"
+      },
+      "listing_url": "https://www.brde.com.br/incentivos/incentivos-fiscais/",
+      "origin": "inventory",
+      "policy": "BRDE candidate adapter scope is FSA public calls plus Palacete editais; fiscal incentives are a separate program",
+      "record": {
+        "canonical_url": "https://brde.com.br/incentivos/incentivos-fiscais/",
+        "document_urls": [
+          "https://brde.com.br/wp-content/uploads/2026/06/Edital-de-Incentivos-Fiscais-2026.pdf"
+        ],
+        "evidence": {
+          "document_capture": {
+            "bytes": 873888,
+            "content_type": "application/pdf",
+            "final_url": "https://brde.com.br/wp-content/uploads/2026/06/Edital-de-Incentivos-Fiscais-2026.pdf",
+            "http_status": 200,
+            "kind": "out_of_scope_fiscal_incentive",
+            "magic_hex": "255044462d312e37",
+            "requested_url": "https://brde.com.br/wp-content/uploads/2026/06/Edital-de-Incentivos-Fiscais-2026.pdf",
+            "sha256": "4b7e258182e356fe31178fca7f93be87b8e874f6d5bcead3963cf6dbb131ec2b"
+          },
+          "document_link": {
+            "label": "EDITAL INCENTIVOS FISCAIS 2026",
+            "raw_href": "https://brde.com.br/wp-content/uploads/2026/06/Edital-de-Incentivos-Fiscais-2026.pdf",
+            "resolved_url": "https://brde.com.br/wp-content/uploads/2026/06/Edital-de-Incentivos-Fiscais-2026.pdf"
+          },
+          "listing_url": "https://www.brde.com.br/incentivos/incentivos-fiscais/",
+          "policy": "BRDE candidate adapter scope is FSA public calls plus Palacete editais; fiscal incentives are a separate program",
+          "surface_html_sha256": "510bef808cd21948b4e478016c6eb9c8314ce427e8f22b50a280382a379f5b65"
+        },
+        "reason_code": "out_of_scope",
+        "source_key": "brde",
+        "source_record_id": "incentivos:edital-2026",
+        "status": "unknown",
+        "title": "EDITAL INCENTIVOS FISCAIS 2026"
+      },
+      "surface_html_sha256": "510bef808cd21948b4e478016c6eb9c8314ce427e8f22b50a280382a379f5b65"
+    },
+    "reason_code": "out_of_scope",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "links": [
+        {
+          "label": "02/09/2026 - Informações Convocações até 07/08/2026 – Concurso 2025",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/09/Informacoes-Convocacoes-Ate-2026-09-02-concurso-2025.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/09/Informacoes-Convocacoes-Ate-2026-09-02-concurso-2025.pdf"
+        },
+        {
+          "label": "21/05/2026 - Edital Nº 15/2026 – Homologação do Resultado Final do Concurso Público – Cargos de Analista",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/05/979_Edital_15-2025_Edital_Homologacao_Final_Analista.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/05/979_Edital_15-2025_Edital_Homologacao_Final_Analista.pdf"
+        },
+        {
+          "label": "06/05/2026 – Edital Nº 14/2026 – Retificação do Cronograma de Execução",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/05/979_Edital_14-2026_Retificacao_Cronograma.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/05/979_Edital_14-2026_Retificacao_Cronograma.pdf"
+        },
+        {
+          "label": "13/04/2026 – Edital Nº 13/2026 – Retificação do Cronograma de Execução",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/04/979_Edital_13-2026_Retificacao_Cronograma.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/04/979_Edital_13-2026_Retificacao_Cronograma.pdf"
+        },
+        {
+          "label": "02/04/2026 – Edital Nº 12/2026 – Divulgação das Notas Definitivas da Prova de Títulos",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/04/979_Edital_12-2026_Notas_Definitivas_das_Provas_de_Titulos.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/04/979_Edital_12-2026_Notas_Definitivas_das_Provas_de_Titulos.pdf"
+        },
+        {
+          "label": "20/03/2026 – Edital Nº 11/2026 – Divulgação das Notas Preliminares da Prova de Títulos",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/03/979_Edital_11-2026_Notas_Preliminares_Prova_de_Titulos.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/03/979_Edital_11-2026_Notas_Preliminares_Prova_de_Titulos.pdf"
+        },
+        {
+          "label": "13/03/2026 - Edital Nº 10/2026 – Retificação do Edital nº 08/2026 – Divulgação das Notas Definitivas da Prova Discursiva",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/03/979_Edital_10-2026_Retificacao_Discursivas.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/03/979_Edital_10-2026_Retificacao_Discursivas.pdf"
+        },
+        {
+          "label": "13/03/2026 - Edital Nº 09/2026 – Retificação do Edital nº 07/2026 – Homologação do Resultado Final do Concurso Público – Cargos de Assistente Administrativo",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/03/979_Edital_09-2026_Retificacao_do_Edital_Homologacao_Final_Assistente.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/03/979_Edital_09-2026_Retificacao_do_Edital_Homologacao_Final_Assistente.pdf"
+        },
+        {
+          "label": "04/03/2026 – Lista dos Aprovados para Entrega de Títulos",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/03/Listados_Aprovados_para_Entrega_de_Titulos.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/03/Listados_Aprovados_para_Entrega_de_Titulos.pdf"
+        },
+        {
+          "label": "03/03/2026 – Edital Nº 08/2026 – Divulgação das Notas Definitivas da Prova Discursiva",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/03/979_Edital_08-2026_Notas_Definitivas_Discursivas.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/03/979_Edital_08-2026_Notas_Definitivas_Discursivas.pdf"
+        },
+        {
+          "label": "20/02/2026 – Edital Nº 07/2026 – Homologação do Resultado Final do Concurso Público – Cargos de Assistente Administrativo",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/02/979_Edital_07-2026_Edital_Homologacao_Final_Assistente_Administrativo.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/02/979_Edital_07-2026_Edital_Homologacao_Final_Assistente_Administrativo.pdf"
+        },
+        {
+          "label": "11/02/2026 – Edital Nº 06/2026 – Divulgação das Notas Preliminares da Prova Discursiva – Cargo de Analista",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/02/979_Edital_06-2026_NotasPreliminares_Discursivas.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/02/979_Edital_06-2026_NotasPreliminares_Discursivas.pdf"
+        },
+        {
+          "label": "29/01/2026 – Edital Nº 05/2026 – Retificação do Edital Nº 04/2026 – Realização de Sorteio Público de Desempate",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/01/979_Edital_05-2026_Retificao_Edital_04-2026.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/01/979_Edital_05-2026_Retificao_Edital_04-2026.pdf"
+        },
+        {
+          "label": "21/01/2026 – Edital Nº 04/2026 – Realização de Sorteio Público de Desempate - Cargo de Assistente Administrativo",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/01/979_Edital_04-2026_Convocacao_Sorteio_PAblico_697121724b2ee.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/01/979_Edital_04-2026_Convocacao_Sorteio_PAblico_697121724b2ee.pdf"
+        },
+        {
+          "label": "21/01/2026 – Lista dos Aprovados para correção da Prova de Discursiva",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/01/ListadosAprovadosparacorreAAodaProvadeDiscursiva_6970d8662ae4c.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/01/ListadosAprovadosparacorreAAodaProvadeDiscursiva_6970d8662ae4c.pdf"
+        },
+        {
+          "label": "20/01/2026 – Edital Nº 03/2026 – Retificação do Edital de Abertura",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/01/979_Edital_03-2026_RetificaAAoCronograma_696f9a085cb1a.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/01/979_Edital_03-2026_RetificaAAoCronograma_696f9a085cb1a.pdf"
+        },
+        {
+          "label": "19/01/2026 – Edital nº 02/2026 – Resultado Definitivo do Procedimento de Heteroidentificação – Pessoas Negras e Integrantes dos Povos Indígenas",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/01/979_Edital_02-2026_ResultadoDefinitivodoProcedimentodeHeteroidentificaAAo_Combinado_696e84438053a.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/01/979_Edital_02-2026_ResultadoDefinitivodoProcedimentodeHeteroidentificaAAo_Combinado_696e84438053a.pdf"
+        },
+        {
+          "label": "06/01/2026 – Edital Nº 01/2026 – Resultado Preliminar do Procedimento de Heteroidentificação – Candidatos Autodeclarados Negros e Integrantes dos Povos Indígenas",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/01/979_Edital_01-2026_ResultadoPreliminar_HeteroidentificaAAo_combinado_695d25dc98be8.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/01/979_Edital_01-2026_ResultadoPreliminar_HeteroidentificaAAo_combinado_695d25dc98be8.pdf"
+        },
+        {
+          "label": "Edital de Abertura Consolidado",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/03/Edital_abertura_consolidado_05_02_2026.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/03/Edital_abertura_consolidado_05_02_2026.pdf"
+        }
+      ],
+      "listing_url": "https://www.brde.com.br/transparencia/concursos/",
+      "observed_2026_link_count": 19,
+      "origin": "inventory",
+      "policy": "employment contest notices are not FSA/Palacete funding opportunities",
+      "record": {
+        "canonical_url": "https://brde.com.br/transparencia/concursos/",
+        "evidence": {
+          "links": [
+            {
+              "label": "02/09/2026 - Informações Convocações até 07/08/2026 – Concurso 2025",
+              "raw_href": "https://brde.com.br/wp-content/uploads/2026/09/Informacoes-Convocacoes-Ate-2026-09-02-concurso-2025.pdf",
+              "resolved_url": "https://brde.com.br/wp-content/uploads/2026/09/Informacoes-Convocacoes-Ate-2026-09-02-concurso-2025.pdf"
+            },
+            {
+              "label": "21/05/2026 - Edital Nº 15/2026 – Homologação do Resultado Final do Concurso Público – Cargos de Analista",
+              "raw_href": "https://brde.com.br/wp-content/uploads/2026/05/979_Edital_15-2025_Edital_Homologacao_Final_Analista.pdf",
+              "resolved_url": "https://brde.com.br/wp-content/uploads/2026/05/979_Edital_15-2025_Edital_Homologacao_Final_Analista.pdf"
+            },
+            {
+              "label": "06/05/2026 – Edital Nº 14/2026 – Retificação do Cronograma de Execução",
+              "raw_href": "https://brde.com.br/wp-content/uploads/2026/05/979_Edital_14-2026_Retificacao_Cronograma.pdf",
+              "resolved_url": "https://brde.com.br/wp-content/uploads/2026/05/979_Edital_14-2026_Retificacao_Cronograma.pdf"
+            },
+            {
+              "label": "13/04/2026 – Edital Nº 13/2026 – Retificação do Cronograma de Execução",
+              "raw_href": "https://brde.com.br/wp-content/uploads/2026/04/979_Edital_13-2026_Retificacao_Cronograma.pdf",
+              "resolved_url": "https://brde.com.br/wp-content/uploads/2026/04/979_Edital_13-2026_Retificacao_Cronograma.pdf"
+            },
+            {
+              "label": "02/04/2026 – Edital Nº 12/2026 – Divulgação das Notas Definitivas da Prova de Títulos",
+              "raw_href": "https://brde.com.br/wp-content/uploads/2026/04/979_Edital_12-2026_Notas_Definitivas_das_Provas_de_Titulos.pdf",
+              "resolved_url": "https://brde.com.br/wp-content/uploads/2026/04/979_Edital_12-2026_Notas_Definitivas_das_Provas_de_Titulos.pdf"
+            },
+            {
+              "label": "20/03/2026 – Edital Nº 11/2026 – Divulgação das Notas Preliminares da Prova de Títulos",
+              "raw_href": "https://brde.com.br/wp-content/uploads/2026/03/979_Edital_11-2026_Notas_Preliminares_Prova_de_Titulos.pdf",
+              "resolved_url": "https://brde.com.br/wp-content/uploads/2026/03/979_Edital_11-2026_Notas_Preliminares_Prova_de_Titulos.pdf"
+            },
+            {
+              "label": "13/03/2026 - Edital Nº 10/2026 – Retificação do Edital nº 08/2026 – Divulgação das Notas Definitivas da Prova Discursiva",
+              "raw_href": "https://brde.com.br/wp-content/uploads/2026/03/979_Edital_10-2026_Retificacao_Discursivas.pdf",
+              "resolved_url": "https://brde.com.br/wp-content/uploads/2026/03/979_Edital_10-2026_Retificacao_Discursivas.pdf"
+            },
+            {
+              "label": "13/03/2026 - Edital Nº 09/2026 – Retificação do Edital nº 07/2026 – Homologação do Resultado Final do Concurso Público – Cargos de Assistente Administrativo",
+              "raw_href": "https://brde.com.br/wp-content/uploads/2026/03/979_Edital_09-2026_Retificacao_do_Edital_Homologacao_Final_Assistente.pdf",
+              "resolved_url": "https://brde.com.br/wp-content/uploads/2026/03/979_Edital_09-2026_Retificacao_do_Edital_Homologacao_Final_Assistente.pdf"
+            },
+            {
+              "label": "04/03/2026 – Lista dos Aprovados para Entrega de Títulos",
+              "raw_href": "https://brde.com.br/wp-content/uploads/2026/03/Listados_Aprovados_para_Entrega_de_Titulos.pdf",
+              "resolved_url": "https://brde.com.br/wp-content/uploads/2026/03/Listados_Aprovados_para_Entrega_de_Titulos.pdf"
+            },
+            {
+              "label": "03/03/2026 – Edital Nº 08/2026 – Divulgação das Notas Definitivas da Prova Discursiva",
+              "raw_href": "https://brde.com.br/wp-content/uploads/2026/03/979_Edital_08-2026_Notas_Definitivas_Discursivas.pdf",
+              "resolved_url": "https://brde.com.br/wp-content/uploads/2026/03/979_Edital_08-2026_Notas_Definitivas_Discursivas.pdf"
+            },
+            {
+              "label": "20/02/2026 – Edital Nº 07/2026 – Homologação do Resultado Final do Concurso Público – Cargos de Assistente Administrativo",
+              "raw_href": "https://brde.com.br/wp-content/uploads/2026/02/979_Edital_07-2026_Edital_Homologacao_Final_Assistente_Administrativo.pdf",
+              "resolved_url": "https://brde.com.br/wp-content/uploads/2026/02/979_Edital_07-2026_Edital_Homologacao_Final_Assistente_Administrativo.pdf"
+            },
+            {
+              "label": "11/02/2026 – Edital Nº 06/2026 – Divulgação das Notas Preliminares da Prova Discursiva – Cargo de Analista",
+              "raw_href": "https://brde.com.br/wp-content/uploads/2026/02/979_Edital_06-2026_NotasPreliminares_Discursivas.pdf",
+              "resolved_url": "https://brde.com.br/wp-content/uploads/2026/02/979_Edital_06-2026_NotasPreliminares_Discursivas.pdf"
+            },
+            {
+              "label": "29/01/2026 – Edital Nº 05/2026 – Retificação do Edital Nº 04/2026 – Realização de Sorteio Público de Desempate",
+              "raw_href": "https://brde.com.br/wp-content/uploads/2026/01/979_Edital_05-2026_Retificao_Edital_04-2026.pdf",
+              "resolved_url": "https://brde.com.br/wp-content/uploads/2026/01/979_Edital_05-2026_Retificao_Edital_04-2026.pdf"
+            },
+            {
+              "label": "21/01/2026 – Edital Nº 04/2026 – Realização de Sorteio Público de Desempate - Cargo de Assistente Administrativo",
+              "raw_href": "https://brde.com.br/wp-content/uploads/2026/01/979_Edital_04-2026_Convocacao_Sorteio_PAblico_697121724b2ee.pdf",
+              "resolved_url": "https://brde.com.br/wp-content/uploads/2026/01/979_Edital_04-2026_Convocacao_Sorteio_PAblico_697121724b2ee.pdf"
+            },
+            {
+              "label": "21/01/2026 – Lista dos Aprovados para correção da Prova de Discursiva",
+              "raw_href": "https://brde.com.br/wp-content/uploads/2026/01/ListadosAprovadosparacorreAAodaProvadeDiscursiva_6970d8662ae4c.pdf",
+              "resolved_url": "https://brde.com.br/wp-content/uploads/2026/01/ListadosAprovadosparacorreAAodaProvadeDiscursiva_6970d8662ae4c.pdf"
+            },
+            {
+              "label": "20/01/2026 – Edital Nº 03/2026 – Retificação do Edital de Abertura",
+              "raw_href": "https://brde.com.br/wp-content/uploads/2026/01/979_Edital_03-2026_RetificaAAoCronograma_696f9a085cb1a.pdf",
+              "resolved_url": "https://brde.com.br/wp-content/uploads/2026/01/979_Edital_03-2026_RetificaAAoCronograma_696f9a085cb1a.pdf"
+            },
+            {
+              "label": "19/01/2026 – Edital nº 02/2026 – Resultado Definitivo do Procedimento de Heteroidentificação – Pessoas Negras e Integrantes dos Povos Indígenas",
+              "raw_href": "https://brde.com.br/wp-content/uploads/2026/01/979_Edital_02-2026_ResultadoDefinitivodoProcedimentodeHeteroidentificaAAo_Combinado_696e84438053a.pdf",
+              "resolved_url": "https://brde.com.br/wp-content/uploads/2026/01/979_Edital_02-2026_ResultadoDefinitivodoProcedimentodeHeteroidentificaAAo_Combinado_696e84438053a.pdf"
+            },
+            {
+              "label": "06/01/2026 – Edital Nº 01/2026 – Resultado Preliminar do Procedimento de Heteroidentificação – Candidatos Autodeclarados Negros e Integrantes dos Povos Indígenas",
+              "raw_href": "https://brde.com.br/wp-content/uploads/2026/01/979_Edital_01-2026_ResultadoPreliminar_HeteroidentificaAAo_combinado_695d25dc98be8.pdf",
+              "resolved_url": "https://brde.com.br/wp-content/uploads/2026/01/979_Edital_01-2026_ResultadoPreliminar_HeteroidentificaAAo_combinado_695d25dc98be8.pdf"
+            },
+            {
+              "label": "Edital de Abertura Consolidado",
+              "raw_href": "https://brde.com.br/wp-content/uploads/2026/03/Edital_abertura_consolidado_05_02_2026.pdf",
+              "resolved_url": "https://brde.com.br/wp-content/uploads/2026/03/Edital_abertura_consolidado_05_02_2026.pdf"
+            }
+          ],
+          "listing_url": "https://www.brde.com.br/transparencia/concursos/",
+          "observed_2026_link_count": 19,
+          "policy": "employment contest notices are not FSA/Palacete funding opportunities"
+        },
+        "reason_code": "out_of_scope",
+        "source_key": "brde",
+        "source_record_id": "concursos:2026",
+        "status": "unknown",
+        "title": "BRDE Concursos 2026 notices"
+      }
+    },
+    "reason_code": "out_of_scope",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "listing_url": "https://www.brde.com.br/licitacoes/compras-e-servicos/",
+      "origin": "inventory",
+      "policy": "BRDE procurement/contracts listing is outside the FSA/Palacete ingest adapter scope and is covered by PNCP/procurement handling",
+      "record": {
+        "canonical_url": "https://brde.com.br/compraseservicos/2026-000068",
+        "evidence": {
+          "listing_url": "https://www.brde.com.br/licitacoes/compras-e-servicos/",
+          "policy": "BRDE procurement/contracts listing is outside the FSA/Palacete ingest adapter scope and is covered by PNCP/procurement handling"
+        },
+        "reason_code": "out_of_scope",
+        "source_key": "brde",
+        "source_record_id": "procurement:2026-000068",
+        "status": "unknown",
+        "title": "Contratação, na modalidade “guarda-chuva”, de serviços técnicos necessários para a estruturação e modelagem de projetos de Parceria Público-Privada – PPP para construção, reconstrução, reforma, gestão, operação, conservação e manutenção (somente serviços não pedagógicos) de UNIDADES EDUCACIONAIS das redes de ensino dos entes públicos na região de atuação do BRDE, segundo as especificações do Termo de Referência e demais Anexos."
+      }
+    },
+    "reason_code": "out_of_scope",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "listing_url": "https://www.brde.com.br/licitacoes/compras-e-servicos/",
+      "origin": "inventory",
+      "policy": "BRDE procurement/contracts listing is outside the FSA/Palacete ingest adapter scope and is covered by PNCP/procurement handling",
+      "record": {
+        "canonical_url": "https://brde.com.br/compraseservicos/2026-000098",
+        "evidence": {
+          "listing_url": "https://www.brde.com.br/licitacoes/compras-e-servicos/",
+          "policy": "BRDE procurement/contracts listing is outside the FSA/Palacete ingest adapter scope and is covered by PNCP/procurement handling"
+        },
+        "reason_code": "out_of_scope",
+        "source_key": "brde",
+        "source_record_id": "procurement:2026-000098",
+        "status": "unknown",
+        "title": "Contratação de consultoria técnica especializada para a realização de estudos estratégicos, técnicos, operacionais, institucionais, econômico-financeiros e regulatórios relacionados ao sistema ferroviário da Malha Sul Ampliada, com a finalidade de subsidiar a atuação técnica e institucional do BRDE/CODESUL e dos estados integrantes, segundo as especificações do Termo de Referência e demais Anexos do Edital."
+      }
+    },
+    "reason_code": "out_of_scope",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "listing_url": "https://www.brde.com.br/licitacoes/compras-e-servicos/",
+      "origin": "inventory",
+      "policy": "BRDE procurement/contracts listing is outside the FSA/Palacete ingest adapter scope and is covered by PNCP/procurement handling",
+      "record": {
+        "canonical_url": "https://brde.com.br/compraseservicos/2026-000151",
+        "evidence": {
+          "listing_url": "https://www.brde.com.br/licitacoes/compras-e-servicos/",
+          "policy": "BRDE procurement/contracts listing is outside the FSA/Palacete ingest adapter scope and is covered by PNCP/procurement handling"
+        },
+        "reason_code": "out_of_scope",
+        "source_key": "brde",
+        "source_record_id": "procurement:2026-000151",
+        "status": "unknown",
+        "title": "Sorteio para a contratação de serviços de Gerenciamento de Consentimento e Ciência (GCC) dos titulares de dados pessoais para acesso e tratamento de dados dos sistemas e subsistemas informatizados da Secretaria Nacional de Trânsito (SENATRAN)."
+      }
+    },
+    "reason_code": "out_of_scope",
+    "severity": "non_blocking"
+  }
+]

@@ -1,0 +1,23 @@
+[
+  {
+    "source_key": "brde",
+    "canonical_url": null,
+    "title": null,
+    "status": null,
+    "document_urls": [
+      "https://www.brde.com.br/palacete/wp-content/uploads/2025/05/Edital-de-Patrocinio-BRDE-Cultural-\u2013-Palacete-dos-Leoes-2026-1.pdf"
+    ],
+    "document_hashes": [
+      "f1d6aeed093a0a80eaa4b5851b6b3c61b07f6ce0cd81fe69f9dd604f2260c7e7"
+    ],
+    "evidence": {
+      "raw_candidate_kind": "pdf",
+      "metadata": {
+        "source": "brde",
+        "listing_url": "https://www.brde.com.br/palacete/editais/",
+        "origin": "listing_pdf",
+        "extracted_year": 2026
+      }
+    }
+  }
+]

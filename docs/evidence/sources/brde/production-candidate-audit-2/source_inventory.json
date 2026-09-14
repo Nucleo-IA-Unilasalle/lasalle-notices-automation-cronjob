@@ -1,0 +1,54 @@
+[
+  {
+    "source_key": "brde",
+    "source_record_id": "brde-fsa-tv-vod-desempenho-comercial-produtoras-2026",
+    "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-tv-e-vod-desempenho-comercial-de-produtoras-2026/",
+    "title": "Chamada Publica BRDE/FSA - TV E VOD: DESEMPENHO COMERCIAL DE PRODUTORAS 2026",
+    "status": "open",
+    "deadline": "2026-09-25",
+    "document_urls": [
+      "https://brde.com.br/wp-content/uploads/2026/06/0-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-TV-VOD-PRODUTORAS-2026.pdf"
+    ],
+    "document_hashes": [
+      "055efd07f544d3ef166b1bf74ae552906ad1a96f2dd3c9a83f6389f26696471e"
+    ],
+    "renderable": true,
+    "content_type_validated": true,
+    "hash_validated": true,
+    "evidence": {
+      "listing_url": "https://www.brde.com.br/producao/",
+      "detail_url": "https://brde.com.br/chamada-publica-brde-fsa-tv-e-vod-desempenho-comercial-de-produtoras-2026/",
+      "period_text": "27/07/2026 a 25/09/2026",
+      "status_basis": "deadline_after_snapshot_and_no_closed_marker",
+      "detail_sha256": "6c14dc9628687f100cfe9d5493b2bc1138345487ac4f97bb652229a9f55ee7bd",
+      "document_sha256": "055efd07f544d3ef166b1bf74ae552906ad1a96f2dd3c9a83f6389f26696471e"
+    }
+  },
+  {
+    "source_key": "brde",
+    "source_record_id": "brde-fsa-coproducao-brasil-portugal-2026",
+    "canonical_url": "https://www.brde.com.br/%20chamada-publica-brde-fsa-coproducao-brasil-portugal-2026/",
+    "title": "Chamada Publica BRDE/FSA - COPRODUCAO BRASIL-PORTUGAL - 2026",
+    "status": "open",
+    "deadline": "2026-09-25",
+    "document_urls": [
+      "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-PORTUGAL-2026.pdf"
+    ],
+    "document_hashes": [
+      "bc35bb3d2f3d7f92f89a3af5a09f1a2a56d4a09f71d5b95696e5296a956a9eac"
+    ],
+    "renderable": true,
+    "content_type_validated": true,
+    "hash_validated": true,
+    "evidence": {
+      "listing_url": "https://www.brde.com.br/producao/",
+      "listing_href_raw": "http://www.brde.com.br/ chamada-publica-brde-fsa-coproducao-brasil-portugal-2026/",
+      "detail_url": "https://www.brde.com.br/%20chamada-publica-brde-fsa-coproducao-brasil-portugal-2026/",
+      "period_text": "15/06/2026 a 25/09/2026",
+      "status_basis": "deadline_after_snapshot_and_no_closed_marker",
+      "detail_sha256": "e92f62a45d896594d5e2491d351ca47b779053d4eb8d7513b3f13941c8fa773c",
+      "document_sha256": "bc35bb3d2f3d7f92f89a3af5a09f1a2a56d4a09f71d5b95696e5296a956a9eac",
+      "navigation_quality_note": "The official href contains a literal leading space; the encoded %20 path is retained as the fetched identity."
+    }
+  }
+]

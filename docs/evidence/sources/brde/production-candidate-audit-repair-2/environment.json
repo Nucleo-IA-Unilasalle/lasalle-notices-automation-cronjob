@@ -1,0 +1,47 @@
+{
+  "audit_slot": 2,
+  "audit_kind": "post_repair_production_candidate_source_audit",
+  "signer": "/root/independent_review",
+  "decision": "PASS",
+  "source_key": "brde",
+  "submission_contract": "candidate",
+  "repo_a": {
+    "head": "a5275dae46f223da74dc54d0734051acc66a8a9f",
+    "branch": "feature/durable-executor-and-review-hardening",
+    "supplied_candidate": true
+  },
+  "repo_b": {
+    "head": "2e0dd74ee64b999318dea4cc1767df4985b384ee",
+    "branch": "feature/source-rotation-fairness",
+    "supplied_candidate": true,
+    "worktree_status": "dirty_outside_audited_paths",
+    "audited_paths_clean": true,
+    "audited_paths": [
+      "scripts/discover_brde_candidates.py",
+      "tests/test_brde_discovery.py",
+      "tests/fixtures/sources/brde"
+    ]
+  },
+  "runtime": {
+    "python": "3.13.5",
+    "focused_test_command": "py -3.13 -m pytest tests/test_brde_discovery.py -q",
+    "focused_test_result": "36 passed in 12.46s",
+    "fidelity_command": "py -3.13 scripts/audit_source_fidelity.py --source-inventory docs/evidence/sources/brde/production-candidate-audit-repair-2/source_inventory.json --discovery docs/evidence/sources/brde/production-candidate-audit-repair-2/discovery.json --out docs/evidence/sources/brde/production-candidate-audit-repair-2/fidelity"
+  },
+  "capture_order": {
+    "official_inventory_built_at_utc": "2026-09-13T07:16:44.489401+00:00",
+    "adapter_started_at_utc": "2026-09-13T07:16:44.489607+00:00",
+    "adapter_finished_at_utc": "2026-09-13T07:16:50.894604+00:00",
+    "listing_marker_refetch_at_utc": "2026-09-13T07:18:41.120022+00:00",
+    "palacete_marker_refetch_at_utc": "2026-09-13T07:18:52.055771+00:00",
+    "palacete_pdf_refetch_at_utc": "2026-09-13T07:17:58.792308+00:00"
+  },
+  "network_policy": {
+    "method": "credential-free HTTP GET only",
+    "credentials": false,
+    "cookies": false,
+    "production_api_or_db": false,
+    "github_or_workflow_mutation": false,
+    "ocr_or_submission": false
+  }
+}

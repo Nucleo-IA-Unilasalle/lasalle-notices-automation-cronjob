@@ -22,25 +22,44 @@ must not be relabeled as RR-05 evidence.
 
 ## Audit slot 1
 
-- Independent official-source capture: `TODO`
-- Independent operator and sign-off: `TODO`
-- Historical diagnostic output: `audit-1/fidelity/` (not gate-qualifying)
-- Result: `TODO`
+- Historical pre-repair attempt: `production-candidate-audit-1/` (FAIL /
+  BLOCKED; retained for context only and not reused).
+- Post-repair independent official-source capture:
+  `production-candidate-audit-repair-1/official_surface_captures.json`
+- Independently prepared inventory:
+  `production-candidate-audit-repair-1/source_inventory.json`
+- Candidate comparison input/output:
+  `production-candidate-audit-repair-1/discovery.json`,
+  `production-candidate-audit-repair-1/adapter_output.json`
+- Offline fidelity output: `production-candidate-audit-repair-1/fidelity/`
+- Independent operator: `/root/p3_ledger`; pair reviewed and accepted by
+  `/root/p2_review` in the P4 release decision.
+- Result: **PASS** for this post-repair run; zero blocking exceptions,
+  100% open-inventory accounting, and 100% candidate traceability.
 
 ## Audit slot 2
 
-- Independent official-source capture: `TODO`
-- Independent of slot 1: `TODO`
-- Independent operator and sign-off: `TODO`
-- Historical diagnostic output: `audit-2/fidelity/` (not gate-qualifying)
-- Result: `TODO`
+- Historical pre-repair attempt: `production-candidate-audit-2/` (FAIL /
+  REJECT; retained for context only and not reused).
+- Independent official-source capture:
+  `production-candidate-audit-repair-2/official-surfaces.json`
+- Independently prepared lifecycle inventory:
+  `production-candidate-audit-repair-2/lifecycle-inventory.json`
+- Candidate comparison input/output:
+  `production-candidate-audit-repair-2/discovery.json`,
+  `production-candidate-audit-repair-2/adapter-run.json`
+- Offline fidelity output: `production-candidate-audit-repair-2/fidelity/`
+- Independent operator/signature: `/root/independent_review`
+- Result: **PASS**; zero blocking exceptions, 100% open-inventory accounting,
+  and 100% candidate traceability.
 
 ## Completion gate
 
-- [ ] Both audits concluded `pass` with zero blocking exceptions.
-- [ ] Both used independently prepared official-source ground truth.
-- [ ] Raw captures and provenance are retained and credential-redacted.
-- [ ] Reviewer sign-off is recorded in `snapshot.json`.
+- [x] Both audits concluded `pass` with zero blocking exceptions.
+- [x] Both used independently prepared official-source ground truth.
+- [x] Sanitized captures and provenance are retained and credential-redacted.
+- [x] Reviewer sign-off is recorded in `snapshot.json`.
 
-RR-05 remains open for BRDE. Activation remains a separate authorized lifecycle
-decision after all other release gates.
+The scoped two-audit requirement is satisfied for the frozen Repo B SHA and the
+pair is accepted by the final P4 reviewer. Broader-program RR-05 remains open
+for unselected sources. Activation remains a separate P5 lifecycle action.

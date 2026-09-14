@@ -1,0 +1,439 @@
+[
+  {
+    "source_key": "brde",
+    "source_record_id": "fsa:chamada-publica-brde-fsa-tv-e-vod-desempenho-comercial-de-produtoras-2026",
+    "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-tv-e-vod-desempenho-comercial-de-produtoras-2026",
+    "title": "Chamada Publica BRDE/FSA  TV E VOD: DESEMPENHO COMERCIAL DE PRODUTORAS 2026",
+    "status": "open",
+    "published_at": "2026-07-31T00:00:00Z",
+    "deadline": "2026-09-25T00:00:00Z",
+    "document_urls": [
+      "https://brde.com.br/wp-content/uploads/2026/06/0-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-TV-VOD-PRODUTORAS-2026.pdf"
+    ],
+    "document_hashes": [
+      "055efd07f544d3ef166b1bf74ae552906ad1a96f2dd3c9a83f6389f26696471e"
+    ],
+    "evidence": {
+      "scope": "FSA Production 2026",
+      "listing_url": "https://www.brde.com.br/producao/?tab=ci",
+      "listing_row": {
+        "label": "Chamada Publica BRDE/FSA  TV E VOD: DESEMPENHO COMERCIAL DE PRODUTORAS 2026",
+        "raw_href": "https://brde.com.br/chamada-publica-brde-fsa-tv-e-vod-desempenho-comercial-de-produtoras-2026",
+        "resolved_url": "https://brde.com.br/chamada-publica-brde-fsa-tv-e-vod-desempenho-comercial-de-produtoras-2026",
+        "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-tv-e-vod-desempenho-comercial-de-produtoras-2026",
+        "row_text": "Chamada Publica BRDE/FSA  TV E VOD: DESEMPENHO COMERCIAL DE PRODUTORAS 2026"
+      },
+      "period": {
+        "start": "2026-07-27",
+        "end": "2026-09-25",
+        "source_text": "periodo de inscricoes: 27/07/2026 a 25/09/2026"
+      },
+      "status_basis": "application period contains audit snapshot date",
+      "detail_html_sha256": "6c14dc9628687f100cfe9d5493b2bc1138345487ac4f97bb652229a9f55ee7bd",
+      "principal_pdf_capture": {
+        "kind": "fsa_principal",
+        "requested_url": "https://brde.com.br/wp-content/uploads/2026/06/0-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-TV-VOD-PRODUTORAS-2026.pdf",
+        "final_url": "https://brde.com.br/wp-content/uploads/2026/06/0-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-TV-VOD-PRODUTORAS-2026.pdf",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "bytes": 426122,
+        "sha256": "055efd07f544d3ef166b1bf74ae552906ad1a96f2dd3c9a83f6389f26696471e",
+        "magic_hex": "255044462d312e37"
+      }
+    }
+  },
+  {
+    "source_key": "brde",
+    "source_record_id": "fsa:chamada-publica-brde-fsa-nucleos-criativos-2026",
+    "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-nucleos-criativos-2026",
+    "title": "Chamada Publica BRDE/FSA  NUCLEOS CRIATIVOS  2026",
+    "status": "closed",
+    "published_at": "2026-07-10T00:00:00Z",
+    "deadline": "2026-09-04T00:00:00Z",
+    "document_urls": [
+      "https://brde.com.br/wp-content/uploads/2026/06/1-CHAMADA-PUBLICA-NUCLEOS-CRIATIVOS-2026.pdf"
+    ],
+    "document_hashes": [
+      "31f8b8a0e37b5278d5c48cd27e435d1450f3a66d7adee6232941b087693ce722"
+    ],
+    "evidence": {
+      "scope": "FSA Production 2026",
+      "listing_url": "https://www.brde.com.br/producao/?tab=ci",
+      "listing_row": {
+        "label": "Chamada Publica BRDE/FSA  NUCLEOS CRIATIVOS  2026",
+        "raw_href": "https://brde.com.br/chamada-publica-brde-fsa-nucleos-criativos-2026",
+        "resolved_url": "https://brde.com.br/chamada-publica-brde-fsa-nucleos-criativos-2026",
+        "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-nucleos-criativos-2026",
+        "row_text": "Chamada Publica BRDE/FSA  NUCLEOS CRIATIVOS  2026"
+      },
+      "period": {
+        "start": "2026-07-06",
+        "end": "2026-09-04",
+        "source_text": "periodo de inscricoes: 06/07/2026 a 04/09/2026"
+      },
+      "status_basis": "deadline elapsed; listing has no closed label",
+      "detail_html_sha256": "bac03753aba13f822c4be15e7868d7c73e611034261775e9e838f9111619f0be",
+      "principal_pdf_capture": {
+        "kind": "fsa_principal",
+        "requested_url": "https://brde.com.br/wp-content/uploads/2026/06/1-CHAMADA-PUBLICA-NUCLEOS-CRIATIVOS-2026.pdf",
+        "final_url": "https://brde.com.br/wp-content/uploads/2026/06/1-CHAMADA-PUBLICA-NUCLEOS-CRIATIVOS-2026.pdf",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "bytes": 383420,
+        "sha256": "31f8b8a0e37b5278d5c48cd27e435d1450f3a66d7adee6232941b087693ce722",
+        "magic_hex": "255044462d312e37"
+      }
+    }
+  },
+  {
+    "source_key": "brde",
+    "source_record_id": "fsa:chamada-publica-brde-fsa-desempenho-artistico-produtoras-2026",
+    "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-desempenho-artistico-produtoras-2026",
+    "title": "Chamada Publica BRDE/FSA  DESEMPENHO ARTISTICO  PRODUTORAS 2026",
+    "status": "closed",
+    "published_at": "2026-07-03T00:00:00Z",
+    "deadline": "2026-08-03T00:00:00Z",
+    "document_urls": [
+      "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-FSA-BRDE-DESEMPENHO-ARTISTICO-PRODUTORAS-2026.pdf"
+    ],
+    "document_hashes": [
+      "88f76fc92c4da784f16f06b2ba25fc37357307bd1baa483dff7c80030efc5b23"
+    ],
+    "evidence": {
+      "scope": "FSA Production 2026",
+      "listing_url": "https://www.brde.com.br/producao/?tab=ci",
+      "listing_row": {
+        "label": "Chamada Publica BRDE/FSA  DESEMPENHO ARTISTICO  PRODUTORAS 2026",
+        "raw_href": "https://brde.com.br/chamada-publica-brde-fsa-desempenho-artistico-produtoras-2026/",
+        "resolved_url": "https://brde.com.br/chamada-publica-brde-fsa-desempenho-artistico-produtoras-2026/",
+        "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-desempenho-artistico-produtoras-2026",
+        "row_text": "Chamada Publica BRDE/FSA  DESEMPENHO ARTISTICO  PRODUTORAS 2026"
+      },
+      "period": {
+        "start": "2026-05-25",
+        "end": "2026-08-03",
+        "source_text": "periodo de inscricoes: 25/05/2026 a 03/08/2026"
+      },
+      "status_basis": "deadline elapsed; listing has no closed label",
+      "detail_html_sha256": "22a9fda4c5a8232bbb7a443f4ab50fed172512aa2b74e21ebdccb80ef0b7890c",
+      "principal_pdf_capture": {
+        "kind": "fsa_principal",
+        "requested_url": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-FSA-BRDE-DESEMPENHO-ARTISTICO-PRODUTORAS-2026.pdf",
+        "final_url": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-FSA-BRDE-DESEMPENHO-ARTISTICO-PRODUTORAS-2026.pdf",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "bytes": 487240,
+        "sha256": "88f76fc92c4da784f16f06b2ba25fc37357307bd1baa483dff7c80030efc5b23",
+        "magic_hex": "255044462d312e37"
+      }
+    }
+  },
+  {
+    "source_key": "brde",
+    "source_record_id": "fsa:chamada-publica-brde-fsa-coproducao-brasil-argentina-2026",
+    "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-argentina-2026",
+    "title": "Chamada Publica BRDE/FSA  COPRODUCAO BRASIL  ARGENTINA  2026",
+    "status": "closed",
+    "published_at": "2026-08-21T00:00:00Z",
+    "deadline": "2026-07-17T00:00:00Z",
+    "document_urls": [
+      "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-ARGENTINA-2026.pdf"
+    ],
+    "document_hashes": [
+      "e2747110c1d1e68cbed9d5cc6f290ae11d4b5c978283a1ac3bbc3c09b592b922"
+    ],
+    "evidence": {
+      "scope": "FSA Production 2026",
+      "listing_url": "https://www.brde.com.br/producao/?tab=ci",
+      "listing_row": {
+        "label": "Chamada Publica BRDE/FSA  COPRODUCAO BRASIL-ARGENTINA  2026",
+        "raw_href": "http://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-argentina-2026",
+        "resolved_url": "http://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-argentina-2026",
+        "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-argentina-2026",
+        "row_text": "Chamada Publica BRDE/FSA  COPRODUCAO BRASIL-ARGENTINA  2026 (Inscricoes encerradas)"
+      },
+      "period": {
+        "start": "2026-06-17",
+        "end": "2026-07-17",
+        "source_text": "periodo de inscricoes: 17/06/2026 a 17/07/2026"
+      },
+      "status_basis": "explicit listing label",
+      "detail_html_sha256": "93899fa7187132c6a17309087a9501d2ab69d2bc539a62cf81f4b4b14a1b22fa",
+      "principal_pdf_capture": {
+        "kind": "fsa_principal",
+        "requested_url": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-ARGENTINA-2026.pdf",
+        "final_url": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-ARGENTINA-2026.pdf",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "bytes": 379702,
+        "sha256": "e2747110c1d1e68cbed9d5cc6f290ae11d4b5c978283a1ac3bbc3c09b592b922",
+        "magic_hex": "255044462d312e37"
+      }
+    }
+  },
+  {
+    "source_key": "brde",
+    "source_record_id": "fsa:chamada-publica-brde-fsa-coproducao-brasil-portugal-2026",
+    "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-portugal-2026",
+    "title": "Chamada Publica BRDE/FSA  COPRODUCAO BRASIL  PORTUGAL  2026",
+    "status": "open",
+    "published_at": "2026-06-10T00:00:00Z",
+    "deadline": "2026-09-25T00:00:00Z",
+    "document_urls": [
+      "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-PORTUGAL-2026.pdf"
+    ],
+    "document_hashes": [
+      "bc35bb3d2f3d7f92f89a3af5a09f1a2a56d4a09f71d5b95696e5296a956a9eac"
+    ],
+    "evidence": {
+      "scope": "FSA Production 2026",
+      "listing_url": "https://www.brde.com.br/producao/?tab=ci",
+      "listing_row": null,
+      "period": {
+        "start": "2026-06-15",
+        "end": "2026-09-25",
+        "source_text": "periodo de inscricoes: 15/06/2026 a 25/09/2026"
+      },
+      "status_basis": "application period contains audit snapshot date",
+      "detail_html_sha256": "e92f62a45d896594d5e2491d351ca47b779053d4eb8d7513b3f13941c8fa773c",
+      "principal_pdf_capture": {
+        "kind": "fsa_principal",
+        "requested_url": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-PORTUGAL-2026.pdf",
+        "final_url": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-PORTUGAL-2026.pdf",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "bytes": 427088,
+        "sha256": "bc35bb3d2f3d7f92f89a3af5a09f1a2a56d4a09f71d5b95696e5296a956a9eac",
+        "magic_hex": "255044462d312e37"
+      }
+    }
+  },
+  {
+    "source_key": "brde",
+    "source_record_id": "fsa:chamada-publica-brde-fsa-cinema-desempenho-comercial-de-produtoras-2026",
+    "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-produtoras-2026",
+    "title": "Chamada Publica BRDE/FSA  CINEMA: DESEMPENHO COMERCIAL DE PRODUTORAS  2026",
+    "status": "closed",
+    "published_at": "2026-07-30T00:00:00Z",
+    "deadline": "2026-07-01T00:00:00Z",
+    "document_urls": [
+      "https://brde.com.br/wp-content/uploads/2026/04/1-EDITAL-DESEMPENHO-COMERCIAL-DE-PRODUTORAS-2026.pdf"
+    ],
+    "document_hashes": [
+      "8be5a344694ce8508841de634cb0b8bf922aa1552acbff73ee3e1b6da150ff76"
+    ],
+    "evidence": {
+      "scope": "FSA Production 2026",
+      "listing_url": "https://www.brde.com.br/producao/?tab=ci",
+      "listing_row": {
+        "label": "Chamada Publica BRDE/FSA  CINEMA: DESEMPENHO COMERCIAL DE PRODUTORAS  2026",
+        "raw_href": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-produtoras-2026/",
+        "resolved_url": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-produtoras-2026/",
+        "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-produtoras-2026",
+        "row_text": "Chamada Publica BRDE/FSA  CINEMA: DESEMPENHO COMERCIAL DE PRODUTORAS  2026 (Inscricoes encerradas para Beneficiarios Indiretos)"
+      },
+      "period": {
+        "start": "2026-05-13",
+        "end": "2026-07-01",
+        "source_text": "periodo de inscricoes: 13/05/2026 a 01/07/2026"
+      },
+      "status_basis": "explicit listing label",
+      "detail_html_sha256": "ec47444ae5246ac219a8e05035c47c58dbe28ab87ce46a82f5be5950c8ca5f2c",
+      "principal_pdf_capture": {
+        "kind": "fsa_principal",
+        "requested_url": "https://brde.com.br/wp-content/uploads/2026/04/1-EDITAL-DESEMPENHO-COMERCIAL-DE-PRODUTORAS-2026.pdf",
+        "final_url": "https://brde.com.br/wp-content/uploads/2026/04/1-EDITAL-DESEMPENHO-COMERCIAL-DE-PRODUTORAS-2026.pdf",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "bytes": 424490,
+        "sha256": "8be5a344694ce8508841de634cb0b8bf922aa1552acbff73ee3e1b6da150ff76",
+        "magic_hex": "255044462d312e37"
+      }
+    }
+  },
+  {
+    "source_key": "brde",
+    "source_record_id": "fsa:chamada-publica-brde-fsa-cinema-desempenho-comercial-de-distribuidoras-2026",
+    "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-distribuidoras-2026",
+    "title": "Chamada Publica BRDE/FSA  CINEMA: DESEMPENHO COMERCIAL DE DISTRIBUIDORAS 2026",
+    "status": "closed",
+    "published_at": "2026-07-23T00:00:00Z",
+    "deadline": "2026-06-17T00:00:00Z",
+    "document_urls": [
+      "https://brde.com.br/wp-content/uploads/2026/04/1-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-DISTRIBUIDORAS-2026.pdf"
+    ],
+    "document_hashes": [
+      "40e268fa4fdc80052bbbc1dc25829089d6b3382574454c578685ad27019b8dc7"
+    ],
+    "evidence": {
+      "scope": "FSA Production 2026",
+      "listing_url": "https://www.brde.com.br/producao/?tab=ci",
+      "listing_row": {
+        "label": "Chamada Publica BRDE/FSA  CINEMA: DESEMPENHO COMERCIAL DE DISTRIBUIDORAS  2026",
+        "raw_href": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-distribuidoras-2026/",
+        "resolved_url": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-distribuidoras-2026/",
+        "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-distribuidoras-2026",
+        "row_text": "Chamada Publica BRDE/FSA  CINEMA: DESEMPENHO COMERCIAL DE DISTRIBUIDORAS  2026 (Inscricoes encerradas para Beneficiarios Indiretos)"
+      },
+      "period": {
+        "start": "2026-04-29",
+        "end": "2026-06-17",
+        "source_text": "periodo de inscricoes: 29/04/2026 a 17/06/2026"
+      },
+      "status_basis": "explicit listing label",
+      "detail_html_sha256": "d755b8a06e1403d79b316f2021cc0671a03231a58d1699fb245946cdd28b663c",
+      "principal_pdf_capture": {
+        "kind": "fsa_principal",
+        "requested_url": "https://brde.com.br/wp-content/uploads/2026/04/1-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-DISTRIBUIDORAS-2026.pdf",
+        "final_url": "https://brde.com.br/wp-content/uploads/2026/04/1-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-DISTRIBUIDORAS-2026.pdf",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "bytes": 443962,
+        "sha256": "40e268fa4fdc80052bbbc1dc25829089d6b3382574454c578685ad27019b8dc7",
+        "magic_hex": "255044462d312e37"
+      }
+    }
+  },
+  {
+    "source_key": "brde",
+    "source_record_id": "fsa:chamada-publica-brde-fsa-coproducao-brasil-uruguai-2026",
+    "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-uruguai-2026",
+    "title": "Chamada Publica BRDE/FSA  COPRODUCAO BRASIL-URUGUAI  2026",
+    "status": "closed",
+    "published_at": "2026-08-25T00:00:00Z",
+    "deadline": "2026-05-25T00:00:00Z",
+    "document_urls": [
+      "https://brde.com.br/wp-content/uploads/2026/04/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-URUGUAI-2026-1.pdf"
+    ],
+    "document_hashes": [
+      "346ef844312785fae35b5abb09c57a41212e8984e5c67f0143c7de0eff7e9b5c"
+    ],
+    "evidence": {
+      "scope": "FSA Production 2026",
+      "listing_url": "https://www.brde.com.br/producao/?tab=ci",
+      "listing_row": {
+        "label": "Chamada Publica BRDE/FSA  COPRODUCAO BRASIL-URUGUAI  2026",
+        "raw_href": "https://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-uruguai-2026/",
+        "resolved_url": "https://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-uruguai-2026/",
+        "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-uruguai-2026",
+        "row_text": "Chamada Publica BRDE/FSA  COPRODUCAO BRASIL-URUGUAI  2026 (Inscricoes encerradas)"
+      },
+      "period": {
+        "start": "2026-04-16",
+        "end": "2026-05-25",
+        "source_text": "periodo de inscricoes: 16/04/2026 a 25/05/2026"
+      },
+      "status_basis": "explicit listing label",
+      "detail_html_sha256": "30260c3616403746593d7a33a9f9a59938e7f4c169585a29fcfd0f5be4346f1b",
+      "principal_pdf_capture": {
+        "kind": "fsa_principal",
+        "requested_url": "https://brde.com.br/wp-content/uploads/2026/04/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-URUGUAI-2026-1.pdf",
+        "final_url": "https://brde.com.br/wp-content/uploads/2026/04/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-URUGUAI-2026-1.pdf",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "bytes": 414970,
+        "sha256": "346ef844312785fae35b5abb09c57a41212e8984e5c67f0143c7de0eff7e9b5c",
+        "magic_hex": "255044462d312e37"
+      }
+    }
+  },
+  {
+    "source_key": "brde",
+    "source_record_id": "palacete:patrocinio-2026",
+    "canonical_url": "https://brde.com.br/palacete/editais/",
+    "title": "Edital de Patrocinio BRDE Cultural - Palacete dos Leoes 2026",
+    "status": "closed",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://www.brde.com.br/palacete/wp-content/uploads/2025/05/Edital-de-Patrocinio-BRDE-Cultural-\u2013-Palacete-dos-Leoes-2026-1.pdf"
+    ],
+    "document_hashes": [
+      "f1d6aeed093a0a80eaa4b5851b6b3c61b07f6ce0cd81fe69f9dd604f2260c7e7"
+    ],
+    "evidence": {
+      "scope": "Palacete editais 2026",
+      "listing_url": "https://brde.com.br/palacete/editais/",
+      "status_basis": "explicit listing label Encerrado",
+      "listing_html_sha256": "6c3a801d5e65c2b0eed463ff357aca90c8bbd40f27c5008040ee1634b7c22f21",
+      "principal_pdf_capture": {
+        "kind": "palacete_principal",
+        "requested_url": "https://www.brde.com.br/palacete/wp-content/uploads/2025/05/Edital-de-Patrocinio-BRDE-Cultural-\u2013-Palacete-dos-Leoes-2026-1.pdf",
+        "final_url": "https://www.brde.com.br/palacete/wp-content/uploads/2025/05/Edital-de-Patrocinio-BRDE-Cultural-%E2%80%93-Palacete-dos-Leoes-2026-1.pdf",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "bytes": 278314,
+        "sha256": "f1d6aeed093a0a80eaa4b5851b6b3c61b07f6ce0cd81fe69f9dd604f2260c7e7",
+        "magic_hex": "255044462d312e37"
+      }
+    }
+  },
+  {
+    "source_key": "brde",
+    "source_record_id": "incentivos:edital-2026",
+    "canonical_url": "https://brde.com.br/incentivos/incentivos-fiscais/",
+    "title": "Edital Incentivos Fiscais 2026",
+    "status": "unknown",
+    "document_urls": [
+      "https://brde.com.br/wp-content/uploads/2026/06/Edital-de-Incentivos-Fiscais-2026.pdf"
+    ],
+    "reason_code": "out_of_scope",
+    "evidence": {
+      "policy": "BRDE ingest adapter scope is FSA public calls plus Palacete editais; fiscal-incentive program is a separate surface and is not silently treated as an FSA opportunity",
+      "surface_html_sha256": "510bef808cd21948b4e478016c6eb9c8314ce427e8f22b50a280382a379f5b65",
+      "document_link": {
+        "label": "EDITAL INCENTIVOS FISCAIS 2026",
+        "url": "https://brde.com.br/wp-content/uploads/2026/06/Edital-de-Incentivos-Fiscais-2026.pdf"
+      }
+    }
+  },
+  {
+    "source_key": "brde",
+    "source_record_id": "procurement:2026-000151",
+    "canonical_url": "https://brde.com.br/compraseservicos/2026-000151",
+    "title": "Sorteio para a contratacao de servicos de Gerenciamento de Consentimento e Ciencia (GCC) dos titulares de dados pessoais para acesso e tratamento de dados dos sistemas e subsistemas informatizados da Secretaria Nacional de Transito (SENATRAN).",
+    "status": "unknown",
+    "reason_code": "out_of_scope",
+    "evidence": {
+      "policy": "BRDE procurement/contracts listing is outside the FSA/Palacete ingest adapter scope and is covered by PNCP/procurement handling",
+      "listing_url": "https://brde.com.br/licitacoes/compras-e-servicos/"
+    }
+  },
+  {
+    "source_key": "brde",
+    "source_record_id": "procurement:2026-000098",
+    "canonical_url": "https://brde.com.br/compraseservicos/2026-000098",
+    "title": "Contratacao de consultoria tecnica especializada para a realizacao de estudos estrategicos, tecnicos, operacionais, institucionais, economico-financeiros e regulatorios relacionados ao sistema ferroviario da Malha Sul Ampliada, com a finalidade de subsidiar a atuacao tecnica e institucional do BRDE/",
+    "status": "unknown",
+    "reason_code": "out_of_scope",
+    "evidence": {
+      "policy": "BRDE procurement/contracts listing is outside the FSA/Palacete ingest adapter scope and is covered by PNCP/procurement handling",
+      "listing_url": "https://brde.com.br/licitacoes/compras-e-servicos/"
+    }
+  },
+  {
+    "source_key": "brde",
+    "source_record_id": "procurement:2026-000068",
+    "canonical_url": "https://brde.com.br/compraseservicos/2026-000068",
+    "title": "Contratacao, na modalidade guarda-chuva, de servicos tecnicos necessarios para a estruturacao e modelagem de projetos de Parceria Publico-Privada  PPP para construcao, reconstrucao, reforma, gestao, operacao, conservacao e manutencao (somente servicos nao pedagogicos) de UNIDADES EDUCACIONAIS das",
+    "status": "unknown",
+    "reason_code": "out_of_scope",
+    "evidence": {
+      "policy": "BRDE procurement/contracts listing is outside the FSA/Palacete ingest adapter scope and is covered by PNCP/procurement handling",
+      "listing_url": "https://brde.com.br/licitacoes/compras-e-servicos/"
+    }
+  },
+  {
+    "source_key": "brde",
+    "source_record_id": "concursos:2026",
+    "canonical_url": "https://brde.com.br/transparencia/concursos/",
+    "title": "BRDE Concursos 2026 notices",
+    "status": "unknown",
+    "reason_code": "out_of_scope",
+    "evidence": {
+      "policy": "employment contest notices are not FSA/Palacete funding opportunities",
+      "listing_url": "https://brde.com.br/transparencia/concursos/",
+      "observed_2026_link_count": 19
+    }
+  }
+]

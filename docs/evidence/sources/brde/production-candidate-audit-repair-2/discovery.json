@@ -1,0 +1,50 @@
+[
+  {
+    "source_key": "brde",
+    "source_record_id": "brde-fsa-tv-vod-desempenho-comercial-produtoras-2026",
+    "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-tv-e-vod-desempenho-comercial-de-produtoras-2026/",
+    "title": "Chamada Publica BRDE/FSA - TV E VOD: DESEMPENHO COMERCIAL DE PRODUTORAS 2026",
+    "status": "open",
+    "deadline": "2026-09-25",
+    "document_urls": [
+      "https://brde.com.br/wp-content/uploads/2026/06/0-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-TV-VOD-PRODUTORAS-2026.pdf"
+    ],
+    "document_hashes": [
+      "055efd07f544d3ef166b1bf74ae552906ad1a96f2dd3c9a83f6389f26696471e"
+    ],
+    "renderable": true,
+    "content_type_validated": true,
+    "hash_validated": true,
+    "evidence": {
+      "adapter_listing_url": "https://brde.com.br/producao/?tab=ci",
+      "adapter_detail_url": "https://brde.com.br/chamada-publica-brde-fsa-tv-e-vod-desempenho-comercial-de-produtoras-2026",
+      "application_start": "2026-07-27",
+      "application_deadline": "2026-09-25"
+    }
+  },
+  {
+    "source_key": "brde",
+    "source_record_id": "brde-fsa-coproducao-brasil-portugal-2026",
+    "canonical_url": "https://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-portugal-2026/",
+    "title": "Chamada Publica BRDE/FSA - COPRODUCAO BRASIL-PORTUGAL - 2026",
+    "status": "open",
+    "deadline": "2026-09-25",
+    "document_urls": [
+      "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-PORTUGAL-2026.pdf"
+    ],
+    "document_hashes": [
+      "bc35bb3d2f3d7f92f89a3af5a09f1a2a56d4a09f71d5b95696e5296a956a9eac"
+    ],
+    "renderable": true,
+    "content_type_validated": true,
+    "hash_validated": true,
+    "evidence": {
+      "adapter_listing_url": "https://www.brde.com.br/producao/?tab=ci",
+      "adapter_detail_url": "https://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-portugal-2026",
+      "raw_listing_href": "http://www.brde.com.br/ chamada-publica-brde-fsa-coproducao-brasil-portugal-2026/",
+      "application_start": "2026-06-15",
+      "application_deadline": "2026-09-25",
+      "malformed_listing_href_repaired": true
+    }
+  }
+]

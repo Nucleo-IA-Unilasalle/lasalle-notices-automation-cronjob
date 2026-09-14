@@ -1,0 +1,150 @@
+{
+  "captured_at_utc": "2026-09-13T06:57:29.905779+00:00",
+  "method": {
+    "http": "GET with redirects enabled",
+    "headers": "Chrome-like User-Agent and pt-BR Accept-Language",
+    "credentials": false,
+    "cookies": false,
+    "stored_payloads": "No credential-bearing payloads; relevant extracts and response hashes are retained here."
+  },
+  "surfaces": [
+    {
+      "url": "https://www.brde.com.br/producao/",
+      "http_status": 200,
+      "final_url": "https://www.brde.com.br/producao/",
+      "bytes": 157441,
+      "sha256": "2acdccc8c5cdce1f9a274329133fea91341c89c69697569252fc3579095747c5",
+      "title": "Producao - BRDE Banco Regional de Desenvolvimento do Extremo Sul",
+      "distinct_2026_notice_links": 8,
+      "observed_extract": "Producao / Chamadas Publicas 2026; eight distinct current 2026 FSA detail anchors, including two future-deadline records and six expired/closed records."
+    },
+    {
+      "url": "https://www.brde.com.br/palacete/editais/",
+      "http_status": 200,
+      "final_url": "https://www.brde.com.br/palacete/editais/",
+      "bytes": 74197,
+      "sha256": "069d7efd2bd1d0116e133dea4440d4d4609ceca6b572ff49d071f87becdcc5dc",
+      "title": "EDITAIS BRDE CULTURAL - Palacete dos Leoes",
+      "distinct_2026_notice_links": 1,
+      "observed_extract": "EDITAL DE PATROCINIO BRDE CULTURAL Palacete dos Leoes 2026 ... EDITAL 2026 | Encerrado",
+      "main_document_url": "https://www.brde.com.br/palacete/wp-content/uploads/2025/05/Edital-de-Patrocinio-BRDE-Cultural-\u2013-Palacete-dos-Leoes-2026-1.pdf"
+    },
+    {
+      "url": "https://www.brde.com.br/fsa/chamadas-de-investimento/",
+      "http_status": 200,
+      "final_url": "https://www.brde.com.br/fsa/chamadas-de-investimento/",
+      "bytes": 106980,
+      "sha256": "3a9324f44c28f22cff3feee6f3f646fa1c5456479f96c59bde033e26d9fad813",
+      "title": "Chamadas de Investimento - BRDE Banco Regional de Desenvolvimento do Extremo Sul",
+      "distinct_2026_notice_links": 0,
+      "fsa_detail_links": 0,
+      "observed_extract": "The committed adapter's FSA URL returned HTTP 200 but no current 2026 detail links."
+    },
+    {
+      "url": "https://www.brde.com.br/fsa/chamadas-de-investimento/chamadas-publicas/",
+      "http_status": 200,
+      "final_url": "https://www.brde.com.br/fsa/chamadas-de-investimento/chamadas-publicas/",
+      "bytes": 102635,
+      "sha256": "26b52cb1b7c28d305bcda49a9f6f03642d5bd42a9d2c7d89123ffa576b776f97",
+      "title": "Chamadas Publicas - BRDE Banco Regional de Desenvolvimento do Extremo Sul",
+      "distinct_2026_notice_links": 0,
+      "fsa_detail_links": 0,
+      "observed_extract": "Generic historic navigation; no current 2026 notice links."
+    },
+    {
+      "url": "https://www.brde.com.br/fsa/chamadas-de-investimento/chamadas-publicas/arranjos-regionais/?tab=ci",
+      "http_status": 200,
+      "final_url": "https://www.brde.com.br/fsa/chamadas-de-investimento/chamadas-publicas/arranjos-regionais/?tab=ci",
+      "bytes": 115193,
+      "sha256": "26375fe97d8390827d16e7567f60edf75c9cab8bc365dfb7ff75f64c5275d19a",
+      "title": "Arranjos Regionais - BRDE Banco Regional de Desenvolvimento do Extremo Sul",
+      "distinct_2026_notice_links": 0,
+      "fsa_detail_links": 0,
+      "observed_extract": "Historic references and page text for older 2014-2018 calls; no current 2026 notice links."
+    },
+    {
+      "url": "https://www.brde.com.br/fsa/chamadas-de-investimento/chamadas-publicas/comercializacao/?tab=ci",
+      "http_status": 200,
+      "final_url": "https://www.brde.com.br/fsa/chamadas-de-investimento/chamadas-publicas/comercializacao/?tab=ci",
+      "bytes": 110899,
+      "sha256": "58f7c24c7c94d6e1ff7b9b506d169b5bd04bb30049a9e51881c810791c57986a",
+      "title": "Comercializacao - BRDE Banco Regional de Desenvolvimento do Extremo Sul",
+      "distinct_2026_notice_links": 0,
+      "historic_fsa_detail_links": 4,
+      "observed_extract": "Four historic detail links, all marked closed; no current 2026 notice links."
+    },
+    {
+      "url": "https://www.brde.com.br/fsa/chamadas-de-investimento/chamadas-publicas/desenvolvimento/?tab=ci",
+      "http_status": 200,
+      "final_url": "https://www.brde.com.br/fsa/chamadas-de-investimento/chamadas-publicas/desenvolvimento/?tab=ci",
+      "bytes": 114432,
+      "sha256": "1ea67ad31d8a40d65e3674770644ac91443bb66e1c1072cabad3956204d85320",
+      "title": "Desenvolvimento - BRDE Banco Regional de Desenvolvimento do Extremo Sul",
+      "distinct_2026_notice_links": 0,
+      "historic_fsa_detail_links": 12,
+      "observed_extract": "Twelve historic detail links, marked closed; no current 2026 notice links."
+    },
+    {
+      "url": "https://www.brde.com.br/fsa/chamadas-de-investimento/chamadas-publicas/suporte-automatico/?tab=ci",
+      "http_status": 200,
+      "final_url": "https://www.brde.com.br/fsa/chamadas-de-investimento/chamadas-publicas/suporte-automatico/?tab=ci",
+      "bytes": 115480,
+      "sha256": "0da852e528a5202fccadda4619ead934699a67d233b75f310263958ead27040e",
+      "title": "Suporte Automatico - BRDE Banco Regional de Desenvolvimento do Extremo Sul",
+      "distinct_2026_notice_links": 0,
+      "historic_fsa_detail_links": 11,
+      "observed_extract": "Eleven historic detail links, marked closed; no current 2026 notice links."
+    },
+    {
+      "url": "https://www.brde.com.br/fsa/chamadas-de-investimento/chamadas-publicas/tvs-publicas/?tab=ci",
+      "http_status": 200,
+      "final_url": "https://www.brde.com.br/fsa/chamadas-de-investimento/chamadas-publicas/tvs-publicas/?tab=ci",
+      "bytes": 114077,
+      "sha256": "f4d296fec5690d8ae6763610556abb514574ed916ba67220b115c4a14d940e88",
+      "title": "TVs Publicas - BRDE Banco Regional de Desenvolvimento do Extremo Sul",
+      "distinct_2026_notice_links": 0,
+      "historic_fsa_detail_links": 11,
+      "observed_extract": "Historic detail links only; no current 2026 notice links."
+    },
+    {
+      "url": "https://www.brde.com.br/fsa/chamadas-de-investimento/chamadas-publicas/infraestrutura/?tab=ci",
+      "http_status": 200,
+      "final_url": "https://www.brde.com.br/fsa/chamadas-de-investimento/chamadas-publicas/infraestrutura/?tab=ci",
+      "bytes": 109754,
+      "sha256": "2986f98850e635c67a89ad99deca83d1cb5536d636777c96d626f07fb6b242c6",
+      "title": "Infraestrutura - BRDE Banco Regional de Desenvolvimento do Extremo Sul",
+      "distinct_2026_notice_links": 0,
+      "observed_extract": "Historic 2023/2020/2018 references marked closed; no current 2026 notice links."
+    },
+    {
+      "url": "https://www.brde.com.br/fsa/chamadas-de-investimento/resultados/?tab=ci",
+      "http_status": 200,
+      "final_url": "https://www.brde.com.br/fsa/chamadas-de-investimento/resultados/?tab=ci",
+      "bytes": 116668,
+      "sha256": "a85a081e612c50f9c2133a0c5cc2e2e93f9292880345c87c72cee57fc208c858",
+      "title": "Resultados - BRDE Banco Regional de Desenvolvimento do Extremo Sul",
+      "distinct_2026_notice_links": 0,
+      "observed_extract": "Historic result pages only; no current 2026 notice links."
+    },
+    {
+      "url": "https://www.brde.com.br/editais/",
+      "http_status": 404,
+      "final_url": "https://www.brde.com.br/editais/",
+      "bytes": 132113,
+      "sha256": "db896ba1beef9076fa60df912889a13274da439c8438156c7dec6ae98c8f4339",
+      "title": "Page not found - BRDE Banco Regional de Desenvolvimento do Extremo Sul",
+      "distinct_2026_notice_links": 0,
+      "observed_extract": "Negative control; generic /editais/ is not a valid current BRDE source surface."
+    }
+  ],
+  "current_producao_2026_hrefs": [
+    "https://brde.com.br/chamada-publica-brde-fsa-tv-e-vod-desempenho-comercial-de-produtoras-2026",
+    "https://brde.com.br/chamada-publica-brde-fsa-nucleos-criativos-2026",
+    "https://brde.com.br/chamada-publica-brde-fsa-desempenho-artistico-produtoras-2026/",
+    "http://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-argentina-2026",
+    "http://www.brde.com.br/ chamada-publica-brde-fsa-coproducao-brasil-portugal-2026/",
+    "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-produtoras-2026/",
+    "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-distribuidoras-2026/",
+    "https://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-uruguai-2026/"
+  ]
+}

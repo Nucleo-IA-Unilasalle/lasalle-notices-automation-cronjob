@@ -1,0 +1,61 @@
+{
+  "phase": "committed_adapter_after_official_inventory",
+  "repo_b_head": "2e0dd74ee64b999318dea4cc1767df4985b384ee",
+  "source_file": "scripts/discover_brde_candidates.py",
+  "execution": "discover_candidates(as_of_date=date(2026, 9, 13)); main() not executed",
+  "started_at_utc": "2026-09-13T07:16:44.489607+00:00",
+  "finished_at_utc": "2026-09-13T07:16:50.894604+00:00",
+  "production_write": false,
+  "stats": {
+    "listings_fetched": 2,
+    "details_fetched": 8,
+    "open_details": 2,
+    "closed_details": 6,
+    "upcoming_details": 0,
+    "missing_lifecycle": 0,
+    "palacete_closed_sections": 1,
+    "candidates": 2,
+    "prefilter_rejected": 0,
+    "year_rejected": 0,
+    "errors": 0,
+    "partial_inventory": 0,
+    "detail_cap_reached": 0,
+    "candidate_cap_reached": 0
+  },
+  "candidates": [
+    {
+      "url": "https://brde.com.br/wp-content/uploads/2026/06/0-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-TV-VOD-PRODUTORAS-2026.pdf",
+      "kind": "pdf",
+      "metadata": {
+        "source": "brde",
+        "listing_url": "https://brde.com.br/producao/?tab=ci",
+        "detail_url": "https://brde.com.br/chamada-publica-brde-fsa-tv-e-vod-desempenho-comercial-de-produtoras-2026",
+        "origin": "detail_page",
+        "extracted_year": 2026,
+        "application_start": "2026-07-27",
+        "application_deadline": "2026-09-25",
+        "status": "open",
+        "discovered_at": "2026-09-13T07:16:45.832666+00:00"
+      },
+      "official_host_check": true
+    },
+    {
+      "url": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-PORTUGAL-2026.pdf",
+      "kind": "pdf",
+      "metadata": {
+        "source": "brde",
+        "listing_url": "https://www.brde.com.br/producao/?tab=ci",
+        "detail_url": "https://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-portugal-2026",
+        "origin": "detail_page",
+        "extracted_year": 2026,
+        "application_start": "2026-06-15",
+        "application_deadline": "2026-09-25",
+        "status": "open",
+        "discovered_at": "2026-09-13T07:16:49.229094+00:00"
+      },
+      "official_host_check": true,
+      "malformed_listing_href_repaired": true
+    }
+  ],
+  "host_policy_observed": "All emitted detail and PDF URLs normalize to brde.com.br; www.brde.com.br is accepted as the same official host."
+}

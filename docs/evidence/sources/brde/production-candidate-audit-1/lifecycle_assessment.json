@@ -1,0 +1,49 @@
+{
+  "audit_source": "brde",
+  "slot": 1,
+  "snapshot_utc": "2026-09-13T02:20:10Z",
+  "adapter_observed_utc": "2026-09-13T06:52:26.0632028Z",
+  "repo_a_head": "a5275dae46f223da74dc54d0734051acc66a8a9f",
+  "repo_b_head": "5c935d7e30949f69158c8344c42379ff3bd09ef6",
+  "official_closed_candidate": {
+    "source_record_id": "palacete:patrocinio-2026",
+    "canonical_url": "https://brde.com.br/palacete/editais/",
+    "principal_document_sha256": "f1d6aeed093a0a80eaa4b5851b6b3c61b07f6ce0cd81fe69f9dd604f2260c7e7",
+    "status": "closed",
+    "status_basis": "explicit listing label Encerrado"
+  },
+  "candidate_payload_lifecycle_fields": {
+    "emitted_metadata_fields": [
+      "source",
+      "listing_url",
+      "discovered_at",
+      "origin",
+      "extracted_year"
+    ],
+    "missing_authoritative_fields": [
+      "source_status",
+      "source_published_at",
+      "proposal_opens_at",
+      "application_deadline",
+      "deadline_source"
+    ],
+    "worker_result_contract_fields": [
+      "ocr_markdown",
+      "content_hash",
+      "content_length",
+      "validated_at",
+      "validation_outcome"
+    ]
+  },
+  "repo_a_lifecycle_behavior": {
+    "generic_worker_mapping": "application_deadline and proposal timing are populated only from candidate metadata when supplied; source_status is not included in the generic provenance mapping",
+    "open_predicate": "non-PNCP rows with pncp_status_id NULL and proposal_opens_at NULL and application_deadline NULL or in the future satisfy lifecycle=open",
+    "evidence": [
+      "app/models/generic_worker_result.py:7-36",
+      "app/services/scrape_candidate_service.py:521-590",
+      "app/repository/edital.py:362-370"
+    ]
+  },
+  "finding": "YES: a closed 2026 BRDE PDF can be admitted by the generic candidate writer without lifecycle metadata and then satisfy the default open predicate. This remains a blocking P3/P5 readiness issue until the writer propagates authoritative lifecycle or rejects closed records before processing.",
+  "production_state": "not accessed or mutated"
+}

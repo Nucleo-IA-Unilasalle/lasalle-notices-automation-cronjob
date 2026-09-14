@@ -1,0 +1,41 @@
+{
+  "audit_slot": 2,
+  "signer": "/root/independent_review",
+  "decision": "FAIL",
+  "source_key": "brde",
+  "submission_contract": "candidate",
+  "repo_a": {
+    "head": "a5275dae46f223da74dc54d0734051acc66a8a9f",
+    "branch": "feature/durable-executor-and-review-hardening",
+    "worktree_status_at_check": "clean"
+  },
+  "repo_b": {
+    "head": "5c935d7e30949f69158c8344c42379ff3bd09ef6",
+    "branch": "feature/source-rotation-fairness",
+    "worktree_status_at_check": "dirty",
+    "audit_revision": "committed HEAD; uncommitted checkout changes were not used",
+    "dirty_checkout_note": "The checkout had unrelated evidence, fixture, and source-file edits when this artifact was written. The committed source file was inspected from HEAD for this audit."
+  },
+  "runtime": {
+    "python": "3.13.5",
+    "audit_tools": [
+      "credential-free requests/BeautifulSoup official-surface capture",
+      "scripts/discover_brde_candidates.py discover_candidates()",
+      "scripts/audit_source_fidelity.py"
+    ]
+  },
+  "capture_window_utc": {
+    "surface_summary": "2026-09-13T06:57:29.905779+00:00",
+    "link_extract": "2026-09-13T06:57:48.056946+00:00",
+    "detail_pages": "2026-09-13T07:00:01.780922+00:00",
+    "adapter_start": "2026-09-13T06:53:34.714009+00:00",
+    "adapter_end": "2026-09-13T06:53:35.571230+00:00"
+  },
+  "network_policy": {
+    "requests": "GET only",
+    "credentials": false,
+    "cookies": false,
+    "production_api_or_db": false,
+    "workflow_or_scheduler_mutation": false
+  }
+}

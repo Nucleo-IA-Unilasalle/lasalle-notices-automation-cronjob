@@ -1,20 +1,23 @@
 {
   "source_key": "brde",
-  "observed_at": "2026-09-07T23:02:09.655045+00:00",
-  "registry_ref": "15501bf37908b0968112299966792011b6b0d81d",
+  "observed_at": "2026-09-13T07:18:52.055771+00:00",
+  "registry_ref": "2e0dd74ee64b999318dea4cc1767df4985b384ee",
   "pin_ref": "2026-09-06T03:22:11.102329+00:00",
   "runs": [],
   "audits": [
     {
-      "result": "TODO",
-      "report_path": "",
+      "result": "pass",
+      "operator": "/root/p3_ledger",
+      "report_path": "docs/evidence/sources/brde/production-candidate-audit-repair-1/fidelity",
       "historical_diagnostic_path": "docs/evidence/sources/brde/audit-1/fidelity"
     },
     {
-      "result": "TODO",
-      "report_path": "",
+      "result": "pass",
+      "operator": "/root/independent_review",
+      "report_path": "docs/evidence/sources/brde/production-candidate-audit-repair-2/fidelity",
       "historical_diagnostic_path": "docs/evidence/sources/brde/audit-2/fidelity"
     }
   ],
-  "notes": "RR-05 remains open. Historical repository-owned comparisons had 0 blockers but were not independent audits. The three real run IDs remain documented in STAGING-2026-09-07.md; their exact started_at timestamps were not retained, so unsupported round-hour values were removed here."
+  "reviewer_signoff": "/root/p2_review: ACCEPT 2026-09-13 (P4), selected brde/candidate",
+  "notes": "Two independently prepared post-repair official-source audits passed for Repo B 2e0dd74ee64b999318dea4cc1767df4985b384ee with zero blocking exceptions. Historical repository-owned comparisons remain diagnostic only. Production activation, canary, soak, and P4 reviewer acceptance remain separate gates."
 }

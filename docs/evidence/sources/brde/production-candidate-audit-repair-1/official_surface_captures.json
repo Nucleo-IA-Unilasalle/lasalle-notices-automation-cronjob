@@ -1,0 +1,2092 @@
+{
+  "audit": {
+    "source": "brde",
+    "slot": "repair-1",
+    "snapshot_utc": "2026-09-13T07:18:48Z",
+    "snapshot_local": "2026-09-13",
+    "auditor": "/root/p3_ledger",
+    "method": "independent credential-free GET captures of official BRDE listing/detail surfaces, sitemap, and principal PDFs; inventory prepared before adapter comparison; no repository diagnostic selector, no other post-repair slot, no production API/DB/workflow mutation",
+    "credentials": "none",
+    "raw_bytes_retained": false,
+    "repo_a_head": "a5275dae46f223da74dc54d0734051acc66a8a9f",
+    "repo_b_head": "2e0dd74ee64b999318dea4cc1767df4985b384ee",
+    "inventory_prepared_before_adapter": true,
+    "auditor_signoff": "/root/p3_ledger",
+    "independent_reviewer": "TODO"
+  },
+  "capture_policy": {
+    "credentials": "none; public credential-free GET only",
+    "retained": "sanitized relevant page extracts, listing rows, lifecycle periods/status evidence, document URLs, response metadata, and SHA-256 hashes",
+    "omitted": "raw HTML, scripts, cookies, authorization headers, nonces, and PDF/document bytes",
+    "comparison_boundary": "the committed adapter function was run only after this source inventory was built",
+    "prohibited_paths": "repository diagnostic selector, other post-repair audit slot, production API/DB/workflow, OCR, and submission"
+  },
+  "surfaces": [
+    {
+      "surface_id": "sitemap_index",
+      "requested_url": "https://brde.com.br/sitemap_index.xml",
+      "final_url": "https://brde.com.br/sitemap_index.xml",
+      "http_status": 200,
+      "content_type": "text/xml; charset=UTF-8",
+      "bytes": 4797,
+      "sha256": "93b7057158a4cf8cf3f91ba6474f11edb7340a6d16a07eb453a008331205858f",
+      "title": null,
+      "headings": [],
+      "fsa_detail_anchor_count": 0,
+      "links_containing_2026": 0,
+      "selected_links": [],
+      "sitemap_urls": [
+        "https://brde.com.br/post-sitemap.xml",
+        "https://brde.com.br/page-sitemap.xml",
+        "https://brde.com.br/banner-sitemap.xml",
+        "https://brde.com.br/banner-menor-sitemap.xml",
+        "https://brde.com.br/linha-financiamento-sitemap.xml",
+        "https://brde.com.br/noticia-sitemap.xml",
+        "https://brde.com.br/noticia-sitemap2.xml",
+        "https://brde.com.br/noticia-sitemap3.xml",
+        "https://brde.com.br/pilar-sitemap.xml",
+        "https://brde.com.br/contato-sitemap.xml",
+        "https://brde.com.br/repasses-sitemap.xml",
+        "https://brde.com.br/ppps-concessoes-sitemap.xml",
+        "https://brde.com.br/compraseservicos-sitemap.xml",
+        "https://brde.com.br/vendadebens-sitemap.xml",
+        "https://brde.com.br/consultatecnica-sitemap.xml",
+        "https://brde.com.br/financiamento-sitemap.xml",
+        "https://brde.com.br/vaga-estagio-sitemap.xml",
+        "https://brde.com.br/parceiro-sitemap.xml",
+        "https://brde.com.br/ativo-sitemap.xml",
+        "https://brde.com.br/category-sitemap.xml",
+        "https://brde.com.br/categoria-noticia-sitemap.xml",
+        "https://brde.com.br/destaque-sitemap.xml",
+        "https://brde.com.br/status-ppps-sitemap.xml",
+        "https://brde.com.br/categoria-ppps-sitemap.xml",
+        "https://brde.com.br/data-sitemap.xml",
+        "https://brde.com.br/data-consulta-sitemap.xml",
+        "https://brde.com.br/ano-sitemap.xml",
+        "https://brde.com.br/categoria-sitemap.xml",
+        "https://brde.com.br/cidade-sitemap.xml",
+        "https://brde.com.br/estado-sitemap.xml",
+        "https://brde.com.br/categoria-pilar-sitemap.xml",
+        "https://brde.com.br/tipo-ativo-sitemap.xml",
+        "https://brde.com.br/tipo-venda-sitemap.xml",
+        "https://brde.com.br/venda-estado-sitemap.xml",
+        "https://brde.com.br/venda-cidade-sitemap.xml",
+        "https://brde.com.br/author-sitemap.xml"
+      ]
+    },
+    {
+      "surface_id": "page_sitemap",
+      "requested_url": "https://brde.com.br/page-sitemap.xml",
+      "final_url": "https://brde.com.br/page-sitemap.xml",
+      "http_status": 200,
+      "content_type": "text/xml; charset=UTF-8",
+      "bytes": 44149,
+      "sha256": "9bcbca3c8f47b18de40ea93713a7c410f85b580bc9d5582349a8b07187a01918",
+      "title": null,
+      "headings": [],
+      "fsa_detail_anchor_count": 0,
+      "links_containing_2026": 0,
+      "selected_links": [],
+      "page_sitemap_2026_urls": [
+        "https://brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-portugal-2026/",
+        "https://brde.com.br/chamada-publica-brde-fsa-desempenho-artistico-produtoras-2026/",
+        "https://brde.com.br/chamada-publica-brde-fsa-nucleos-criativos-2026/",
+        "https://brde.com.br/registro-de-despesas-2026/",
+        "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-distribuidoras-2026/",
+        "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-produtoras-2026/",
+        "https://brde.com.br/chamada-publica-brde-fsa-tv-e-vod-desempenho-comercial-de-produtoras-2026/",
+        "https://brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-argentina-2026/",
+        "https://brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-uruguai-2026/"
+      ]
+    },
+    {
+      "surface_id": "palacete_editais",
+      "requested_url": "https://www.brde.com.br/palacete/editais/",
+      "final_url": "https://www.brde.com.br/palacete/editais/",
+      "http_status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 74197,
+      "sha256": "d1b101a0c975c6f32204316391f51ef4571ad433fc3db96242939531bcffec95",
+      "title": "EDITAIS BRDE CULTURAL \u2013 Palacete dos Le\u00f5es",
+      "headings": [
+        "EDITAIS BRDE CULTURAL",
+        "EDITAL DE PATROC\u00cdNIO BRDE CULTURAL Palacete dos Le\u00f5es 2026",
+        "EDITAL 2026 | Encerrado",
+        "EDITAL DE OCUPA\u00c7\u00c3O 2024 \u2013 2025 |Encerrado",
+        "EDITAL 2019 \u2013 2020 | Encerrado",
+        "Programa\u00e7\u00e3o",
+        "Espa\u00e7o Cultural",
+        "O Palacete",
+        "Visite o Palacete",
+        "Entrada Gratuita",
+        "Hor\u00e1rio de Funcionamento"
+      ],
+      "fsa_detail_anchor_count": 0,
+      "links_containing_2026": 2,
+      "selected_links": [
+        {
+          "label": "Edital de Patroc\u00ednio BRDE Cultural \u2013 Palacete dos Le\u00f5es 2026",
+          "raw_href": "https://www.brde.com.br/palacete/wp-content/uploads/2025/05/Edital-de-Patrocinio-BRDE-Cultural-\u2013-Palacete-dos-Leoes-2026-1.pdf",
+          "resolved_url": "https://www.brde.com.br/palacete/wp-content/uploads/2025/05/Edital-de-Patrocinio-BRDE-Cultural-\u2013-Palacete-dos-Leoes-2026-1.pdf"
+        },
+        {
+          "label": "Formul\u00e1rio de Inscri\u00e7\u00e3o 2026",
+          "raw_href": "https://docs.google.com/forms/d/e/1FAIpQLSdJ71X8UmYzkAECulICKZbdyzEifWe5Rim6qaOJ-x_oolMGNg/viewform",
+          "resolved_url": "https://docs.google.com/forms/d/e/1FAIpQLSdJ71X8UmYzkAECulICKZbdyzEifWe5Rim6qaOJ-x_oolMGNg/viewform"
+        }
+      ],
+      "palacete_2026_sections": [
+        {
+          "heading": "EDITAL DE PATROC\u00cdNIO BRDE CULTURAL Palacete dos Le\u00f5es 2026",
+          "is_closed": false,
+          "links": []
+        },
+        {
+          "heading": "EDITAL 2026 | Encerrado",
+          "is_closed": true,
+          "links": [
+            {
+              "label": "Edital de Patroc\u00ednio BRDE Cultural \u2013 Palacete dos Le\u00f5es 2026",
+              "raw_href": "https://www.brde.com.br/palacete/wp-content/uploads/2025/05/Edital-de-Patrocinio-BRDE-Cultural-\u2013-Palacete-dos-Leoes-2026-1.pdf",
+              "resolved_url": "https://www.brde.com.br/palacete/wp-content/uploads/2025/05/Edital-de-Patrocinio-BRDE-Cultural-\u2013-Palacete-dos-Leoes-2026-1.pdf"
+            },
+            {
+              "label": "ANEXO I \u2013 Declara\u00e7\u00e3o_Patroc\u00ednio BRDE Cultural \u2013 Palacete",
+              "raw_href": "https://www.brde.com.br/palacete/wp-content/uploads/2025/05/ANEXO-I-Declaracao_Patrocinios-BRDE-Cultural-Palacete.pdf",
+              "resolved_url": "https://www.brde.com.br/palacete/wp-content/uploads/2025/05/ANEXO-I-Declaracao_Patrocinios-BRDE-Cultural-Palacete.pdf"
+            },
+            {
+              "label": "ANEXO III \u2013 PLANTA BAIXA E IMAGENS Patroc\u00ednio BRDE Cultural \u2013 Palacete",
+              "raw_href": "https://www.brde.com.br/palacete/wp-content/uploads/2025/05/ANEXO-III-PLANTA-BAIXA-E-IMAGENS-Patrocinios-BRDE-Cultural-Palacete.pdf",
+              "resolved_url": "https://www.brde.com.br/palacete/wp-content/uploads/2025/05/ANEXO-III-PLANTA-BAIXA-E-IMAGENS-Patrocinios-BRDE-Cultural-Palacete.pdf"
+            },
+            {
+              "label": "ANEXO IV \u2013 LGPD_Patroc\u00ednio BRDE Cultural \u2013 Palacete",
+              "raw_href": "https://www.brde.com.br/palacete/wp-content/uploads/2025/05/ANEXO-IV-LGPD_Patrocinios-BRDE-Cultural-Palacete.pdf",
+              "resolved_url": "https://www.brde.com.br/palacete/wp-content/uploads/2025/05/ANEXO-IV-LGPD_Patrocinios-BRDE-Cultural-Palacete.pdf"
+            },
+            {
+              "label": "Projetos Inscritos",
+              "raw_href": "https://www.brde.com.br/palacete/wp-content/uploads/2025/07/Projetos-Inscritos_Edital-Palacete.pdf",
+              "resolved_url": "https://www.brde.com.br/palacete/wp-content/uploads/2025/07/Projetos-Inscritos_Edital-Palacete.pdf"
+            },
+            {
+              "label": "Projeto Selecionado",
+              "raw_href": "https://www.brde.com.br/palacete/wp-content/uploads/2025/07/Projetos-Selecionado_Edital-Palacete-1.pdf",
+              "resolved_url": "https://www.brde.com.br/palacete/wp-content/uploads/2025/07/Projetos-Selecionado_Edital-Palacete-1.pdf"
+            }
+          ]
+        }
+      ],
+      "palacete_2026_pdf_links": [
+        {
+          "label": "Edital de Patroc\u00ednio BRDE Cultural \u2013 Palacete dos Le\u00f5es 2026",
+          "raw_href": "https://www.brde.com.br/palacete/wp-content/uploads/2025/05/Edital-de-Patrocinio-BRDE-Cultural-\u2013-Palacete-dos-Leoes-2026-1.pdf",
+          "resolved_url": "https://www.brde.com.br/palacete/wp-content/uploads/2025/05/Edital-de-Patrocinio-BRDE-Cultural-\u2013-Palacete-dos-Leoes-2026-1.pdf"
+        }
+      ]
+    },
+    {
+      "surface_id": "fsa_investment_root",
+      "requested_url": "https://www.brde.com.br/fsa/chamadas-de-investimento/",
+      "final_url": "https://www.brde.com.br/fsa/chamadas-de-investimento/",
+      "http_status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 106980,
+      "sha256": "3a9324f44c28f22cff3feee6f3f646fa1c5456479f96c59bde033e26d9fad813",
+      "title": "Chamadas de Investimento - BRDE Banco Regional de Desenvolvimento do Extremo Sul",
+      "headings": [
+        "Chamadas de Investimento",
+        "Acesso R\u00e1pido",
+        "Paran\u00e1",
+        "Santa Catarina",
+        "Rio Grande do Sul",
+        "Mato Grosso do Sul",
+        "Rio de Janeiro",
+        "Distrito Federal"
+      ],
+      "fsa_detail_anchor_count": 0,
+      "links_containing_2026": 0,
+      "selected_links": []
+    },
+    {
+      "surface_id": "fsa_calls_index",
+      "requested_url": "https://www.brde.com.br/fsa/chamadas-de-investimento/chamadas-publicas/",
+      "final_url": "https://www.brde.com.br/fsa/chamadas-de-investimento/chamadas-publicas/",
+      "http_status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 102635,
+      "sha256": "26b52cb1b7c28d305bcda49a9f6f03642d5bd42a9d2c7d89123ffa576b776f97",
+      "title": "Chamadas P\u00fablicas - BRDE Banco Regional de Desenvolvimento do Extremo Sul",
+      "headings": [
+        "Chamadas P\u00fablicas",
+        "Acesso R\u00e1pido",
+        "Paran\u00e1",
+        "Santa Catarina",
+        "Rio Grande do Sul",
+        "Mato Grosso do Sul",
+        "Rio de Janeiro",
+        "Distrito Federal"
+      ],
+      "fsa_detail_anchor_count": 0,
+      "links_containing_2026": 0,
+      "selected_links": []
+    },
+    {
+      "surface_id": "fsa_arranjos_regionais",
+      "requested_url": "https://www.brde.com.br/fsa/chamadas-de-investimento/chamadas-publicas/arranjos-regionais/?tab=ci",
+      "final_url": "https://www.brde.com.br/fsa/chamadas-de-investimento/chamadas-publicas/arranjos-regionais/?tab=ci",
+      "http_status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 115193,
+      "sha256": "26375fe97d8390827d16e7567f60edf75c9cab8bc365dfb7ff75f64c5275d19a",
+      "title": "Arranjos Regionais - BRDE Banco Regional de Desenvolvimento do Extremo Sul",
+      "headings": [
+        "Arranjos Regionais",
+        "Acesso R\u00e1pido",
+        "Paran\u00e1",
+        "Santa Catarina",
+        "Rio Grande do Sul",
+        "Mato Grosso do Sul",
+        "Rio de Janeiro",
+        "Distrito Federal"
+      ],
+      "fsa_detail_anchor_count": 0,
+      "links_containing_2026": 0,
+      "selected_links": []
+    },
+    {
+      "surface_id": "fsa_comercializacao",
+      "requested_url": "https://www.brde.com.br/fsa/chamadas-de-investimento/chamadas-publicas/comercializacao/?tab=ci",
+      "final_url": "https://www.brde.com.br/fsa/chamadas-de-investimento/chamadas-publicas/comercializacao/?tab=ci",
+      "http_status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 110899,
+      "sha256": "58f7c24c7c94d6e1ff7b9b506d169b5bd04bb30049a9e51881c810791c57986a",
+      "title": "Comercializa\u00e7\u00e3o - BRDE Banco Regional de Desenvolvimento do Extremo Sul",
+      "headings": [
+        "Comercializa\u00e7\u00e3o",
+        "Acesso R\u00e1pido",
+        "Paran\u00e1",
+        "Santa Catarina",
+        "Rio Grande do Sul",
+        "Mato Grosso do Sul",
+        "Rio de Janeiro",
+        "Distrito Federal"
+      ],
+      "fsa_detail_anchor_count": 4,
+      "links_containing_2026": 0,
+      "selected_links": [
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA Comercializa\u00e7\u00e3o em Cinema 2018",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-comercializacao-em-cinema-2018/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-comercializacao-em-cinema-2018/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODECINE 03/2016",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-03-2016/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-03-2016/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODECINE 03/2013",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-03-2013/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-03-2013/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODECINE 03/2012",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-03-2012/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-03-2012/"
+        }
+      ]
+    },
+    {
+      "surface_id": "fsa_desenvolvimento",
+      "requested_url": "https://www.brde.com.br/fsa/chamadas-de-investimento/chamadas-publicas/desenvolvimento/?tab=ci",
+      "final_url": "https://www.brde.com.br/fsa/chamadas-de-investimento/chamadas-publicas/desenvolvimento/?tab=ci",
+      "http_status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 114432,
+      "sha256": "1ea67ad31d8a40d65e3674770644ac91443bb66e1c1072cabad3956204d85320",
+      "title": "Desenvolvimento - BRDE Banco Regional de Desenvolvimento do Extremo Sul",
+      "headings": [
+        "Desenvolvimento",
+        "Acesso R\u00e1pido",
+        "Paran\u00e1",
+        "Santa Catarina",
+        "Rio Grande do Sul",
+        "Mato Grosso do Sul",
+        "Rio de Janeiro",
+        "Distrito Federal"
+      ],
+      "fsa_detail_anchor_count": 12,
+      "links_containing_2026": 0,
+      "selected_links": [
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 03/2017",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-03-2017/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-03-2017/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 05/2016",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-05-2016/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-05-2016/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 03/2016",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-03-2016/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-03-2016/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 13/2016",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-13-2016/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-13-2016/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 03/2015",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-03-2015/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-03-2015/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 05/2015",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-05-2015/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-05-2015/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 03/2014",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-03-2014/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-03-2014/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 04/2014",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-04-2014/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-04-2014/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 05/2014",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-05-2014/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-05-2014/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 03/2013",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-03-2013/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-03-2013/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 04/2013",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-04-2013/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-04-2013/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 05/2013",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-05-2013/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-05-2013/"
+        }
+      ]
+    },
+    {
+      "surface_id": "fsa_producao",
+      "requested_url": "https://www.brde.com.br/producao/?tab=ci",
+      "final_url": "https://www.brde.com.br/producao/?tab=ci",
+      "http_status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 157436,
+      "sha256": "f0d2ec75a9098dd0f658e1daf764b0cf970d6fd2a921fd2496913fbaa4f6aa58",
+      "title": "Produ\u00e7\u00e3o - BRDE Banco Regional de Desenvolvimento do Extremo Sul",
+      "headings": [
+        "Produ\u00e7\u00e3o",
+        "Acesso R\u00e1pido",
+        "Paran\u00e1",
+        "Santa Catarina",
+        "Rio Grande do Sul",
+        "Mato Grosso do Sul",
+        "Rio de Janeiro",
+        "Distrito Federal"
+      ],
+      "fsa_detail_anchor_count": 72,
+      "links_containing_2026": 8,
+      "selected_links": [
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 TV E VOD: DESEMPENHO COMERCIAL DE PRODUTORAS 2026",
+          "raw_href": "https://brde.com.br/chamada-publica-brde-fsa-tv-e-vod-desempenho-comercial-de-produtoras-2026",
+          "resolved_url": "https://brde.com.br/chamada-publica-brde-fsa-tv-e-vod-desempenho-comercial-de-produtoras-2026"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 N\u00daCLEOS CRIATIVOS \u2013 2026",
+          "raw_href": "https://brde.com.br/chamada-publica-brde-fsa-nucleos-criativos-2026",
+          "resolved_url": "https://brde.com.br/chamada-publica-brde-fsa-nucleos-criativos-2026"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 DESEMPENHO ART\u00cdSTICO \u2013 PRODUTORAS 2026",
+          "raw_href": "https://brde.com.br/chamada-publica-brde-fsa-desempenho-artistico-produtoras-2026/",
+          "resolved_url": "https://brde.com.br/chamada-publica-brde-fsa-desempenho-artistico-produtoras-2026/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 COPRODU\u00c7\u00c3O BRASIL-ARGENTINA \u2013 2026",
+          "raw_href": "http://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-argentina-2026",
+          "resolved_url": "http://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-argentina-2026"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 COPRODU\u00c7\u00c3O BRASIL-PORTUGAL \u2013 2026",
+          "raw_href": "http://www.brde.com.br/ chamada-publica-brde-fsa-coproducao-brasil-portugal-2026/",
+          "resolved_url": "http://www.brde.com.br/ chamada-publica-brde-fsa-coproducao-brasil-portugal-2026/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 CINEMA: DESEMPENHO COMERCIAL DE PRODUTORAS \u2013 2026",
+          "raw_href": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-produtoras-2026/",
+          "resolved_url": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-produtoras-2026/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 CINEMA: DESEMPENHO COMERCIAL DE DISTRIBUIDORAS \u2013 2026",
+          "raw_href": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-distribuidoras-2026/",
+          "resolved_url": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-distribuidoras-2026/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 COPRODU\u00c7\u00c3O BRASIL-URUGUAI \u2013 2026",
+          "raw_href": "https://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-uruguai-2026/",
+          "resolved_url": "https://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-uruguai-2026/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 TV E VOD: DESEMPENHO COMERCIAL DE PROGRAMADORAS \u2013 2025",
+          "raw_href": "https://www.brde.com.br/chamada-publica-brde-fsa-tv-e-vod-desempenho-comercial-de-programadoras-2025/",
+          "resolved_url": "https://www.brde.com.br/chamada-publica-brde-fsa-tv-e-vod-desempenho-comercial-de-programadoras-2025/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 COPRODU\u00c7\u00c3O BRASIL-PORTUGAL \u2013 2025",
+          "raw_href": "http://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-portugal-2025/",
+          "resolved_url": "http://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-portugal-2025/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 COPRODU\u00c7\u00c3O BRASIL-URUGUAI \u2013 2025",
+          "raw_href": "http://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-uruguai-2025/",
+          "resolved_url": "http://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-uruguai-2025/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 TV E VOD: DESEMPENHO COMERCIAL DE PRODUTORAS 2024",
+          "raw_href": "https://www.brde.com.br/chamada-publica-brde-fsa-tv-e-vod-desempenho-comercial-de-produtoras-2024/",
+          "resolved_url": "https://www.brde.com.br/chamada-publica-brde-fsa-tv-e-vod-desempenho-comercial-de-produtoras-2024/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 CINEMA: DESEMPENHO ART\u00cdSTICO \u2013 2\u00aa edi\u00e7\u00e3o \u2013 2024",
+          "raw_href": "https://www.brde.com.br/chamada-publica-brde-fsa-producao-cinema-desempenho-artistico-2a-edicao-2024/",
+          "resolved_url": "https://www.brde.com.br/chamada-publica-brde-fsa-producao-cinema-desempenho-artistico-2a-edicao-2024/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 PRODU\u00c7\u00c3O CINEMA: DESEMPENHO COMERCIAL DE PRODUTORAS \u2013 2\u00aa EDI\u00c7\u00c3O \u2013 2024",
+          "raw_href": "https://www.brde.com.br/chamada-publica-brde-fsa-producao-cinema-desempenho-comercial-de-produtoras-2a-edicao-2024/",
+          "resolved_url": "https://www.brde.com.br/chamada-publica-brde-fsa-producao-cinema-desempenho-comercial-de-produtoras-2a-edicao-2024/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 PRODU\u00c7\u00c3O SELETIVO TV-VOD \u2013 2024",
+          "raw_href": "https://www.brde.com.br/chamada-publica-brde-fsa-producao-seletivo-tv-vod-2024/",
+          "resolved_url": "https://www.brde.com.br/chamada-publica-brde-fsa-producao-seletivo-tv-vod-2024/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 CINEMA: DESEMPENHO COMERCIAL DE DISTRIBUIDORAS \u2013 2024",
+          "raw_href": "https://www.brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-distribuidoras-2024/",
+          "resolved_url": "https://www.brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-distribuidoras-2024/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 PRODU\u00c7\u00c3O SELETIVO CINEMA \u2013 2024",
+          "raw_href": "https://www.brde.com.br/chamada-publica-brde-fsa-producao-seletivo-cinema-2024/",
+          "resolved_url": "https://www.brde.com.br/chamada-publica-brde-fsa-producao-seletivo-cinema-2024/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 COPRODU\u00c7\u00c3O BRASIL-PORTUGAL \u2013 2024",
+          "raw_href": "http://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-portugal-2024/",
+          "resolved_url": "http://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-portugal-2024/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 COPRODU\u00c7\u00c3O BRASIL-URUGUAI \u2013 2024",
+          "raw_href": "http://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-uruguai-2024",
+          "resolved_url": "http://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-uruguai-2024"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 PRODU\u00c7\u00c3O CINEMA: DESEMPENHO COMERCIAL DE PRODUTORAS 2024",
+          "raw_href": "http://www.brde.com.br/chamada-publica-brde-fsa-producao-cinema-desempenho-comercial-de-produtoras-2024/",
+          "resolved_url": "http://www.brde.com.br/chamada-publica-brde-fsa-producao-cinema-desempenho-comercial-de-produtoras-2024/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 PRODU\u00c7\u00c3O CINEMA: DESEMPENHO ART\u00cdSTICO 2024",
+          "raw_href": "http://www.brde.com.br/chamada-publica-brde-fsa-producao-cinema-desempenho-artistico-2024/",
+          "resolved_url": "http://www.brde.com.br/chamada-publica-brde-fsa-producao-cinema-desempenho-artistico-2024/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 PRODU\u00c7\u00c3O CINEMA: DESEMPENHO COMERCIAL DE DISTRIBUIDORAS \u2013 2023",
+          "raw_href": "http://www.brde.com.br/chamada-publica-brde-fsa-producao-cinema-desempenho-comercial-de-distribuidoras-2023/",
+          "resolved_url": "http://www.brde.com.br/chamada-publica-brde-fsa-producao-cinema-desempenho-comercial-de-distribuidoras-2023/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 COPRODU\u00c7\u00c3O INTERNACIONAL CINEMA \u2013 2023",
+          "raw_href": "http://www.brde.com.br/chamada-publica-brde-fsa-coproducao-internacional-cinema-2023/",
+          "resolved_url": "http://www.brde.com.br/chamada-publica-brde-fsa-coproducao-internacional-cinema-2023/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 COPRODU\u00c7\u00c3O BRASIL-PORTUGAL \u2013 2023",
+          "raw_href": "http://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-portugal-2023/",
+          "resolved_url": "http://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-portugal-2023/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 PRODU\u00c7\u00c3O TV-VOD \u2013 2023",
+          "raw_href": "http://www.brde.com.br/chamada-publica-brde-fsa-producao-tv-vod-2023/",
+          "resolved_url": "http://www.brde.com.br/chamada-publica-brde-fsa-producao-tv-vod-2023/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 PRODU\u00c7\u00c3O CINEMA \u2013 2023",
+          "raw_href": "http://www.brde.com.br/chamada-publica-brde-fsa-producao-cinema-2023/",
+          "resolved_url": "http://www.brde.com.br/chamada-publica-brde-fsa-producao-cinema-2023/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 PRODU\u00c7\u00c3O CINEMA VIA DISTRIBUIDORA \u2013 2023",
+          "raw_href": "http://www.brde.com.br/chamada-publica-brde-fsa-producao-cinema-via-distribuidora-2023",
+          "resolved_url": "http://www.brde.com.br/chamada-publica-brde-fsa-producao-cinema-via-distribuidora-2023"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 PRODU\u00c7\u00c3O TV/VOD \u2013 VIA PROGRAMADORA \u2013 2022",
+          "raw_href": "http://www.brde.com.br/chamada-publica-brde-fsa-tv-vod-via-programadora-2022/",
+          "resolved_url": "http://www.brde.com.br/chamada-publica-brde-fsa-tv-vod-via-programadora-2022/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODU\u00c7\u00c3O TV-VOD NOVOS REALIZADORES 2022",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-tv-vod-novos-realizadores-2022/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-tv-vod-novos-realizadores-2022/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODU\u00c7\u00c3O TV-VOD 2022",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-producao-tv-vod-2022/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-producao-tv-vod-2022/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA CINEMA VIA DISTRIBUIDORA 2022",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-cinema-via-distribuidora-2022/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-cinema-via-distribuidora-2022/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA CINEMA: DESEMPENHO COMERCIAL 2022",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-cinema-desempenho-comercial-2022/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-cinema-desempenho-comercial-2022/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA Coprodu\u00e7\u00e3o Internacional Cinema 2022",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-coproducao-internacional-cinema-2022/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-coproducao-internacional-cinema-2022/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA Produ\u00e7\u00e3o Cinema 2022",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-producao-cinema-2022/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-producao-cinema-2022/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA Cinema \u2013 Novos Realizadores 2022",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-cinema-novos-realizadores-2022/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-cinema-novos-realizadores-2022/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA Complementa\u00e7\u00e3o 2021",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-complementacao-2021/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-complementacao-2021/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA Concurso Produ\u00e7\u00e3o para Cinema 2018 \u2013 Coprodu\u00e7\u00e3o Chile-Brasil",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-concurso-producao-para-cinema-2018-coproducao-chile-brasil/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-concurso-producao-para-cinema-2018-coproducao-chile-brasil/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA Coprodu\u00e7\u00e3o Internacional 2019",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-coproducao-internacional-2019/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-coproducao-internacional-2019/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA Concurso Produ\u00e7\u00e3o para Cinema 2018",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-concurso-producao-para-cinema-2018/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-concurso-producao-para-cinema-2018/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA Fluxo Cont\u00ednuo Produ\u00e7\u00e3o para Cinema 2018",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-fluxo-continuo-producao-para-cinema-2018/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-fluxo-continuo-producao-para-cinema-2018/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA Fluxo Cont\u00ednuo Produ\u00e7\u00e3o para Televis\u00e3o 2018",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-fluxo-continuo-producao-para-televisao-2018/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-fluxo-continuo-producao-para-televisao-2018/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA Concurso Produ\u00e7\u00e3o para Cinema 2018 \u2013 Coprodu\u00e7\u00e3o Uruguai-Brasil",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-concurso-producao-para-cinema-2018-coproducao-uruguai-brasil/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-concurso-producao-para-cinema-2018-coproducao-uruguai-brasil/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA Concurso Produ\u00e7\u00e3o para Cinema 2018 \u2013 Coprodu\u00e7\u00e3o Portugal-Brasil",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-concurso-producao-para-cinema-2018-coproducao-portugal-brasil/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-concurso-producao-para-cinema-2018-coproducao-portugal-brasil/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODECINE 07/2017",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-07-2017/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-07-2017/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODECINE 08/2017",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-08-2017/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-08-2017/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODECINE 09/2017",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-09-2017/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-09-2017/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODECINE 10/2017",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-10-2017/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-10-2017/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODECINE 12/2017",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-12-2017/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-12-2017/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 14/2017",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-12-2017/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-12-2017/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODECINE 01/2016",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-01-2016/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-01-2016/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODECINE 02/2016",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-02-2016/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-02-2016/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODECINE 05/2016",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-05-2016/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-05-2016/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODECINE 07/2016",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-07-2016/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-07-2016/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODECINE 08/2016",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-08-2016/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-08-2016/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODECINE 09/2016",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-09-2016/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-09-2016/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODECINE 10/2016",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-10-2016/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-10-2016/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 02/2016",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-02-2016/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-02-2016/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 14/2016",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-14-2016/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-14-2016/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODECINE 01/2015",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-01-2015/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-01-2015/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODECINE 05/2015",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-05-2015/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-05-2015/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODECINE 06/2015",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-06-2015/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-06-2015/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODECINE 01/2014",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-01-2014/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-01-2014/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODECINE 05/2014",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-05-2014/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-05-2014/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODECINE 01/2013",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-01-2013/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-01-2013/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODECINE 02/2013",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-02-2013/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-02-2013/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODECINE 04/2013",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-04-2013/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-04-2013/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODECINE 05/2013",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-05-2013/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-05-2013/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 01/2013",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-01-2013/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-01-2013/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 02/2013",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-02-2013/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-02-2013/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODECINE 01/2012",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-01-2012/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-01-2012/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODECINE 02/2012",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-02-2012/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodecine-02-2012/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 01/2012",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-01-2012/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-01-2012/"
+        }
+      ],
+      "production_2026_rows": [
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 TV E VOD: DESEMPENHO COMERCIAL DE PRODUTORAS 2026",
+          "raw_href": "https://brde.com.br/chamada-publica-brde-fsa-tv-e-vod-desempenho-comercial-de-produtoras-2026",
+          "resolved_url": "https://brde.com.br/chamada-publica-brde-fsa-tv-e-vod-desempenho-comercial-de-produtoras-2026",
+          "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-tv-e-vod-desempenho-comercial-de-produtoras-2026",
+          "row_text": "Chamada P\u00fablica BRDE/FSA \u2013 TV E VOD: DESEMPENHO COMERCIAL DE PRODUTORAS 2026"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 N\u00daCLEOS CRIATIVOS \u2013 2026",
+          "raw_href": "https://brde.com.br/chamada-publica-brde-fsa-nucleos-criativos-2026",
+          "resolved_url": "https://brde.com.br/chamada-publica-brde-fsa-nucleos-criativos-2026",
+          "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-nucleos-criativos-2026",
+          "row_text": "Chamada P\u00fablica BRDE/FSA \u2013 N\u00daCLEOS CRIATIVOS \u2013 2026"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 DESEMPENHO ART\u00cdSTICO \u2013 PRODUTORAS 2026",
+          "raw_href": "https://brde.com.br/chamada-publica-brde-fsa-desempenho-artistico-produtoras-2026/",
+          "resolved_url": "https://brde.com.br/chamada-publica-brde-fsa-desempenho-artistico-produtoras-2026/",
+          "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-desempenho-artistico-produtoras-2026",
+          "row_text": "Chamada P\u00fablica BRDE/FSA \u2013 DESEMPENHO ART\u00cdSTICO \u2013 PRODUTORAS 2026"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 COPRODU\u00c7\u00c3O BRASIL-ARGENTINA \u2013 2026",
+          "raw_href": "http://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-argentina-2026",
+          "resolved_url": "http://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-argentina-2026",
+          "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-argentina-2026",
+          "row_text": "Chamada P\u00fablica BRDE/FSA \u2013 COPRODU\u00c7\u00c3O BRASIL-ARGENTINA \u2013 2026 (Inscri\u00e7\u00f5es encerradas)"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 COPRODU\u00c7\u00c3O BRASIL-PORTUGAL \u2013 2026",
+          "raw_href": "http://www.brde.com.br/ chamada-publica-brde-fsa-coproducao-brasil-portugal-2026/",
+          "resolved_url": "http://www.brde.com.br/ chamada-publica-brde-fsa-coproducao-brasil-portugal-2026/",
+          "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-portugal-2026",
+          "row_text": "Chamada P\u00fablica BRDE/FSA \u2013 COPRODU\u00c7\u00c3O BRASIL-PORTUGAL \u2013 2026"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 CINEMA: DESEMPENHO COMERCIAL DE PRODUTORAS \u2013 2026",
+          "raw_href": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-produtoras-2026/",
+          "resolved_url": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-produtoras-2026/",
+          "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-produtoras-2026",
+          "row_text": "Chamada P\u00fablica BRDE/FSA \u2013 CINEMA: DESEMPENHO COMERCIAL DE PRODUTORAS \u2013 2026 (Inscri\u00e7\u00f5es encerradas para Benefici\u00e1rios Indiretos)"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 CINEMA: DESEMPENHO COMERCIAL DE DISTRIBUIDORAS \u2013 2026",
+          "raw_href": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-distribuidoras-2026/",
+          "resolved_url": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-distribuidoras-2026/",
+          "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-distribuidoras-2026",
+          "row_text": "Chamada P\u00fablica BRDE/FSA \u2013 CINEMA: DESEMPENHO COMERCIAL DE DISTRIBUIDORAS \u2013 2026 (Inscri\u00e7\u00f5es encerradas para Benefici\u00e1rios Indiretos)"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA \u2013 COPRODU\u00c7\u00c3O BRASIL-URUGUAI \u2013 2026",
+          "raw_href": "https://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-uruguai-2026/",
+          "resolved_url": "https://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-uruguai-2026/",
+          "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-uruguai-2026",
+          "row_text": "Chamada P\u00fablica BRDE/FSA \u2013 COPRODU\u00c7\u00c3O BRASIL-URUGUAI \u2013 2026 (Inscri\u00e7\u00f5es encerradas)"
+        }
+      ]
+    },
+    {
+      "surface_id": "fsa_suporte_automatico",
+      "requested_url": "https://www.brde.com.br/fsa/chamadas-de-investimento/chamadas-publicas/suporte-automatico/?tab=ci",
+      "final_url": "https://www.brde.com.br/fsa/chamadas-de-investimento/chamadas-publicas/suporte-automatico/?tab=ci",
+      "http_status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 115480,
+      "sha256": "0da852e528a5202fccadda4619ead934699a67d233b75f310263958ead27040e",
+      "title": "Suporte Autom\u00e1tico - BRDE Banco Regional de Desenvolvimento do Extremo Sul",
+      "headings": [
+        "Suporte Autom\u00e1tico",
+        "Acesso R\u00e1pido",
+        "Paran\u00e1",
+        "Santa Catarina",
+        "Rio Grande do Sul",
+        "Mato Grosso do Sul",
+        "Rio de Janeiro",
+        "Distrito Federal"
+      ],
+      "fsa_detail_anchor_count": 11,
+      "links_containing_2026": 0,
+      "selected_links": [
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA Suporte Autom\u00e1tico \u2013 Desempenho Art\u00edstico 2018",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-suporte-automatico-desempenho-artistico-2018/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-suporte-automatico-desempenho-artistico-2018/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA Suporte Autom\u00e1tico \u2013 Desempenho Comercial Cinema 2018",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-suporte-automatico-desempenho-comercial-cinema-2018/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-suporte-automatico-desempenho-comercial-cinema-2018/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA Suporte Autom\u00e1tico \u2013 Desempenho Comercial TV e VOD 2018",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-suporte-automatico-desempenho-comercial-tv-e-vod-2018/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-suporte-automatico-desempenho-comercial-tv-e-vod-2018/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 06/2017",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-06-2017/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-06-2017/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 07/2017",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-07-2017/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-07-2017/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 06/2016",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-06-2016/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-06-2016/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 07/2016",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-07-2016/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-07-2016/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 06/2015",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-06-2015/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-06-2015/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 07/2015",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-07-2015/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-07-2015/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 06/2013-2014",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-06-2013-2014/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-06-2013-2014/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 07/2014",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-07-2014/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-07-2014/"
+        }
+      ]
+    },
+    {
+      "surface_id": "fsa_tvs_publicas",
+      "requested_url": "https://www.brde.com.br/fsa/chamadas-de-investimento/chamadas-publicas/tvs-publicas/?tab=ci",
+      "final_url": "https://www.brde.com.br/fsa/chamadas-de-investimento/chamadas-publicas/tvs-publicas/?tab=ci",
+      "http_status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 114077,
+      "sha256": "f4d296fec5690d8ae6763610556abb514574ed916ba67220b115c4a14d940e88",
+      "title": "TVs P\u00fablicas - BRDE Banco Regional de Desenvolvimento do Extremo Sul",
+      "headings": [
+        "TVs P\u00fablicas",
+        "Acesso R\u00e1pido",
+        "Paran\u00e1",
+        "Santa Catarina",
+        "Rio Grande do Sul",
+        "Mato Grosso do Sul",
+        "Rio de Janeiro",
+        "Distrito Federal"
+      ],
+      "fsa_detail_anchor_count": 11,
+      "links_containing_2026": 0,
+      "selected_links": [
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV \u2013 TVS P\u00daBLICAS \u2013 2018",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-tvs-publicas-2018/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-tvs-publicas-2018/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 08/2015 \u2013 Norte",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-08-2015-norte/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-08-2015-norte/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 09/2015 \u2013 Nordeste",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-09-2015-nordeste/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-09-2015-nordeste/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 10/2015 \u2013 Centro-Oeste",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-10-2015-centro-oeste/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-10-2015-centro-oeste/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 11/2015 \u2013 Sudeste",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-11-2015-sudeste/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-11-2015-sudeste/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 12/2015 \u2013 Sul",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-12-2015-sul/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-12-2015-sul/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 08/2014 \u2013 Norte",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-08-2014-norte/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-08-2014-norte/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 09/2014 \u2013 Nordeste",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-09-2014-nordeste/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-09-2014-nordeste/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 10/2014 \u2013 Centro-Oeste",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-10-2014-centro-oeste/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-10-2014-centro-oeste/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 11/2014 \u2013 Sudeste",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-11-2014-sudeste/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-11-2014-sudeste/"
+        },
+        {
+          "label": "Chamada P\u00fablica BRDE/FSA PRODAV 12/2014 \u2013 Sul",
+          "raw_href": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-12-2014-sul/",
+          "resolved_url": "http://www.brde.com.br/fsa/chamada-publica-brde-fsa-prodav-12-2014-sul/"
+        }
+      ]
+    },
+    {
+      "surface_id": "fsa_infraestrutura",
+      "requested_url": "https://www.brde.com.br/fsa/chamadas-de-investimento/chamadas-publicas/infraestrutura/?tab=ci",
+      "final_url": "https://www.brde.com.br/fsa/chamadas-de-investimento/chamadas-publicas/infraestrutura/?tab=ci",
+      "http_status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 109754,
+      "sha256": "2986f98850e635c67a89ad99deca83d1cb5536d636777c96d626f07fb6b242c6",
+      "title": "Infraestrutura - BRDE Banco Regional de Desenvolvimento do Extremo Sul",
+      "headings": [
+        "Infraestrutura",
+        "Acesso R\u00e1pido",
+        "Paran\u00e1",
+        "Santa Catarina",
+        "Rio Grande do Sul",
+        "Mato Grosso do Sul",
+        "Rio de Janeiro",
+        "Distrito Federal"
+      ],
+      "fsa_detail_anchor_count": 0,
+      "links_containing_2026": 0,
+      "selected_links": []
+    },
+    {
+      "surface_id": "fsa_resultados",
+      "requested_url": "https://www.brde.com.br/fsa/chamadas-de-investimento/resultados/",
+      "final_url": "https://www.brde.com.br/fsa/chamadas-de-investimento/resultados/",
+      "http_status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 116673,
+      "sha256": "7553452d9d1d58dece2a75008f95650271f2c3df228a9b32a6ec06fd59d4e5fd",
+      "title": "Resultados - BRDE Banco Regional de Desenvolvimento do Extremo Sul",
+      "headings": [
+        "Resultados",
+        "Resultados Finais \u2013 Fluxo Cont\u00ednuo",
+        "Acesso R\u00e1pido",
+        "Paran\u00e1",
+        "Santa Catarina",
+        "Rio Grande do Sul",
+        "Mato Grosso do Sul",
+        "Rio de Janeiro",
+        "Distrito Federal"
+      ],
+      "fsa_detail_anchor_count": 0,
+      "links_containing_2026": 0,
+      "selected_links": []
+    },
+    {
+      "surface_id": "incentivos_fiscais",
+      "requested_url": "https://www.brde.com.br/incentivos/incentivos-fiscais/",
+      "final_url": "https://www.brde.com.br/incentivos/incentivos-fiscais/",
+      "http_status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 103600,
+      "sha256": "510bef808cd21948b4e478016c6eb9c8314ce427e8f22b50a280382a379f5b65",
+      "title": "Incentivos Fiscais - BRDE Banco Regional de Desenvolvimento do Extremo Sul",
+      "headings": [
+        "Incentivos Fiscais",
+        "EDITAL INCENTIVOS FISCAIS 2026",
+        "Acesso R\u00e1pido",
+        "Paran\u00e1",
+        "Santa Catarina",
+        "Rio Grande do Sul",
+        "Mato Grosso do Sul",
+        "Rio de Janeiro",
+        "Distrito Federal"
+      ],
+      "fsa_detail_anchor_count": 0,
+      "links_containing_2026": 4,
+      "selected_links": [
+        {
+          "label": "EDITAL INCENTIVOS FISCAIS 2026",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/06/Edital-de-Incentivos-Fiscais-2026.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/06/Edital-de-Incentivos-Fiscais-2026.pdf"
+        },
+        {
+          "label": "Paran\u00e1",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/01/incentivos_fiscais_pr_-_brde_0.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/01/incentivos_fiscais_pr_-_brde_0.pdf"
+        },
+        {
+          "label": "Santa Catarina",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/01/Incentivos-Fiscais-2025-SC.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/01/Incentivos-Fiscais-2025-SC.pdf"
+        },
+        {
+          "label": "Rio Grande do Sul",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/01/PROJETOS-APOIADOS-RS-ATUALIZADO.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/01/PROJETOS-APOIADOS-RS-ATUALIZADO.pdf"
+        }
+      ]
+    },
+    {
+      "surface_id": "concursos",
+      "requested_url": "https://www.brde.com.br/transparencia/concursos/",
+      "final_url": "https://www.brde.com.br/transparencia/concursos/",
+      "http_status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 175581,
+      "sha256": "3ffdbec783ad9c4e51f93321565565ac696f9e8d3b4c4eeb4c47be8acab2aea0",
+      "title": "Concursos - BRDE Banco Regional de Desenvolvimento do Extremo Sul",
+      "headings": [
+        "Concursos",
+        "Acesso R\u00e1pido",
+        "Paran\u00e1",
+        "Santa Catarina",
+        "Rio Grande do Sul",
+        "Mato Grosso do Sul",
+        "Rio de Janeiro",
+        "Distrito Federal"
+      ],
+      "fsa_detail_anchor_count": 0,
+      "links_containing_2026": 19,
+      "selected_links": [
+        {
+          "label": "02/09/2026 - Informa\u00e7\u00f5es Convoca\u00e7\u00f5es at\u00e9 07/08/2026 \u2013 Concurso 2025",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/09/Informacoes-Convocacoes-Ate-2026-09-02-concurso-2025.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/09/Informacoes-Convocacoes-Ate-2026-09-02-concurso-2025.pdf"
+        },
+        {
+          "label": "21/05/2026 - Edital N\u00ba 15/2026 \u2013 Homologa\u00e7\u00e3o do Resultado Final do Concurso P\u00fablico \u2013 Cargos de Analista",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/05/979_Edital_15-2025_Edital_Homologacao_Final_Analista.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/05/979_Edital_15-2025_Edital_Homologacao_Final_Analista.pdf"
+        },
+        {
+          "label": "06/05/2026 \u2013 Edital N\u00ba 14/2026 \u2013 Retifica\u00e7\u00e3o do Cronograma de Execu\u00e7\u00e3o",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/05/979_Edital_14-2026_Retificacao_Cronograma.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/05/979_Edital_14-2026_Retificacao_Cronograma.pdf"
+        },
+        {
+          "label": "13/04/2026 \u2013 Edital N\u00ba 13/2026 \u2013 Retifica\u00e7\u00e3o do Cronograma de Execu\u00e7\u00e3o",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/04/979_Edital_13-2026_Retificacao_Cronograma.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/04/979_Edital_13-2026_Retificacao_Cronograma.pdf"
+        },
+        {
+          "label": "02/04/2026 \u2013 Edital N\u00ba 12/2026 \u2013 Divulga\u00e7\u00e3o das Notas Definitivas da Prova de T\u00edtulos",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/04/979_Edital_12-2026_Notas_Definitivas_das_Provas_de_Titulos.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/04/979_Edital_12-2026_Notas_Definitivas_das_Provas_de_Titulos.pdf"
+        },
+        {
+          "label": "20/03/2026 \u2013 Edital N\u00ba 11/2026 \u2013 Divulga\u00e7\u00e3o das Notas Preliminares da Prova de T\u00edtulos",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/03/979_Edital_11-2026_Notas_Preliminares_Prova_de_Titulos.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/03/979_Edital_11-2026_Notas_Preliminares_Prova_de_Titulos.pdf"
+        },
+        {
+          "label": "13/03/2026 - Edital N\u00ba 10/2026 \u2013 Retifica\u00e7\u00e3o do Edital n\u00ba 08/2026 \u2013 Divulga\u00e7\u00e3o das Notas Definitivas da Prova Discursiva",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/03/979_Edital_10-2026_Retificacao_Discursivas.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/03/979_Edital_10-2026_Retificacao_Discursivas.pdf"
+        },
+        {
+          "label": "13/03/2026 - Edital N\u00ba 09/2026 \u2013 Retifica\u00e7\u00e3o do Edital n\u00ba 07/2026 \u2013 Homologa\u00e7\u00e3o do Resultado Final do Concurso P\u00fablico \u2013 Cargos de Assistente Administrativo",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/03/979_Edital_09-2026_Retificacao_do_Edital_Homologacao_Final_Assistente.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/03/979_Edital_09-2026_Retificacao_do_Edital_Homologacao_Final_Assistente.pdf"
+        },
+        {
+          "label": "04/03/2026 \u2013 Lista dos Aprovados para Entrega de T\u00edtulos",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/03/Listados_Aprovados_para_Entrega_de_Titulos.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/03/Listados_Aprovados_para_Entrega_de_Titulos.pdf"
+        },
+        {
+          "label": "03/03/2026 \u2013 Edital N\u00ba 08/2026 \u2013 Divulga\u00e7\u00e3o das Notas Definitivas da Prova Discursiva",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/03/979_Edital_08-2026_Notas_Definitivas_Discursivas.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/03/979_Edital_08-2026_Notas_Definitivas_Discursivas.pdf"
+        },
+        {
+          "label": "20/02/2026 \u2013 Edital N\u00ba 07/2026 \u2013 Homologa\u00e7\u00e3o do Resultado Final do Concurso P\u00fablico \u2013 Cargos de Assistente Administrativo",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/02/979_Edital_07-2026_Edital_Homologacao_Final_Assistente_Administrativo.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/02/979_Edital_07-2026_Edital_Homologacao_Final_Assistente_Administrativo.pdf"
+        },
+        {
+          "label": "11/02/2026 \u2013 Edital N\u00ba 06/2026 \u2013 Divulga\u00e7\u00e3o das Notas Preliminares da Prova Discursiva \u2013 Cargo de Analista",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/02/979_Edital_06-2026_NotasPreliminares_Discursivas.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/02/979_Edital_06-2026_NotasPreliminares_Discursivas.pdf"
+        },
+        {
+          "label": "29/01/2026 \u2013 Edital N\u00ba 05/2026 \u2013 Retifica\u00e7\u00e3o do Edital N\u00ba 04/2026 \u2013 Realiza\u00e7\u00e3o de Sorteio P\u00fablico de Desempate",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/01/979_Edital_05-2026_Retificao_Edital_04-2026.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/01/979_Edital_05-2026_Retificao_Edital_04-2026.pdf"
+        },
+        {
+          "label": "21/01/2026 \u2013 Edital N\u00ba 04/2026 \u2013 Realiza\u00e7\u00e3o de Sorteio P\u00fablico de Desempate - Cargo de Assistente Administrativo",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/01/979_Edital_04-2026_Convocacao_Sorteio_PAblico_697121724b2ee.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/01/979_Edital_04-2026_Convocacao_Sorteio_PAblico_697121724b2ee.pdf"
+        },
+        {
+          "label": "21/01/2026 \u2013 Lista dos Aprovados para corre\u00e7\u00e3o da Prova de Discursiva",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/01/ListadosAprovadosparacorreAAodaProvadeDiscursiva_6970d8662ae4c.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/01/ListadosAprovadosparacorreAAodaProvadeDiscursiva_6970d8662ae4c.pdf"
+        },
+        {
+          "label": "20/01/2026 \u2013 Edital N\u00ba 03/2026 \u2013 Retifica\u00e7\u00e3o do Edital de Abertura",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/01/979_Edital_03-2026_RetificaAAoCronograma_696f9a085cb1a.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/01/979_Edital_03-2026_RetificaAAoCronograma_696f9a085cb1a.pdf"
+        },
+        {
+          "label": "19/01/2026 \u2013 Edital n\u00ba 02/2026 \u2013 Resultado Definitivo do Procedimento de Heteroidentifica\u00e7\u00e3o \u2013 Pessoas Negras e Integrantes dos Povos Ind\u00edgenas",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/01/979_Edital_02-2026_ResultadoDefinitivodoProcedimentodeHeteroidentificaAAo_Combinado_696e84438053a.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/01/979_Edital_02-2026_ResultadoDefinitivodoProcedimentodeHeteroidentificaAAo_Combinado_696e84438053a.pdf"
+        },
+        {
+          "label": "06/01/2026 \u2013 Edital N\u00ba 01/2026 \u2013 Resultado Preliminar do Procedimento de Heteroidentifica\u00e7\u00e3o \u2013 Candidatos Autodeclarados Negros e Integrantes dos Povos Ind\u00edgenas",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/01/979_Edital_01-2026_ResultadoPreliminar_HeteroidentificaAAo_combinado_695d25dc98be8.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/01/979_Edital_01-2026_ResultadoPreliminar_HeteroidentificaAAo_combinado_695d25dc98be8.pdf"
+        },
+        {
+          "label": "Edital de Abertura Consolidado",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/03/Edital_abertura_consolidado_05_02_2026.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/03/Edital_abertura_consolidado_05_02_2026.pdf"
+        }
+      ]
+    },
+    {
+      "surface_id": "licitacoes",
+      "requested_url": "https://www.brde.com.br/licitacoes/",
+      "final_url": "https://www.brde.com.br/licitacoes/",
+      "http_status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 101848,
+      "sha256": "71fd46a9cbf28d2b4b07cf4e65460aae63ef6b7eaeb4c71e7050eb140c5edcdf",
+      "title": "Licita\u00e7\u00f5es - BRDE Banco Regional de Desenvolvimento do Extremo Sul",
+      "headings": [
+        "Licita\u00e7\u00f5es",
+        "Acesso R\u00e1pido",
+        "Paran\u00e1",
+        "Santa Catarina",
+        "Rio Grande do Sul",
+        "Mato Grosso do Sul",
+        "Rio de Janeiro",
+        "Distrito Federal"
+      ],
+      "fsa_detail_anchor_count": 0,
+      "links_containing_2026": 0,
+      "selected_links": []
+    },
+    {
+      "surface_id": "compras_servicos",
+      "requested_url": "https://www.brde.com.br/licitacoes/compras-e-servicos/",
+      "final_url": "https://www.brde.com.br/licitacoes/compras-e-servicos/",
+      "http_status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 138555,
+      "sha256": "89348699115571b2f64e99671b561fde4cd0d727fd98f91db959e84c83cef1e3",
+      "title": "Compras e Servi\u00e7os - BRDE Banco Regional de Desenvolvimento do Extremo Sul",
+      "headings": [
+        "Compras e Servi\u00e7os",
+        "Acesso R\u00e1pido",
+        "Paran\u00e1",
+        "Santa Catarina",
+        "Rio Grande do Sul",
+        "Mato Grosso do Sul",
+        "Rio de Janeiro",
+        "Distrito Federal"
+      ],
+      "fsa_detail_anchor_count": 0,
+      "links_containing_2026": 7,
+      "selected_links": [
+        {
+          "label": "2026/000151",
+          "raw_href": "https://brde.com.br/compraseservicos/2026-000151/",
+          "resolved_url": "https://brde.com.br/compraseservicos/2026-000151/"
+        },
+        {
+          "label": "Sorteio para a contrata\u00e7\u00e3o de servi\u00e7os de Gerenciamento de Consentimento e Ci\u00eancia (GCC) dos titulares de dados pessoais para acesso e tratamento de dados dos sistemas e subsistemas informatizados da Secretaria Nacional de Tr\u00e2nsito (SENATRAN).",
+          "raw_href": "https://brde.com.br/compraseservicos/2026-000151/",
+          "resolved_url": "https://brde.com.br/compraseservicos/2026-000151/"
+        },
+        {
+          "label": "2026/000098",
+          "raw_href": "https://brde.com.br/compraseservicos/2026-000098/",
+          "resolved_url": "https://brde.com.br/compraseservicos/2026-000098/"
+        },
+        {
+          "label": "Contrata\u00e7\u00e3o de consultoria t\u00e9cnica especializada para a realiza\u00e7\u00e3o de estudos estrat\u00e9gicos, t\u00e9cnicos, operacionais, institucionais, econ\u00f4mico-financeiros e regulat\u00f3rios relacionados ao sistema ferrovi\u00e1rio da Malha Sul Ampliada, com a finalidade de subsidiar a atua\u00e7\u00e3o t\u00e9cnica e institucional do BRDE/CODESUL e dos estados integrantes, segundo as especifica\u00e7\u00f5es do Termo de Refer\u00eancia e demais Anexos do Edital.",
+          "raw_href": "https://brde.com.br/compraseservicos/2026-000098/",
+          "resolved_url": "https://brde.com.br/compraseservicos/2026-000098/"
+        },
+        {
+          "label": "2026/000068",
+          "raw_href": "https://brde.com.br/compraseservicos/2026-000068/",
+          "resolved_url": "https://brde.com.br/compraseservicos/2026-000068/"
+        },
+        {
+          "label": "Contrata\u00e7\u00e3o, na modalidade \u201cguarda-chuva\u201d, de servi\u00e7os t\u00e9cnicos necess\u00e1rios para a estrutura\u00e7\u00e3o e modelagem de projetos de Parceria P\u00fablico-Privada \u2013 PPP para constru\u00e7\u00e3o, reconstru\u00e7\u00e3o, reforma, gest\u00e3o, opera\u00e7\u00e3o, conserva\u00e7\u00e3o e manuten\u00e7\u00e3o (somente servi\u00e7os n\u00e3o pedag\u00f3gicos) de UNIDADES EDUCACIONAIS das redes de ensino dos entes p\u00fablicos na regi\u00e3o de atua\u00e7\u00e3o do BRDE, segundo as especifica\u00e7\u00f5es do Termo de Refer\u00eancia e demais Anexos.",
+          "raw_href": "https://brde.com.br/compraseservicos/2026-000068/",
+          "resolved_url": "https://brde.com.br/compraseservicos/2026-000068/"
+        },
+        {
+          "label": "Contrata\u00e7\u00e3o de servi\u00e7os de Propaganda e Publicidade , prestados necessariamente por interm\u00e9dio de ag\u00eancia de propaganda. Link de acesso: https://licitacoes-e2.bb.com.br/aop-inter-estatico/ N\u00ba Licita\u00e7\u00f5es-e: 1079427 . Data da primeira sess\u00e3o e limite para o acolhimento das propostas: 29/01/2026 \u2013 14h.",
+          "raw_href": "https://brde.com.br/compraseservicos/2025-000079/",
+          "resolved_url": "https://brde.com.br/compraseservicos/2025-000079/"
+        }
+      ],
+      "procurement_2026_items": [
+        {
+          "source_record_id": "procurement:2026-000068",
+          "canonical_url": "https://brde.com.br/compraseservicos/2026-000068",
+          "title": "Contrata\u00e7\u00e3o, na modalidade \u201cguarda-chuva\u201d, de servi\u00e7os t\u00e9cnicos necess\u00e1rios para a estrutura\u00e7\u00e3o e modelagem de projetos de Parceria P\u00fablico-Privada \u2013 PPP para constru\u00e7\u00e3o, reconstru\u00e7\u00e3o, reforma, gest\u00e3o, opera\u00e7\u00e3o, conserva\u00e7\u00e3o e manuten\u00e7\u00e3o (somente servi\u00e7os n\u00e3o pedag\u00f3gicos) de UNIDADES EDUCACIONAIS das redes de ensino dos entes p\u00fablicos na regi\u00e3o de atua\u00e7\u00e3o do BRDE, segundo as especifica\u00e7\u00f5es do Termo de Refer\u00eancia e demais Anexos."
+        },
+        {
+          "source_record_id": "procurement:2026-000098",
+          "canonical_url": "https://brde.com.br/compraseservicos/2026-000098",
+          "title": "Contrata\u00e7\u00e3o de consultoria t\u00e9cnica especializada para a realiza\u00e7\u00e3o de estudos estrat\u00e9gicos, t\u00e9cnicos, operacionais, institucionais, econ\u00f4mico-financeiros e regulat\u00f3rios relacionados ao sistema ferrovi\u00e1rio da Malha Sul Ampliada, com a finalidade de subsidiar a atua\u00e7\u00e3o t\u00e9cnica e institucional do BRDE/CODESUL e dos estados integrantes, segundo as especifica\u00e7\u00f5es do Termo de Refer\u00eancia e demais Anexos do Edital."
+        },
+        {
+          "source_record_id": "procurement:2026-000151",
+          "canonical_url": "https://brde.com.br/compraseservicos/2026-000151",
+          "title": "Sorteio para a contrata\u00e7\u00e3o de servi\u00e7os de Gerenciamento de Consentimento e Ci\u00eancia (GCC) dos titulares de dados pessoais para acesso e tratamento de dados dos sistemas e subsistemas informatizados da Secretaria Nacional de Tr\u00e2nsito (SENATRAN)."
+        }
+      ]
+    }
+  ],
+  "details": [
+    {
+      "source_record_id": "fsa:chamada-publica-brde-fsa-tv-e-vod-desempenho-comercial-de-produtoras-2026",
+      "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-tv-e-vod-desempenho-comercial-de-produtoras-2026",
+      "title": "Chamada P\u00fablica BRDE/FSA \u2013 TV E VOD: DESEMPENHO COMERCIAL DE PRODUTORAS 2026",
+      "listing_row": {
+        "label": "Chamada P\u00fablica BRDE/FSA \u2013 TV E VOD: DESEMPENHO COMERCIAL DE PRODUTORAS 2026",
+        "raw_href": "https://brde.com.br/chamada-publica-brde-fsa-tv-e-vod-desempenho-comercial-de-produtoras-2026",
+        "resolved_url": "https://brde.com.br/chamada-publica-brde-fsa-tv-e-vod-desempenho-comercial-de-produtoras-2026",
+        "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-tv-e-vod-desempenho-comercial-de-produtoras-2026",
+        "row_text": "Chamada P\u00fablica BRDE/FSA \u2013 TV E VOD: DESEMPENHO COMERCIAL DE PRODUTORAS 2026"
+      },
+      "http_status": 200,
+      "final_url": "https://brde.com.br/chamada-publica-brde-fsa-tv-e-vod-desempenho-comercial-de-produtoras-2026/",
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 112734,
+      "html_sha256": "6c14dc9628687f100cfe9d5493b2bc1138345487ac4f97bb652229a9f55ee7bd",
+      "published_at": "2026-07-31T00:00:00Z",
+      "period": {
+        "start": "2026-07-27",
+        "end": "2026-09-25",
+        "source_text": "periodo de inscricoes: 27/07/2026 a 25/09/2026"
+      },
+      "status": "open",
+      "status_basis": "application period contains audit snapshot date",
+      "document_links": [
+        {
+          "label": "Manual para inscri\u00e7\u00e3o e habilita\u00e7\u00e3o de obras",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/07/MANUAL-PARA-INSCRICAO-E-HABILITACAO-DESEMPENHO-COMERCIAL-TV-VOD-2026.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/07/MANUAL-PARA-INSCRICAO-E-HABILITACAO-DESEMPENHO-COMERCIAL-TV-VOD-2026.pdf"
+        },
+        {
+          "label": "FAQ",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/07/FAQ-Desempenho-Comercial-TV-VOD-Produtoras-2026.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/07/FAQ-Desempenho-Comercial-TV-VOD-Produtoras-2026.pdf"
+        },
+        {
+          "label": "Edital",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/06/0-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-TV-VOD-PRODUTORAS-2026.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/06/0-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-TV-VOD-PRODUTORAS-2026.pdf"
+        },
+        {
+          "label": "Edital (com anexos)",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/06/0-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-TV-VOD-PRODUTORAS-2026-completo.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/06/0-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-TV-VOD-PRODUTORAS-2026-completo.pdf"
+        },
+        {
+          "label": "ANEXO I \u2013 DOCUMENTOS PARA COMPROVA\u00c7\u00c3O DOS LICENCIAMENTOS DAS OBRAS",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/06/1-ANEXO-I-\u2013-DOCUMENTOS-PARA-COMPROVACAO-DOS-LICENCIAMENTOS-DAS-OBRAS.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/06/1-ANEXO-I-\u2013-DOCUMENTOS-PARA-COMPROVACAO-DOS-LICENCIAMENTOS-DAS-OBRAS.pdf"
+        },
+        {
+          "label": "ANEXO II \u2013 DOCUMENTOS PARA PROPOSI\u00c7\u00c3O DE INVESTIMENTO",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/06/2-ANEXO-II-DOCUMENTOS-PARA-PROPOSICAO-DE-INVESTIMENTO.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/06/2-ANEXO-II-DOCUMENTOS-PARA-PROPOSICAO-DE-INVESTIMENTO.pdf"
+        },
+        {
+          "label": "ANEXO III \u2013 PROCEDIMENTO DE C\u00c1LCULO DA PONTUA\u00c7\u00c3O",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/06/3-ANEXO-III-PROCEDIMENTO-DE-CALCULO-DA-PONTUACAO.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/06/3-ANEXO-III-PROCEDIMENTO-DE-CALCULO-DA-PONTUACAO.pdf"
+        },
+        {
+          "label": "ANEXO IV \u2013 PROCEDIMENTO DE C\u00c1LCULO DO VALOR M\u00cdNIMO DE LICENCIAMENTO",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/06/4-ANEXO-IV-PROCEDIMENTO-DE-CALCULO-DO-VALOR-MINIMO-DE-LICENCIAMENTO.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/06/4-ANEXO-IV-PROCEDIMENTO-DE-CALCULO-DO-VALOR-MINIMO-DE-LICENCIAMENTO.pdf"
+        },
+        {
+          "label": "ANEXO VI \u2013 MINUTA DO CONTRATO DE INVESTIMENTO NA PRODU\u00c7\u00c3O \u2013 TV/VOD",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/06/6-ANEXO-VI-MINUTA-DO-CONTRATO-DE-INVESTIMENTO-NA-PRODUCAO-\u2013-TV-VOD.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/06/6-ANEXO-VI-MINUTA-DO-CONTRATO-DE-INVESTIMENTO-NA-PRODUCAO-\u2013-TV-VOD.pdf"
+        },
+        {
+          "label": "ANEXO VII \u2013 MINUTA DE CONTRATO DE INVESTIMENTO EM DESENVOLVIMENTO",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/06/7-ANEXO-VII-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-DESENVOLVIMENTO.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/06/7-ANEXO-VII-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-DESENVOLVIMENTO.pdf"
+        }
+      ],
+      "principal_document_url": "https://brde.com.br/wp-content/uploads/2026/06/0-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-TV-VOD-PRODUTORAS-2026.pdf",
+      "principal_document_capture": {
+        "kind": "fsa_principal",
+        "requested_url": "https://brde.com.br/wp-content/uploads/2026/06/0-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-TV-VOD-PRODUTORAS-2026.pdf",
+        "final_url": "https://brde.com.br/wp-content/uploads/2026/06/0-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-TV-VOD-PRODUTORAS-2026.pdf",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "bytes": 426122,
+        "sha256": "055efd07f544d3ef166b1bf74ae552906ad1a96f2dd3c9a83f6389f26696471e",
+        "magic_hex": "255044462d312e37"
+      }
+    },
+    {
+      "source_record_id": "fsa:chamada-publica-brde-fsa-nucleos-criativos-2026",
+      "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-nucleos-criativos-2026",
+      "title": "Chamada P\u00fablica BRDE/FSA \u2013 N\u00daCLEOS CRIATIVOS \u2013 2026",
+      "listing_row": {
+        "label": "Chamada P\u00fablica BRDE/FSA \u2013 N\u00daCLEOS CRIATIVOS \u2013 2026",
+        "raw_href": "https://brde.com.br/chamada-publica-brde-fsa-nucleos-criativos-2026",
+        "resolved_url": "https://brde.com.br/chamada-publica-brde-fsa-nucleos-criativos-2026",
+        "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-nucleos-criativos-2026",
+        "row_text": "Chamada P\u00fablica BRDE/FSA \u2013 N\u00daCLEOS CRIATIVOS \u2013 2026"
+      },
+      "http_status": 200,
+      "final_url": "https://brde.com.br/chamada-publica-brde-fsa-nucleos-criativos-2026/",
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 111553,
+      "html_sha256": "bac03753aba13f822c4be15e7868d7c73e611034261775e9e838f9111619f0be",
+      "published_at": "2026-07-10T00:00:00Z",
+      "period": {
+        "start": "2026-07-06",
+        "end": "2026-09-04",
+        "source_text": "periodo de inscricoes: 06/07/2026 a 04/09/2026"
+      },
+      "status": "closed",
+      "status_basis": "deadline elapsed; listing has no closed label",
+      "document_links": [
+        {
+          "label": "FAQ",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/07/FAQ_EDITAL_NUCLEOS-CRIATIVOS_2026-publicacao-10.07.2026.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/07/FAQ_EDITAL_NUCLEOS-CRIATIVOS_2026-publicacao-10.07.2026.pdf"
+        },
+        {
+          "label": "Edital",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/06/1-CHAMADA-PUBLICA-NUCLEOS-CRIATIVOS-2026.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/06/1-CHAMADA-PUBLICA-NUCLEOS-CRIATIVOS-2026.pdf"
+        },
+        {
+          "label": "Edital completo (com anexos)",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/06/1-CHAMADA-PUBLICA-NUCLEOS-CRIATIVOS-2026-completo.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/06/1-CHAMADA-PUBLICA-NUCLEOS-CRIATIVOS-2026-completo.pdf"
+        },
+        {
+          "label": "ANEXO I \u2013 DOCUMENTOS PARA INSCRI\u00c7\u00c3O",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/06/2-ANEXO-I-\u2013-DOCUMENTOS-PARA-INSCRICAO.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/06/2-ANEXO-I-\u2013-DOCUMENTOS-PARA-INSCRICAO.pdf"
+        },
+        {
+          "label": "ANEXO IX \u2013 CRIT\u00c9RIOS DA PRIMEIRA AVALIA\u00c7\u00c3O",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/06/10-ANEXO-IX-\u2013-CRITERIOS-DA-PRIMEIRA-AVALIACAO.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/06/10-ANEXO-IX-\u2013-CRITERIOS-DA-PRIMEIRA-AVALIACAO.pdf"
+        },
+        {
+          "label": "ANEXO X \u2013 MINUTA DE CONTRATO DE INVESTIMENTO EM N\u00daCLEO CRIATIVO",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/06/11-ANEXO-X-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-NUCLEO-CRIATIVO.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/06/11-ANEXO-X-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-NUCLEO-CRIATIVO.pdf"
+        }
+      ],
+      "principal_document_url": "https://brde.com.br/wp-content/uploads/2026/06/1-CHAMADA-PUBLICA-NUCLEOS-CRIATIVOS-2026.pdf",
+      "principal_document_capture": {
+        "kind": "fsa_principal",
+        "requested_url": "https://brde.com.br/wp-content/uploads/2026/06/1-CHAMADA-PUBLICA-NUCLEOS-CRIATIVOS-2026.pdf",
+        "final_url": "https://brde.com.br/wp-content/uploads/2026/06/1-CHAMADA-PUBLICA-NUCLEOS-CRIATIVOS-2026.pdf",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "bytes": 383420,
+        "sha256": "31f8b8a0e37b5278d5c48cd27e435d1450f3a66d7adee6232941b087693ce722",
+        "magic_hex": "255044462d312e37"
+      }
+    },
+    {
+      "source_record_id": "fsa:chamada-publica-brde-fsa-desempenho-artistico-produtoras-2026",
+      "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-desempenho-artistico-produtoras-2026",
+      "title": "Chamada P\u00fablica BRDE/FSA \u2013 DESEMPENHO ART\u00cdSTICO \u2013 PRODUTORAS 2026",
+      "listing_row": {
+        "label": "Chamada P\u00fablica BRDE/FSA \u2013 DESEMPENHO ART\u00cdSTICO \u2013 PRODUTORAS 2026",
+        "raw_href": "https://brde.com.br/chamada-publica-brde-fsa-desempenho-artistico-produtoras-2026/",
+        "resolved_url": "https://brde.com.br/chamada-publica-brde-fsa-desempenho-artistico-produtoras-2026/",
+        "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-desempenho-artistico-produtoras-2026",
+        "row_text": "Chamada P\u00fablica BRDE/FSA \u2013 DESEMPENHO ART\u00cdSTICO \u2013 PRODUTORAS 2026"
+      },
+      "http_status": 200,
+      "final_url": "https://brde.com.br/chamada-publica-brde-fsa-desempenho-artistico-produtoras-2026/",
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 112631,
+      "html_sha256": "22a9fda4c5a8232bbb7a443f4ab50fed172512aa2b74e21ebdccb80ef0b7890c",
+      "published_at": "2026-07-03T00:00:00Z",
+      "period": {
+        "start": "2026-05-25",
+        "end": "2026-08-03",
+        "source_text": "periodo de inscricoes: 25/05/2026 a 03/08/2026"
+      },
+      "status": "closed",
+      "status_basis": "deadline elapsed; listing has no closed label",
+      "document_links": [
+        {
+          "label": "Edital \u2013 Retifica\u00e7\u00e3o n\u00ba 01",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/07/0-CHAMADA-PUBLICA-FSA-BRDE-DESEMPENHO-ARTISTICO-PRODUTORAS-2026-Retificacao-1.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/07/0-CHAMADA-PUBLICA-FSA-BRDE-DESEMPENHO-ARTISTICO-PRODUTORAS-2026-Retificacao-1.pdf"
+        },
+        {
+          "label": "Edital \u2013 Retifica\u00e7\u00e3o n\u00ba 01 (com anexos)",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/07/0-CHAMADA-PUBLICA-FSA-BRDE-DESEMPENHO-ARTISTICO-PRODUTORAS-2026-Retificacao-1-completo.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/07/0-CHAMADA-PUBLICA-FSA-BRDE-DESEMPENHO-ARTISTICO-PRODUTORAS-2026-Retificacao-1-completo.pdf"
+        },
+        {
+          "label": "Manual do Usu\u00e1rio \u2013 RPPF",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/05/Manual-usuario-RPPF-30.12.2024.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/05/Manual-usuario-RPPF-30.12.2024.pdf"
+        },
+        {
+          "label": "Edital",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-FSA-BRDE-DESEMPENHO-ARTISTICO-PRODUTORAS-2026.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-FSA-BRDE-DESEMPENHO-ARTISTICO-PRODUTORAS-2026.pdf"
+        },
+        {
+          "label": "Edital completo (com anexos)",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/05/CHAMADA-PUBLICA-FSA-BRDE-DESEMPENHO-ARTISTICO-PRODUTORAS-2026-PosErrata.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/05/CHAMADA-PUBLICA-FSA-BRDE-DESEMPENHO-ARTISTICO-PRODUTORAS-2026-PosErrata.pdf"
+        },
+        {
+          "label": "ANEXO I \u2013 DOCUMENTOS PARA INSCRI\u00c7\u00c3O \u2013 EMPRESA VOCACIONADA",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/05/2-ANEXO-I-DOCUMENTOS-PARA-INSCRICAO-EMPRESA-VOCACIONADA.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/05/2-ANEXO-I-DOCUMENTOS-PARA-INSCRICAO-EMPRESA-VOCACIONADA.pdf"
+        },
+        {
+          "label": "ANEXO IV \u2013 LISTA DE FESTIVAIS E CONG\u00caNERES",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/07/4-ANEXO-IV-LISTA-DE-FESTIVAIS-E-CONGENERES.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/07/4-ANEXO-IV-LISTA-DE-FESTIVAIS-E-CONGENERES.pdf"
+        },
+        {
+          "label": "ANEXO V \u2013 DOCUMENTOS PARA PROPOSI\u00c7\u00c3O DE INVESTIMENTO",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/05/6-ANEXO-V-DOCUMENTOS-PARA-PROPOSICAO-DE-INVESTIMENTO.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/05/6-ANEXO-V-DOCUMENTOS-PARA-PROPOSICAO-DE-INVESTIMENTO.pdf"
+        },
+        {
+          "label": "ANEXO VII \u2013 MINUTA DE CONTRATO DE INVESTIMENTO EM PRODU\u00c7\u00c3O COM INTERVENIENTE",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/05/8-ANEXO-VII-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-PRODUCAO-COM-INTERVENIENTE.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/05/8-ANEXO-VII-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-PRODUCAO-COM-INTERVENIENTE.pdf"
+        },
+        {
+          "label": "ANEXO VIII \u2013 MINUTA DE CONTRATO DE INVESTIMENTO EM PRODU\u00c7\u00c3O \u2013 DISTRIBUI\u00c7\u00c3O PR\u00d3PRIA",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/05/9-ANEXO-VIII-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-PRODUCAO-DISTRIBUICAO-PROPRIA.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/05/9-ANEXO-VIII-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-PRODUCAO-DISTRIBUICAO-PROPRIA.pdf"
+        },
+        {
+          "label": "ANEXO IX \u2013 MINUTA DE CONTRATO DE INVESTIMENTO EM DESENVOLVIMENTO",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/05/10-ANEXO-IX-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-DESENVOLVIMENTO.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/05/10-ANEXO-IX-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-DESENVOLVIMENTO.pdf"
+        }
+      ],
+      "principal_document_url": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-FSA-BRDE-DESEMPENHO-ARTISTICO-PRODUTORAS-2026.pdf",
+      "principal_document_capture": {
+        "kind": "fsa_principal",
+        "requested_url": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-FSA-BRDE-DESEMPENHO-ARTISTICO-PRODUTORAS-2026.pdf",
+        "final_url": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-FSA-BRDE-DESEMPENHO-ARTISTICO-PRODUTORAS-2026.pdf",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "bytes": 487240,
+        "sha256": "88f76fc92c4da784f16f06b2ba25fc37357307bd1baa483dff7c80030efc5b23",
+        "magic_hex": "255044462d312e37"
+      }
+    },
+    {
+      "source_record_id": "fsa:chamada-publica-brde-fsa-coproducao-brasil-argentina-2026",
+      "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-argentina-2026",
+      "title": "Chamada P\u00fablica BRDE/FSA \u2013 COPRODU\u00c7\u00c3O BRASIL \u2013 ARGENTINA \u2013 2026",
+      "listing_row": {
+        "label": "Chamada P\u00fablica BRDE/FSA \u2013 COPRODU\u00c7\u00c3O BRASIL-ARGENTINA \u2013 2026",
+        "raw_href": "http://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-argentina-2026",
+        "resolved_url": "http://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-argentina-2026",
+        "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-argentina-2026",
+        "row_text": "Chamada P\u00fablica BRDE/FSA \u2013 COPRODU\u00c7\u00c3O BRASIL-ARGENTINA \u2013 2026 (Inscri\u00e7\u00f5es encerradas)"
+      },
+      "http_status": 200,
+      "final_url": "https://brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-argentina-2026/",
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 106542,
+      "html_sha256": "93899fa7187132c6a17309087a9501d2ab69d2bc539a62cf81f4b4b14a1b22fa",
+      "published_at": "2026-08-21T00:00:00Z",
+      "period": {
+        "start": "2026-06-17",
+        "end": "2026-07-17",
+        "source_text": "periodo de inscricoes: 17/06/2026 a 17/07/2026"
+      },
+      "status": "closed",
+      "status_basis": "explicit listing label",
+      "document_links": [
+        {
+          "label": "Ata final da Habilita\u00e7\u00e3o",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/08/Ata-RESULTADO-FINAL-DA-HABILITACAO-BRA-ARG-2026-publicacao-21.08.2026.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/08/Ata-RESULTADO-FINAL-DA-HABILITACAO-BRA-ARG-2026-publicacao-21.08.2026.pdf"
+        },
+        {
+          "label": "Ata preliminar da Habilita\u00e7\u00e3o",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/07/Ata-RESULTADO-PRELIMINAR-DA-HABILITACAO-BRA-ARG-2026-publicacao-31.07.2026.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/07/Ata-RESULTADO-PRELIMINAR-DA-HABILITACAO-BRA-ARG-2026-publicacao-31.07.2026.pdf"
+        },
+        {
+          "label": "FAQ",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/06/FAQ_EDITAL_BRASIL_ARGENTINA_2026-06-09.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/06/FAQ_EDITAL_BRASIL_ARGENTINA_2026-06-09.pdf"
+        },
+        {
+          "label": "Edital",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-ARGENTINA-2026.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-ARGENTINA-2026.pdf"
+        },
+        {
+          "label": "Edital completo (com anexos)",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-ARGENTINA-2026-completo.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-ARGENTINA-2026-completo.pdf"
+        },
+        {
+          "label": "ANEXO I \u2013 DOCUMENTOS PARA INSCRI\u00c7\u00c3O",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/05/2-ANEXO-I-\u2013-DOCUMENTOS-PARA-INSCRICAO-1.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/05/2-ANEXO-I-\u2013-DOCUMENTOS-PARA-INSCRICAO-1.pdf"
+        },
+        {
+          "label": "ANEXO III \u2013 MINUTA DE CONTRATO DE INVESTIMENTO EM PRODU\u00c7\u00c3O COM INTERVENIENTE",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/05/4-ANEXO-III-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-PRODUCAO-COM-INTERVENIENTE-1.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/05/4-ANEXO-III-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-PRODUCAO-COM-INTERVENIENTE-1.pdf"
+        },
+        {
+          "label": "ANEXO IV \u2013 MINUTA DE CONTRATO DE INVESTIMENTO EM PRODU\u00c7\u00c3O \u2013 DISTRIBUI\u00c7\u00c3O PR\u00d3PRIA",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/05/5-ANEXO-IV-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-PRODUCAO-DISTRIBUICAO-PROPRIA-1.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/05/5-ANEXO-IV-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-PRODUCAO-DISTRIBUICAO-PROPRIA-1.pdf"
+        }
+      ],
+      "principal_document_url": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-ARGENTINA-2026.pdf",
+      "principal_document_capture": {
+        "kind": "fsa_principal",
+        "requested_url": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-ARGENTINA-2026.pdf",
+        "final_url": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-ARGENTINA-2026.pdf",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "bytes": 379702,
+        "sha256": "e2747110c1d1e68cbed9d5cc6f290ae11d4b5c978283a1ac3bbc3c09b592b922",
+        "magic_hex": "255044462d312e37"
+      }
+    },
+    {
+      "source_record_id": "fsa:chamada-publica-brde-fsa-coproducao-brasil-portugal-2026",
+      "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-portugal-2026",
+      "title": "Chamada P\u00fablica BRDE/FSA \u2013 COPRODU\u00c7\u00c3O BRASIL \u2013 PORTUGAL \u2013 2026",
+      "listing_row": {
+        "label": "Chamada P\u00fablica BRDE/FSA \u2013 COPRODU\u00c7\u00c3O BRASIL-PORTUGAL \u2013 2026",
+        "raw_href": "http://www.brde.com.br/ chamada-publica-brde-fsa-coproducao-brasil-portugal-2026/",
+        "resolved_url": "http://www.brde.com.br/ chamada-publica-brde-fsa-coproducao-brasil-portugal-2026/",
+        "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-portugal-2026",
+        "row_text": "Chamada P\u00fablica BRDE/FSA \u2013 COPRODU\u00c7\u00c3O BRASIL-PORTUGAL \u2013 2026"
+      },
+      "http_status": 200,
+      "final_url": "https://brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-portugal-2026/",
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 110158,
+      "html_sha256": "e92f62a45d896594d5e2491d351ca47b779053d4eb8d7513b3f13941c8fa773c",
+      "published_at": "2026-06-10T00:00:00Z",
+      "period": {
+        "start": "2026-06-15",
+        "end": "2026-09-25",
+        "source_text": "periodo de inscricoes: 15/06/2026 a 25/09/2026"
+      },
+      "status": "open",
+      "status_basis": "application period contains audit snapshot date",
+      "document_links": [
+        {
+          "label": "FAQ",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/06/FAQ_EDITAL_BRASIL_PORTUGAL_2026-06-09.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/06/FAQ_EDITAL_BRASIL_PORTUGAL_2026-06-09.pdf"
+        },
+        {
+          "label": "Edital",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-PORTUGAL-2026.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-PORTUGAL-2026.pdf"
+        },
+        {
+          "label": "Edital completo (com anexos)",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-PORTUGAL-2026-completo.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-PORTUGAL-2026-completo.pdf"
+        },
+        {
+          "label": "ANEXO I \u2013 DOCUMENTOS PARA INSCRI\u00c7\u00c3O",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/05/2-ANEXO-I-\u2013-DOCUMENTOS-PARA-INSCRICAO.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/05/2-ANEXO-I-\u2013-DOCUMENTOS-PARA-INSCRICAO.pdf"
+        },
+        {
+          "label": "ANEXO III \u2013 MINUTA DE CONTRATO DE INVESTIMENTO EM PRODU\u00c7\u00c3O COM INTERVENIENTE",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/05/4-ANEXO-III-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-PRODUCAO-COM-INTERVENIENTE.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/05/4-ANEXO-III-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-PRODUCAO-COM-INTERVENIENTE.pdf"
+        },
+        {
+          "label": "ANEXO IV \u2013 MINUTA DE CONTRATO DE INVESTIMENTO EM PRODU\u00c7\u00c3O \u2013 DISTRIBUI\u00c7\u00c3O PR\u00d3PRIA",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/05/5-ANEXO-IV-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-PRODUCAO-DISTRIBUICAO-PROPRIA.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/05/5-ANEXO-IV-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-PRODUCAO-DISTRIBUICAO-PROPRIA.pdf"
+        }
+      ],
+      "principal_document_url": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-PORTUGAL-2026.pdf",
+      "principal_document_capture": {
+        "kind": "fsa_principal",
+        "requested_url": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-PORTUGAL-2026.pdf",
+        "final_url": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-PORTUGAL-2026.pdf",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "bytes": 427088,
+        "sha256": "bc35bb3d2f3d7f92f89a3af5a09f1a2a56d4a09f71d5b95696e5296a956a9eac",
+        "magic_hex": "255044462d312e37"
+      }
+    },
+    {
+      "source_record_id": "fsa:chamada-publica-brde-fsa-cinema-desempenho-comercial-de-produtoras-2026",
+      "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-produtoras-2026",
+      "title": "Chamada P\u00fablica BRDE/FSA \u2013 CINEMA: DESEMPENHO COMERCIAL DE PRODUTORAS \u2013 2026",
+      "listing_row": {
+        "label": "Chamada P\u00fablica BRDE/FSA \u2013 CINEMA: DESEMPENHO COMERCIAL DE PRODUTORAS \u2013 2026",
+        "raw_href": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-produtoras-2026/",
+        "resolved_url": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-produtoras-2026/",
+        "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-produtoras-2026",
+        "row_text": "Chamada P\u00fablica BRDE/FSA \u2013 CINEMA: DESEMPENHO COMERCIAL DE PRODUTORAS \u2013 2026 (Inscri\u00e7\u00f5es encerradas para Benefici\u00e1rios Indiretos)"
+      },
+      "http_status": 200,
+      "final_url": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-produtoras-2026/",
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 111697,
+      "html_sha256": "ec47444ae5246ac219a8e05035c47c58dbe28ab87ce46a82f5be5950c8ca5f2c",
+      "published_at": "2026-07-30T00:00:00Z",
+      "period": {
+        "start": "2026-05-13",
+        "end": "2026-07-01",
+        "source_text": "periodo de inscricoes: 13/05/2026 a 01/07/2026"
+      },
+      "status": "closed",
+      "status_basis": "explicit listing label",
+      "document_links": [
+        {
+          "label": "Ata de Resultado Final",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/07/Ata-Resultado-final_Desemp.-Comercial-Produtoras-2026-publicacao_30.07.2026.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/07/Ata-Resultado-final_Desemp.-Comercial-Produtoras-2026-publicacao_30.07.2026.pdf"
+        },
+        {
+          "label": "Ata de Resultado da An\u00e1lise dos Recursos",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/07/Resultado-analise-recurso_Des.-Comercial-Produtoras-2026-publicacao_30.07.26.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/07/Resultado-analise-recurso_Des.-Comercial-Produtoras-2026-publicacao_30.07.26.pdf"
+        },
+        {
+          "label": "FAQ",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/05/FAQ-Desempenho-Comercial-Produtoras-2026.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/05/FAQ-Desempenho-Comercial-Produtoras-2026.pdf"
+        },
+        {
+          "label": "MANUAL PARA INSCRI\u00c7\u00c3O E SOLICITA\u00c7\u00c3O DE RECURSOS \u00c0 PONTUA\u00c7\u00c3O",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/05/MANUAL-PARA-INSCRICAO-E-SOLICITACAO-DE-RECURSOS-A-PONTUACAO-DESEMPENHO-COMERCIAL-PRODUTORAS-26.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/05/MANUAL-PARA-INSCRICAO-E-SOLICITACAO-DE-RECURSOS-A-PONTUACAO-DESEMPENHO-COMERCIAL-PRODUTORAS-26.pdf"
+        },
+        {
+          "label": "Edital",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/04/1-EDITAL-DESEMPENHO-COMERCIAL-DE-PRODUTORAS-2026.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/04/1-EDITAL-DESEMPENHO-COMERCIAL-DE-PRODUTORAS-2026.pdf"
+        },
+        {
+          "label": "Edital completo (com anexos)",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/04/1-EDITAL-DESEMPENHO-COMERCIAL-DE-PRODUTORAS-2026-completo-com-anexos.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/04/1-EDITAL-DESEMPENHO-COMERCIAL-DE-PRODUTORAS-2026-completo-com-anexos.pdf"
+        },
+        {
+          "label": "ANEXO I \u2013 DOCUMENTOS PARA PROPOSI\u00c7\u00c3O DE INVESTIMENTO",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/04/2-ANEXO-I-\u2013-DOCUMENTOS-PARA-PROPOSICAO-DE-INVESTIMENTO.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/04/2-ANEXO-I-\u2013-DOCUMENTOS-PARA-PROPOSICAO-DE-INVESTIMENTO.pdf"
+        },
+        {
+          "label": "ANEXO II \u2013 PROCEDIMENTO DE C\u00c1LCULO DA PONTUA\u00c7\u00c3O",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/04/3-ANEXO-II-PROCEDIMENTO-DE-CALCULO-DA-PONTUACAO.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/04/3-ANEXO-II-PROCEDIMENTO-DE-CALCULO-DA-PONTUACAO.pdf"
+        },
+        {
+          "label": "ANEXO IV \u2013 MINUTA DE CONTRATO DE INVESTIMENTO EM PRODU\u00c7\u00c3O COM INTERVENIENTE",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/04/5-ANEXO-IV-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-PRODUCAO-COM-INTERVENIENTE.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/04/5-ANEXO-IV-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-PRODUCAO-COM-INTERVENIENTE.pdf"
+        },
+        {
+          "label": "ANEXO V \u2013 MINUTA DE CONTRATO DE INVESTIMENTO EM PRODU\u00c7\u00c3O \u2013 DISTRIBUI\u00c7\u00c3O PR\u00d3PRIA",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/04/6-ANEXO-V-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-PRODUCAO-DISTRIB-PROPRIA.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/04/6-ANEXO-V-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-PRODUCAO-DISTRIB-PROPRIA.pdf"
+        },
+        {
+          "label": "ANEXO VI \u2013 MINUTA DE CONTRATO DE INVESTIMENTO EM DESENVOLVIMENTO",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/04/7-ANEXO-VI-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-DESENVOLVIMENTO.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/04/7-ANEXO-VI-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-DESENVOLVIMENTO.pdf"
+        }
+      ],
+      "principal_document_url": "https://brde.com.br/wp-content/uploads/2026/04/1-EDITAL-DESEMPENHO-COMERCIAL-DE-PRODUTORAS-2026.pdf",
+      "principal_document_capture": {
+        "kind": "fsa_principal",
+        "requested_url": "https://brde.com.br/wp-content/uploads/2026/04/1-EDITAL-DESEMPENHO-COMERCIAL-DE-PRODUTORAS-2026.pdf",
+        "final_url": "https://brde.com.br/wp-content/uploads/2026/04/1-EDITAL-DESEMPENHO-COMERCIAL-DE-PRODUTORAS-2026.pdf",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "bytes": 424490,
+        "sha256": "8be5a344694ce8508841de634cb0b8bf922aa1552acbff73ee3e1b6da150ff76",
+        "magic_hex": "255044462d312e37"
+      }
+    },
+    {
+      "source_record_id": "fsa:chamada-publica-brde-fsa-cinema-desempenho-comercial-de-distribuidoras-2026",
+      "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-distribuidoras-2026",
+      "title": "Chamada P\u00fablica BRDE/FSA \u2013 CINEMA: DESEMPENHO COMERCIAL DE DISTRIBUIDORAS 2026",
+      "listing_row": {
+        "label": "Chamada P\u00fablica BRDE/FSA \u2013 CINEMA: DESEMPENHO COMERCIAL DE DISTRIBUIDORAS \u2013 2026",
+        "raw_href": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-distribuidoras-2026/",
+        "resolved_url": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-distribuidoras-2026/",
+        "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-distribuidoras-2026",
+        "row_text": "Chamada P\u00fablica BRDE/FSA \u2013 CINEMA: DESEMPENHO COMERCIAL DE DISTRIBUIDORAS \u2013 2026 (Inscri\u00e7\u00f5es encerradas para Benefici\u00e1rios Indiretos)"
+      },
+      "http_status": 200,
+      "final_url": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-distribuidoras-2026/",
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 112593,
+      "html_sha256": "d755b8a06e1403d79b316f2021cc0671a03231a58d1699fb245946cdd28b663c",
+      "published_at": "2026-07-23T00:00:00Z",
+      "period": {
+        "start": "2026-04-29",
+        "end": "2026-06-17",
+        "source_text": "periodo de inscricoes: 29/04/2026 a 17/06/2026"
+      },
+      "status": "closed",
+      "status_basis": "explicit listing label",
+      "document_links": [
+        {
+          "label": "Ata de Resultado Final",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/07/Ata-Resultado-final_Desemp.-Comercial-Distribuidoras-2026-publicacao_23.07.2025.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/07/Ata-Resultado-final_Desemp.-Comercial-Distribuidoras-2026-publicacao_23.07.2025.pdf"
+        },
+        {
+          "label": "Ata de Resultado da An\u00e1lise dos Recursos",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/07/Resultado-analise-recurso_Des.-Comercial-Distribuidoras-2026-publicacao_23.07.2026.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/07/Resultado-analise-recurso_Des.-Comercial-Distribuidoras-2026-publicacao_23.07.2026.pdf"
+        },
+        {
+          "label": "FAQ",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/04/FAQ-Desempenho-Comercial-Distribuidoras-2026.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/04/FAQ-Desempenho-Comercial-Distribuidoras-2026.pdf"
+        },
+        {
+          "label": "MANUAL PARA INSCRI\u00c7\u00c3O E SOLICITA\u00c7\u00c3O DE RECURSOS \u00c0 PONTUA\u00c7\u00c3O",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/04/MANUAL-PARA-INSCRICAO-E-SOLICITACAO-DE-RECURSOS-A-PONTUACAO-NA-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-DISTRIBUIDORAS-2026.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/04/MANUAL-PARA-INSCRICAO-E-SOLICITACAO-DE-RECURSOS-A-PONTUACAO-NA-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-DISTRIBUIDORAS-2026.pdf"
+        },
+        {
+          "label": "Edital",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/04/1-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-DISTRIBUIDORAS-2026.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/04/1-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-DISTRIBUIDORAS-2026.pdf"
+        },
+        {
+          "label": "Edital completo (com anexos)",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/04/1-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-DISTRIBUIDORAS-2026-completo-com-anexos.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/04/1-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-DISTRIBUIDORAS-2026-completo-com-anexos.pdf"
+        },
+        {
+          "label": "ANEXO I \u2013 DOCUMENTOS PARA PROPOSI\u00c7\u00c3O DE INVESTIMENTO",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/04/2-ANEXO-I-\u2013-DOCUMENTOS-PARA-PROPOSICAO-DE-INVESTIMENTO-1.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/04/2-ANEXO-I-\u2013-DOCUMENTOS-PARA-PROPOSICAO-DE-INVESTIMENTO-1.pdf"
+        },
+        {
+          "label": "ANEXO II \u2013 PROCEDIMENTO DE C\u00c1LCULO DA PONTUA\u00c7\u00c3O",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/04/3-ANEXO-II-PROCEDIMENTO-DE-CALCULO-DA-PONTUACAO-1.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/04/3-ANEXO-II-PROCEDIMENTO-DE-CALCULO-DA-PONTUACAO-1.pdf"
+        },
+        {
+          "label": "ANEXO V \u2013 MINUTA DE CONTRATO DE INVESTIMENTO EM PRODU\u00c7\u00c3O COM INTERVENIENTE",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/04/6-ANEXO-V-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-PRODUCAO-COM-INTERVENIENTE.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/04/6-ANEXO-V-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-PRODUCAO-COM-INTERVENIENTE.pdf"
+        },
+        {
+          "label": "ANEXO VI \u2013 MINUTA DE CONTRATO DE INVESTIMENTO EM PRODU\u00c7\u00c3O \u2013 DISTRIBUI\u00c7\u00c3O PR\u00d3PRIA",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/04/7-ANEXO-VI-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-PRODUCAO-DISTRIBUICAO-PROPRIA.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/04/7-ANEXO-VI-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-PRODUCAO-DISTRIBUICAO-PROPRIA.pdf"
+        },
+        {
+          "label": "ANEXO VII \u2013 MINUTA DE CONTRATO DE INVESTIMENTO EM DESENVOLVIMENTO",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/04/8-ANEXO-VII-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-DESENVOLVIMENTO.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/04/8-ANEXO-VII-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-DESENVOLVIMENTO.pdf"
+        },
+        {
+          "label": "ANEXO VIII \u2013 MINUTA DE CONTRATO DE INVESTIMENTO EM COMERCIALIZA\u00c7\u00c3O COM INTERVENIENTE",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/04/9-ANEXO-VIII-\u2013-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-COMERCIALIZACAO-COM-INTERVENIENTE.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/04/9-ANEXO-VIII-\u2013-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-COMERCIALIZACAO-COM-INTERVENIENTE.pdf"
+        },
+        {
+          "label": "ANEXO IX \u2013 MINUTA DE CONTRATO DE INVESTIMENTO EM COMERCIALIZA\u00c7\u00c3O \u2013 DISTRIBUI\u00c7\u00c3O PR\u00d3PRIA",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/04/10-ANEXO-IX-\u2013-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-COMERCIALIZACAO-DISTRIBUICAO-PROPRIA.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/04/10-ANEXO-IX-\u2013-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-COMERCIALIZACAO-DISTRIBUICAO-PROPRIA.pdf"
+        }
+      ],
+      "principal_document_url": "https://brde.com.br/wp-content/uploads/2026/04/1-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-DISTRIBUIDORAS-2026.pdf",
+      "principal_document_capture": {
+        "kind": "fsa_principal",
+        "requested_url": "https://brde.com.br/wp-content/uploads/2026/04/1-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-DISTRIBUIDORAS-2026.pdf",
+        "final_url": "https://brde.com.br/wp-content/uploads/2026/04/1-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-DISTRIBUIDORAS-2026.pdf",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "bytes": 443962,
+        "sha256": "40e268fa4fdc80052bbbc1dc25829089d6b3382574454c578685ad27019b8dc7",
+        "magic_hex": "255044462d312e37"
+      }
+    },
+    {
+      "source_record_id": "fsa:chamada-publica-brde-fsa-coproducao-brasil-uruguai-2026",
+      "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-uruguai-2026",
+      "title": "Chamada P\u00fablica BRDE/FSA \u2013 COPRODU\u00c7\u00c3O BRASIL-URUGUAI \u2013 2026",
+      "listing_row": {
+        "label": "Chamada P\u00fablica BRDE/FSA \u2013 COPRODU\u00c7\u00c3O BRASIL-URUGUAI \u2013 2026",
+        "raw_href": "https://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-uruguai-2026/",
+        "resolved_url": "https://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-uruguai-2026/",
+        "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-uruguai-2026",
+        "row_text": "Chamada P\u00fablica BRDE/FSA \u2013 COPRODU\u00c7\u00c3O BRASIL-URUGUAI \u2013 2026 (Inscri\u00e7\u00f5es encerradas)"
+      },
+      "http_status": 200,
+      "final_url": "https://brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-uruguai-2026/",
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 107163,
+      "html_sha256": "30260c3616403746593d7a33a9f9a59938e7f4c169585a29fcfd0f5be4346f1b",
+      "published_at": "2026-08-25T00:00:00Z",
+      "period": {
+        "start": "2026-04-16",
+        "end": "2026-05-25",
+        "source_text": "periodo de inscricoes: 16/04/2026 a 25/05/2026"
+      },
+      "status": "closed",
+      "status_basis": "explicit listing label",
+      "document_links": [
+        {
+          "label": "Ata da Decis\u00e3o Preliminar",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/08/Ata-Decisao-de-Investimento-Preliminar-Coproducao-Brasil-Uruguai-2026_25.08.2026-publicacao.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/08/Ata-Decisao-de-Investimento-Preliminar-Coproducao-Brasil-Uruguai-2026_25.08.2026-publicacao.pdf"
+        },
+        {
+          "label": "Ata da Decis\u00e3o Preliminar \u2013 anexo I",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/08/Ata-Decisao-de-Investimento-Preliminar-Coproducao-Brasil-Uruguai-2026_anexo_25.08.2026-publicacao.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/08/Ata-Decisao-de-Investimento-Preliminar-Coproducao-Brasil-Uruguai-2026_anexo_25.08.2026-publicacao.pdf"
+        },
+        {
+          "label": "Ata da Habilita\u00e7\u00e3o Final",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/07/Ata-Habilitacao-Preliminar-Coproducao-Brasil-Uruguai-2026_08.07.2026-publicacao.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/07/Ata-Habilitacao-Preliminar-Coproducao-Brasil-Uruguai-2026_08.07.2026-publicacao.pdf"
+        },
+        {
+          "label": "Ata da Habilita\u00e7\u00e3o Preliminar",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/06/Ata-Habilitacao-Preliminar-Coproducao-Brasil-Uruguai-2026_12.06.2026-publicacao.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/06/Ata-Habilitacao-Preliminar-Coproducao-Brasil-Uruguai-2026_12.06.2026-publicacao.pdf"
+        },
+        {
+          "label": "FAQ",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/04/FAQ_EDITAL_BRASIL_URUGUAI_2026_versao_30.03.2026.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/04/FAQ_EDITAL_BRASIL_URUGUAI_2026_versao_30.03.2026.pdf"
+        },
+        {
+          "label": "Edital",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/04/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-URUGUAI-2026-1.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/04/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-URUGUAI-2026-1.pdf"
+        },
+        {
+          "label": "Edital completo (com anexos)",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/04/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-URUGUAI-2026-completo-1.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/04/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-URUGUAI-2026-completo-1.pdf"
+        },
+        {
+          "label": "ANEXO I \u2013 DOCUMENTOS PARA INSCRI\u00c7\u00c3O",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/04/2-ANEXO-I-DOCUMENTOS-PARA-INSCRICAO.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/04/2-ANEXO-I-DOCUMENTOS-PARA-INSCRICAO.pdf"
+        },
+        {
+          "label": "ANEXO III \u2013 MINUTA DE CONTRATO DE INVESTIMENTO EM PRODU\u00c7\u00c3O COM INTERVENIENTE",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/04/4-ANEXO-III-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-PRODUCAO-COM-INTERVENIENTE.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/04/4-ANEXO-III-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-PRODUCAO-COM-INTERVENIENTE.pdf"
+        },
+        {
+          "label": "ANEXO IV \u2013 MINUTA DE CONTRATO DE INVESTIMENTO EM PRODU\u00c7\u00c3O \u2013 DISTRIBUI\u00c7\u00c3O PR\u00d3PRIA",
+          "raw_href": "https://brde.com.br/wp-content/uploads/2026/04/5-ANEXO-IV-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-PRODUCAO-DISTRIBUICAO-PROPRIA.pdf",
+          "resolved_url": "https://brde.com.br/wp-content/uploads/2026/04/5-ANEXO-IV-MINUTA-DE-CONTRATO-DE-INVESTIMENTO-EM-PRODUCAO-DISTRIBUICAO-PROPRIA.pdf"
+        }
+      ],
+      "principal_document_url": "https://brde.com.br/wp-content/uploads/2026/04/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-URUGUAI-2026-1.pdf",
+      "principal_document_capture": {
+        "kind": "fsa_principal",
+        "requested_url": "https://brde.com.br/wp-content/uploads/2026/04/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-URUGUAI-2026-1.pdf",
+        "final_url": "https://brde.com.br/wp-content/uploads/2026/04/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-URUGUAI-2026-1.pdf",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "bytes": 414970,
+        "sha256": "346ef844312785fae35b5abb09c57a41212e8984e5c67f0143c7de0eff7e9b5c",
+        "magic_hex": "255044462d312e37"
+      }
+    }
+  ],
+  "principal_document_captures": [
+    {
+      "kind": "fsa_principal",
+      "requested_url": "https://brde.com.br/wp-content/uploads/2026/06/0-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-TV-VOD-PRODUTORAS-2026.pdf",
+      "final_url": "https://brde.com.br/wp-content/uploads/2026/06/0-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-TV-VOD-PRODUTORAS-2026.pdf",
+      "http_status": 200,
+      "content_type": "application/pdf",
+      "bytes": 426122,
+      "sha256": "055efd07f544d3ef166b1bf74ae552906ad1a96f2dd3c9a83f6389f26696471e",
+      "magic_hex": "255044462d312e37"
+    },
+    {
+      "kind": "fsa_principal",
+      "requested_url": "https://brde.com.br/wp-content/uploads/2026/06/1-CHAMADA-PUBLICA-NUCLEOS-CRIATIVOS-2026.pdf",
+      "final_url": "https://brde.com.br/wp-content/uploads/2026/06/1-CHAMADA-PUBLICA-NUCLEOS-CRIATIVOS-2026.pdf",
+      "http_status": 200,
+      "content_type": "application/pdf",
+      "bytes": 383420,
+      "sha256": "31f8b8a0e37b5278d5c48cd27e435d1450f3a66d7adee6232941b087693ce722",
+      "magic_hex": "255044462d312e37"
+    },
+    {
+      "kind": "fsa_principal",
+      "requested_url": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-FSA-BRDE-DESEMPENHO-ARTISTICO-PRODUTORAS-2026.pdf",
+      "final_url": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-FSA-BRDE-DESEMPENHO-ARTISTICO-PRODUTORAS-2026.pdf",
+      "http_status": 200,
+      "content_type": "application/pdf",
+      "bytes": 487240,
+      "sha256": "88f76fc92c4da784f16f06b2ba25fc37357307bd1baa483dff7c80030efc5b23",
+      "magic_hex": "255044462d312e37"
+    },
+    {
+      "kind": "fsa_principal",
+      "requested_url": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-ARGENTINA-2026.pdf",
+      "final_url": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-ARGENTINA-2026.pdf",
+      "http_status": 200,
+      "content_type": "application/pdf",
+      "bytes": 379702,
+      "sha256": "e2747110c1d1e68cbed9d5cc6f290ae11d4b5c978283a1ac3bbc3c09b592b922",
+      "magic_hex": "255044462d312e37"
+    },
+    {
+      "kind": "fsa_principal",
+      "requested_url": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-PORTUGAL-2026.pdf",
+      "final_url": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-PORTUGAL-2026.pdf",
+      "http_status": 200,
+      "content_type": "application/pdf",
+      "bytes": 427088,
+      "sha256": "bc35bb3d2f3d7f92f89a3af5a09f1a2a56d4a09f71d5b95696e5296a956a9eac",
+      "magic_hex": "255044462d312e37"
+    },
+    {
+      "kind": "fsa_principal",
+      "requested_url": "https://brde.com.br/wp-content/uploads/2026/04/1-EDITAL-DESEMPENHO-COMERCIAL-DE-PRODUTORAS-2026.pdf",
+      "final_url": "https://brde.com.br/wp-content/uploads/2026/04/1-EDITAL-DESEMPENHO-COMERCIAL-DE-PRODUTORAS-2026.pdf",
+      "http_status": 200,
+      "content_type": "application/pdf",
+      "bytes": 424490,
+      "sha256": "8be5a344694ce8508841de634cb0b8bf922aa1552acbff73ee3e1b6da150ff76",
+      "magic_hex": "255044462d312e37"
+    },
+    {
+      "kind": "fsa_principal",
+      "requested_url": "https://brde.com.br/wp-content/uploads/2026/04/1-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-DISTRIBUIDORAS-2026.pdf",
+      "final_url": "https://brde.com.br/wp-content/uploads/2026/04/1-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-DISTRIBUIDORAS-2026.pdf",
+      "http_status": 200,
+      "content_type": "application/pdf",
+      "bytes": 443962,
+      "sha256": "40e268fa4fdc80052bbbc1dc25829089d6b3382574454c578685ad27019b8dc7",
+      "magic_hex": "255044462d312e37"
+    },
+    {
+      "kind": "fsa_principal",
+      "requested_url": "https://brde.com.br/wp-content/uploads/2026/04/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-URUGUAI-2026-1.pdf",
+      "final_url": "https://brde.com.br/wp-content/uploads/2026/04/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-URUGUAI-2026-1.pdf",
+      "http_status": 200,
+      "content_type": "application/pdf",
+      "bytes": 414970,
+      "sha256": "346ef844312785fae35b5abb09c57a41212e8984e5c67f0143c7de0eff7e9b5c",
+      "magic_hex": "255044462d312e37"
+    },
+    {
+      "kind": "palacete_principal",
+      "requested_url": "https://www.brde.com.br/palacete/wp-content/uploads/2025/05/Edital-de-Patrocinio-BRDE-Cultural-\u2013-Palacete-dos-Leoes-2026-1.pdf",
+      "final_url": "https://www.brde.com.br/palacete/wp-content/uploads/2025/05/Edital-de-Patrocinio-BRDE-Cultural-%E2%80%93-Palacete-dos-Leoes-2026-1.pdf",
+      "http_status": 200,
+      "content_type": "application/pdf",
+      "bytes": 278314,
+      "sha256": "f1d6aeed093a0a80eaa4b5851b6b3c61b07f6ce0cd81fe69f9dd604f2260c7e7",
+      "magic_hex": "255044462d312e37"
+    },
+    {
+      "kind": "out_of_scope_fiscal_incentive",
+      "requested_url": "https://brde.com.br/wp-content/uploads/2026/06/Edital-de-Incentivos-Fiscais-2026.pdf",
+      "final_url": "https://brde.com.br/wp-content/uploads/2026/06/Edital-de-Incentivos-Fiscais-2026.pdf",
+      "http_status": 200,
+      "content_type": "application/pdf",
+      "bytes": 873888,
+      "sha256": "4b7e258182e356fe31178fca7f93be87b8e874f6d5bcead3963cf6dbb131ec2b",
+      "magic_hex": "255044462d312e37"
+    }
+  ],
+  "counts": {
+    "snapshot_local": "2026-09-13",
+    "fsa_detail_pages": 8,
+    "inventory_records": 14,
+    "in_scope_fsa_palacete_records": 9,
+    "out_of_scope_records": 5,
+    "open_in_scope_records": 2,
+    "closed_fsa_records": 6,
+    "closed_palacete_records": 1,
+    "contest_2026_links": 19,
+    "procurement_2026_items": 3
+  }
+}

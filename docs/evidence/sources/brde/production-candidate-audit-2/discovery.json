@@ -1,0 +1,26 @@
+[
+  {
+    "source_key": "brde",
+    "source_record_id": "brde-palacete-cultural-2026",
+    "canonical_url": "https://www.brde.com.br/palacete/wp-content/uploads/2025/05/Edital-de-Patrocinio-BRDE-Cultural-\u2013-Palacete-dos-Leoes-2026-1.pdf",
+    "title": "Edital de Patrocinio BRDE Cultural - Palacete dos Leoes 2026",
+    "status": "closed",
+    "document_urls": [
+      "https://www.brde.com.br/palacete/wp-content/uploads/2025/05/Edital-de-Patrocinio-BRDE-Cultural-\u2013-Palacete-dos-Leoes-2026-1.pdf"
+    ],
+    "document_hashes": [
+      "f1d6aeed093a0a80eaa4b5851b6b3c61b07f6ce0cd81fe69f9dd604f2260c7e7"
+    ],
+    "renderable": true,
+    "content_type_validated": true,
+    "hash_validated": true,
+    "evidence": {
+      "listing_url": "https://www.brde.com.br/palacete/editais/",
+      "listing_sha256": "069d7efd2bd1d0116e133dea4440d4d4609ceca6b572ff49d071f87becdcc5dc",
+      "listing_status_text": "EDITAL 2026 | Encerrado",
+      "document_http_status": 200,
+      "document_content_type": "application/pdf",
+      "document_bytes": 278314
+    }
+  }
+]

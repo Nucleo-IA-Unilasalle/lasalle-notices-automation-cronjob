@@ -1,0 +1,42 @@
+{
+  "captured_at_start_utc": "2026-09-13T06:53:34.714009+00:00",
+  "captured_at_end_utc": "2026-09-13T06:53:35.571230+00:00",
+  "repo_b_head": "5c935d7e30949f69158c8344c42379ff3bd09ef6",
+  "source_file": "scripts/discover_brde_candidates.py",
+  "execution": "direct discover_candidates() call; main() was not executed",
+  "credentials_or_submission": false,
+  "configuration": {
+    "BRDE_MIN_NOTICE_YEAR": 2026,
+    "BRDE_MAX_CANDIDATES_PER_RUN": 50,
+    "BRDE_MAX_DETAILS_PER_RUN": 20,
+    "filter_policy": "default"
+  },
+  "stats": {
+    "listings_fetched": 2,
+    "details_fetched": 0,
+    "candidates": 1,
+    "prefilter_rejected": 0,
+    "year_rejected": 13,
+    "errors": 0,
+    "partial_inventory": 0,
+    "candidate_cap_reached": 0
+  },
+  "candidate": {
+    "url": "https://www.brde.com.br/palacete/wp-content/uploads/2025/05/Edital-de-Patrocinio-BRDE-Cultural-\u2013-Palacete-dos-Leoes-2026-1.pdf",
+    "kind": "pdf",
+    "metadata": {
+      "source": "brde",
+      "listing_url": "https://www.brde.com.br/palacete/editais/",
+      "origin": "listing_pdf",
+      "extracted_year": 2026,
+      "discovered_at": "2026-09-13T06:53:34.714009+00:00"
+    },
+    "official_lifecycle_at_snapshot": "closed",
+    "official_lifecycle_evidence": "EDITAL 2026 | Encerrado"
+  },
+  "observations": [
+    "The committed adapter fetched the obsolete FSA listing, not the current /producao/ listing.",
+    "The one emitted candidate is explicitly closed on the official Palacete listing.",
+    "No candidate lifecycle/status/deadline metadata was emitted."
+  ]
+}

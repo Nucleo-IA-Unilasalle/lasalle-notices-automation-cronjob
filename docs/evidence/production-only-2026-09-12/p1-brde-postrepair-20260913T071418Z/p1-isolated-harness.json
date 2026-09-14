@@ -1,0 +1,34 @@
+{
+  "candidate": {
+    "api_python": "python.exe",
+    "repo_a": "C:\\Users\\Vitor\\Desktop\\Vinicius\\Projetos\\lasalle-notices\\lasalle-notices-automation",
+    "repo_b": "C:\\Users\\Vitor\\Desktop\\Vinicius\\Projetos\\lasalle-notices\\lasalle-notices-automation-cronjob",
+    "worker_python": "python.exe"
+  },
+  "cleanup_error": "HarnessExecutionError",
+  "declared_workload": {
+    "admitted_source": "brde",
+    "arrival_rate_per_hour": 22.0,
+    "capacity_sources": [
+      "bndes",
+      "brde",
+      "fao"
+    ],
+    "descriptor_items_per_drain_worker": 4,
+    "storage_budget_bytes": 1073741824,
+    "warm_samples": 20
+  },
+  "error": "Repo A helper database-ping failed (exit 1)",
+  "finished_at": "2026-09-13T07:14:29.344245+00:00",
+  "gate": "P1",
+  "scenarios": {},
+  "skipped": [],
+  "started_at": "2026-09-13T07:14:28.434892+00:00",
+  "status": "blocked_or_failed",
+  "target": {
+    "identity": "127.0.0.1:55432/lasalle_test",
+    "kind": "disposable_local_postgresql",
+    "schema": "p1_harness_73509c18b5e8",
+    "schema_dropped": false
+  }
+}

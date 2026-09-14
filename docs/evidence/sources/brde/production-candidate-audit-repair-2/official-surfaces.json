@@ -1,0 +1,139 @@
+{
+  "capture_method": {
+    "requests": "credential-free HTTP GET with redirects",
+    "headers": "Chrome-like User-Agent and pt-BR Accept-Language",
+    "cookies": false,
+    "credentials": false,
+    "production_mutation": false
+  },
+  "captures": [
+    {
+      "requested_url": "https://www.brde.com.br/producao/?tab=ci",
+      "captured_at_utc": "2026-09-13T07:16:44.489401+00:00",
+      "http_status": 200,
+      "final_url": "https://www.brde.com.br/producao/?tab=ci",
+      "bytes": 157436,
+      "sha256": "f0d2ec75a9098dd0f658e1daf764b0cf970d6fd2a921fd2496913fbaa4f6aa58",
+      "title": "Producao - BRDE Banco Regional de Desenvolvimento do Extremo Sul",
+      "distinct_2026_fsa_detail_links": 8,
+      "relevant_extract": "Producao Chamadas Publicas 2026",
+      "detail_pages_fetched": 8,
+      "principal_edital_pdfs_fetched": 8
+    },
+    {
+      "requested_url": "https://www.brde.com.br/producao/",
+      "captured_at_utc": "2026-09-13T07:19:21.354712+00:00",
+      "http_status": 200,
+      "final_url": "https://www.brde.com.br/producao/",
+      "bytes": 157441,
+      "sha256": "2acdccc8c5cdce1f9a274329133fea91341c89c69697569252fc3579095747c5",
+      "title": "Producao - BRDE Banco Regional de Desenvolvimento do Extremo Sul",
+      "distinct_2026_fsa_detail_links": 8,
+      "relevant_extract": "Equivalent current Production page without the tab query also exposes the same eight 2026 FSA links."
+    },
+    {
+      "requested_url": "https://www.brde.com.br/palacete/editais/",
+      "captured_at_utc": "2026-09-13T07:16:44.489401+00:00",
+      "http_status": 200,
+      "final_url": "https://www.brde.com.br/palacete/editais/",
+      "bytes": 74197,
+      "sha256": "20602e54b484efdbd6595c83447d18ba9925ee1928115f9414eb806c4d316075",
+      "title": "EDITAIS BRDE CULTURAL - Palacete dos Leoes",
+      "relevant_extract": "EDITAL DE PATROCINIO BRDE CULTURAL Palacete dos Leoes 2026 ... EDITAL 2026 | Encerrado",
+      "closed_2026_sections": 1,
+      "main_edital_pdf_refetch": {
+        "captured_at_utc": "2026-09-13T07:17:58.792308+00:00",
+        "http_status": 200,
+        "bytes": 278314,
+        "sha256": "f1d6aeed093a0a80eaa4b5851b6b3c61b07f6ce0cd81fe69f9dd604f2260c7e7",
+        "content_type": "application/pdf"
+      },
+      "dynamic_page_refetch": {
+        "captured_at_utc": "2026-09-13T07:18:52.055771+00:00",
+        "bytes": 74197,
+        "sha256": "b9ec1852cc19bcc5539374771e2ff6375c65bf4d276befec2c7cb04309840405",
+        "note": "The page hash changes between credential-free requests while the lifecycle heading and links remain unchanged."
+      }
+    },
+    {
+      "requested_url": "https://www.brde.com.br/fsa/chamadas-de-investimento/",
+      "captured_at_utc": "2026-09-13T07:19:21.354712+00:00",
+      "http_status": 200,
+      "final_url": "https://www.brde.com.br/fsa/chamadas-de-investimento/",
+      "bytes": 106980,
+      "sha256": "3a9324f44c28f22cff3feee6f3f646fa1c5456479f96c59bde033e26d9fad813",
+      "title": "Chamadas de Investimento - BRDE Banco Regional de Desenvolvimento do Extremo Sul",
+      "distinct_2026_fsa_detail_links": 0,
+      "relevant_extract": "Legacy FSA surface remains reachable but exposes no current 2026 detail links; it is not the post-repair adapter surface."
+    },
+    {
+      "requested_url": "https://www.brde.com.br/editais/",
+      "captured_at_utc": "2026-09-13T07:19:21.354712+00:00",
+      "http_status": 404,
+      "final_url": "https://www.brde.com.br/editais/",
+      "bytes": 132113,
+      "sha256": "db896ba1beef9076fa60df912889a13274da439c8438156c7dec6ae98c8f4339",
+      "title": "Page not found - BRDE Banco Regional de Desenvolvimento do Extremo Sul",
+      "distinct_2026_fsa_detail_links": 0,
+      "relevant_extract": "Negative control; generic /editais/ is not an official current BRDE source surface."
+    }
+  ],
+  "listing_anchor_extract": [
+    {
+      "href_raw": "https://brde.com.br/chamada-publica-brde-fsa-tv-e-vod-desempenho-comercial-de-produtoras-2026",
+      "label": "Chamada Publica BRDE/FSA - TV E VOD: DESEMPENHO COMERCIAL DE PRODUTORAS 2026",
+      "closed_marker": null
+    },
+    {
+      "href_raw": "https://brde.com.br/chamada-publica-brde-fsa-nucleos-criativos-2026",
+      "label": "Chamada Publica BRDE/FSA - NUCLEOS CRIATIVOS - 2026",
+      "closed_marker": null
+    },
+    {
+      "href_raw": "https://brde.com.br/chamada-publica-brde-fsa-desempenho-artistico-produtoras-2026/",
+      "label": "Chamada Publica BRDE/FSA - DESEMPENHO ARTISTICO - PRODUTORAS 2026",
+      "closed_marker": null
+    },
+    {
+      "href_raw": "http://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-argentina-2026",
+      "label": "Chamada Publica BRDE/FSA - COPRODUCAO BRASIL-ARGENTINA - 2026",
+      "closed_marker": "Inscricoes encerradas"
+    },
+    {
+      "href_raw": "http://www.brde.com.br/ chamada-publica-brde-fsa-coproducao-brasil-portugal-2026/",
+      "label": "Chamada Publica BRDE/FSA - COPRODUCAO BRASIL-PORTUGAL - 2026",
+      "closed_marker": null,
+      "malformed_leading_space": true
+    },
+    {
+      "href_raw": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-produtoras-2026/",
+      "label": "Chamada Publica BRDE/FSA - CINEMA: DESEMPENHO COMERCIAL DE PRODUTORAS - 2026",
+      "closed_marker": "Inscricoes encerradas para Beneficiarios Indiretos"
+    },
+    {
+      "href_raw": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-de-distribuidoras-2026/",
+      "label": "Chamada Publica BRDE/FSA - CINEMA: DESEMPENHO COMERCIAL DE DISTRIBUIDORAS 2026",
+      "closed_marker": "Inscricoes encerradas para Beneficiarios Indiretos"
+    },
+    {
+      "href_raw": "https://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-uruguai-2026/",
+      "label": "Chamada Publica BRDE/FSA - COPRODUCAO BRASIL-URUGUAI - 2026",
+      "closed_marker": "Inscricoes encerradas"
+    }
+  ],
+  "host_validation": {
+    "normalization": "lowercase hostname and remove one leading www.",
+    "accepted_normalized_host": "brde.com.br",
+    "malformed_portugal_repaired_detail_url": "https://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-portugal-2026",
+    "malformed_portugal_repaired_detail_check": {
+      "captured_at_utc": "2026-09-13T07:24:00.959801+00:00",
+      "http_status": 200,
+      "final_url": "https://brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-portugal-2026/",
+      "bytes": 110158,
+      "sha256": "e92f62a45d896594d5e2491d351ca47b779053d4eb8d7513b3f13941c8fa773c",
+      "official_host": true
+    },
+    "emitted_principal_pdf_hosts": ["brde.com.br"],
+    "all_emitted_hosts_official": true
+  }
+}

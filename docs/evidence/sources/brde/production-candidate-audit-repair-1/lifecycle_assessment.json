@@ -1,0 +1,90 @@
+{
+  "source": "brde",
+  "slot": "repair-1",
+  "snapshot_utc": "2026-09-13T07:18:48Z",
+  "snapshot_local": "2026-09-13",
+  "repo_a_head": "a5275dae46f223da74dc54d0734051acc66a8a9f",
+  "repo_b_head": "2e0dd74ee64b999318dea4cc1767df4985b384ee",
+  "official_inventory": {
+    "in_scope_total": 9,
+    "open_fsa_principal_editals": 2,
+    "closed_fsa_calls": 6,
+    "closed_palacete_editals": 1,
+    "out_of_scope_total": 5,
+    "open_ids": [
+      "fsa:chamada-publica-brde-fsa-tv-e-vod-desempenho-comercial-de-produtoras-2026",
+      "fsa:chamada-publica-brde-fsa-coproducao-brasil-portugal-2026"
+    ],
+    "closed_fsa_ids": [
+      "fsa:chamada-publica-brde-fsa-nucleos-criativos-2026",
+      "fsa:chamada-publica-brde-fsa-desempenho-artistico-produtoras-2026",
+      "fsa:chamada-publica-brde-fsa-coproducao-brasil-argentina-2026",
+      "fsa:chamada-publica-brde-fsa-cinema-desempenho-comercial-de-produtoras-2026",
+      "fsa:chamada-publica-brde-fsa-cinema-desempenho-comercial-de-distribuidoras-2026",
+      "fsa:chamada-publica-brde-fsa-coproducao-brasil-uruguai-2026"
+    ],
+    "closed_palacete_id": "palacete:patrocinio-2026"
+  },
+  "adapter_result": {
+    "stats": {
+      "listings_fetched": 2,
+      "details_fetched": 8,
+      "candidates": 2,
+      "prefilter_rejected": 0,
+      "year_rejected": 0,
+      "errors": 0,
+      "partial_inventory": 0,
+      "candidate_cap_reached": 0,
+      "detail_cap_reached": 0,
+      "open_details": 2,
+      "closed_details": 6,
+      "upcoming_details": 0,
+      "missing_lifecycle": 0,
+      "palacete_closed_sections": 1
+    },
+    "emitted_urls": [
+      "https://brde.com.br/wp-content/uploads/2026/06/0-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-TV-VOD-PRODUTORAS-2026.pdf",
+      "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-PORTUGAL-2026.pdf"
+    ],
+    "emitted_metadata": [
+      {
+        "source": "brde",
+        "listing_url": "https://www.brde.com.br/producao/?tab=ci",
+        "discovered_at": "2026-09-13T07:19:28.236449+00:00",
+        "origin": "detail_page",
+        "extracted_year": 2026,
+        "detail_url": "https://brde.com.br/chamada-publica-brde-fsa-tv-e-vod-desempenho-comercial-de-produtoras-2026",
+        "application_start": "2026-07-27",
+        "application_deadline": "2026-09-25",
+        "status": "open"
+      },
+      {
+        "source": "brde",
+        "listing_url": "https://www.brde.com.br/producao/?tab=ci",
+        "discovered_at": "2026-09-13T07:19:30.421288+00:00",
+        "origin": "detail_page",
+        "extracted_year": 2026,
+        "detail_url": "https://www.brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-portugal-2026",
+        "application_start": "2026-06-15",
+        "application_deadline": "2026-09-25",
+        "status": "open"
+      }
+    ]
+  },
+  "lifecycle_guards": {
+    "fsa": "detail application period is required; details with snapshot date before start or at/after deadline are excluded; only active periods build candidates",
+    "palacete": "2026 section with Encerrado heading yields no PDF candidates",
+    "malformed_portugal_href": "leading whitespace after the official host slash is repaired only for the bounded BRDE FSA path, then canonicalized to an official brde.com.br URL",
+    "closed_material_admission": "closed FSA and Palacete material was excluded before candidate construction; no closed PDF entered the candidate output",
+    "metadata": "both candidates carry source=brde, official listing/detail URLs, application_start, application_deadline, and status=open"
+  },
+  "host_and_lifecycle_evidence": [
+    "scripts/discover_brde_candidates.py:120-214",
+    "scripts/discover_brde_candidates.py:216-234",
+    "scripts/discover_brde_candidates.py:317-529",
+    "adapter_output.json"
+  ],
+  "production_state": "not accessed or mutated",
+  "independent_reviewer": "TODO",
+  "operator_signoff": "/root/p3_ledger"
+}
