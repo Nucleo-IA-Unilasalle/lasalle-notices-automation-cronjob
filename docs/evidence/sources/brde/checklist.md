@@ -1,4 +1,4 @@
-# Staging Runbook Checklist: brde
+# Source Reliability Checklist: brde
 
 Source Key: `brde`  
 Mode: `ingest`  
@@ -12,14 +12,23 @@ Orchestrator: `discover_brde_candidates.py` via `pipeline-discovery-group-a.yml`
   - FSA: `https://www.brde.com.br/fsa/chamadas-de-investimento/`
 
 ## Phase 2: Independent Official Ground-Truth Audits (Gate RR-05)
-- [ ] Audit Slot 1: obtain independently prepared official-source inventory and reviewer sign-off.
-- [ ] Audit Slot 2: repeat independently from slot 1 and record provenance.
-- [ ] Retain credential-redacted raw captures and reproducible inventory derivation.
-- [ ] Record qualifying reports and reviewer sign-off. Existing `audit-1/` and
+- [x] Audit Slot 1: independently prepared official-source inventory and reviewer sign-off.
+- [x] Audit Slot 2: independent repeat with recorded provenance.
+- [x] Retain credential-redacted captures and reproducible inventory derivation.
+- [x] Record qualifying reports and reviewer sign-off. Existing `audit-1/` and
       `audit-2/` are diagnostic history only.
 
 ## Phase 3: Staging Execution Verification
 - [x] Staging Ingestion Rehearsal (`da824048-181e-4653-9570-096ef1177073`): downloaded 278,314 PDF bytes, text extracted, 1 notice inserted. This is not image-only OCR proof.
 - [x] Staging Idempotent Replay (`204538a5-9ac5-469d-a062-3618967c29e5`): zero duplicate insertions or redundant processing.
+
+## Phase 4: Production P5
+- [x] Supabase-only additive migration, RLS, and internal-table ACL denial.
+- [x] Repo A admission fence and 25 legacy writer workflow fence.
+- [x] BRDE canary (`34883807324`): two audited open records, zero blockers.
+- [x] Unchanged replay (`34884405336`): zero new writes or duplicates.
+- [ ] Two actual scheduled BRDE executions with reconciliation.
+
+## Phase 5: Production P6
 - [ ] 48-Hour Observation Soak (minimum 48 hours continuous scheduled execution).
 - [ ] 7-Day Operating Review for production cutover signoff.

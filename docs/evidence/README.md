@@ -1,16 +1,19 @@
 # Staging Evidence Index
 
-Status: **IN PROGRESS**. [Hosted staging report](STAGING-2026-09-07.md) records
+Status: **IN PROGRESS**. BRDE P5 canary/replay passed, but two scheduled
+executions are still required before P5 closes; P6 and every later source
+remain gated. The [production-only evidence](production-only-2026-09-12/README.md)
+records the Supabase-only production cutover, bounded canary, and unchanged
+replay. [Hosted staging report](STAGING-2026-09-07.md) records
 deployment, catalog parity, BRDE ingestion/replay, BNDES audit resolution and
 aggregate admission. The committed BRDE/BNDES URL comparisons are diagnostic
-outputs, not independent audits; both RR-05 audit slots remain `TODO`. Paused (`canoas`, `dopa`, `fbds`, `finep`, `ibama`) and audit-only
+outputs, not independent audits. BRDE now has two qualifying independent audit
+slots; other source audit requirements remain open. Paused (`canoas`, `dopa`, `fbds`, `finep`, `ibama`) and audit-only
 (`tnc`, `funbio`, `govbr_mma_fnma`, `govbr_mma_public_calls`, `unep`) holds are preserved; baseline assessment and capture methodologies are documented in [Held Sources Audit Roadmap](sources/HELD-SOURCES-AUDIT-ROADMAP-2026-09-07.md). Evidence scaffolding never activates a
 source.
 
-[Production-only admission candidate](production-only-2026-09-12/README.md)
-records the 2026-09-12 uncommitted server-side and workflow admission work, its
-local verification, and the remaining process/capacity gaps. It is a review
-record, not a passed release gate or production observation. The [P3 writer
+[Production-only release evidence](production-only-2026-09-12/README.md)
+records P1-P4, the P5 cutover/canary, and the remaining time-bound gates. The [P3 writer
 drain/fence readiness ledger](production-only-2026-09-12/p3-writer-drain-fence-ledger-2026-09-12T2342Z.md)
 adds the sanitized old-ref, queued/running, direct-CLI, API, scheduler, and
 executor inventory plus guarded operator commands; it is also not production
@@ -56,7 +59,7 @@ genuine post-takeover stale-owner fencing.
 | Source | Mode | Snapshot | Audit 1 | Audit 2 | 48 h observation |
 |--------|------|----------|---------|---------|------------------|
 | bndes | ingest | [snapshot.json](sources/bndes/snapshot.json) | [TODO](sources/bndes/audits.md#audit-slot-1) | [TODO](sources/bndes/audits.md#audit-slot-2) | TODO (pending soak) |
-| brde | ingest | [snapshot.json](sources/brde/snapshot.json) | [TODO](sources/brde/audits.md#audit-slot-1) | [TODO](sources/brde/audits.md#audit-slot-2) | TODO (pending soak) |
+| brde | ingest | [snapshot.json](sources/brde/snapshot.json) | [PASS](sources/brde/production-candidate-audit-repair-1/README.md) | [PASS](sources/brde/production-candidate-audit-repair-2/README.md) | TODO (P6 pending soak) |
 | fao | ingest | TODO | TODO | TODO | TODO |
 | fapergs | ingest | TODO | TODO | TODO | TODO |
 | fundacao_grupo_boticario | ingest | TODO | TODO | TODO | TODO |

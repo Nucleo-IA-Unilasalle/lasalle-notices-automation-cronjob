@@ -1,9 +1,26 @@
 {
   "source_key": "brde",
-  "observed_at": "2026-09-13T07:18:52.055771+00:00",
-  "registry_ref": "2e0dd74ee64b999318dea4cc1767df4985b384ee",
+  "observed_at": "2026-09-14T19:04:00+00:00",
+  "registry_ref": "15501bf37908b0968112299966792011b6b0d81d",
   "pin_ref": "2026-09-06T03:22:11.102329+00:00",
-  "runs": [],
+  "runs": [
+    {
+      "run_id": "34883807324",
+      "started_at": "2026-09-14T18:56:01+00:00",
+      "status": "success",
+      "kind": "production_canary",
+      "head_sha": "2b91ee58e09a77cb5cd5b9b3760048832ef5aa12",
+      "evidence": "docs/evidence/production-only-2026-09-12/p5-production-canary-2026-09-14T1904Z.md"
+    },
+    {
+      "run_id": "34884405336",
+      "started_at": "2026-09-14T19:01:56+00:00",
+      "status": "success",
+      "kind": "unchanged_replay",
+      "head_sha": "2b91ee58e09a77cb5cd5b9b3760048832ef5aa12",
+      "evidence": "docs/evidence/production-only-2026-09-12/p5-production-canary-2026-09-14T1904Z.md"
+    }
+  ],
   "audits": [
     {
       "result": "pass",
@@ -18,6 +35,6 @@
       "historical_diagnostic_path": "docs/evidence/sources/brde/audit-2/fidelity"
     }
   ],
-  "reviewer_signoff": "/root/p2_review: ACCEPT 2026-09-13 (P4), selected brde/candidate",
-  "notes": "Two independently prepared post-repair official-source audits passed for Repo B 2e0dd74ee64b999318dea4cc1767df4985b384ee with zero blocking exceptions. Historical repository-owned comparisons remain diagnostic only. Production activation, canary, soak, and P4 reviewer acceptance remain separate gates."
+  "reviewer_signoff": "/root/p2_review: ACCEPT 2026-09-14 final P4 amendment, A 419673a90cfd6feb192d505c6cd9a43d4d9ae251, B 2b91ee58e09a77cb5cd5b9b3760048832ef5aa12, selected brde/candidate, remaining window through 20:10Z",
+  "notes": "Two independently prepared post-repair official-source audits passed against executable Repo B 2e0dd74ee64b999318dea4cc1767df4985b384ee with zero blocking exceptions. Repo B 2b91ee58e09a77cb5cd5b9b3760048832ef5aa12 is the production executable after the reviewed default-deny workflow repair. Production canary and unchanged replay passed their P5 checks with no duplicate or unexpected-source record. Two actual scheduled executions remain required to close P5; P6, the 48-hour soak, seven-day review, expansion, and RR-01 through RR-05 remain open."
 }
