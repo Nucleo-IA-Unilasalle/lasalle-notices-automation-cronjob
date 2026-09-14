@@ -210,6 +210,9 @@ def test_closed_beta_schedules_only_the_selected_source_matrix() -> None:
         assert "admitted == 'true'" in workflow["jobs"]["discover"]["if"]
         assert "__closed_beta_denied__" in build_step["run"]
         assert "admitted=false" in build_step["run"]
+        assert build_step["run"].index('[ -z "$CLOSED_BETA_SOURCE_ALLOWLIST" ]') < (
+            build_step["run"].index("python scripts/build_source_matrix.py")
+        )
         assert workflow["jobs"]["discover"]["strategy"]["max-parallel"] == 3
     pncp = _load(WORKFLOW_DIR / "pipeline-pncp-discovery.yml")
     assert "CLOSED_BETA_SOURCE_ALLOWLIST == 'pncp'" in pncp["jobs"]["discover-pncp"]["if"]
