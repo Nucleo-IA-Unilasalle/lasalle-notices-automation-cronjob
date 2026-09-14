@@ -19,19 +19,28 @@ jobs:
     timeout-minutes: 5
     outputs:
       includes: ${{ steps.build.outputs.includes }}
+      admitted: ${{ steps.build.outputs.admitted }}
     steps:
       - name: Checkout scheduler repository
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
 
       - name: Build strict source matrix from the registry
         id: build
-        run: echo "includes=$(python scripts/build_source_matrix.py --group a --format github)" >> "$GITHUB_OUTPUT"
+        run: |
+          includes="$(python scripts/build_source_matrix.py --group a --format github)"
+          if [ "$includes" = "[]" ]; then
+            echo 'includes=[{"source":"__closed_beta_denied__","browser_required":false,"rollout_mode":"audit","submission_contract":"candidate"}]' >> "$GITHUB_OUTPUT"
+            echo 'admitted=false' >> "$GITHUB_OUTPUT"
+          else
+            echo "includes=$includes" >> "$GITHUB_OUTPUT"
+            echo 'admitted=true' >> "$GITHUB_OUTPUT"
+          fi
         env:
           CLOSED_BETA_SOURCE_ALLOWLIST: ${{ vars.CLOSED_BETA_SOURCE_ALLOWLIST || '' }}
 
   discover:
     needs: matrix
-    if: ${{ needs.matrix.outputs.includes != '[]' }}
+    if: ${{ needs.matrix.outputs.admitted == 'true' }}
     strategy:
       fail-fast: false
       max-parallel: 3
