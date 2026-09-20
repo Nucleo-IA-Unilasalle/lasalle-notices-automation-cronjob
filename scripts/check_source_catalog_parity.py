@@ -4,6 +4,7 @@ from datetime import datetime, timezone, timedelta
 import json
 import os
 from pathlib import Path
+import time
 
 import requests
 from build_source_matrix import load_registry, validate_registry
@@ -17,6 +18,9 @@ ARCHIVED_SOURCE_KEYS = frozenset({
     "cnpq", "floresta_mais_amazonia", "fundacao_cargill", "fundo_amazonia",
     "govbr_mcti", "govbr_mma_cop17", "govbr_sfb", "iadb", "thegef",
 })
+CATALOG_FETCH_ATTEMPTS = 4
+CATALOG_FETCH_BACKOFF_SECONDS = 2
+RETRYABLE_CATALOG_STATUS_CODES = frozenset({408, 425, 429, 500, 502, 503, 504})
 
 
 def _require_contract_items(contract):
@@ -113,9 +117,26 @@ def validate_parity(registry, contract):
 
 
 def fetch_catalog():
-    response = requests.get(os.environ["RENDER_APP_URL"].rstrip("/") + "/api/pipeline/source-schedule/catalog",
-                            headers={"Authorization": "Bearer " + os.environ["PIPELINE_SECRET"]},
-                            timeout=(5, 20), allow_redirects=False)
+    url = os.environ["RENDER_APP_URL"].rstrip("/") + "/api/pipeline/source-schedule/catalog"
+    headers = {"Authorization": "Bearer " + os.environ["PIPELINE_SECRET"]}
+    response = None
+    last_error = None
+    for attempt in range(CATALOG_FETCH_ATTEMPTS):
+        try:
+            response = requests.get(
+                url, headers=headers, timeout=(5, 20), allow_redirects=False
+            )
+        except (requests.ConnectionError, requests.Timeout) as exc:
+            last_error = exc
+        else:
+            if response.status_code == 200:
+                break
+            if response.status_code not in RETRYABLE_CATALOG_STATUS_CODES:
+                break
+        if attempt + 1 < CATALOG_FETCH_ATTEMPTS:
+            time.sleep(CATALOG_FETCH_BACKOFF_SECONDS * (2 ** attempt))
+    if response is None:
+        raise last_error or requests.ConnectionError("Live catalog unavailable")
     if response.status_code != 200:
         raise ValueError(f"Live catalog unavailable: HTTP {response.status_code}")
     result = response.json()

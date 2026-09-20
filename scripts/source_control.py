@@ -1,5 +1,6 @@
 """Bounded trusted-worker client. Never print tokens or arbitrary API bodies."""
 import os
+import time
 
 import requests
 
@@ -13,6 +14,10 @@ SOURCE_SCOPES = {
     "finep": "finep-pages-v1",
 }
 DEFAULT_SCOPE = "default"
+RENDER_READY_ATTEMPTS = 4
+RENDER_READY_TIMEOUT = (5, 20)
+RENDER_READY_BACKOFF_SECONDS = 2
+RETRYABLE_READY_STATUS_CODES = frozenset({408, 425, 429, 500, 502, 503, 504})
 
 
 def scope_for(source):
@@ -46,6 +51,34 @@ class SourceControl:
         self.url = os.environ["RENDER_APP_URL"].rstrip("/")
         self.headers = {"Authorization": "Bearer " + os.environ["PIPELINE_SECRET"]}
 
+    def wait_until_ready(self):
+        """Wake Render with safe reads before the first mutating claim."""
+        last_status = None
+        last_error = None
+        for attempt in range(RENDER_READY_ATTEMPTS):
+            try:
+                response = requests.get(
+                    self.url + "/health",
+                    timeout=RENDER_READY_TIMEOUT,
+                    allow_redirects=False,
+                )
+            except (requests.ConnectionError, requests.Timeout) as exc:
+                last_error = exc
+            else:
+                last_status = response.status_code
+                if response.status_code == 200:
+                    return
+                if response.status_code not in RETRYABLE_READY_STATUS_CODES:
+                    raise RuntimeError(
+                        f"Source control readiness failed: HTTP {response.status_code}"
+                    )
+            if attempt + 1 < RENDER_READY_ATTEMPTS:
+                time.sleep(RENDER_READY_BACKOFF_SECONDS * (2 ** attempt))
+
+        if last_status is not None:
+            raise RuntimeError(f"Source control readiness failed: HTTP {last_status}")
+        raise RuntimeError("Source control readiness failed: network unavailable") from last_error
+
     def post(self, path, payload):
         response = requests.post(self.url + "/api/pipeline/" + path, json=payload,
                                  headers=self.headers, timeout=(5, 15), allow_redirects=False)
@@ -61,6 +94,10 @@ class SourceControl:
         return body
 
     def claim(self, force=False, purpose="collection"):
+        # A cold Render instance may take longer than the claim timeout to
+        # start. Warm it with idempotent reads; never replay the POST after an
+        # ambiguous timeout because the server may already hold the lease.
+        self.wait_until_ready()
         # Claim with the adapter's checkpoint scope so the server pins
         # claim_scope to the scope register/checkpoint calls will actually
         # use (a "default"-scoped claim cannot advance "pncp-updates-v1").

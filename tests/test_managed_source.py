@@ -103,6 +103,9 @@ def test_claim_payload_carries_scope_and_purpose():
             captured.update(path=path, payload=payload)
             return {"claim_token": "tok-" + "x" * 40}
 
+        def wait_until_ready(self):
+            pass
+
     control = _Control("pncp")
     control.claim()
     assert captured["path"] == "source-schedule/claims"
@@ -112,6 +115,81 @@ def test_claim_payload_carries_scope_and_purpose():
     control2.claim(force=True)
     assert captured["payload"]["scope"] == "default"
     assert captured["payload"]["force"] is True
+
+
+def test_claim_warms_render_with_bounded_safe_retries(monkeypatch):
+    import requests
+    import source_control
+
+    monkeypatch.setenv("RENDER_APP_URL", "https://render.example.com/")
+    monkeypatch.setenv("PIPELINE_SECRET", "test-secret")
+    responses = [
+        requests.ReadTimeout("sleeping"),
+        Mock(status_code=503),
+        Mock(status_code=200),
+    ]
+    seen_gets = []
+    sleeps = []
+
+    def fake_get(url, **kwargs):
+        seen_gets.append((url, kwargs))
+        result = responses.pop(0)
+        if isinstance(result, Exception):
+            raise result
+        return result
+
+    monkeypatch.setattr(source_control.requests, "get", fake_get)
+    monkeypatch.setattr(source_control.time, "sleep", sleeps.append)
+    post = Mock(return_value=Mock(
+        status_code=201,
+        json=Mock(return_value={"claim_token": "tok-" + "x" * 40}),
+    ))
+    monkeypatch.setattr(source_control.requests, "post", post)
+
+    source_control.SourceControl("bndes").claim()
+
+    assert [call[0] for call in seen_gets] == [
+        "https://render.example.com/health",
+        "https://render.example.com/health",
+        "https://render.example.com/health",
+    ]
+    assert all(call[1] == {"timeout": (5, 20), "allow_redirects": False} for call in seen_gets)
+    assert sleeps == [2, 4]
+    post.assert_called_once()
+
+
+def test_claim_never_posts_when_render_readiness_is_exhausted(monkeypatch):
+    import source_control
+
+    monkeypatch.setenv("RENDER_APP_URL", "https://render.example.com")
+    monkeypatch.setenv("PIPELINE_SECRET", "test-secret")
+    monkeypatch.setattr(
+        source_control.requests, "get", lambda *args, **kwargs: Mock(status_code=503)
+    )
+    monkeypatch.setattr(source_control.time, "sleep", lambda seconds: None)
+    post = Mock()
+    monkeypatch.setattr(source_control.requests, "post", post)
+
+    with pytest.raises(RuntimeError, match="readiness failed: HTTP 503"):
+        source_control.SourceControl("bndes").claim()
+    post.assert_not_called()
+
+
+def test_claim_post_is_not_retried_after_ambiguous_timeout(monkeypatch):
+    import requests
+    import source_control
+
+    monkeypatch.setenv("RENDER_APP_URL", "https://render.example.com")
+    monkeypatch.setenv("PIPELINE_SECRET", "test-secret")
+    monkeypatch.setattr(
+        source_control.requests, "get", lambda *args, **kwargs: Mock(status_code=200)
+    )
+    post = Mock(side_effect=requests.ReadTimeout("outcome unknown"))
+    monkeypatch.setattr(source_control.requests, "post", post)
+
+    with pytest.raises(requests.ReadTimeout):
+        source_control.SourceControl("bndes").claim()
+    post.assert_called_once()
 
 
 def test_drain_only_rejects_audit_combination(monkeypatch):

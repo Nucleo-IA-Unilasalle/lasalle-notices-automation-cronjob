@@ -11,6 +11,7 @@ import copy
 from datetime import datetime, timedelta, timezone
 import json
 from pathlib import Path
+from unittest.mock import Mock
 
 import pytest
 import requests
@@ -30,6 +31,11 @@ from check_source_catalog_parity import (
 @pytest.fixture
 def registry():
     return load_registry()
+
+
+@pytest.fixture(autouse=True)
+def no_catalog_retry_delay(monkeypatch):
+    monkeypatch.setattr(check_source_catalog_parity.time, "sleep", lambda seconds: None)
 
 
 @pytest.fixture
@@ -385,6 +391,42 @@ def test_fetch_catalog_timeout_surfaces(monkeypatch):
     _patch_get(monkeypatch, exc=requests.Timeout("connect timed out"))
     with pytest.raises(requests.RequestException):
         fetch_catalog()
+
+
+def test_fetch_catalog_retries_only_transient_failures(monkeypatch, pin):
+    body = copy.deepcopy(pin)
+    body["max_concurrent_source_runs"] = 3
+    responses = [
+        requests.ReadTimeout("sleeping"),
+        _FakeResponse(status_code=503, body={}),
+        _FakeResponse(status_code=200, body=body),
+    ]
+    sleeps = []
+
+    def fake_get(*args, **kwargs):
+        result = responses.pop(0)
+        if isinstance(result, Exception):
+            raise result
+        return result
+
+    monkeypatch.setattr("check_source_catalog_parity.requests.get", fake_get)
+    monkeypatch.setattr("check_source_catalog_parity.time.sleep", sleeps.append)
+    monkeypatch.setenv("RENDER_APP_URL", "https://render.example.com/")
+    monkeypatch.setenv("PIPELINE_SECRET", "test-secret")
+
+    assert fetch_catalog() == body
+    assert sleeps == [2, 4]
+
+
+def test_fetch_catalog_does_not_retry_auth_failure(monkeypatch):
+    get = Mock(return_value=_FakeResponse(status_code=401, body={}))
+    monkeypatch.setattr("check_source_catalog_parity.requests.get", get)
+    monkeypatch.setenv("RENDER_APP_URL", "https://render.example.com/")
+    monkeypatch.setenv("PIPELINE_SECRET", "test-secret")
+
+    with pytest.raises(ValueError, match="HTTP 401"):
+        fetch_catalog()
+    get.assert_called_once()
 
 
 def test_fetch_catalog_sends_no_redirects_with_bounded_timeout(monkeypatch, pin):
