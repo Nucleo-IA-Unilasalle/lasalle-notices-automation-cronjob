@@ -252,6 +252,12 @@ def discover_candidates(
             response.raise_for_status()
             listing_html = response.text
         except Exception as exc:
+            status_code = getattr(getattr(exc, "response", None), "status_code", None)
+            # WordPress returns 404 for out-of-range pages once the archive
+            # is exhausted on page 1; treat that as end-of-pagination, not
+            # a partial-inventory error.
+            if page_num > 1 and status_code == 404:
+                break
             log_source_failure(
                 "Failed to fetch IIS-Rio listing page %s: %s",
                 page_url,

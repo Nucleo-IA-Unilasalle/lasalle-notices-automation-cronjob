@@ -80,6 +80,38 @@ class TestExtractFunbioDetailUrls:
             "https://chamadas.funbio.org.br/chamada-publica-2026",
         ]
 
+    def test_manifestacao_interesse_titles_are_discovered(self) -> None:
+        """Open 'Manifestação de Interesse' cards must not be dropped.
+
+        Regression for the 2026-09-14 audit: three open calls
+        (conselho-ucs-municipais-estaduais, planodemanejo-sinalizacao-
+        estadual-municipal, usopublico-ucs) were invisible to discovery
+        because the signal token list lacked interesse/manifestação.
+        """
+        from discover_funbio_candidates import extract_funbio_detail_urls
+
+        listing_html = """
+        <html>
+          <body>
+            <a href="/conselho-ucs-municipais-estaduais">
+              Manifestação de Interesse 03/2026 - Apoio às Unidades de Conservação
+            </a>
+            <a href="/planodemanejo-sinalizacao-estadual-municipal">
+              Manifestação de Interesse 04/2026 - Elaboração de Planos de Manejo
+            </a>
+            <a href="/usopublico-ucs">
+              Manifestação de Interesse 05/2026 - Uso público e negócios de UCs
+            </a>
+            <a href="/quem-somos">Bloqueado</a>
+          </body>
+        </html>
+        """
+        assert extract_funbio_detail_urls(listing_html, LISTING_URL) == [
+            "https://chamadas.funbio.org.br/conselho-ucs-municipais-estaduais",
+            "https://chamadas.funbio.org.br/planodemanejo-sinalizacao-estadual-municipal",
+            "https://chamadas.funbio.org.br/usopublico-ucs",
+        ]
+
 
 class TestExtractFunbioPdfUrls:
     def test_extracts_download_regulamento_anchors(self) -> None:
@@ -285,6 +317,71 @@ class TestDiscoverCandidates:
 
         assert stats["errors"] == 1
         assert candidates == []
+
+
+class TestParseFunbioOpportunity:
+    """Detail-page parsing for the structured opportunity contract."""
+
+    DETAIL_HTML = """
+    <html>
+      <body>
+        <div id="__next">
+          <div class="detail-wrap">
+            <h1>Chamada de Projetos 07/2026 Apoio à Consolidação de RPPNs</h1>
+            <p>Valor total da Chamada de Projetos: R$ 1.000.000,00</p>
+            <p>Inscrições até 25/09/2026</p>
+            <a href="planodemanejo-rppn/download/regulamento?id=abc">Baixe o regulamento</a>
+          </div>
+        </div>
+      </body>
+    </html>
+    """
+
+    def test_deadline_uses_brasilia_timezone(self) -> None:
+        """23h59 Brasília (UTC-3) becomes 02:59Z the next calendar day."""
+        from datetime import datetime, timezone
+
+        from discover_funbio_candidates import parse_funbio_opportunity
+
+        record = parse_funbio_opportunity(
+            DETAIL_URL, self.DETAIL_HTML,
+            snapshot_at=datetime(2026, 9, 14, 12, 0, tzinfo=timezone.utc),
+        )
+        assert record is not None
+        assert record["authoritative_status"] == "open"
+        # 25/09/2026 23:59 America/Sao_Paulo == 26/09/2026 02:59 UTC
+        assert record["application_deadline"] == "2026-09-26T02:59:00+00:00"
+
+    def test_regulamento_is_principal_document(self) -> None:
+        from datetime import datetime, timezone
+
+        from discover_funbio_candidates import parse_funbio_opportunity
+
+        record = parse_funbio_opportunity(
+            DETAIL_URL, self.DETAIL_HTML,
+            snapshot_at=datetime(2026, 9, 14, 12, 0, tzinfo=timezone.utc),
+        )
+        assert record is not None
+        docs = record["documents"]
+        assert len(docs) == 1
+        assert docs[0]["is_principal"] is True
+        assert docs[0]["is_renderable"] is True
+        assert docs[0]["url"].startswith(
+            "https://chamadas.funbio.org.br/planodemanejo-rppn/download/regulamento",
+        )
+
+    def test_past_deadline_marks_closed(self) -> None:
+        from datetime import datetime, timezone
+
+        from discover_funbio_candidates import parse_funbio_opportunity
+
+        html = self.DETAIL_HTML.replace("25/09/2026", "01/01/2026")
+        record = parse_funbio_opportunity(
+            DETAIL_URL, html,
+            snapshot_at=datetime(2026, 9, 14, 12, 0, tzinfo=timezone.utc),
+        )
+        assert record is not None
+        assert record["authoritative_status"] == "closed"
 
 
 class TestSubmitHandoff:

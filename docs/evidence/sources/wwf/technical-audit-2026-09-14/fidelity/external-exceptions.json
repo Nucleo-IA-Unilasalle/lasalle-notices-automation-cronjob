@@ -1,0 +1,63 @@
+[
+  {
+    "evidence": {
+      "captured_via": "independent-direct-requests",
+      "detail_content_area": true,
+      "detail_http": {
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:20.833964Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95223%2FConsultoria-para-intervencoes-em-campo-para-promover-a-gestao-integrada-dos-recursos-hidricos-e-as-financas-sustentaveis-no-Pantanal=",
+        "status": 200
+      },
+      "detail_id": "95223",
+      "listing_http": {
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:20.583631Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/",
+        "status": 200
+      },
+      "listing_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/",
+      "note": "Detail content area has no PDF links; only non-PDF attachments (e.g. DOCX TDRs). Candidate/PDF pipeline cannot ingest this open edital.",
+      "origin": "inventory",
+      "pdfs_found": [],
+      "pdfs_rejected": [],
+      "record": {
+        "canonical_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95223%2FConsultoria-para-intervencoes-em-campo-para-promover-a-gestao-integrada-dos-recursos-hidricos-e-as-financas-sustentaveis-no-Pantanal=",
+        "deadline": null,
+        "document_hashes": [],
+        "document_urls": [],
+        "evidence": {
+          "captured_via": "independent-direct-requests",
+          "detail_content_area": true,
+          "detail_http": {
+            "content_type": "text/html;charset=UTF-8",
+            "fetched_at_utc_end": "2026-09-14T21:54:20.833964Z",
+            "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95223%2FConsultoria-para-intervencoes-em-campo-para-promover-a-gestao-integrada-dos-recursos-hidricos-e-as-financas-sustentaveis-no-Pantanal=",
+            "status": 200
+          },
+          "detail_id": "95223",
+          "listing_http": {
+            "content_type": "text/html;charset=UTF-8",
+            "fetched_at_utc_end": "2026-09-14T21:54:20.583631Z",
+            "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/",
+            "status": 200
+          },
+          "listing_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/",
+          "note": "Detail content area has no PDF links; only non-PDF attachments (e.g. DOCX TDRs). Candidate/PDF pipeline cannot ingest this open edital.",
+          "pdfs_found": [],
+          "pdfs_rejected": [],
+          "row_source_record_id": "95223"
+        },
+        "published_at": "2026-09-03T00:00:00Z",
+        "reason_code": "out_of_scope",
+        "source_key": "wwf",
+        "source_record_id": "95223",
+        "status": "open",
+        "title": "03 set 2026 Consultoria para intervenções em campo para promover a gestão integrada dos recursos hídricos e as ... Pantanal-CARP"
+      },
+      "row_source_record_id": "95223"
+    },
+    "reason_code": "out_of_scope",
+    "severity": "non_blocking"
+  }
+]

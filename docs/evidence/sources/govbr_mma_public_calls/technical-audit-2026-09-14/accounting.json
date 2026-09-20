@@ -1,0 +1,137 @@
+{
+  "captured_at": "2026-09-14T20:30:31.663634+00:00",
+  "listing_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/participacao-social/3-5-editais-de-chamamento-publico/3-5-editais-de-chamamento-publico",
+  "counts": {
+    "open": 0,
+    "closed": 0,
+    "upcoming": 0,
+    "excluded": 15,
+    "unknown": 1
+  },
+  "raw_entries": 16,
+  "errors": [],
+  "fetch_log": [
+    {
+      "url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/participacao-social/3-5-editais-de-chamamento-publico/3-5-editais-de-chamamento-publico",
+      "status": 200,
+      "final_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/participacao-social/3-5-editais-de-chamamento-publico/3-5-editais-de-chamamento-publico",
+      "content_type": "text/html;charset=utf-8",
+      "fetched_at": "2026-09-14T20:30:31.663634+00:00"
+    },
+    {
+      "url": "https://www.gov.br/mma/pt-br/noticias/edital-do-mma-abre-inscricoes-para-a-comissao-nacional-de-seguranca-quimica-no-bienio-202620132028",
+      "status": 200,
+      "final_url": "https://www.gov.br/mma/acl_users/credentials_cookie_auth/require_login?came_from=https%3A//www.gov.br/mma/pt-br/noticias/edital-do-mma-abre-inscricoes-para-a-comissao-nacional-de-seguranca-quimica-no-bienio-202620132028",
+      "content_type": "text/html;charset=utf-8",
+      "fetched_at": "2026-09-14T20:30:34.931230+00:00"
+    }
+  ],
+  "excluded": [
+    {
+      "url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/participacao-social/3-5-editais-de-chamamento-publico/resultado-do-edital-gm-mma-no-1-2026",
+      "title": "Resultado do EDITAL GM/MMA Nº 1/2026",
+      "year": 2026,
+      "reason": "related_document"
+    },
+    {
+      "url": "https://www.gov.br/mma/pt-br/noticias/governo-publica-edital-para-selecionar-representantes-da-sociedade-que-integrarao-camara-do-cim",
+      "title": "Edital de Seleção de Representantes para a Câmara de Participação Social do Comitê Interministerial sobre Mudança do Clima (CIM)",
+      "year": 2025,
+      "reason": "year_below_min_2026"
+    },
+    {
+      "url": "https://www.gov.br/mma/pt-br/noticias/mma-publica-edital-de-apoio-a-projetos-para-a-melhoria-da-gestao-de-residuos-solidos-em-minas-gerais",
+      "title": "Edital de Apoio a Projetos para a Melhoria de Resíduos Sólidos em Minas Gerais",
+      "year": 2025,
+      "reason": "year_below_min_2026"
+    },
+    {
+      "url": "https://www.gov.br/mma/pt-br/assuntos/noticias/floresta-amazonia-lanca-edital-para-fortalecer-capacidade-produtiva-de-organizacoes-comunitarias",
+      "title": "Edital do projeto BRA/19/005 “Pagamentos baseados em resultados de REDD+ por resultados alcançados pelo Brasil no bioma Amazônia em 2014 e 2015\" Floresta+ Amazônia",
+      "year": 2025,
+      "reason": "year_below_min_2026"
+    },
+    {
+      "url": "https://www.gov.br/mma/pt-br/noticias/mma-lanca-edital-periferias-verdes-resilientes",
+      "title": "Edital Periferias Verdes Resilientes",
+      "year": 2025,
+      "reason": "year_below_min_2026"
+    },
+    {
+      "url": "https://www.gov.br/mma/pt-br/noticias/mma-e-icmbio-lancam-edital-para-apoiar-criacao-e-ampliacao-de-ucs-em-estados-e-municipios-na-amazonia",
+      "title": "Edital para Apoiar a Criação e Ampliação de Unidades de Conservação Estaduais e Municipais na Amazônia Legal",
+      "year": 2025,
+      "reason": "year_below_min_2026"
+    },
+    {
+      "url": "https://www.gov.br/mma/pt-br/noticias/mma-anuncia-editais-com-r-34-5-milhoes-para-financiar-acoes-de-prevencao-e-combate-a-incendios-florestais",
+      "title": "Editais de Fomento a Ações de Prevenção e Combate de Incêndios Florestais na Amazônia e Pantanal",
+      "year": 2025,
+      "reason": "year_below_min_2026"
+    },
+    {
+      "url": "https://www.gov.br/mma/pt-br/noticias/mma-abre-chamada-publica-para-apoiar-praticas-produtivas-sustentaveis-em-ucs-da-caatinga-pampa-e-pantanal",
+      "title": "Edital de Fortalecimento do Desenvolvimento de Práticas Produtivas Sustentáveis em Unidades de Conservação na Caatinga, Pampa e Pantanal",
+      "year": 2025,
+      "reason": "year_below_min_2026"
+    },
+    {
+      "url": "https://www.gov.br/mma/pt-br/noticias/mma-participa-da-construcao-de-edital-que-apoiara-projetos-de-combate-a-desertificacao-na-caatinga",
+      "title": "Edital Combate à Desertificação na Caatinga",
+      "year": 2025,
+      "reason": "year_below_min_2026"
+    },
+    {
+      "url": "https://www.gov.br/mma/pt-br/noticias/fnma-abre-processo-seletivo-para-composicao-de-conselho-deliberativo",
+      "title": "Edital do Processo Seletivo para Composição do Conselho Deliberativo FNMA",
+      "year": 2025,
+      "reason": "year_below_min_2026"
+    },
+    {
+      "url": "https://www.gov.br/mma/pt-br/noticias/mma-investe-em-pesquisas-sobre-biodiversidade-no-ambito-do-programa-sinbiose",
+      "title": "Chamada do Programa SinBiose",
+      "year": 2025,
+      "reason": "year_below_min_2026"
+    },
+    {
+      "url": "https://www.gov.br/mma/pt-br/noticias/mma-abre-processo-eleitoral-para-novos-representantes-no-comite-nacional-de-zonas-umidas",
+      "title": "Editais de Eleição dos Novos Integrantes do Comitê Nacional das Zonas Úmidas (CNZU)",
+      "year": 2025,
+      "reason": "year_below_min_2026"
+    },
+    {
+      "url": "https://www.gov.br/mma/pt-br/noticias/mma-kfw-e-fas-lancam-edital-de-r-70-2-milhoes-para-criacao-de-nucleos-de-sociobioeconomia-na-amazonia",
+      "title": "Edital para Criação de Núcleos de Sociobioeconomia na Amazônia",
+      "year": 2025,
+      "reason": "year_below_min_2026"
+    },
+    {
+      "url": "https://www.gov.br/mma/pt-br/noticias/lancado-edital-que-disponibiliza-1-milhao-de-libras-para-ampliar-governanca-do-plano-clima",
+      "title": "Edital Brasil-UK PACT",
+      "year": 2025,
+      "reason": "year_below_min_2026"
+    },
+    {
+      "url": "https://www.gov.br/mma/pt-br/noticias/mma-lanca-edital-de-2-5-milhoes-para-a-2a-edicao-do-premio-guardias-da-sociobiodiversidade",
+      "title": "Edital da 2ª Edição do Prêmio Guardiãs da Sociobiodiversidade",
+      "year": 2025,
+      "reason": "year_below_min_2026"
+    }
+  ],
+  "records": [
+    {
+      "source_key": "govbr_mma_public_calls",
+      "source_record_id": "https://www.gov.br/mma/pt-br/noticias/edital-do-mma-abre-inscricoes-para-a-comissao-nacional-de-seguranca-quimica-no-bienio-202620132028",
+      "canonical_url": "https://www.gov.br/mma/pt-br/noticias/edital-do-mma-abre-inscricoes-para-a-comissao-nacional-de-seguranca-quimica-no-bienio-202620132028",
+      "title": "Edital das Inscrições para a Comissão Nacional de Segurança Química (CONASQ) no biênio 2026-2028",
+      "status": "unknown",
+      "published_at": null,
+      "deadline": null,
+      "source_year": 2026,
+      "document_urls": [],
+      "document_hashes": []
+    }
+  ],
+  "page_limit": 1,
+  "pagination_capped": false
+}

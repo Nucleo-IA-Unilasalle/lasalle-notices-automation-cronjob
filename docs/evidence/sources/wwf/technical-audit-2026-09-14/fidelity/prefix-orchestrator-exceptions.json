@@ -1,0 +1,238 @@
+[
+  {
+    "evidence": {
+      "origin": "discovery",
+      "record_indices": [
+        0,
+        1
+      ],
+      "type": "sid",
+      "value": "('wwf', '005936')"
+    },
+    "reason_code": "duplicate_identity",
+    "severity": "blocking"
+  },
+  {
+    "evidence": {
+      "origin": "discovery",
+      "record_indices": [
+        10,
+        11
+      ],
+      "type": "sid",
+      "value": "('wwf', '005789')"
+    },
+    "reason_code": "duplicate_identity",
+    "severity": "blocking"
+  },
+  {
+    "evidence": {
+      "origin": "discovery",
+      "record_indices": [
+        12,
+        13
+      ],
+      "type": "sid",
+      "value": "('wwf', '005812')"
+    },
+    "reason_code": "duplicate_identity",
+    "severity": "blocking"
+  },
+  {
+    "evidence": {
+      "origin": "discovery",
+      "record_indices": [
+        14,
+        15
+      ],
+      "type": "sid",
+      "value": "('wwf', '005845')"
+    },
+    "reason_code": "duplicate_identity",
+    "severity": "blocking"
+  },
+  {
+    "evidence": {
+      "origin": "discovery",
+      "record_indices": [
+        16,
+        17,
+        18
+      ],
+      "type": "sid",
+      "value": "('wwf', '005722')"
+    },
+    "reason_code": "duplicate_identity",
+    "severity": "blocking"
+  },
+  {
+    "evidence": {
+      "origin": "discovery",
+      "record_indices": [
+        2,
+        3
+      ],
+      "type": "sid",
+      "value": "('wwf', '005945')"
+    },
+    "reason_code": "duplicate_identity",
+    "severity": "blocking"
+  },
+  {
+    "evidence": {
+      "origin": "discovery",
+      "record_indices": [
+        4,
+        5
+      ],
+      "type": "sid",
+      "value": "('wwf', '005943')"
+    },
+    "reason_code": "duplicate_identity",
+    "severity": "blocking"
+  },
+  {
+    "evidence": {
+      "origin": "discovery",
+      "record_indices": [
+        6,
+        7
+      ],
+      "type": "sid",
+      "value": "('wwf', '005874')"
+    },
+    "reason_code": "duplicate_identity",
+    "severity": "blocking"
+  },
+  {
+    "evidence": {
+      "origin": "discovery",
+      "record_indices": [
+        8,
+        9
+      ],
+      "type": "sid",
+      "value": "('wwf', '005746')"
+    },
+    "reason_code": "duplicate_identity",
+    "severity": "blocking"
+  },
+  {
+    "evidence": {
+      "origin": "inventory",
+      "record_indices": [
+        0,
+        1
+      ],
+      "type": "sid",
+      "value": "('wwf', '005936')"
+    },
+    "reason_code": "duplicate_identity",
+    "severity": "blocking"
+  },
+  {
+    "evidence": {
+      "origin": "inventory",
+      "record_indices": [
+        10,
+        11
+      ],
+      "type": "sid",
+      "value": "('wwf', '005789')"
+    },
+    "reason_code": "duplicate_identity",
+    "severity": "blocking"
+  },
+  {
+    "evidence": {
+      "origin": "inventory",
+      "record_indices": [
+        12,
+        13
+      ],
+      "type": "sid",
+      "value": "('wwf', '005812')"
+    },
+    "reason_code": "duplicate_identity",
+    "severity": "blocking"
+  },
+  {
+    "evidence": {
+      "origin": "inventory",
+      "record_indices": [
+        14,
+        15
+      ],
+      "type": "sid",
+      "value": "('wwf', '005845')"
+    },
+    "reason_code": "duplicate_identity",
+    "severity": "blocking"
+  },
+  {
+    "evidence": {
+      "origin": "inventory",
+      "record_indices": [
+        16,
+        17,
+        18
+      ],
+      "type": "sid",
+      "value": "('wwf', '005722')"
+    },
+    "reason_code": "duplicate_identity",
+    "severity": "blocking"
+  },
+  {
+    "evidence": {
+      "origin": "inventory",
+      "record_indices": [
+        2,
+        3
+      ],
+      "type": "sid",
+      "value": "('wwf', '005945')"
+    },
+    "reason_code": "duplicate_identity",
+    "severity": "blocking"
+  },
+  {
+    "evidence": {
+      "origin": "inventory",
+      "record_indices": [
+        4,
+        5
+      ],
+      "type": "sid",
+      "value": "('wwf', '005943')"
+    },
+    "reason_code": "duplicate_identity",
+    "severity": "blocking"
+  },
+  {
+    "evidence": {
+      "origin": "inventory",
+      "record_indices": [
+        6,
+        7
+      ],
+      "type": "sid",
+      "value": "('wwf', '005874')"
+    },
+    "reason_code": "duplicate_identity",
+    "severity": "blocking"
+  },
+  {
+    "evidence": {
+      "origin": "inventory",
+      "record_indices": [
+        8,
+        9
+      ],
+      "type": "sid",
+      "value": "('wwf', '005746')"
+    },
+    "reason_code": "duplicate_identity",
+    "severity": "blocking"
+  }
+]

@@ -562,3 +562,51 @@ class TestTwoPrincipalsSameYear:
 
         assert len(c1) == 2
         assert c2 == []
+
+
+class TestStaleOpenPastDeadline:
+    """Regression: past application deadline forces closed even with open wording."""
+
+    def test_past_deadline_overrides_open_wording(self) -> None:
+        from datetime import datetime, timedelta, timezone
+
+        import discover_govbr_mma_fnma_candidates as fnma
+        from bs4 import BeautifulSoup
+
+        past_date = datetime.now(timezone.utc).date() - timedelta(days=30)
+        past = past_date.isoformat()
+        day, month, year = past_date.strftime("%d"), past_date.strftime("%m"), past_date.strftime("%Y")
+        html = f"""
+        <html><body><div id="content-core">
+          <h2>2026</h2>
+          <p>Inscricoes prorrogadas ate {day}/{month}/{year}</p>
+          <p><a href="/edital-fnma-1-de-2026.pdf">Edital FNMA 1/2026</a></p>
+        </div></body></html>
+        """
+        soup = BeautifulSoup(html, "html.parser")
+        root = soup.select_one("#content-core")
+        meta = fnma._extract_listing_metadata(root, year=2026)
+        assert meta["deadline"] == past
+        assert meta["status"] == "closed"
+
+    def test_future_deadline_stays_open(self) -> None:
+        from datetime import datetime, timedelta, timezone
+
+        import discover_govbr_mma_fnma_candidates as fnma
+        from bs4 import BeautifulSoup
+
+        future_date = datetime.now(timezone.utc).date() + timedelta(days=30)
+        future = future_date.isoformat()
+        day, month, year = future_date.strftime("%d"), future_date.strftime("%m"), future_date.strftime("%Y")
+        html = f"""
+        <html><body><div id="content-core">
+          <h2>2026</h2>
+          <p>Inscricoes prorrogadas ate {day}/{month}/{year}</p>
+          <p><a href="/edital-fnma-2-de-2026.pdf">Edital FNMA 2/2026</a></p>
+        </div></body></html>
+        """
+        soup = BeautifulSoup(html, "html.parser")
+        root = soup.select_one("#content-core")
+        meta = fnma._extract_listing_metadata(root, year=2026)
+        assert meta["deadline"] == future
+        assert meta["status"] == "open"

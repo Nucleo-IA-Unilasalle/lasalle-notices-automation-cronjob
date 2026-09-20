@@ -70,7 +70,7 @@ class TestExtractBndesDetailAndPdfUrls:
                 "https://www.bndes.gov.br/wps/wcm/connect/site/"
                 "4f71d4b2-0a9a-4ca1-93f8-45d011e3074a/"
                 "edital-fundo-socioambiental-2026.pdf?"
-                "MOD=AJPERES&CVID=q123"
+                "MOD=AJPERES"
             ),
         ]
 
@@ -333,6 +333,101 @@ class TestYearGuard:
 
 
 # ---------------------------------------------------------------------------
+# Lifecycle gate and tracking-param stripping (regression 2026-09-14)
+# ---------------------------------------------------------------------------
+
+
+class TestLifecycleGate:
+    def test_fully_closed_page_is_skipped(self) -> None:
+        from discover_bndes_candidates import discover_candidates
+
+        closed_html = """
+        <html><body>
+          <p>O BNDES informa que a Chamada BNDES Corais foi encerrada em 05/07/2024.</p>
+          <a href="/wps/wcm/connect/site/xyz/modelo-roteiro-corais.pdf?MOD=AJPERES">
+            Modelo de roteiro
+          </a>
+        </body></html>
+        """
+        responses = {
+            FUNDO_LISTING_URL: make_response(
+                '<html><body>'
+                '<a href="/wps/portal/site/home/financiamento/produto/'
+                'bndes-fundo-socioambiental?urile=wcm:path:/bndes_institucional/'
+                'home/onde-atuamos/meio-ambiente/bndes-azul/bndes-corais">'
+                'Projetos de Meio Ambiente –BNDES Corais</a>'
+                "</body></html>",
+            ),
+            INOVACAO_LISTING_URL: make_response("<html></html>"),
+            (
+                "https://www.bndes.gov.br/wps/portal/site/home/financiamento/"
+                "produto/bndes-fundo-socioambiental?urile=wcm:path:/bndes_"
+                "institucional/home/onde-atuamos/meio-ambiente/bndes-azul/bndes-corais"
+            ): make_response(closed_html),
+        }
+
+        with patch_request_with_safe_redirects(responses):
+            stats, candidates = discover_candidates()
+
+        assert candidates == []
+        assert stats["lifecycle_rejected"] == 1
+        assert stats["candidates"] == 0
+
+    def test_mixed_page_with_open_deadline_still_emits(self) -> None:
+        from discover_bndes_candidates import discover_candidates
+
+        mixed_html = """
+        <html><body>
+          <p>Chamada de Projetos para o 6º ciclo do BNDES Periferias.
+             Ciclo para recebimento de propostas: de 18.08.2026 até às 17h de 04.12.2026.</p>
+          <p>Editais BNDES Periferias Fortes - Divulgado o resultado da
+             Fase Classificatória Final.</p>
+          <a href="/wps/wcm/connect/site/abc/roteiro-periferias-6-ciclo.pdf?MOD=AJPERES">
+            Conheça o modelo de roteiro para o 6º ciclo
+          </a>
+        </body></html>
+        """
+        responses = {
+            FUNDO_LISTING_URL: make_response(
+                '<html><body>'
+                '<a href="/wps/portal/site/home/financiamento/produto/'
+                'bndes-fundo-socioambiental?urile=wcm:path:/bndes_institucional/'
+                'home/onde-atuamos/social/bndes-periferias">BNDES Periferias</a>'
+                "</body></html>",
+            ),
+            INOVACAO_LISTING_URL: make_response("<html></html>"),
+            (
+                "https://www.bndes.gov.br/wps/portal/site/home/financiamento/"
+                "produto/bndes-fundo-socioambiental?urile=wcm:path:/bndes_"
+                "institucional/home/onde-atuamos/social/bndes-periferias"
+            ): make_response(mixed_html),
+        }
+
+        with patch_request_with_safe_redirects(responses):
+            stats, candidates = discover_candidates()
+
+        urls = [c["url"] for c in candidates]
+        assert any("roteiro-periferias-6-ciclo.pdf" in url for url in urls)
+        assert stats["lifecycle_rejected"] == 0
+
+    def test_cvid_param_is_stripped_from_candidate_identity(self) -> None:
+        from discover_bndes_candidates import _strip_tracking_params, build_candidate
+
+        raw = (
+            "https://www.bndes.gov.br/wps/wcm/connect/site/xyz/"
+            "edital-2026.pdf?CVID=abc123&MOD=AJPERES"
+        )
+        assert _strip_tracking_params(raw) == (
+            "https://www.bndes.gov.br/wps/wcm/connect/site/xyz/"
+            "edital-2026.pdf?CVID=abc123&MOD=AJPERES".replace("CVID=abc123&", "")
+        )
+        candidate = build_candidate(raw, listing_url=FUNDO_LISTING_URL)
+        assert candidate is not None
+        assert "CVID" not in candidate["url"]
+        assert candidate["url"].endswith("edital-2026.pdf?MOD=AJPERES")
+
+
+# ---------------------------------------------------------------------------
 # Edital prefilter integration
 # ---------------------------------------------------------------------------
 
@@ -497,7 +592,7 @@ class TestDiscoverCandidates:
             "https://www.bndes.gov.br/wps/wcm/connect/site/"
             "4f71d4b2-0a9a-4ca1-93f8-45d011e3074a/"
             "edital-fundo-socioambiental-2026.pdf?"
-            "MOD=AJPERES&CVID=q123"
+            "MOD=AJPERES"
         ) in urls
         assert (
             "https://www.bndes.gov.br/wps/wcm/connect/site/"

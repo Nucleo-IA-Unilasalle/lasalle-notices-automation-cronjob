@@ -1,0 +1,41 @@
+[
+  {
+    "source_key": "fapergs",
+    "source_record_id": "https://fapergs.rs.gov.br/upload/arquivos/202607/27144415-edital-06-2026-profix-cb.pdf",
+    "canonical_url": "https://fapergs.rs.gov.br/upload/arquivos/202607/27144415-edital-06-2026-profix-cb.pdf",
+    "title": "EDITAL FAPERGS/CNPq/CAPES 06/2026 PROFIX-CB (principal edital PDF)",
+    "status": "open",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://fapergs.rs.gov.br/upload/arquivos/202607/27144415-edital-06-2026-profix-cb.pdf"
+    ],
+    "document_hashes": []
+  },
+  {
+    "source_key": "fapergs",
+    "source_record_id": "chamada-confap-propostas-do-programa-desafios-da-amazonia-2026-iniciativa-amazonia-10",
+    "canonical_url": "https://fapergs.rs.gov.br/chamada-confap-propostas-do-programa-desafios-da-amazonia-2026-iniciativa-amazonia-10",
+    "title": "CHAMADA CONFAP - PROPOSTAS DO PROGRAMA DESAFIOS DA AMAZONIA (2026) - Iniciativa Amazonia +10",
+    "status": "open",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [],
+    "document_hashes": [],
+    "reason_code": "out_of_scope"
+  },
+  {
+    "source_key": "fapergs",
+    "source_record_id": "programa-horizon-europe-da-comunidade-europeia",
+    "canonical_url": "https://fapergs.rs.gov.br/programa-horizon-europe-da-comunidade-europeia",
+    "title": "Programa Horizon Europe da Comunidade Europeia (permanent program page; guidelines PDF 2024 year-guard rejected)",
+    "status": "open",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://fapergs.rs.gov.br/upload/arquivos/202410/03160733-pt-horizon-europe-fapergs-guidelines-2024-v4.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": "out_of_scope"
+  }
+]

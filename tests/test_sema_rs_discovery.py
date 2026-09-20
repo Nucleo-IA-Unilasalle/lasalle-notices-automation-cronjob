@@ -41,11 +41,16 @@ def _read_fixture(path: Path) -> str:
     return path.read_text(encoding="utf-8")
 
 
-def _make_json_listing_response(body_html: str) -> MagicMock:
+def _make_json_listing_response(
+    body_html: str, pagecount: int | None = None,
+) -> MagicMock:
     response = MagicMock()
     response.status_code = 200
     response.raise_for_status = MagicMock()
-    response.json.return_value = {"body": body_html}
+    payload: dict[str, object] = {"body": body_html}
+    if pagecount is not None:
+        payload["pagecount"] = pagecount
+    response.json.return_value = payload
     return response
 
 
@@ -259,7 +264,7 @@ class TestDiscoverCandidates:
         for keyword in ("edital", "chamada"):
             for page in (1, 2):
                 responses[EDITAL_URL_TEMPLATE.format(current_page=page, keyword=keyword)] = (
-                    _make_json_listing_response(_read_fixture(LISTING_BODY_FIXTURE))
+                    _make_json_listing_response(_read_fixture(LISTING_BODY_FIXTURE), pagecount=2)
                 )
         responses["https://www.sema.rs.gov.br/edital-01-de-2024-delta-do-jacui"] = (
             make_response(detail_html_2026)
@@ -296,7 +301,7 @@ class TestDiscoverCandidates:
         responses: dict[str, object] = {}
         for keyword in ("edital",):
             responses[EDITAL_URL_TEMPLATE.format(current_page=1, keyword=keyword)] = (
-                _make_json_listing_response(_read_fixture(LISTING_BODY_FIXTURE))
+                _make_json_listing_response(_read_fixture(LISTING_BODY_FIXTURE), pagecount=1)
             )
         # The "edital-01-de-2024-delta-do-jacui" detail carries a 2024
         # year, which should be rejected.
@@ -356,6 +361,206 @@ class TestDiscoverCandidates:
         # the consecutive-failure cutoff) + 1 residuos-solidos failure.
         assert stats["errors"] == 4
         assert candidates == []
+
+
+class TestPaginationContinuation:
+    """A signal-less listing page is not the end of results.
+
+    Regression for the live SEMA-RS AJAX behaviour: the endpoint is a
+    full-text search whose first pages often carry zero signal-matched
+    anchors while later pages contain the real edital detail URLs. The
+    discoverer must honour the server-reported ``pagecount`` and only
+    stop on article-free placeholder bodies / stale pages.
+    """
+
+    def test_signal_less_first_page_still_reaches_later_matches(self) -> None:
+        from discover_sema_rs_candidates import discover_candidates
+
+        signal_less_page = """
+        <html><body>
+          <article class="conteudo-lista__item"><h2><a href="/programa-biogas-rs">Programa Biogás RS</a></h2></article>
+          <article class="conteudo-lista__item"><h2><a href="/outorga-aguas-subterraneas">Outorga</a></h2></article>
+        </body></html>
+        """
+        match_page = _read_fixture(LISTING_BODY_FIXTURE)
+
+        responses: dict[str, object] = {}
+        for keyword in ("edital",):
+            responses[EDITAL_URL_TEMPLATE.format(current_page=1, keyword=keyword)] = (
+                _make_json_listing_response(signal_less_page, pagecount=2)
+            )
+            responses[EDITAL_URL_TEMPLATE.format(current_page=2, keyword=keyword)] = (
+                _make_json_listing_response(match_page, pagecount=2)
+            )
+        # chamada keyword: single empty page.
+        responses[EDITAL_URL_TEMPLATE.format(current_page=1, keyword="chamada")] = (
+            _make_json_listing_response("<html><body></body></html>", pagecount=1)
+        )
+        detail_html_2026 = """
+        <html><body>
+          <article class="artigo"><div class="artigo__texto">
+            <a href="/upload/arquivos/202601/edital-programa-2026.pdf">Edital 2026</a>
+          </div></article>
+        </body></html>
+        """
+        responses["https://www.sema.rs.gov.br/edital-01-de-2024-delta-do-jacui"] = (
+            make_response(detail_html_2026)
+        )
+        responses["https://www.sema.rs.gov.br/inscricoes-abertas-edital-002-de-2022-voluntariado-pe-tainhas"] = (
+            make_response("<html></html>")
+        )
+        responses["https://www.sema.rs.gov.br/governo-do-rs-lanca-chamada-publica-para-municipios-que-queiram-valorizar-residuos-organicos"] = (
+            make_response("<html></html>")
+        )
+        responses["https://www.sema.rs.gov.br/residuos-solidos"] = (
+            make_response("<html></html>")
+        )
+
+        with patch_request_with_safe_redirects(responses):
+            stats, candidates = discover_candidates()
+
+        urls = [c["url"] for c in candidates]
+        assert (
+            "https://www.sema.rs.gov.br/upload/arquivos/202601/edital-programa-2026.pdf"
+        ) in urls
+        assert stats["details_fetched"] >= 1
+
+    def test_pagecount_stops_pagination_without_extra_fetches(self) -> None:
+        from discover_sema_rs_candidates import _paginate_keyword
+
+        match_page = _read_fixture(LISTING_BODY_FIXTURE)
+        responses: dict[str, object] = {
+            EDITAL_URL_TEMPLATE.format(current_page=1, keyword="edital"): (
+                _make_json_listing_response(match_page, pagecount=1)
+            ),
+        }
+
+        seen: set[str] = set()
+        out: list[str] = []
+        stats: dict[str, int] = {"errors": 0}
+        with patch_request_with_safe_redirects(responses):
+            # Any fetch beyond page 1 raises AssertionError in the mock,
+            # which would surface as stats["errors"] > 0.
+            yielded = _paginate_keyword(
+                "edital",
+                seen_detail_urls=seen,
+                detail_urls_out=out,
+                stats=stats,
+            )
+
+        assert yielded is True
+        assert len(out) == 3
+        assert stats["errors"] == 0
+
+    def test_article_free_body_stops_pagination(self) -> None:
+        from discover_sema_rs_candidates import _paginate_keyword
+
+        responses: dict[str, object] = {
+            EDITAL_URL_TEMPLATE.format(current_page=1, keyword="edital"): (
+                _make_json_listing_response("<p>Nenhuma informação a ser exibida.</p>")
+            ),
+        }
+
+        seen: set[str] = set()
+        out: list[str] = []
+        stats: dict[str, int] = {"errors": 0}
+        with patch_request_with_safe_redirects(responses):
+            yielded = _paginate_keyword(
+                "edital",
+                seen_detail_urls=seen,
+                detail_urls_out=out,
+                stats=stats,
+            )
+
+        assert yielded is False
+        assert out == []
+        assert stats["errors"] == 0
+
+
+class TestYearFolderExtraction:
+    """YYYYMM upload folders carry the authoritative year."""
+
+    def test_upload_folder_year_rejects_pre_min_year(self) -> None:
+        from discover_sema_rs_candidates import _extract_year_from_url, _passes_year_guard
+
+        url = "https://www.sema.rs.gov.br/upload/arquivos/202307/03143645-doe-edital.pdf"
+        assert _extract_year_from_url(url) == 2023
+        assert _passes_year_guard(url, min_year=2026) is False
+
+    def test_upload_folder_year_accepts_current_year(self) -> None:
+        from discover_sema_rs_candidates import _extract_year_from_url, _passes_year_guard
+
+        url = "https://www.sema.rs.gov.br/upload/arquivos/202605/22143051-materia.pdf"
+        assert _extract_year_from_url(url) == 2026
+        assert _passes_year_guard(url, min_year=2026) is True
+
+    def test_percent_encoding_does_not_create_false_years(self) -> None:
+        from discover_sema_rs_candidates import _extract_year_from_url
+
+        # "Lei nº 09.921" must not be read as year 2009 via "%2009".
+        url = "https://ww3.al.rs.gov.br/filerepository/replegiscomp/Lei%20n%C2%BA%2009.921.pdf"
+        assert _extract_year_from_url(url) is None
+
+    def test_filename_year_still_wins_when_more_recent(self) -> None:
+        from discover_sema_rs_candidates import _extract_year_from_url
+
+        url = "https://www.sema.rs.gov.br/upload/arquivos/202307/03143645-edital-2026.pdf"
+        assert _extract_year_from_url(url) == 2026
+
+
+class TestStaticServiceExtractor:
+    """The residuos-solidos sweep keeps only open, same-host edital PDFs."""
+
+    PAGE_URL = "https://www.sema.rs.gov.br/residuos-solidos"
+
+    def _extract(self, html: str) -> list[str]:
+        from discover_sema_rs_candidates import extract_static_service_pdf_urls
+
+        return extract_static_service_pdf_urls(html, self.PAGE_URL)
+
+    def test_keeps_same_host_signal_pdf_outside_closed_panel(self) -> None:
+        html = """
+        <html><body>
+          <div class="panel panel-default"><div class="panel-body">
+            <p><a href="/upload/arquivos/202608/edital-chamada-2026.pdf">Edital de Chamada Pública</a></p>
+          </div></div>
+        </body></html>
+        """
+        assert self._extract(html) == [
+            "https://www.sema.rs.gov.br/upload/arquivos/202608/edital-chamada-2026.pdf",
+        ]
+
+    def test_skips_signal_pdf_in_panel_with_final_result(self) -> None:
+        html = """
+        <html><body>
+          <div class="panel panel-default"><div class="panel-body">
+            <p><a href="/upload/arquivos/202605/22143051-materia1309752.pdf">Edital de Chamada Pública</a></p>
+            <p><a href="https://www.diariooficial.rs.gov.br/materia?id=1331198">Resultado Final</a></p>
+          </div></div>
+        </body></html>
+        """
+        assert self._extract(html) == []
+
+    def test_skips_off_host_and_signal_less_pdfs(self) -> None:
+        html = """
+        <html><body>
+          <p><a href="https://ww3.al.rs.gov.br/filerepository/replegiscomp/Lei%20n%C2%BA%206.503.pdf">Lei Estadual nº 6.503/1972</a></p>
+          <p><a href="/upload/arquivos/202605/22142718-comunidade-de-pratica.pdf">Orientações gerais</a></p>
+          <p><a href="/upload/arquivos/202602/06105524-br-home-composting.pdf">Diretrizes para a implementação de programa de compostagem domiciliar</a></p>
+        </body></html>
+        """
+        assert self._extract(html) == []
+
+    def test_skips_signal_pdf_with_encerrado_marker(self) -> None:
+        html = """
+        <html><body>
+          <div class="panel-body">
+            <p><a href="/upload/arquivos/202601/edital-encerrado-2026.pdf">Edital de Chamada Pública</a></p>
+            <p>Inscrições encerradas em 15/01/2026.</p>
+          </div>
+        </body></html>
+        """
+        assert self._extract(html) == []
 
 
 class TestSubmitHandoff:

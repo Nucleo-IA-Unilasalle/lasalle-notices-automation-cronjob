@@ -1,0 +1,1490 @@
+[
+  {
+    "source_key": "pncp",
+    "source_record_id": "01612918000154-1-000110/2026",
+    "canonical_url": "https://pncp.gov.br/app/editais/01612918000154/2026/110",
+    "title": "SERVI\u00c7O DE TERCEIROS",
+    "status": "upcoming",
+    "published_at": "2026-09-14T13:37:17-03:00",
+    "deadline": "2026-09-30T13:00:00-03:00",
+    "document_urls": [],
+    "document_hashes": [],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "pncp-public-api-independent",
+      "captured_at_utc": "2026-09-14T22:25:46.669089+00:00",
+      "listing_url": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+      "query_bound": {
+        "uf": "RS",
+        "modalities": [
+          "4"
+        ],
+        "date_window": "20260913..20260914",
+        "min_year": 2026
+      },
+      "situacaoCompraId": 1,
+      "situacaoCompraNome": "Divulgada no PNCP",
+      "modalidadeId": 4,
+      "modalidadeNome": "Concorr\u00eancia - Eletr\u00f4nica",
+      "anoCompra": 2026,
+      "sequencialCompra": 110,
+      "cnpj": "01612918000154",
+      "classification_reason": "abertura_in_future",
+      "http_status": 200
+    }
+  },
+  {
+    "source_key": "pncp",
+    "source_record_id": "04213779000184-1-000303/2026",
+    "canonical_url": "https://pncp.gov.br/app/editais/04213779000184/2026/303",
+    "title": "CESS\u00c3O ONEROSA DO DIREITO DE PAGAMENTO DA FOLHA DE SERVIDORES DO PODER EXECUTIVO, LEGISLATIVO E RPPS DO MUNIC\u00cdPIO",
+    "status": "upcoming",
+    "published_at": "2026-09-14T13:31:58-03:00",
+    "deadline": "2026-10-08T08:59:00-03:00",
+    "document_urls": [],
+    "document_hashes": [],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "pncp-public-api-independent",
+      "captured_at_utc": "2026-09-14T22:25:46.669089+00:00",
+      "listing_url": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+      "query_bound": {
+        "uf": "RS",
+        "modalities": [
+          "4"
+        ],
+        "date_window": "20260913..20260914",
+        "min_year": 2026
+      },
+      "situacaoCompraId": 1,
+      "situacaoCompraNome": "Divulgada no PNCP",
+      "modalidadeId": 4,
+      "modalidadeNome": "Concorr\u00eancia - Eletr\u00f4nica",
+      "anoCompra": 2026,
+      "sequencialCompra": 303,
+      "cnpj": "04213779000184",
+      "classification_reason": "abertura_in_future",
+      "http_status": 200
+    }
+  },
+  {
+    "source_key": "pncp",
+    "source_record_id": "04213779000184-1-000304/2026",
+    "canonical_url": "https://pncp.gov.br/app/editais/04213779000184/2026/304",
+    "title": "CESS\u00c3O ONEROSA DO DIREITO DE PAGAMENTO DA FOLHA DE SERVIDORES DO PODER EXECUTIVO, LEGISLATIVO E RPPS DO MUNIC\u00cdPIO",
+    "status": "upcoming",
+    "published_at": "2026-09-14T13:51:26-03:00",
+    "deadline": "2026-10-08T09:00:00-03:00",
+    "document_urls": [],
+    "document_hashes": [],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "pncp-public-api-independent",
+      "captured_at_utc": "2026-09-14T22:25:46.669089+00:00",
+      "listing_url": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+      "query_bound": {
+        "uf": "RS",
+        "modalities": [
+          "4"
+        ],
+        "date_window": "20260913..20260914",
+        "min_year": 2026
+      },
+      "situacaoCompraId": 1,
+      "situacaoCompraNome": "Divulgada no PNCP",
+      "modalidadeId": 4,
+      "modalidadeNome": "Concorr\u00eancia - Eletr\u00f4nica",
+      "anoCompra": 2026,
+      "sequencialCompra": 304,
+      "cnpj": "04213779000184",
+      "classification_reason": "abertura_in_future",
+      "http_status": 200
+    }
+  },
+  {
+    "source_key": "pncp",
+    "source_record_id": "87489910000168-1-000083/2026",
+    "canonical_url": "https://pncp.gov.br/app/editais/87489910000168/2026/83",
+    "title": "Abertura de processo licitat\u00f3rio para a terceiriza\u00e7\u00e3o de hor\u00e1rios na grade de programa\u00e7\u00e3o da R\u00e1dio Municipal S\u00e3o-pedrense, para os servi\u00e7os de radiodifus\u00e3o p\u00fablica, com observ\u00e2ncia \u00e0s disposi\u00e7\u00f5es da Lei 2427/2014, que institui os princ\u00edpios e objetivos dos servi\u00e7os da R\u00e1dio Municipal S\u00e3o-pedrense e Decreto Municipal n\u00ba 4519/2026.",
+    "status": "open",
+    "published_at": "2026-09-14T09:52:54-03:00",
+    "deadline": "2026-10-06T08:30:00-03:00",
+    "document_urls": [
+      "https://pncp.gov.br/pncp-api/v1/orgaos/87489910000168/compras/2026/83/arquivos/1"
+    ],
+    "document_hashes": [
+      "6cd989dac9de31de314a29b7bdb8341dc1728e3028dd8c7a2e541fe86f12bfb7"
+    ],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "pncp-public-api-independent",
+      "captured_at_utc": "2026-09-14T22:25:46.669089+00:00",
+      "listing_url": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+      "query_bound": {
+        "uf": "RS",
+        "modalities": [
+          "4"
+        ],
+        "date_window": "20260913..20260914",
+        "min_year": 2026
+      },
+      "situacaoCompraId": 1,
+      "situacaoCompraNome": "Divulgada no PNCP",
+      "modalidadeId": 4,
+      "modalidadeNome": "Concorr\u00eancia - Eletr\u00f4nica",
+      "anoCompra": 2026,
+      "sequencialCompra": 83,
+      "cnpj": "87489910000168",
+      "classification_reason": "actionable",
+      "http_status": 200,
+      "doc_http": [
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/87489910000168/compras/2026/83/arquivos/1",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 79241,
+          "sha256": "6cd989dac9de31de314a29b7bdb8341dc1728e3028dd8c7a2e541fe86f12bfb7"
+        }
+      ],
+      "preferred_doc_count": 1,
+      "total_docs": 1
+    }
+  },
+  {
+    "source_key": "pncp",
+    "source_record_id": "87490306000151-1-000108/2026",
+    "canonical_url": "https://pncp.gov.br/app/editais/87490306000151/2026/108",
+    "title": "Contratacao de empresa especializada para a execucao da obra de construcao de arquibancada coberta junto a pista de rodeio campeiro  localizada no Centro de Eventos Municipal de Restinga Seca RS  com recursos oriundos da Emenda Parlamentar n  202590480003.",
+    "status": "upcoming",
+    "published_at": "2026-09-14T09:53:18-03:00",
+    "deadline": "2026-10-05T08:30:00-03:00",
+    "document_urls": [],
+    "document_hashes": [],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "pncp-public-api-independent",
+      "captured_at_utc": "2026-09-14T22:25:46.669089+00:00",
+      "listing_url": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+      "query_bound": {
+        "uf": "RS",
+        "modalities": [
+          "4"
+        ],
+        "date_window": "20260913..20260914",
+        "min_year": 2026
+      },
+      "situacaoCompraId": 1,
+      "situacaoCompraNome": "Divulgada no PNCP",
+      "modalidadeId": 4,
+      "modalidadeNome": "Concorr\u00eancia - Eletr\u00f4nica",
+      "anoCompra": 2026,
+      "sequencialCompra": 108,
+      "cnpj": "87490306000151",
+      "classification_reason": "abertura_in_future",
+      "http_status": 200
+    }
+  },
+  {
+    "source_key": "pncp",
+    "source_record_id": "87897740000150-1-000157/2026",
+    "canonical_url": "https://pncp.gov.br/app/editais/87897740000150/2026/157",
+    "title": "[Portal de Compras P\u00fablicas] - CONCORR\u00caNCIA ELETR\u00d4NICA VISANDO A CONTRATA\u00c7\u00c3O DE EMPRESA ESPECIALIZADA EM CONSTRU\u00c7\u00c3O CIVIL, COM FORNECIMENTO DE MATERIAIS E M\u00c3O DE OBRA PARA EXECU\u00c7\u00c3O DE OBRA DE REFORMA DO PR\u00c9DIO DO CENTRO DE EVENTOS MUNICIPAL F\u00c1BIO DOS SANTOS GOMES",
+    "status": "open",
+    "published_at": "2026-09-14T09:16:47-03:00",
+    "deadline": "2026-09-29T10:30:00-03:00",
+    "document_urls": [
+      "https://pncp.gov.br/pncp-api/v1/orgaos/87897740000150/compras/2026/157/arquivos/1"
+    ],
+    "document_hashes": [
+      "fbb4d655cc54126758b530af8b74e8688136143c137432769cb0de59a2079cdc"
+    ],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "pncp-public-api-independent",
+      "captured_at_utc": "2026-09-14T22:25:46.669089+00:00",
+      "listing_url": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+      "query_bound": {
+        "uf": "RS",
+        "modalities": [
+          "4"
+        ],
+        "date_window": "20260913..20260914",
+        "min_year": 2026
+      },
+      "situacaoCompraId": 1,
+      "situacaoCompraNome": "Divulgada no PNCP",
+      "modalidadeId": 4,
+      "modalidadeNome": "Concorr\u00eancia - Eletr\u00f4nica",
+      "anoCompra": 2026,
+      "sequencialCompra": 157,
+      "cnpj": "87897740000150",
+      "classification_reason": "actionable",
+      "http_status": 200,
+      "doc_http": [
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/87897740000150/compras/2026/157/arquivos/1",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 1549992,
+          "sha256": "fbb4d655cc54126758b530af8b74e8688136143c137432769cb0de59a2079cdc"
+        }
+      ],
+      "preferred_doc_count": 1,
+      "total_docs": 1
+    }
+  },
+  {
+    "source_key": "pncp",
+    "source_record_id": "87897740000150-1-000158/2026",
+    "canonical_url": "https://pncp.gov.br/app/editais/87897740000150/2026/158",
+    "title": "[Portal de Compras P\u00fablicas] - CONTRATA\u00c7\u00c3O DE EMPRESA ESPECIALIZADA QUE FORNE\u00c7A MATERIAL E M\u00c3O DE OBRA PARA EXECU\u00c7\u00c3O DE SISTEMA DE ALARME E DETEC\u00c7\u00c3O DE INC\u00caNDIO, ADEQUA\u00c7\u00c3O DO PPCI - PLANO DE PREVEN\u00c7\u00c3O E PROTE\u00c7\u00c3O CONTRA INC\u00caNDIOS, NA EMTO - ESCOLA MUNICIPAL DE TURNO OPOSTO CRIAN\u00c7A FELIZ.SECRETARIA MUNICIPAL DE EDUCA\u00c7\u00c3O.",
+    "status": "open",
+    "published_at": "2026-09-14T09:22:18-03:00",
+    "deadline": "2026-09-29T10:30:00-03:00",
+    "document_urls": [
+      "https://pncp.gov.br/pncp-api/v1/orgaos/87897740000150/compras/2026/158/arquivos/1",
+      "https://pncp.gov.br/pncp-api/v1/orgaos/87897740000150/compras/2026/158/arquivos/2",
+      "https://pncp.gov.br/pncp-api/v1/orgaos/87897740000150/compras/2026/158/arquivos/3",
+      "https://pncp.gov.br/pncp-api/v1/orgaos/87897740000150/compras/2026/158/arquivos/4",
+      "https://pncp.gov.br/pncp-api/v1/orgaos/87897740000150/compras/2026/158/arquivos/5"
+    ],
+    "document_hashes": [
+      "9130988d96df0436aa6eccf3e6a4f0f20ea0806168b42df6f073ea985fdfbd6e",
+      "96c8085521c857e9ac783b585ca71facb0701d2bf5b342e06e40724dd7b33ae8",
+      "8995a848349775394da65f9b573a03c65916e86bfc805c81f7842df96d0d119c",
+      "76eeadec2f680a822f0c1f4efa684874a1f74a607d9bdb025046598e767b5f64",
+      "16b93dfa17b64254826ef05163b8c84d2898d4591e8a2a201b9f30264812b8ee"
+    ],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "pncp-public-api-independent",
+      "captured_at_utc": "2026-09-14T22:25:46.669089+00:00",
+      "listing_url": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+      "query_bound": {
+        "uf": "RS",
+        "modalities": [
+          "4"
+        ],
+        "date_window": "20260913..20260914",
+        "min_year": 2026
+      },
+      "situacaoCompraId": 1,
+      "situacaoCompraNome": "Divulgada no PNCP",
+      "modalidadeId": 4,
+      "modalidadeNome": "Concorr\u00eancia - Eletr\u00f4nica",
+      "anoCompra": 2026,
+      "sequencialCompra": 158,
+      "cnpj": "87897740000150",
+      "classification_reason": "actionable",
+      "http_status": 200,
+      "doc_http": [
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/87897740000150/compras/2026/158/arquivos/1",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 1007811,
+          "sha256": "9130988d96df0436aa6eccf3e6a4f0f20ea0806168b42df6f073ea985fdfbd6e"
+        },
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/87897740000150/compras/2026/158/arquivos/2",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 820998,
+          "sha256": "96c8085521c857e9ac783b585ca71facb0701d2bf5b342e06e40724dd7b33ae8"
+        },
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/87897740000150/compras/2026/158/arquivos/3",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 1537962,
+          "sha256": "8995a848349775394da65f9b573a03c65916e86bfc805c81f7842df96d0d119c"
+        },
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/87897740000150/compras/2026/158/arquivos/4",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 347095,
+          "sha256": "76eeadec2f680a822f0c1f4efa684874a1f74a607d9bdb025046598e767b5f64"
+        },
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/87897740000150/compras/2026/158/arquivos/5",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 865778,
+          "sha256": "16b93dfa17b64254826ef05163b8c84d2898d4591e8a2a201b9f30264812b8ee"
+        }
+      ],
+      "preferred_doc_count": 7,
+      "total_docs": 8
+    }
+  },
+  {
+    "source_key": "pncp",
+    "source_record_id": "87897740000150-1-000159/2026",
+    "canonical_url": "https://pncp.gov.br/app/editais/87897740000150/2026/159",
+    "title": "[Portal de Compras P\u00fablicas] - CONTRATA\u00c7\u00c3O DE EMPRESA ESPECIALIZADA, COM FORNECIMENTO DE MATERIAL E M\u00c3O DE OBRA, PARA EXECU\u00c7\u00c3O DAS OBRAS DE ADEQUA\u00c7\u00c3O  DO SISTEMA DE TRATAMENTO DE EFLUENTES E PISTA DE MANUTEN\u00c7\u00c3O/ABASTECIMENTO DA CENTRAL DE TRANSBORDO E TRIAGEM.SECRETARIA MUNICIPAL DE MEIO AMBIENTE.",
+    "status": "open",
+    "published_at": "2026-09-14T09:27:34-03:00",
+    "deadline": "2026-09-29T10:30:00-03:00",
+    "document_urls": [
+      "https://pncp.gov.br/pncp-api/v1/orgaos/87897740000150/compras/2026/159/arquivos/1",
+      "https://pncp.gov.br/pncp-api/v1/orgaos/87897740000150/compras/2026/159/arquivos/2",
+      "https://pncp.gov.br/pncp-api/v1/orgaos/87897740000150/compras/2026/159/arquivos/3",
+      "https://pncp.gov.br/pncp-api/v1/orgaos/87897740000150/compras/2026/159/arquivos/4",
+      "https://pncp.gov.br/pncp-api/v1/orgaos/87897740000150/compras/2026/159/arquivos/5"
+    ],
+    "document_hashes": [
+      "710fb1b39acb06e039e8b845a9113437837b5fa5619eb7c9bf4321516b6b49f5",
+      "8a2a89392feac6cf3a7945593e477f6a1424d206139d179474a1a648ff959fd1",
+      "4136070ea694ba3ad5d3ed8313d3fec5db5658bd46d2877abec28ad00af8299c",
+      "b35888d2d4cf1f4160e1e2da42903de89b6f2007b2f8c8efaf112ab32e85da5d",
+      "2d484a45edf1e6de7c79a36f9c6cc38e5330acd8b917af5181709aadc8aac396"
+    ],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "pncp-public-api-independent",
+      "captured_at_utc": "2026-09-14T22:25:46.669089+00:00",
+      "listing_url": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+      "query_bound": {
+        "uf": "RS",
+        "modalities": [
+          "4"
+        ],
+        "date_window": "20260913..20260914",
+        "min_year": 2026
+      },
+      "situacaoCompraId": 1,
+      "situacaoCompraNome": "Divulgada no PNCP",
+      "modalidadeId": 4,
+      "modalidadeNome": "Concorr\u00eancia - Eletr\u00f4nica",
+      "anoCompra": 2026,
+      "sequencialCompra": 159,
+      "cnpj": "87897740000150",
+      "classification_reason": "actionable",
+      "http_status": 200,
+      "doc_http": [
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/87897740000150/compras/2026/159/arquivos/1",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 1320189,
+          "sha256": "710fb1b39acb06e039e8b845a9113437837b5fa5619eb7c9bf4321516b6b49f5"
+        },
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/87897740000150/compras/2026/159/arquivos/2",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 862865,
+          "sha256": "8a2a89392feac6cf3a7945593e477f6a1424d206139d179474a1a648ff959fd1"
+        },
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/87897740000150/compras/2026/159/arquivos/3",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 1523482,
+          "sha256": "4136070ea694ba3ad5d3ed8313d3fec5db5658bd46d2877abec28ad00af8299c"
+        },
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/87897740000150/compras/2026/159/arquivos/4",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 1501423,
+          "sha256": "b35888d2d4cf1f4160e1e2da42903de89b6f2007b2f8c8efaf112ab32e85da5d"
+        },
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/87897740000150/compras/2026/159/arquivos/5",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 493290,
+          "sha256": "2d484a45edf1e6de7c79a36f9c6cc38e5330acd8b917af5181709aadc8aac396"
+        }
+      ],
+      "preferred_doc_count": 7,
+      "total_docs": 8
+    }
+  },
+  {
+    "source_key": "pncp",
+    "source_record_id": "88084942000146-1-000477/2026",
+    "canonical_url": "https://pncp.gov.br/app/editais/88084942000146/2026/477",
+    "title": "[Portal de Compras P\u00fablicas] - Contrata\u00e7\u00e3o de empresa para execu\u00e7\u00e3o do servi\u00e7o de pinturas interna e externa do pr\u00e9dio da Assist\u00eancia Social, conforme condi\u00e7\u00f5es, quantidades e exig\u00eancias estabelecidas no Edital e seus anexos.",
+    "status": "open",
+    "published_at": "2026-09-14T11:53:58-03:00",
+    "deadline": "2026-09-28T14:00:00-03:00",
+    "document_urls": [
+      "https://pncp.gov.br/pncp-api/v1/orgaos/88084942000146/compras/2026/477/arquivos/1"
+    ],
+    "document_hashes": [
+      "cdba7502cbec8ede0b5643149a4264c6a11cf5c437d21c94441f7c5caec349ae"
+    ],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "pncp-public-api-independent",
+      "captured_at_utc": "2026-09-14T22:25:46.669089+00:00",
+      "listing_url": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+      "query_bound": {
+        "uf": "RS",
+        "modalities": [
+          "4"
+        ],
+        "date_window": "20260913..20260914",
+        "min_year": 2026
+      },
+      "situacaoCompraId": 1,
+      "situacaoCompraNome": "Divulgada no PNCP",
+      "modalidadeId": 4,
+      "modalidadeNome": "Concorr\u00eancia - Eletr\u00f4nica",
+      "anoCompra": 2026,
+      "sequencialCompra": 477,
+      "cnpj": "88084942000146",
+      "classification_reason": "actionable",
+      "http_status": 200,
+      "doc_http": [
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/88084942000146/compras/2026/477/arquivos/1",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 1560443,
+          "sha256": "cdba7502cbec8ede0b5643149a4264c6a11cf5c437d21c94441f7c5caec349ae"
+        }
+      ],
+      "preferred_doc_count": 1,
+      "total_docs": 1
+    }
+  },
+  {
+    "source_key": "pncp",
+    "source_record_id": "88254891000153-1-000249/2026",
+    "canonical_url": "https://pncp.gov.br/app/editais/88254891000153/2026/249",
+    "title": "Registro de Pre\u00e7os para contrata\u00e7\u00e3o de empresa especializada na presta\u00e7\u00e3o de servi\u00e7os comuns de engenharia, a serem solicitados e executados sob demanda, destinados \u00e0 manuten\u00e7\u00e3o, conserva\u00e7\u00e3o, adequa\u00e7\u00e3o e adapta\u00e7\u00e3o das edifica\u00e7\u00f5es p\u00fablicas do Munic\u00edpio de Dois Irm\u00e3os.",
+    "status": "upcoming",
+    "published_at": "2026-09-14T11:14:59-03:00",
+    "deadline": "2026-10-01T08:55:00-03:00",
+    "document_urls": [],
+    "document_hashes": [],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "pncp-public-api-independent",
+      "captured_at_utc": "2026-09-14T22:25:46.669089+00:00",
+      "listing_url": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+      "query_bound": {
+        "uf": "RS",
+        "modalities": [
+          "4"
+        ],
+        "date_window": "20260913..20260914",
+        "min_year": 2026
+      },
+      "situacaoCompraId": 1,
+      "situacaoCompraNome": "Divulgada no PNCP",
+      "modalidadeId": 4,
+      "modalidadeNome": "Concorr\u00eancia - Eletr\u00f4nica",
+      "anoCompra": 2026,
+      "sequencialCompra": 249,
+      "cnpj": "88254891000153",
+      "classification_reason": "abertura_in_future",
+      "http_status": 200
+    }
+  },
+  {
+    "source_key": "pncp",
+    "source_record_id": "88368386000130-1-000290/2026",
+    "canonical_url": "https://pncp.gov.br/app/editais/88368386000130/2026/290",
+    "title": "[Portal de Compras P\u00fablicas] - CONTRATA\u00c7\u00c3O SEMI-INTEGRADA DE EMPRESA DE ENGENHARIA PARA EXECU\u00c7\u00c3O DAS REDES COLETORAS, EMISS\u00c1RIOS E RAMAIS DE LIGA\u00c7\u00c3O DO SISTEMA DE ESGOTAMENTO SANIT\u00c1RIO - SES SANTOS DUMONT.",
+    "status": "open",
+    "published_at": "2026-09-14T11:32:02-03:00",
+    "deadline": "2026-11-09T09:00:00-03:00",
+    "document_urls": [
+      "https://pncp.gov.br/pncp-api/v1/orgaos/88368386000130/compras/2026/290/arquivos/1",
+      "https://pncp.gov.br/pncp-api/v1/orgaos/88368386000130/compras/2026/290/arquivos/2",
+      "https://pncp.gov.br/pncp-api/v1/orgaos/88368386000130/compras/2026/290/arquivos/15",
+      "https://pncp.gov.br/pncp-api/v1/orgaos/88368386000130/compras/2026/290/arquivos/16",
+      "https://pncp.gov.br/pncp-api/v1/orgaos/88368386000130/compras/2026/290/arquivos/17"
+    ],
+    "document_hashes": [
+      "96e0b27aa86b2fdbfee3db0afd5fd4736371d37b994be8b79b4c660dc85ad87f",
+      "9ca5bee3702185d5702f68d0512012efcd577c3ae8f23cccc1333d44c16720ea",
+      "f3773a2e006bc56b7522fbc5c2c9b0fea7cd8f7385f8c41af15ae2120d00eb97",
+      "7456ba4e1a0f4a9d579fe7af11252ca68295288de89ab17e2c3aa189a736c166",
+      "c04087d5cfea0cde1c5b959d2274e379c39b0c02918eaaa16c51771e9d3d1d47"
+    ],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "pncp-public-api-independent",
+      "captured_at_utc": "2026-09-14T22:25:46.669089+00:00",
+      "listing_url": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+      "query_bound": {
+        "uf": "RS",
+        "modalities": [
+          "4"
+        ],
+        "date_window": "20260913..20260914",
+        "min_year": 2026
+      },
+      "situacaoCompraId": 1,
+      "situacaoCompraNome": "Divulgada no PNCP",
+      "modalidadeId": 4,
+      "modalidadeNome": "Concorr\u00eancia - Eletr\u00f4nica",
+      "anoCompra": 2026,
+      "sequencialCompra": 290,
+      "cnpj": "88368386000130",
+      "classification_reason": "actionable",
+      "http_status": 200,
+      "doc_http": [
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/88368386000130/compras/2026/290/arquivos/1",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 827669,
+          "sha256": "96e0b27aa86b2fdbfee3db0afd5fd4736371d37b994be8b79b4c660dc85ad87f"
+        },
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/88368386000130/compras/2026/290/arquivos/2",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 775480,
+          "sha256": "9ca5bee3702185d5702f68d0512012efcd577c3ae8f23cccc1333d44c16720ea"
+        },
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/88368386000130/compras/2026/290/arquivos/15",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 120330,
+          "sha256": "f3773a2e006bc56b7522fbc5c2c9b0fea7cd8f7385f8c41af15ae2120d00eb97"
+        },
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/88368386000130/compras/2026/290/arquivos/16",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 373537,
+          "sha256": "7456ba4e1a0f4a9d579fe7af11252ca68295288de89ab17e2c3aa189a736c166"
+        },
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/88368386000130/compras/2026/290/arquivos/17",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 98817,
+          "sha256": "c04087d5cfea0cde1c5b959d2274e379c39b0c02918eaaa16c51771e9d3d1d47"
+        }
+      ],
+      "preferred_doc_count": 5,
+      "total_docs": 17
+    }
+  },
+  {
+    "source_key": "pncp",
+    "source_record_id": "88488341000107-1-000051/2026",
+    "canonical_url": "https://pncp.gov.br/app/editais/88488341000107/2026/51",
+    "title": "[Portal de Compras P\u00fablicas] - Contrata\u00e7\u00e3o de Empresa Especializada para fornecimento de materiais e m\u00e3o de obra para execu\u00e7\u00e3o de Pavimenta\u00e7\u00e3o em trecho da Rua Alberto Pasqualine (\u00c1rea: 1.494,80m\u00b2) em pedra bas\u00e1ltica regular (paralelep\u00edpedo), incluso os meios-fios e drenagem pluvial, em regime de empreitada por pre\u00e7o global, conforme Projeto B\u00e1sico, Memorial Descritivo e Cronograma F\u00edsico Financeiro.",
+    "status": "closed",
+    "published_at": "2026-09-14T15:36:32-03:00",
+    "deadline": "2026-08-17T08:30:00-03:00",
+    "document_urls": [],
+    "document_hashes": [],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "pncp-public-api-independent",
+      "captured_at_utc": "2026-09-14T22:25:46.669089+00:00",
+      "listing_url": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+      "query_bound": {
+        "uf": "RS",
+        "modalities": [
+          "4"
+        ],
+        "date_window": "20260913..20260914",
+        "min_year": 2026
+      },
+      "situacaoCompraId": 1,
+      "situacaoCompraNome": "Divulgada no PNCP",
+      "modalidadeId": 4,
+      "modalidadeNome": "Concorr\u00eancia - Eletr\u00f4nica",
+      "anoCompra": 2026,
+      "sequencialCompra": 51,
+      "cnpj": "88488341000107",
+      "classification_reason": "deadline_passed",
+      "http_status": 200
+    }
+  },
+  {
+    "source_key": "pncp",
+    "source_record_id": "88594999000195-1-001391/2026",
+    "canonical_url": "https://pncp.gov.br/app/editais/88594999000195/2026/1391",
+    "title": "PRESTA\u00c7\u00c3O DE SERVI\u00c7OS",
+    "status": "upcoming",
+    "published_at": "2026-09-14T09:09:26-03:00",
+    "deadline": "2026-09-29T08:29:00-03:00",
+    "document_urls": [],
+    "document_hashes": [],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "pncp-public-api-independent",
+      "captured_at_utc": "2026-09-14T22:25:46.669089+00:00",
+      "listing_url": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+      "query_bound": {
+        "uf": "RS",
+        "modalities": [
+          "4"
+        ],
+        "date_window": "20260913..20260914",
+        "min_year": 2026
+      },
+      "situacaoCompraId": 1,
+      "situacaoCompraNome": "Divulgada no PNCP",
+      "modalidadeId": 4,
+      "modalidadeNome": "Concorr\u00eancia - Eletr\u00f4nica",
+      "anoCompra": 2026,
+      "sequencialCompra": 1391,
+      "cnpj": "88594999000195",
+      "classification_reason": "abertura_in_future",
+      "http_status": 200
+    }
+  },
+  {
+    "source_key": "pncp",
+    "source_record_id": "88594999000195-1-001392/2026",
+    "canonical_url": "https://pncp.gov.br/app/editais/88594999000195/2026/1392",
+    "title": "CONTRATA\u00c7\u00c3O DE EMPRE SA ESPECIALIZADA PARA RECAPEAMENTO ASF\u00c1LTICO SOBRE PARALELEP\u00cdPEDO DA RUA IRM\u00c3O JOS\u00c9 SION NO MUNIC\u00cdPIO DE GARIBALDI",
+    "status": "upcoming",
+    "published_at": "2026-09-14T09:22:17-03:00",
+    "deadline": "2026-09-29T08:30:00-03:00",
+    "document_urls": [],
+    "document_hashes": [],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "pncp-public-api-independent",
+      "captured_at_utc": "2026-09-14T22:25:46.669089+00:00",
+      "listing_url": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+      "query_bound": {
+        "uf": "RS",
+        "modalities": [
+          "4"
+        ],
+        "date_window": "20260913..20260914",
+        "min_year": 2026
+      },
+      "situacaoCompraId": 1,
+      "situacaoCompraNome": "Divulgada no PNCP",
+      "modalidadeId": 4,
+      "modalidadeNome": "Concorr\u00eancia - Eletr\u00f4nica",
+      "anoCompra": 2026,
+      "sequencialCompra": 1392,
+      "cnpj": "88594999000195",
+      "classification_reason": "abertura_in_future",
+      "http_status": 200
+    }
+  },
+  {
+    "source_key": "pncp",
+    "source_record_id": "88661400000199-1-000090/2026",
+    "canonical_url": "https://pncp.gov.br/app/editais/88661400000199/2026/90",
+    "title": "[Portal de Compras P\u00fablicas] - Contrata\u00e7\u00e3o de empresa especializada para execu\u00e7\u00e3o de obras de drenagem e recupera\u00e7\u00e3o da infraestrutura vi\u00e1ria, compreendendo a drenagem da Rua Maur\u00edcio Cardoso, no trecho entre a Rua Lino Weirich e a divisa entre os munic\u00edpios de Teut\u00f4nia e Westf\u00e1lia, a execu\u00e7\u00e3o da galeria aberta Edmundo Carlos Berwig e a execu\u00e7\u00e3o da galeria na Rua Adolfo Hunsche, na passagem do arroio Welp, Teut\u00f4nia/RS, incluindo material e m\u00e3o de obra.",
+    "status": "upcoming",
+    "published_at": "2026-09-14T13:53:55-03:00",
+    "deadline": "2026-09-29T07:45:00-03:00",
+    "document_urls": [],
+    "document_hashes": [],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "pncp-public-api-independent",
+      "captured_at_utc": "2026-09-14T22:25:46.669089+00:00",
+      "listing_url": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+      "query_bound": {
+        "uf": "RS",
+        "modalities": [
+          "4"
+        ],
+        "date_window": "20260913..20260914",
+        "min_year": 2026
+      },
+      "situacaoCompraId": 1,
+      "situacaoCompraNome": "Divulgada no PNCP",
+      "modalidadeId": 4,
+      "modalidadeNome": "Concorr\u00eancia - Eletr\u00f4nica",
+      "anoCompra": 2026,
+      "sequencialCompra": 90,
+      "cnpj": "88661400000199",
+      "classification_reason": "abertura_in_future",
+      "http_status": 200
+    }
+  },
+  {
+    "source_key": "pncp",
+    "source_record_id": "88743604000179-1-000071/2026",
+    "canonical_url": "https://pncp.gov.br/app/editais/88743604000179/2026/71",
+    "title": "[Portal de Compras P\u00fablicas] - Contrata\u00e7\u00e3o de servi\u00e7os de pavimenta\u00e7\u00e3o com blocos intertravados (PAVER) na Rua Pastor J\u00falio Alves, Zona Urbana,  em Charqueadas/RS, com \u00e1rea total a construir de 2.947,50 m\u00b2.",
+    "status": "open",
+    "published_at": "2026-09-14T09:59:44-03:00",
+    "deadline": "2026-09-28T09:59:00-03:00",
+    "document_urls": [
+      "https://pncp.gov.br/pncp-api/v1/orgaos/88743604000179/compras/2026/71/arquivos/1"
+    ],
+    "document_hashes": [
+      "434160855271ca990c419bca2c10da2c48cd72b3735b6f2af729ffbb2584be36"
+    ],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "pncp-public-api-independent",
+      "captured_at_utc": "2026-09-14T22:25:46.669089+00:00",
+      "listing_url": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+      "query_bound": {
+        "uf": "RS",
+        "modalities": [
+          "4"
+        ],
+        "date_window": "20260913..20260914",
+        "min_year": 2026
+      },
+      "situacaoCompraId": 1,
+      "situacaoCompraNome": "Divulgada no PNCP",
+      "modalidadeId": 4,
+      "modalidadeNome": "Concorr\u00eancia - Eletr\u00f4nica",
+      "anoCompra": 2026,
+      "sequencialCompra": 71,
+      "cnpj": "88743604000179",
+      "classification_reason": "actionable",
+      "http_status": 200,
+      "doc_http": [
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/88743604000179/compras/2026/71/arquivos/1",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 1024001,
+          "sha256": "434160855271ca990c419bca2c10da2c48cd72b3735b6f2af729ffbb2584be36"
+        }
+      ],
+      "preferred_doc_count": 1,
+      "total_docs": 13
+    }
+  },
+  {
+    "source_key": "pncp",
+    "source_record_id": "88743604000179-1-000072/2026",
+    "canonical_url": "https://pncp.gov.br/app/editais/88743604000179/2026/72",
+    "title": "[Portal de Compras P\u00fablicas] - Contrata\u00e7\u00e3o de empresa para constru\u00e7\u00e3o de 11 (onze) unidades habitacionais no Munic\u00edpio de Charqueadas/RS.",
+    "status": "open",
+    "published_at": "2026-09-14T12:58:45-03:00",
+    "deadline": "2026-09-28T12:59:00-03:00",
+    "document_urls": [
+      "https://pncp.gov.br/pncp-api/v1/orgaos/88743604000179/compras/2026/72/arquivos/1"
+    ],
+    "document_hashes": [
+      "ecdf387e965ea4afd2bc14b92473f9cba5db92f3a3870474bd0ba86a65122dec"
+    ],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "pncp-public-api-independent",
+      "captured_at_utc": "2026-09-14T22:25:46.669089+00:00",
+      "listing_url": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+      "query_bound": {
+        "uf": "RS",
+        "modalities": [
+          "4"
+        ],
+        "date_window": "20260913..20260914",
+        "min_year": 2026
+      },
+      "situacaoCompraId": 1,
+      "situacaoCompraNome": "Divulgada no PNCP",
+      "modalidadeId": 4,
+      "modalidadeNome": "Concorr\u00eancia - Eletr\u00f4nica",
+      "anoCompra": 2026,
+      "sequencialCompra": 72,
+      "cnpj": "88743604000179",
+      "classification_reason": "actionable",
+      "http_status": 200,
+      "doc_http": [
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/88743604000179/compras/2026/72/arquivos/1",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 1033028,
+          "sha256": "ecdf387e965ea4afd2bc14b92473f9cba5db92f3a3870474bd0ba86a65122dec"
+        }
+      ],
+      "preferred_doc_count": 1,
+      "total_docs": 11
+    }
+  },
+  {
+    "source_key": "pncp",
+    "source_record_id": "88818299000137-1-000302/2026",
+    "canonical_url": "https://pncp.gov.br/app/editais/88818299000137/2026/302",
+    "title": "PAVIMENTA\u00c7\u00c3O",
+    "status": "open",
+    "published_at": "2026-09-14T09:05:04-03:00",
+    "deadline": "2026-10-26T08:30:00-03:00",
+    "document_urls": [
+      "https://pncp.gov.br/pncp-api/v1/orgaos/88818299000137/compras/2026/302/arquivos/1"
+    ],
+    "document_hashes": [
+      "6416ddec5a828af9566acfab3a6d462e8b3cb0fd29d115916202bb77ed14291c"
+    ],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "pncp-public-api-independent",
+      "captured_at_utc": "2026-09-14T22:25:46.669089+00:00",
+      "listing_url": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+      "query_bound": {
+        "uf": "RS",
+        "modalities": [
+          "4"
+        ],
+        "date_window": "20260913..20260914",
+        "min_year": 2026
+      },
+      "situacaoCompraId": 1,
+      "situacaoCompraNome": "Divulgada no PNCP",
+      "modalidadeId": 4,
+      "modalidadeNome": "Concorr\u00eancia - Eletr\u00f4nica",
+      "anoCompra": 2026,
+      "sequencialCompra": 302,
+      "cnpj": "88818299000137",
+      "classification_reason": "actionable",
+      "http_status": 200,
+      "doc_http": [
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/88818299000137/compras/2026/302/arquivos/1",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 1041431,
+          "sha256": "6416ddec5a828af9566acfab3a6d462e8b3cb0fd29d115916202bb77ed14291c"
+        }
+      ],
+      "preferred_doc_count": 1,
+      "total_docs": 23
+    }
+  },
+  {
+    "source_key": "pncp",
+    "source_record_id": "88818299000137-1-000303/2026",
+    "canonical_url": "https://pncp.gov.br/app/editais/88818299000137/2026/303",
+    "title": "CONTRATA\u00c7\u00c3O DE EMPRESA PARA PAVIMENTA\u00c7\u00c3O EM CBUQ E DRENAGEM PLUVIAL EM TRECHO DA RUA JULIA DE CASTILHOS",
+    "status": "open",
+    "published_at": "2026-09-14T09:21:54-03:00",
+    "deadline": "2026-10-26T08:31:00-03:00",
+    "document_urls": [
+      "https://pncp.gov.br/pncp-api/v1/orgaos/88818299000137/compras/2026/303/arquivos/1"
+    ],
+    "document_hashes": [
+      "21d807d33728b96dfacacee52214b6c17feca264daa7f8791930d5e55907e716"
+    ],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "pncp-public-api-independent",
+      "captured_at_utc": "2026-09-14T22:25:46.669089+00:00",
+      "listing_url": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+      "query_bound": {
+        "uf": "RS",
+        "modalities": [
+          "4"
+        ],
+        "date_window": "20260913..20260914",
+        "min_year": 2026
+      },
+      "situacaoCompraId": 1,
+      "situacaoCompraNome": "Divulgada no PNCP",
+      "modalidadeId": 4,
+      "modalidadeNome": "Concorr\u00eancia - Eletr\u00f4nica",
+      "anoCompra": 2026,
+      "sequencialCompra": 303,
+      "cnpj": "88818299000137",
+      "classification_reason": "actionable",
+      "http_status": 200,
+      "doc_http": [
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/88818299000137/compras/2026/303/arquivos/1",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 1041404,
+          "sha256": "21d807d33728b96dfacacee52214b6c17feca264daa7f8791930d5e55907e716"
+        }
+      ],
+      "preferred_doc_count": 1,
+      "total_docs": 22
+    }
+  },
+  {
+    "source_key": "pncp",
+    "source_record_id": "89522064000166-1-000207/2026",
+    "canonical_url": "https://pncp.gov.br/app/editais/89522064000166/2026/207",
+    "title": "Contrata\u00e7\u00e3o, em regime de empreitada por pre\u00e7o global, de servi\u00e7os para constru\u00e7\u00e3o do novo pr\u00e9dio do Foro da Comarca de Terra de Areia.",
+    "status": "upcoming",
+    "published_at": "2026-09-14T12:41:03-03:00",
+    "deadline": "2026-10-01T14:00:00-03:00",
+    "document_urls": [],
+    "document_hashes": [],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "pncp-public-api-independent",
+      "captured_at_utc": "2026-09-14T22:25:46.669089+00:00",
+      "listing_url": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+      "query_bound": {
+        "uf": "RS",
+        "modalities": [
+          "4"
+        ],
+        "date_window": "20260913..20260914",
+        "min_year": 2026
+      },
+      "situacaoCompraId": 1,
+      "situacaoCompraNome": "Divulgada no PNCP",
+      "modalidadeId": 4,
+      "modalidadeNome": "Concorr\u00eancia - Eletr\u00f4nica",
+      "anoCompra": 2026,
+      "sequencialCompra": 207,
+      "cnpj": "89522064000166",
+      "classification_reason": "abertura_in_future",
+      "http_status": 200
+    }
+  },
+  {
+    "source_key": "pncp",
+    "source_record_id": "90832619000155-1-000490/2026",
+    "canonical_url": "https://pncp.gov.br/app/editais/90832619000155/2026/490",
+    "title": "[Portal de Compras P\u00fablicas] - CONTRATA\u00c7\u00c3O DE EMPRESA ESPECIALIZADA, COM FORNECIMENTO DE MATERIAL, M\u00c3O DE OBRA E RESPONSABILIDADE T\u00c9CNICA PARA REFORMA E AMPLIA\u00c7\u00c3O DA INFRAESTRUTURA F\u00cdSICA DA FARM\u00c1CIA DE MEDICAMENTOS ESPECIAIS (FME)",
+    "status": "open",
+    "published_at": "2026-09-14T09:08:06-03:00",
+    "deadline": "2026-10-21T09:29:00-03:00",
+    "document_urls": [
+      "https://pncp.gov.br/pncp-api/v1/orgaos/90832619000155/compras/2026/490/arquivos/1"
+    ],
+    "document_hashes": [
+      "29cba7624a30ec31241d017a252521f6d167846a92b6581909c2ad52524cebbe"
+    ],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "pncp-public-api-independent",
+      "captured_at_utc": "2026-09-14T22:25:46.669089+00:00",
+      "listing_url": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+      "query_bound": {
+        "uf": "RS",
+        "modalities": [
+          "4"
+        ],
+        "date_window": "20260913..20260914",
+        "min_year": 2026
+      },
+      "situacaoCompraId": 1,
+      "situacaoCompraNome": "Divulgada no PNCP",
+      "modalidadeId": 4,
+      "modalidadeNome": "Concorr\u00eancia - Eletr\u00f4nica",
+      "anoCompra": 2026,
+      "sequencialCompra": 490,
+      "cnpj": "90832619000155",
+      "classification_reason": "actionable",
+      "http_status": 200,
+      "doc_http": [
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/90832619000155/compras/2026/490/arquivos/1",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 514914,
+          "sha256": "29cba7624a30ec31241d017a252521f6d167846a92b6581909c2ad52524cebbe"
+        }
+      ],
+      "preferred_doc_count": 1,
+      "total_docs": 5
+    }
+  },
+  {
+    "source_key": "pncp",
+    "source_record_id": "92000215000120-1-000183/2026",
+    "canonical_url": "https://pncp.gov.br/app/editais/92000215000120/2026/183",
+    "title": "Contrata\u00e7\u00e3o de empresa para perfura\u00e7\u00e3o/constru\u00e7\u00e3o de um po\u00e7o tubular, composto por moto bomba d\u2019\u00e0gua submersa e acess\u00f3rios, bem como a outorga e/ou tamponamento na localidade de Bela Vista \u2013 Segredo/RS, conforme Conv\u00eanio FPE n\u00ba 1834/2023.",
+    "status": "open",
+    "published_at": "2026-09-14T13:54:19-03:00",
+    "deadline": "2026-09-28T13:50:00-03:00",
+    "document_urls": [
+      "https://pncp.gov.br/pncp-api/v1/orgaos/92000215000120/compras/2026/183/arquivos/1"
+    ],
+    "document_hashes": [
+      "741e67b5c891bff3822db45c8d2cc4d2be5e90697e7f5328bec10547dc20a402"
+    ],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "pncp-public-api-independent",
+      "captured_at_utc": "2026-09-14T22:25:46.669089+00:00",
+      "listing_url": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+      "query_bound": {
+        "uf": "RS",
+        "modalities": [
+          "4"
+        ],
+        "date_window": "20260913..20260914",
+        "min_year": 2026
+      },
+      "situacaoCompraId": 1,
+      "situacaoCompraNome": "Divulgada no PNCP",
+      "modalidadeId": 4,
+      "modalidadeNome": "Concorr\u00eancia - Eletr\u00f4nica",
+      "anoCompra": 2026,
+      "sequencialCompra": 183,
+      "cnpj": "92000215000120",
+      "classification_reason": "actionable",
+      "http_status": 200,
+      "doc_http": [
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/92000215000120/compras/2026/183/arquivos/1",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 383433,
+          "sha256": "741e67b5c891bff3822db45c8d2cc4d2be5e90697e7f5328bec10547dc20a402"
+        }
+      ],
+      "preferred_doc_count": 1,
+      "total_docs": 7
+    }
+  },
+  {
+    "source_key": "pncp",
+    "source_record_id": "92242080000100-1-000156/2026",
+    "canonical_url": "https://pncp.gov.br/app/editais/92242080000100/2026/156",
+    "title": "Obra para restaura\u00e7\u00e3o e reforma do Pr\u00e9dio do Grande Hotel da UFPel",
+    "status": "open",
+    "published_at": "2026-09-14T04:00:09-03:00",
+    "deadline": "2026-10-20T09:00:00-03:00",
+    "document_urls": [
+      "https://pncp.gov.br/pncp-api/v1/orgaos/92242080000100/compras/2026/156/arquivos/2"
+    ],
+    "document_hashes": [
+      "9f6734feca98c004d12c0cc2d79c88d38b55068c71c635188cb39c7d504df619"
+    ],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "pncp-public-api-independent",
+      "captured_at_utc": "2026-09-14T22:25:46.669089+00:00",
+      "listing_url": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+      "query_bound": {
+        "uf": "RS",
+        "modalities": [
+          "4"
+        ],
+        "date_window": "20260913..20260914",
+        "min_year": 2026
+      },
+      "situacaoCompraId": 1,
+      "situacaoCompraNome": "Divulgada no PNCP",
+      "modalidadeId": 4,
+      "modalidadeNome": "Concorr\u00eancia - Eletr\u00f4nica",
+      "anoCompra": 2026,
+      "sequencialCompra": 156,
+      "cnpj": "92242080000100",
+      "classification_reason": "actionable",
+      "http_status": 200,
+      "doc_http": [
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/92242080000100/compras/2026/156/arquivos/2",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 585186,
+          "sha256": "9f6734feca98c004d12c0cc2d79c88d38b55068c71c635188cb39c7d504df619"
+        }
+      ],
+      "preferred_doc_count": 1,
+      "total_docs": 6
+    }
+  },
+  {
+    "source_key": "pncp",
+    "source_record_id": "92324706000127-1-000181/2026",
+    "canonical_url": "https://pncp.gov.br/app/editais/92324706000127/2026/181",
+    "title": "[Portal de Compras P\u00fablicas] - O presente Termo tem por finalidade a contrata\u00e7\u00e3o de empresa especializada no ramo de engenharia e/ou arquitetura para a execu\u00e7\u00e3o das obras de implanta\u00e7\u00e3o dos Loteamentos Nova Aurora e Novo Horizonte, no Munic\u00edpio de Eldorado do Sul/RS, compreendendo todos os servi\u00e7os, fornecimento de materiais, equipamentos, m\u00e3o de obra e demais insumos necess\u00e1rios \u00e0 completa execu\u00e7\u00e3o dos projetos, conforme projetos, memoriais descritivos, especifica\u00e7\u00f5es t\u00e9cnicas, planilhas or\u00e7ament\u00e1rias,  cronogramas f\u00edsico-financeiros e demais documentos integrantes do processo licitat\u00f3rio.",
+    "status": "upcoming",
+    "published_at": "2026-09-14T14:04:50-03:00",
+    "deadline": "2026-09-29T09:00:00-03:00",
+    "document_urls": [],
+    "document_hashes": [],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "pncp-public-api-independent",
+      "captured_at_utc": "2026-09-14T22:25:46.669089+00:00",
+      "listing_url": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+      "query_bound": {
+        "uf": "RS",
+        "modalities": [
+          "4"
+        ],
+        "date_window": "20260913..20260914",
+        "min_year": 2026
+      },
+      "situacaoCompraId": 1,
+      "situacaoCompraNome": "Divulgada no PNCP",
+      "modalidadeId": 4,
+      "modalidadeNome": "Concorr\u00eancia - Eletr\u00f4nica",
+      "anoCompra": 2026,
+      "sequencialCompra": 181,
+      "cnpj": "92324706000127",
+      "classification_reason": "abertura_in_future",
+      "http_status": 200
+    }
+  },
+  {
+    "source_key": "pncp",
+    "source_record_id": "92406248000175-1-000156/2026",
+    "canonical_url": "https://pncp.gov.br/app/editais/92406248000175/2026/156",
+    "title": "Contrata\u00e7\u00e3o de empresa especializada para a execu\u00e7\u00e3o de obra de engenharia destinada \u00e0 implanta\u00e7\u00e3o de sistema de abastecimento de \u00e1gua pot\u00e1vel no Munic\u00edpio de Esta\u00e7\u00e3o/RS, em parceria com o Governo do Estado do Rio Grande do Sul, por meio do Conv\u00eanio FPE n\u00ba 1684/2023  Processo n\u00ba 23/1500-0021473-4. CONCORR\u00caNCIA ELETR\u00d4NICA 002/2026.",
+    "status": "closed",
+    "published_at": "2026-09-14T16:34:00-03:00",
+    "deadline": "2026-09-02T09:00:00-03:00",
+    "document_urls": [],
+    "document_hashes": [],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "pncp-public-api-independent",
+      "captured_at_utc": "2026-09-14T22:25:46.669089+00:00",
+      "listing_url": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+      "query_bound": {
+        "uf": "RS",
+        "modalities": [
+          "4"
+        ],
+        "date_window": "20260913..20260914",
+        "min_year": 2026
+      },
+      "situacaoCompraId": 1,
+      "situacaoCompraNome": "Divulgada no PNCP",
+      "modalidadeId": 4,
+      "modalidadeNome": "Concorr\u00eancia - Eletr\u00f4nica",
+      "anoCompra": 2026,
+      "sequencialCompra": 156,
+      "cnpj": "92406248000175",
+      "classification_reason": "deadline_passed",
+      "http_status": 200
+    }
+  },
+  {
+    "source_key": "pncp",
+    "source_record_id": "92406248000175-1-000157/2026",
+    "canonical_url": "https://pncp.gov.br/app/editais/92406248000175/2026/157",
+    "title": "Contrata\u00e7\u00e3o de empresa especializada em engenharia civil para a execu\u00e7\u00e3o das obras de constru\u00e7\u00e3o de 02 (duas) pontes em concreto pr\u00e9-moldado, incluindo o fornecimento de materiais, m\u00e3o de obra. CONCORR\u00caNCIA ELETR\u00d4NICA 003/2026.",
+    "status": "closed",
+    "published_at": "2026-09-14T16:34:57-03:00",
+    "deadline": "2026-09-14T09:00:00-03:00",
+    "document_urls": [],
+    "document_hashes": [],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "pncp-public-api-independent",
+      "captured_at_utc": "2026-09-14T22:25:46.669089+00:00",
+      "listing_url": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+      "query_bound": {
+        "uf": "RS",
+        "modalities": [
+          "4"
+        ],
+        "date_window": "20260913..20260914",
+        "min_year": 2026
+      },
+      "situacaoCompraId": 1,
+      "situacaoCompraNome": "Divulgada no PNCP",
+      "modalidadeId": 4,
+      "modalidadeNome": "Concorr\u00eancia - Eletr\u00f4nica",
+      "anoCompra": 2026,
+      "sequencialCompra": 157,
+      "cnpj": "92406248000175",
+      "classification_reason": "deadline_passed",
+      "http_status": 200
+    }
+  },
+  {
+    "source_key": "pncp",
+    "source_record_id": "92406248000175-1-000158/2026",
+    "canonical_url": "https://pncp.gov.br/app/editais/92406248000175/2026/158",
+    "title": "Contrata\u00e7\u00e3o de empresa especializada para execu\u00e7\u00e3o de obra de engenharia destinada a reperfilagem asf\u00e1ltica e moderniza\u00e7\u00e3o da infraestrutura vi\u00e1ria da Av. Lido Tagliari, no Munic\u00edpio de Esta\u00e7\u00e3o/RS. CONCORR\u00caNCIA ELETR\u00d4NICA 004/2026.",
+    "status": "open",
+    "published_at": "2026-09-14T16:35:49-03:00",
+    "deadline": "2026-09-18T09:00:00-03:00",
+    "document_urls": [
+      "https://pncp.gov.br/pncp-api/v1/orgaos/92406248000175/compras/2026/158/arquivos/1",
+      "https://pncp.gov.br/pncp-api/v1/orgaos/92406248000175/compras/2026/158/arquivos/2",
+      "https://pncp.gov.br/pncp-api/v1/orgaos/92406248000175/compras/2026/158/arquivos/3",
+      "https://pncp.gov.br/pncp-api/v1/orgaos/92406248000175/compras/2026/158/arquivos/9",
+      "https://pncp.gov.br/pncp-api/v1/orgaos/92406248000175/compras/2026/158/arquivos/10"
+    ],
+    "document_hashes": [
+      "0636593c5f91bfe0a379d3c7cbd8240679aca5ecbbb5e141a7f392b75c1bf9b7",
+      "00742cdb6b5b6e766151441999ff7ae849b0fe4cd5633f9bd69a8f89f9c3ab1f",
+      "d7fcf44e8ab03a184d48b961070764048e68aa2817ded10726fc3a02e59cf47e",
+      "457678684021b6e427ff36bd4f1e6faa12413ce90e471ff95fe2ff5bd5a9a2f1",
+      "1c56f59912f08aa70bf40651d87bbf6abc5628f45d462c9daf9e18b82c17119b"
+    ],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "pncp-public-api-independent",
+      "captured_at_utc": "2026-09-14T22:25:46.669089+00:00",
+      "listing_url": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+      "query_bound": {
+        "uf": "RS",
+        "modalities": [
+          "4"
+        ],
+        "date_window": "20260913..20260914",
+        "min_year": 2026
+      },
+      "situacaoCompraId": 1,
+      "situacaoCompraNome": "Divulgada no PNCP",
+      "modalidadeId": 4,
+      "modalidadeNome": "Concorr\u00eancia - Eletr\u00f4nica",
+      "anoCompra": 2026,
+      "sequencialCompra": 158,
+      "cnpj": "92406248000175",
+      "classification_reason": "actionable",
+      "http_status": 200,
+      "doc_http": [
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/92406248000175/compras/2026/158/arquivos/1",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 364313,
+          "sha256": "0636593c5f91bfe0a379d3c7cbd8240679aca5ecbbb5e141a7f392b75c1bf9b7"
+        },
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/92406248000175/compras/2026/158/arquivos/2",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 285699,
+          "sha256": "00742cdb6b5b6e766151441999ff7ae849b0fe4cd5633f9bd69a8f89f9c3ab1f"
+        },
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/92406248000175/compras/2026/158/arquivos/3",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 181268,
+          "sha256": "d7fcf44e8ab03a184d48b961070764048e68aa2817ded10726fc3a02e59cf47e"
+        },
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/92406248000175/compras/2026/158/arquivos/9",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 1527838,
+          "sha256": "457678684021b6e427ff36bd4f1e6faa12413ce90e471ff95fe2ff5bd5a9a2f1"
+        },
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/92406248000175/compras/2026/158/arquivos/10",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 653956,
+          "sha256": "1c56f59912f08aa70bf40651d87bbf6abc5628f45d462c9daf9e18b82c17119b"
+        }
+      ],
+      "preferred_doc_count": 16,
+      "total_docs": 26
+    }
+  },
+  {
+    "source_key": "pncp",
+    "source_record_id": "92406248000175-1-000159/2026",
+    "canonical_url": "https://pncp.gov.br/app/editais/92406248000175/2026/159",
+    "title": "Contrata\u00e7\u00e3o de empresa especializada em engenharia civil para a execu\u00e7\u00e3o integral de obra p\u00fablica de infraestrutura vi\u00e1ria destinada \u00e0 pavimenta\u00e7\u00e3o poli\u00e9drica com pedras irregulares de basalto e instala\u00e7\u00e3o de sinaliza\u00e7\u00e3o vi\u00e1ria no trecho urbano de interliga\u00e7\u00e3o entre o Largo da Ferrovi\u00e1ria e o Arboreto Municipal S\u00e3o Francisco de Assis (Parque da Florestinha). CONCORR\u00caNCIA ELETR\u00d4NICA 005/2026.",
+    "status": "closed",
+    "published_at": "2026-09-14T16:36:42-03:00",
+    "deadline": "2026-09-02T14:00:00-03:00",
+    "document_urls": [],
+    "document_hashes": [],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "pncp-public-api-independent",
+      "captured_at_utc": "2026-09-14T22:25:46.669089+00:00",
+      "listing_url": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+      "query_bound": {
+        "uf": "RS",
+        "modalities": [
+          "4"
+        ],
+        "date_window": "20260913..20260914",
+        "min_year": 2026
+      },
+      "situacaoCompraId": 1,
+      "situacaoCompraNome": "Divulgada no PNCP",
+      "modalidadeId": 4,
+      "modalidadeNome": "Concorr\u00eancia - Eletr\u00f4nica",
+      "anoCompra": 2026,
+      "sequencialCompra": 159,
+      "cnpj": "92406248000175",
+      "classification_reason": "deadline_passed",
+      "http_status": 200
+    }
+  },
+  {
+    "source_key": "pncp",
+    "source_record_id": "94726312000120-1-000106/2026",
+    "canonical_url": "https://pncp.gov.br/app/editais/94726312000120/2026/106",
+    "title": "CONTRATA\u00c7\u00c3O DE EMPRESA, PARA EXECU\u00c7\u00c3O DE REFORMA NO GINASIO MUNICIPAL CARLOS NECKEL EM BARRA DO GUARITA, CONFORME PROCESSO N.\u00ba 25/2900 00001082-5, FPE N\u00ba 5407-2025, AVAN\u00c7AR + ESPORTE: INFRAESTRUTURA ESPORTIVA.",
+    "status": "upcoming",
+    "published_at": "2026-09-14T11:08:22-03:00",
+    "deadline": "2026-09-30T08:00:00-03:00",
+    "document_urls": [],
+    "document_hashes": [],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "pncp-public-api-independent",
+      "captured_at_utc": "2026-09-14T22:25:46.669089+00:00",
+      "listing_url": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+      "query_bound": {
+        "uf": "RS",
+        "modalities": [
+          "4"
+        ],
+        "date_window": "20260913..20260914",
+        "min_year": 2026
+      },
+      "situacaoCompraId": 1,
+      "situacaoCompraNome": "Divulgada no PNCP",
+      "modalidadeId": 4,
+      "modalidadeNome": "Concorr\u00eancia - Eletr\u00f4nica",
+      "anoCompra": 2026,
+      "sequencialCompra": 106,
+      "cnpj": "94726312000120",
+      "classification_reason": "abertura_in_future",
+      "http_status": 200
+    }
+  },
+  {
+    "source_key": "pncp",
+    "source_record_id": "95591764000105-1-000236/2026",
+    "canonical_url": "https://pncp.gov.br/app/editais/95591764000105/2026/236",
+    "title": "Reforma do sistema de esgoto sanit\u00e1rio da Casa do Estudante Universit\u00e1rio Ind\u00edgena conforme projetos; especifica\u00e7\u00f5es t\u00e9cnicas; normas da ABNT e TEM, or\u00e7amento e cronograma em anexo a solicita\u00e7\u00e3o.",
+    "status": "open",
+    "published_at": "2026-09-14T04:03:05-03:00",
+    "deadline": "2026-09-28T09:00:00-03:00",
+    "document_urls": [
+      "https://pncp.gov.br/pncp-api/v1/orgaos/95591764000105/compras/2026/236/arquivos/1",
+      "https://pncp.gov.br/pncp-api/v1/orgaos/95591764000105/compras/2026/236/arquivos/2"
+    ],
+    "document_hashes": [
+      "8f6a39d1963e5fdc01e4d4aad69b7ff820d27b10219c7db03c7f41b6aed74074",
+      "e161c315cecddae9835e0e378cc81f1f9b0597b059d08c82569520e63cc67ab5"
+    ],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "pncp-public-api-independent",
+      "captured_at_utc": "2026-09-14T22:25:46.669089+00:00",
+      "listing_url": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+      "query_bound": {
+        "uf": "RS",
+        "modalities": [
+          "4"
+        ],
+        "date_window": "20260913..20260914",
+        "min_year": 2026
+      },
+      "situacaoCompraId": 1,
+      "situacaoCompraNome": "Divulgada no PNCP",
+      "modalidadeId": 4,
+      "modalidadeNome": "Concorr\u00eancia - Eletr\u00f4nica",
+      "anoCompra": 2026,
+      "sequencialCompra": 236,
+      "cnpj": "95591764000105",
+      "classification_reason": "actionable",
+      "http_status": 200,
+      "doc_http": [
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/95591764000105/compras/2026/236/arquivos/1",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 1524975,
+          "sha256": "8f6a39d1963e5fdc01e4d4aad69b7ff820d27b10219c7db03c7f41b6aed74074"
+        },
+        {
+          "url_path_only": "https://pncp.gov.br/pncp-api/v1/orgaos/95591764000105/compras/2026/236/arquivos/2",
+          "http_status": 200,
+          "content_type": "application/octet-stream",
+          "bytes_sampled": 250571,
+          "sha256": "e161c315cecddae9835e0e378cc81f1f9b0597b059d08c82569520e63cc67ab5"
+        }
+      ],
+      "preferred_doc_count": 2,
+      "total_docs": 2
+    }
+  }
+]

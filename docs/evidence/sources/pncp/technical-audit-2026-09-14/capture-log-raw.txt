@@ -1,0 +1,5 @@
+[2026-09-14T22:25:46Z] QUERY publicacao uf=RS mod=4 20260913..20260914
+[2026-09-14T22:25:48Z]   totalRegistros=30 totalPaginas=1 ct=application/json
+[2026-09-14T22:25:48Z] enumerated unique controls: 30; pages_fetched=1
+[2026-09-14T22:25:48Z] classification counts: {'open': 15, 'closed': 4, 'upcoming': 11, 'excluded': 0, 'unknown': 0}
+[2026-09-14T22:26:49Z] doc_lookups=15 doc_failures=0 open_with_principal=15/15

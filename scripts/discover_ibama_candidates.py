@@ -163,7 +163,8 @@ _POSITIVE_TERMS = re.compile(
     r"\b(edital|chamamento|chamada|credencia(?:mento|r)|projetos?|"
     r"recupera(?:c|ç)(?:a|ã)o|organiza(?:c|ç)(?:a|ã)o\s+da\s+sociedade\s+civil|"
     r"\bosc\b|sociedade\s+cooperativa|consulta\s+p[uú]blica|"
-    r"manifesta(?:c|ç)(?:a|ã)o\s+de\s+interesse|propostas?|inscri(?:c|ç)(?:o|õ)es?)\b",
+    r"audi[eê]ncia\s+p[uú]blica|manifesta(?:c|ç)(?:a|ã)o\s+de\s+interesse|"
+    r"propostas?|inscri(?:c|ç)(?:o|õ)es?)\b",
     re.I,
 )
 _GENERIC_NEWS_TERMS = re.compile(
@@ -304,15 +305,27 @@ def _date_value(
     return current.isoformat()
 
 
-def _extract_date_tokens(text: str, *, default_year: int | None) -> list[tuple[str, int]]:
-    result: list[tuple[str, int]] = []
+def _extract_date_tokens(
+    text: str, *, default_year: int | None
+) -> list[tuple[str, int, int]]:
+    result: list[tuple[str, int, int]] = []
     for regex in (_DATE_RE, _PT_DATE_RE):
         for match in regex.finditer(text):
             raw = match.group(0)
             value = _iso(raw, default_year=default_year)
             if value is not None:
-                result.append((value, match.start()))
+                result.append((value, match.start(), match.end()))
     return sorted(result, key=lambda item: item[1])
+
+
+def _deadline_cued_positions(text: str) -> list[int]:
+    """Return start offsets of deadline cues such as termina/até/encerramento."""
+    cue_re = re.compile(
+        r"\b(?:termina(?:rá|ra)?|encerramento|fim\s+do\s+prazo|"
+        r"vai\s+até|ate|até|prazo\s+final)\b",
+        re.I,
+    )
+    return [match.start() for match in cue_re.finditer(text)]
 
 
 def _extract_schedule(
@@ -347,29 +360,45 @@ def _extract_schedule(
         if not tokens:
             continue
         # A date range's final date is the deadline; for a single date use the
-        # end of that day unless the source supplied a time.
+        # end of that day unless the source supplied a time.  When a clause
+        # also cites publication/DOU dates, prefer a date that follows a
+        # deadline cue (termina/até/encerramento) over a later publication date.
+        cue_positions = _deadline_cued_positions(clause)
+        cued = [
+            token
+            for token in tokens
+            if any(cue < token[1] for cue in cue_positions)
+        ]
+        # Prefer the first deadline-cued date: later "até" dates in the same
+        # clause are usually post-submission formalization windows, not the
+        # public call deadline.
+        deadline_token = cued[0] if cued else tokens[-1]
         first = tokens[0][0]
-        last = tokens[-1][0]
+        last = deadline_token[0]
         range_start = first if len(tokens) > 1 and re.search(
             r"\b(?:de|entre|a\s+partir)\b", _fold(clause)
         ) else None
-        explicit_time = bool(re.search(r"\d{1,2}(?:h|:\d{2})", clause, re.I))
+        # An explicit time only counts when it is attached to the deadline
+        # date itself; a start time such as "começou às 10h" must not turn
+        # the closing date into a midnight timestamp.
+        tail = clause[deadline_token[2] : deadline_token[2] + 40]
+        explicit_time = bool(
+            re.search(r"\bàs\s+\d{1,2}(?:[:h]\d{2})?\b|\b\d{1,2}[h:]\d{2}\b", tail, re.I)
+        )
         end = _date_value(last, default_year=default_year, end_of_day=True, explicit_time=explicit_time)
         if explicit_time and end:
-            date_matches = list(_DATE_RE.finditer(clause))
-            if date_matches:
-                time_match = re.search(
-                    r"(?:às|as|ate|até)?\s*(\d{1,2})(?:[:h](\d{2}))?\s*h?\b",
-                    clause[date_matches[-1].end() :],
-                    re.I,
-                )
-                if time_match:
-                    hour = int(time_match.group(1))
-                    minute = int(time_match.group(2) or 0)
-                    if 0 <= hour <= 23 and 0 <= minute <= 59:
-                        end = datetime.fromisoformat(end).replace(
-                            hour=hour, minute=minute, second=0
-                        ).isoformat()
+            time_match = re.search(
+                r"(?:às|as|ate|até)?\s*(\d{1,2})(?:[:h](\d{2}))?\s*h?\b",
+                tail,
+                re.I,
+            )
+            if time_match:
+                hour = int(time_match.group(1))
+                minute = int(time_match.group(2) or 0)
+                if 0 <= hour <= 23 and 0 <= minute <= 59:
+                    end = datetime.fromisoformat(end).replace(
+                        hour=hour, minute=minute, second=0
+                    ).isoformat()
         proposal_clause = bool(re.search(
             r"\b(propostas|inscricoes?|recebimento|submiss(?:a|ã)o|envio|"
             r"candidaturas?|contribui(?:r|cao|coes)|participac(?:ao|oes))\b",
@@ -380,12 +409,15 @@ def _extract_schedule(
             _fold(clause),
             re.I,
         ))
-        ranges.append((range_start, end, position, proposal_clause, deadline_clause))
+        ranges.append(
+            (range_start, end, position, proposal_clause, deadline_clause, bool(cued))
+        )
     if not ranges:
         return None, None
-    # Prefer a proposal/submission clause over a generic publication clause,
-    # such as a later predicted-result date.
-    selected = max(ranges, key=lambda item: (item[3], item[4], item[2]))
+    # Prefer an explicit deadline cue (termina/até/encerramento) over a
+    # proposal clause that only cites a publication/DOU date.  Then prefer a
+    # proposal/submission clause over a generic publication clause.
+    selected = max(ranges, key=lambda item: (item[5], item[3], item[4], item[2]))
     return selected[0], selected[1]
 
 
@@ -646,8 +678,18 @@ def _detail_is_call(title: str, description: str, documents: list[dict[str, Any]
 
 def _status(text: str, deadline: str | None, now: datetime | None) -> str:
     folded = _fold(text)
-    if re.search(r"\b(cancelad|anulad|suspens)", folded):
-        return "cancelled" if re.search(r"cancelad|anulad", folded) else "suspended"
+    if re.search(r"\b(cancelad[oa]s?|anulad[oa]s?)\b", folded):
+        return "cancelled"
+    # Suspended only when the call itself is announced as suspended.  Incidental
+    # phrases such as "exigibilidade suspensa" or "suspensão de prazos" (a court
+    # mechanism) must not override deadline-based lifecycle.
+    if re.search(
+        r"\b(?:edital|chamamento|chamada|consulta|processo|concurso|credenciamento)"
+        r"[^\n]{0,80}\b(?:suspenso|suspensa|suspensos|suspensas|suspendid[oa]s?)\b"
+        r"|\b(?:foi|está|esta|permanece|encontra-se)\s+suspens",
+        folded,
+    ):
+        return "suspended"
     if re.search(r"\b(encerrad|finalizad|fechad)", folded):
         return "closed"
     if deadline:
@@ -711,6 +753,7 @@ def parse_detail(
     fallback_published_at: str | None = None,
     snapshot_at: datetime | None = None,
     now: datetime | None = None,
+    min_year: int | None = None,
 ) -> dict[str, Any] | None:
     """Parse one official detail page into a structured opportunity."""
     soup = BeautifulSoup(detail_html, "html.parser")
@@ -731,6 +774,15 @@ def parse_detail(
         soup, description, default_year=_year_from_url(canonical)
     )
     published = published or fallback_published_at
+    # Pages without a year in the URL/title (e.g. /copy_of_notas/) can still
+    # be historical; the detail publication year is the authoritative guard.
+    year_guard = IBAMA_MIN_NOTICE_YEAR if min_year is None else min_year
+    if published:
+        try:
+            if int(published[:4]) < year_guard:
+                return None
+        except ValueError:
+            pass
     default_year = _year_from_url(canonical) or (
         int(published[:4]) if published else None
     )
@@ -1079,6 +1131,7 @@ def discover_opportunities(
                 fallback_published_at=seed.get("published_at"),
                 snapshot_at=snapshot_at,
                 now=now,
+                min_year=year_guard,
             )
         except Exception as exc:
             print(f"warning: IBAMA detail failed {detail_url}: {exc}", file=sys.stderr)

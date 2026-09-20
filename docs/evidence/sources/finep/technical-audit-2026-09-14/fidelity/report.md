@@ -1,0 +1,300 @@
+# Source Fidelity Report
+
+## Quantitative Gates
+
+- Inventory accounting: 100.0% (19/19)
+- Candidate traceability: 100.0% (19/19)
+
+### Blocking exception counts
+- authoritative_deadline_mismatch: 0
+- authoritative_status_mismatch: 0
+- duplicate_identity: 0
+- extra_submission: 0
+- identity_mismatch: 0
+- missing_open: 0
+- parser_failure: 0
+- renderability_mismatch: 0
+
+Total blocking exceptions: 0
+
+## Matches
+
+- key=('finep', '1019381') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-09-09T13:00:00Z discovery=2026-09-09T13:00:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('finep', '754473') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-11-30T18:00:00Z discovery=2026-11-30T18:00:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('finep', '754839') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-09-30T17:00:00Z discovery=2026-09-30T17:00:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('finep', '754961') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-10-02T18:00:00Z discovery=2026-10-02T18:00:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('finep', '755080') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-04-09T17:00:00Z discovery=2026-04-09T17:00:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('finep', '755376') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-09-25T18:00:00Z discovery=2026-09-25T18:00:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('finep', '755485') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-09-30T17:00:00Z discovery=2026-09-30T17:00:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('finep', '755605') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-09-30T17:00:00Z discovery=2026-09-30T17:00:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('finep', '755727') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-05-11T17:00:00Z discovery=2026-05-11T17:00:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('finep', '755795') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-06-08T17:00:00Z discovery=2026-06-08T17:00:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('finep', '755892') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-07-03T17:00:00Z discovery=2026-07-03T17:00:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('finep', '756012') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-05-28T17:00:00Z discovery=2026-05-28T17:00:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('finep', '943682') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-09-18T17:00:00Z discovery=2026-09-18T17:00:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('finep', '945796') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-08-06T17:00:00Z discovery=2026-08-06T17:00:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('finep', '958302') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-08-03T18:00:00Z discovery=2026-08-03T18:00:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('finep', '968467') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-09-21T18:00:00Z discovery=2026-09-21T18:00:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('finep', '972778') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-12-01T18:00:00Z discovery=2026-12-01T18:00:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('finep', '986129') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-08-12T18:00:00Z discovery=2026-08-12T18:00:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('finep', '991625') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-08-14T18:00:00Z discovery=2026-08-14T18:00:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+
+## Exceptions
+
+- [non_blocking] out_of_scope
+  - api_page: 10
+  - captured_at_utc: 2026-09-14T22:01:52Z
+  - captured_via: direct-http-public-liferay-chamadapublicas-api
+  - detail_url: https://www.finep.gov.br/chamada-publica/222684/719676
+  - origin: inventory
+  - policy_disposition: excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta
+  - principal_document: None
+  - record: {'source_key': 'finep', 'source_record_id': '719676', 'canonical_url': 'https://www.finep.gov.br/chamada-publica/222684/719676', 'title': 'Chamada Pública Bilateral Finep-CDTI', 'status': 'open', 'published_at': '2015-10-13T00:00:00Z', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'renderable': None, 'content_type_validated': None, 'hash_validated': None, 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'direct-http-public-liferay-chamadapublicas-api', 'captured_at_utc': '2026-09-14T22:01:52Z', 'api_page': 10, 'situacao_key': 'aberta', 'situacao_name': 'Aberta', 'vigencia_inicio': None, 'detail_url': 'https://www.finep.gov.br/chamada-publica/222684/719676', 'principal_document': None, 'policy_disposition': 'excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta'}}
+  - situacao_key: aberta
+  - situacao_name: Aberta
+  - vigencia_inicio: None
+- [non_blocking] out_of_scope
+  - api_page: 2
+  - captured_at_utc: 2026-09-14T22:01:52Z
+  - captured_via: direct-http-public-liferay-chamadapublicas-api
+  - detail_url: https://www.finep.gov.br/chamada-publica/222684/752474
+  - origin: inventory
+  - policy_disposition: excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta
+  - principal_document: None
+  - record: {'source_key': 'finep', 'source_record_id': '752474', 'canonical_url': 'https://www.finep.gov.br/chamada-publica/222684/752474', 'title': 'Seleção de Gestor para o FIP Complexo da Saúde', 'status': 'open', 'published_at': '2025-04-07T00:00:00Z', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'renderable': None, 'content_type_validated': None, 'hash_validated': None, 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'direct-http-public-liferay-chamadapublicas-api', 'captured_at_utc': '2026-09-14T22:01:52Z', 'api_page': 2, 'situacao_key': 'aberta', 'situacao_name': 'Aberta', 'vigencia_inicio': None, 'detail_url': 'https://www.finep.gov.br/chamada-publica/222684/752474', 'principal_document': None, 'policy_disposition': 'excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta'}}
+  - situacao_key: aberta
+  - situacao_name: Aberta
+  - vigencia_inicio: None
+- [non_blocking] out_of_scope
+  - api_page: 2
+  - captured_at_utc: 2026-09-14T22:01:52Z
+  - captured_via: direct-http-public-liferay-chamadapublicas-api
+  - detail_url: https://www.finep.gov.br/chamada-publica/222684/752871
+  - origin: inventory
+  - policy_disposition: excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta
+  - principal_document: None
+  - record: {'source_key': 'finep', 'source_record_id': '752871', 'canonical_url': 'https://www.finep.gov.br/chamada-publica/222684/752871', 'title': 'FIP Transição Energética e Descarbonização', 'status': 'open', 'published_at': '2025-06-04T00:00:00Z', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'renderable': None, 'content_type_validated': None, 'hash_validated': None, 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'direct-http-public-liferay-chamadapublicas-api', 'captured_at_utc': '2026-09-14T22:01:52Z', 'api_page': 2, 'situacao_key': 'aberta', 'situacao_name': 'Aberta', 'vigencia_inicio': None, 'detail_url': 'https://www.finep.gov.br/chamada-publica/222684/752871', 'principal_document': None, 'policy_disposition': 'excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta'}}
+  - situacao_key: aberta
+  - situacao_name: Aberta
+  - vigencia_inicio: None
+- [non_blocking] out_of_scope
+  - api_page: 2
+  - captured_at_utc: 2026-09-14T22:01:52Z
+  - captured_via: direct-http-public-liferay-chamadapublicas-api
+  - detail_url: https://www.finep.gov.br/chamada-publica/222684/752980
+  - origin: inventory
+  - policy_disposition: excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta
+  - principal_document: None
+  - record: {'source_key': 'finep', 'source_record_id': '752980', 'canonical_url': 'https://www.finep.gov.br/chamada-publica/222684/752980', 'title': 'FIP Bioeconomia e Sustentabilidade', 'status': 'open', 'published_at': '2025-11-11T00:00:00Z', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'renderable': None, 'content_type_validated': None, 'hash_validated': None, 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'direct-http-public-liferay-chamadapublicas-api', 'captured_at_utc': '2026-09-14T22:01:52Z', 'api_page': 2, 'situacao_key': 'aberta', 'situacao_name': 'Aberta', 'vigencia_inicio': None, 'detail_url': 'https://www.finep.gov.br/chamada-publica/222684/752980', 'principal_document': None, 'policy_disposition': 'excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta'}}
+  - situacao_key: aberta
+  - situacao_name: Aberta
+  - vigencia_inicio: None
+- [non_blocking] out_of_scope
+  - api_page: 2
+  - captured_at_utc: 2026-09-14T22:01:52Z
+  - captured_via: direct-http-public-liferay-chamadapublicas-api
+  - detail_url: https://www.finep.gov.br/chamada-publica/222684/753680
+  - origin: inventory
+  - policy_disposition: excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta
+  - principal_document: None
+  - record: {'source_key': 'finep', 'source_record_id': '753680', 'canonical_url': 'https://www.finep.gov.br/chamada-publica/222684/753680', 'title': 'PROCESSO DE SELEÇÃO Nº 01/2025 PARA CELEBRAÇÃO DE CONVÊNIO COM ENTIDADE FECHADA DE PREVIDÊNCIA COMPLEMENTAR - EFPC', 'status': 'open', 'published_at': '2025-12-05T00:00:00Z', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'renderable': None, 'content_type_validated': None, 'hash_validated': None, 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'direct-http-public-liferay-chamadapublicas-api', 'captured_at_utc': '2026-09-14T22:01:52Z', 'api_page': 2, 'situacao_key': 'aberta', 'situacao_name': 'Aberta', 'vigencia_inicio': None, 'detail_url': 'https://www.finep.gov.br/chamada-publica/222684/753680', 'principal_document': None, 'policy_disposition': 'excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta'}}
+  - situacao_key: aberta
+  - situacao_name: Aberta
+  - vigencia_inicio: None
+- [non_blocking] out_of_scope
+  - api_page: 2
+  - captured_at_utc: 2026-09-14T22:01:52Z
+  - captured_via: direct-http-public-liferay-chamadapublicas-api
+  - detail_url: https://www.finep.gov.br/chamada-publica/222684/753688
+  - doc_check:http://www.finep.gov.br/images/chamadas-publicas/2026/27_02_2026_PA_Anexo_1_Rerratificado.pdf: {'http_status': None, 'content_type': None, 'bytes': 0, 'fetched_at_utc': '2026-09-14T22:00:09Z', 'error': 'HTTPError: HTTP Error 404: Not Found'}
+  - origin: inventory
+  - policy_disposition: excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta
+  - principal_document: http://www.finep.gov.br/images/chamadas-publicas/2026/27_02_2026_PA_Anexo_1_Rerratificado.pdf
+  - record: {'source_key': 'finep', 'source_record_id': '753688', 'canonical_url': 'https://www.finep.gov.br/chamada-publica/222684/753688', 'title': 'Pesquisa Aplicada Em Centros Temáticos 2025', 'status': 'open', 'published_at': '2025-12-19T00:00:00Z', 'deadline': '2026-05-29T17:00:00Z', 'document_urls': ['http://www.finep.gov.br/images/chamadas-publicas/2026/27_02_2026_PA_Anexo_1_Rerratificado.pdf'], 'document_hashes': [], 'renderable': None, 'content_type_validated': None, 'hash_validated': None, 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'direct-http-public-liferay-chamadapublicas-api', 'captured_at_utc': '2026-09-14T22:01:52Z', 'api_page': 2, 'situacao_key': 'aberta', 'situacao_name': 'Aberta', 'vigencia_inicio': '2025-02-19T00:00:00Z', 'detail_url': 'https://www.finep.gov.br/chamada-publica/222684/753688', 'principal_document': 'http://www.finep.gov.br/images/chamadas-publicas/2026/27_02_2026_PA_Anexo_1_Rerratificado.pdf', 'doc_check:http://www.finep.gov.br/images/chamadas-publicas/2026/27_02_2026_PA_Anexo_1_Rerratificado.pdf': {'http_status': None, 'content_type': None, 'bytes': 0, 'fetched_at_utc': '2026-09-14T22:00:09Z', 'error': 'HTTPError: HTTP Error 404: Not Found'}, 'policy_disposition': 'excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta'}}
+  - situacao_key: aberta
+  - situacao_name: Aberta
+  - vigencia_inicio: 2025-02-19T00:00:00Z
+- [non_blocking] out_of_scope
+  - api_page: 2
+  - captured_at_utc: 2026-09-14T22:01:52Z
+  - captured_via: direct-http-public-liferay-chamadapublicas-api
+  - detail_url: https://www.finep.gov.br/chamada-publica/222684/754098
+  - origin: inventory
+  - policy_disposition: excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta
+  - principal_document: None
+  - record: {'source_key': 'finep', 'source_record_id': '754098', 'canonical_url': 'https://www.finep.gov.br/chamada-publica/222684/754098', 'title': 'SELEÇÃO PÚBLICA MCTI/FINEP/FNDCT - Subvenção Econômica à Inovação - DESAFIOS TECNOLÓGICOS PARA AGRICULTURA FAMILIAR', 'status': 'open', 'published_at': '2025-12-23T00:00:00Z', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'renderable': None, 'content_type_validated': None, 'hash_validated': None, 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'direct-http-public-liferay-chamadapublicas-api', 'captured_at_utc': '2026-09-14T22:01:52Z', 'api_page': 2, 'situacao_key': 'aberta', 'situacao_name': 'Aberta', 'vigencia_inicio': None, 'detail_url': 'https://www.finep.gov.br/chamada-publica/222684/754098', 'principal_document': None, 'policy_disposition': 'excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta'}}
+  - situacao_key: aberta
+  - situacao_name: Aberta
+  - vigencia_inicio: None
+- [non_blocking] out_of_scope
+  - api_page: 3
+  - captured_at_utc: 2026-09-14T22:01:52Z
+  - captured_via: direct-http-public-liferay-chamadapublicas-api
+  - detail_url: https://www.finep.gov.br/chamada-publica/222684/747009
+  - origin: inventory
+  - policy_disposition: excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta
+  - principal_document: None
+  - record: {'source_key': 'finep', 'source_record_id': '747009', 'canonical_url': 'https://www.finep.gov.br/chamada-publica/222684/747009', 'title': 'Chamada pública conjunta Finep e Rede Eureka 2024', 'status': 'open', 'published_at': '2024-01-31T00:00:00Z', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'renderable': None, 'content_type_validated': None, 'hash_validated': None, 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'direct-http-public-liferay-chamadapublicas-api', 'captured_at_utc': '2026-09-14T22:01:52Z', 'api_page': 3, 'situacao_key': 'aberta', 'situacao_name': 'Aberta', 'vigencia_inicio': None, 'detail_url': 'https://www.finep.gov.br/chamada-publica/222684/747009', 'principal_document': None, 'policy_disposition': 'excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta'}}
+  - situacao_key: aberta
+  - situacao_name: Aberta
+  - vigencia_inicio: None
+- [non_blocking] out_of_scope
+  - api_page: 3
+  - captured_at_utc: 2026-09-14T22:01:52Z
+  - captured_via: direct-http-public-liferay-chamadapublicas-api
+  - detail_url: https://www.finep.gov.br/chamada-publica/222684/748141
+  - origin: inventory
+  - policy_disposition: excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta
+  - principal_document: None
+  - record: {'source_key': 'finep', 'source_record_id': '748141', 'canonical_url': 'https://www.finep.gov.br/chamada-publica/222684/748141', 'title': 'SOLUÇÕES TECNOLÓGICAS PARA AUMENTO DA PRODUTIVIDADE NA AGRICULTURA FAMILIAR, AQUICULTURA E PESCA ARTESANAL', 'status': 'open', 'published_at': '2024-07-08T00:00:00Z', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'renderable': None, 'content_type_validated': None, 'hash_validated': None, 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'direct-http-public-liferay-chamadapublicas-api', 'captured_at_utc': '2026-09-14T22:01:52Z', 'api_page': 3, 'situacao_key': 'aberta', 'situacao_name': 'Aberta', 'vigencia_inicio': '2024-07-08T00:00:00Z', 'detail_url': 'https://www.finep.gov.br/chamada-publica/222684/748141', 'principal_document': None, 'policy_disposition': 'excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta'}}
+  - situacao_key: aberta
+  - situacao_name: Aberta
+  - vigencia_inicio: 2024-07-08T00:00:00Z
+- [non_blocking] out_of_scope
+  - api_page: 3
+  - captured_at_utc: 2026-09-14T22:01:52Z
+  - captured_via: direct-http-public-liferay-chamadapublicas-api
+  - detail_url: https://www.finep.gov.br/chamada-publica/222684/749273
+  - origin: inventory
+  - policy_disposition: excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta
+  - principal_document: None
+  - record: {'source_key': 'finep', 'source_record_id': '749273', 'canonical_url': 'https://www.finep.gov.br/chamada-publica/222684/749273', 'title': 'Edital FIP Nordeste Capital Semente', 'status': 'open', 'published_at': '2024-07-10T00:00:00Z', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'renderable': None, 'content_type_validated': None, 'hash_validated': None, 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'direct-http-public-liferay-chamadapublicas-api', 'captured_at_utc': '2026-09-14T22:01:52Z', 'api_page': 3, 'situacao_key': 'aberta', 'situacao_name': 'Aberta', 'vigencia_inicio': None, 'detail_url': 'https://www.finep.gov.br/chamada-publica/222684/749273', 'principal_document': None, 'policy_disposition': 'excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta'}}
+  - situacao_key: aberta
+  - situacao_name: Aberta
+  - vigencia_inicio: None
+- [non_blocking] out_of_scope
+  - api_page: 3
+  - captured_at_utc: 2026-09-14T22:01:52Z
+  - captured_via: direct-http-public-liferay-chamadapublicas-api
+  - detail_url: https://www.finep.gov.br/chamada-publica/222684/749717
+  - origin: inventory
+  - policy_disposition: excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta
+  - principal_document: None
+  - record: {'source_key': 'finep', 'source_record_id': '749717', 'canonical_url': 'https://www.finep.gov.br/chamada-publica/222684/749717', 'title': 'Conhecimento Brasil', 'status': 'open', 'published_at': '2024-08-07T00:00:00Z', 'deadline': '2026-09-11T18:00:00Z', 'document_urls': [], 'document_hashes': [], 'renderable': None, 'content_type_validated': None, 'hash_validated': None, 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'direct-http-public-liferay-chamadapublicas-api', 'captured_at_utc': '2026-09-14T22:01:52Z', 'api_page': 3, 'situacao_key': 'aberta', 'situacao_name': 'Aberta', 'vigencia_inicio': None, 'detail_url': 'https://www.finep.gov.br/chamada-publica/222684/749717', 'principal_document': None, 'policy_disposition': 'excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta'}}
+  - situacao_key: aberta
+  - situacao_name: Aberta
+  - vigencia_inicio: None
+- [non_blocking] out_of_scope
+  - api_page: 9
+  - captured_at_utc: 2026-09-14T22:01:52Z
+  - captured_via: direct-http-public-liferay-chamadapublicas-api
+  - detail_url: https://www.finep.gov.br/chamada-publica/222684/721088
+  - origin: inventory
+  - policy_disposition: excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta
+  - principal_document: None
+  - record: {'source_key': 'finep', 'source_record_id': '721088', 'canonical_url': 'https://www.finep.gov.br/chamada-publica/222684/721088', 'title': 'COOPERAÇÃO ICT-EMPRESA – 01/2017', 'status': 'open', 'published_at': '2017-05-08T00:00:00Z', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'renderable': None, 'content_type_validated': None, 'hash_validated': None, 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'direct-http-public-liferay-chamadapublicas-api', 'captured_at_utc': '2026-09-14T22:01:52Z', 'api_page': 9, 'situacao_key': 'aberta', 'situacao_name': 'Aberta', 'vigencia_inicio': None, 'detail_url': 'https://www.finep.gov.br/chamada-publica/222684/721088', 'principal_document': None, 'policy_disposition': 'excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta'}}
+  - situacao_key: aberta
+  - situacao_name: Aberta
+  - vigencia_inicio: None
+- [non_blocking] out_of_scope
+  - api_page: 9
+  - captured_at_utc: 2026-09-14T22:01:52Z
+  - captured_via: direct-http-public-liferay-chamadapublicas-api
+  - detail_url: https://www.finep.gov.br/chamada-publica/222684/721094
+  - origin: inventory
+  - policy_disposition: excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta
+  - principal_document: None
+  - record: {'source_key': 'finep', 'source_record_id': '721094', 'canonical_url': 'https://www.finep.gov.br/chamada-publica/222684/721094', 'title': 'Finep / CDTI - COOPERAÇÃO ICT-EMPRESA – 01/2017', 'status': 'open', 'published_at': '2017-05-07T00:00:00Z', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'renderable': None, 'content_type_validated': None, 'hash_validated': None, 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'direct-http-public-liferay-chamadapublicas-api', 'captured_at_utc': '2026-09-14T22:01:52Z', 'api_page': 9, 'situacao_key': 'aberta', 'situacao_name': 'Aberta', 'vigencia_inicio': None, 'detail_url': 'https://www.finep.gov.br/chamada-publica/222684/721094', 'principal_document': None, 'policy_disposition': 'excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta'}}
+  - situacao_key: aberta
+  - situacao_name: Aberta
+  - vigencia_inicio: None
+- [non_blocking] out_of_scope
+  - api_page: 9
+  - captured_at_utc: 2026-09-14T22:01:52Z
+  - captured_via: direct-http-public-liferay-chamadapublicas-api
+  - detail_url: https://www.finep.gov.br/chamada-publica/222684/721681
+  - origin: inventory
+  - policy_disposition: excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta
+  - principal_document: None
+  - record: {'source_key': 'finep', 'source_record_id': '721681', 'canonical_url': 'https://www.finep.gov.br/chamada-publica/222684/721681', 'title': 'Programa de Investimento em Startups Inovadoras 2ª Rodada', 'status': 'open', 'published_at': '2017-11-21T00:00:00Z', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'renderable': None, 'content_type_validated': None, 'hash_validated': None, 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'direct-http-public-liferay-chamadapublicas-api', 'captured_at_utc': '2026-09-14T22:01:52Z', 'api_page': 9, 'situacao_key': 'aberta', 'situacao_name': 'Aberta', 'vigencia_inicio': None, 'detail_url': 'https://www.finep.gov.br/chamada-publica/222684/721681', 'principal_document': None, 'policy_disposition': 'excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta'}}
+  - situacao_key: aberta
+  - situacao_name: Aberta
+  - vigencia_inicio: None
+- [non_blocking] out_of_scope
+  - api_page: 9
+  - captured_at_utc: 2026-09-14T22:01:52Z
+  - captured_via: direct-http-public-liferay-chamadapublicas-api
+  - detail_url: https://www.finep.gov.br/chamada-publica/222684/721708
+  - origin: inventory
+  - policy_disposition: excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta
+  - principal_document: None
+  - record: {'source_key': 'finep', 'source_record_id': '721708', 'canonical_url': 'https://www.finep.gov.br/chamada-publica/222684/721708', 'title': 'Programa de Investimento em Startups Inovadoras 2ª Rodada', 'status': 'open', 'published_at': '2017-11-21T00:00:00Z', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'renderable': None, 'content_type_validated': None, 'hash_validated': None, 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'direct-http-public-liferay-chamadapublicas-api', 'captured_at_utc': '2026-09-14T22:01:52Z', 'api_page': 9, 'situacao_key': 'aberta', 'situacao_name': 'Aberta', 'vigencia_inicio': None, 'detail_url': 'https://www.finep.gov.br/chamada-publica/222684/721708', 'principal_document': None, 'policy_disposition': 'excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta'}}
+  - situacao_key: aberta
+  - situacao_name: Aberta
+  - vigencia_inicio: None

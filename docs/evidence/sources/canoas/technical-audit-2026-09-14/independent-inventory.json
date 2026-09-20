@@ -1,0 +1,36 @@
+[
+  {
+    "source_key": "canoas",
+    "source_record_id": "140919",
+    "canonical_url": "https://sistemas.canoas.rs.gov.br/domc/api/publication-file/140919",
+    "title": "EDITAL N°319/2026",
+    "status": "unknown",
+    "published_at": "2026-09-14T00:00:00-03:00",
+    "deadline": null,
+    "document_urls": [
+      "https://sistemas.canoas.rs.gov.br/domc/api/publication-file/140919"
+    ],
+    "document_hashes": [],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "direct-http-public-domc-api",
+      "captured_at_utc": "2026-09-14T20:21:19Z",
+      "http_status": 200,
+      "content_type": "application/pdf",
+      "bytes": 74674,
+      "day_url": "https://sistemas.canoas.rs.gov.br/domc/api/public/publication-file/140919",
+      "diary_day": "2026-09-14",
+      "edition_id": "13961",
+      "edition_title": "Edição Complementar 1 - 3930",
+      "page_start": "1",
+      "page_end": "1",
+      "wordpress_search": "https://www.canoas.rs.gov.br/wp-json/wp/v2/licitacoes?search=319%202026&per_page=20 returned HTTP 200 empty array; no matching licitacoes page for 2026",
+      "pdf_text_excerpt": "EDITAL DE DESIGNAÇÃO N°319/2026 PARA COMPOSIÇÃO DA COMISSÃO ELEITORAL PARA IMPLANTAÇÃO DA COMISSÃO DE ÉTICA DE ENFERMAGEM DA SECRETARIA MUNICIPAL DE CANOAS E FUNDAÇÃO MUNICIPAL DE SAÚDE DE CANOAS ... designam os profissionais abaixo descritos",
+      "lifecycle_assessment": "Administrative designation of named nursing staff to an electoral/ethics commission; no public application window, no proposal deadline. Application lifecycle unknown (not open for applications, not closed-after-deadline). Title carries edital signal so the adapter emits it as an unknown-status opportunity with DOMC PDF principal document.",
+      "principal_document": "https://sistemas.canoas.rs.gov.br/domc/api/publication-file/140919 (DOMC publication PDF; WP page unresolved)"
+    }
+  }
+]

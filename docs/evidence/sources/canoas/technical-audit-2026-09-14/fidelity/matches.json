@@ -1,0 +1,79 @@
+[
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://sistemas.canoas.rs.gov.br/domc/api/publication-file/140919",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://sistemas.canoas.rs.gov.br/domc/api/publication-file/140919"
+      ],
+      "published_at": "2026-09-14T00:00:00-03:00",
+      "source_key": "canoas",
+      "source_record_id": "140919",
+      "status": "unknown",
+      "title": "EDITAL N°319/2026"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://sistemas.canoas.rs.gov.br/domc/api/publication-file/140919",
+      "content_type_validated": null,
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://sistemas.canoas.rs.gov.br/domc/api/publication-file/140919"
+      ],
+      "evidence": {
+        "bytes": 74674,
+        "captured_at_utc": "2026-09-14T20:21:19Z",
+        "captured_via": "direct-http-public-domc-api",
+        "content_type": "application/pdf",
+        "day_url": "https://sistemas.canoas.rs.gov.br/domc/api/public/publication-file/140919",
+        "diary_day": "2026-09-14",
+        "edition_id": "13961",
+        "edition_title": "Edição Complementar 1 - 3930",
+        "http_status": 200,
+        "lifecycle_assessment": "Administrative designation of named nursing staff to an electoral/ethics commission; no public application window, no proposal deadline. Application lifecycle unknown (not open for applications, not closed-after-deadline). Title carries edital signal so the adapter emits it as an unknown-status opportunity with DOMC PDF principal document.",
+        "page_end": "1",
+        "page_start": "1",
+        "pdf_text_excerpt": "EDITAL DE DESIGNAÇÃO N°319/2026 PARA COMPOSIÇÃO DA COMISSÃO ELEITORAL PARA IMPLANTAÇÃO DA COMISSÃO DE ÉTICA DE ENFERMAGEM DA SECRETARIA MUNICIPAL DE CANOAS E FUNDAÇÃO MUNICIPAL DE SAÚDE DE CANOAS ... designam os profissionais abaixo descritos",
+        "principal_document": "https://sistemas.canoas.rs.gov.br/domc/api/publication-file/140919 (DOMC publication PDF; WP page unresolved)",
+        "wordpress_search": "https://www.canoas.rs.gov.br/wp-json/wp/v2/licitacoes?search=319+2026&per_page=20+returned+HTTP+200+empty+array%3B+no+matching+licitacoes+page+for+2026"
+      },
+      "hash_validated": null,
+      "published_at": "2026-09-14T00:00:00-03:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "canoas",
+      "source_record_id": "140919",
+      "status": "unknown",
+      "title": "EDITAL N°319/2026"
+    },
+    "match_key": "('canoas', '140919')",
+    "match_method": "stable_id"
+  }
+]

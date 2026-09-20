@@ -12,15 +12,21 @@ SEMA-RS exposes two ways to enumerate edital URLs:
 
 1. The JSON-backed AJAX endpoint at
    ``https://www.sema.rs.gov.br/busca/lista-data-table`` that returns
-   a ``{"body": "<html>...</html>"}`` envelope. Two keywords are
-   swept: ``edital`` and ``chamada``. The endpoint is paginated; the
-   discoverer stops when (a) no new URLs are seen for
-   ``MAX_STALE_PAGES`` pages in a row, (b) three consecutive fetch
-   failures are observed, or (c) the per-keyword cap
+   a ``{"body": "<html>...</html>", "pagecount": N}`` envelope. Two
+   keywords are swept: ``edital`` and ``chamada``. The endpoint is a
+   full-text search whose early pages can contain many articles with
+   no signal-matched anchors, so pagination must not stop on the
+   first page without matches. The discoverer stops when (a) the
+   reported ``pagecount`` is reached, (b) a page contains no article
+   items at all (end of results), (c) no new URLs are seen for
+   ``MAX_STALE_PAGES`` pages in a row, (d) three consecutive fetch
+   failures are observed, or (e) the per-keyword cap
    (``MAX_SEMA_RS_PAGES``) is reached.
 2. A static service page at ``https://www.sema.rs.gov.br/residuos-solidos``
-   whose PDF anchors are enumerated directly via
-   ``scraper_transport.discover_pdf_urls_on_page``.
+   whose PDF anchors are enumerated with a source-local extractor:
+   same-host anchors only, an edital-signal token in the anchor
+   context, and panels that also carry a closure marker (for example
+   "Resultado Final") are skipped as concluded calls.
 
 Detail pages are fetched via ``scraper_transport.discover_pdf_urls_on_page``
 to enumerate the PDF anchors hosted on them.
@@ -48,7 +54,7 @@ import sys
 import time
 from datetime import datetime, timezone
 from typing import Any
-from urllib.parse import urljoin, urlsplit, urlunsplit
+from urllib.parse import unquote, urljoin, urlsplit, urlunsplit
 
 from bs4 import BeautifulSoup, Tag
 
@@ -92,21 +98,37 @@ SEMA_RS_FETCH_TIMEOUT_SECONDS = int(os.environ.get("SEMA_RS_FETCH_TIMEOUT_SECOND
 
 # Matches a 4-digit year token bounded by non-digit boundaries.
 _YEAR_PATTERN = re.compile(r"(?<!\d)(19|20)\d{2}(?!\d)")
+# Matches a ``/YYYYMM/`` upload-folder segment (SEMA-RS stores PDFs under
+# ``/upload/arquivos/202605/...``); the folder year is authoritative even
+# when the filename carries no year token.
+_UPLOAD_MONTH_PATTERN = re.compile(r"/((?:19|20)\d{2})(0[1-9]|1[0-2])/")
+# Concluded-call markers used by static service-page panels (for example
+# the Comunidade de Prática panel lists "Resultado Final" next to the
+# edital PDF once the selection has finished).
+_CLOSURE_MARKER_PATTERN = re.compile(r"resultado\s*final|encerrad", re.IGNORECASE)
+# Shared signal tokens for SEMA-RS anchors (detail listings and static
+# service pages alike).
+_SIGNAL_PATTERN = re.compile(r"\b(edital|chamada|chamamento)\b", re.IGNORECASE)
 
 
 def _extract_year_from_url(url: str) -> int | None:
-    """Return the first 4-digit year found in the URL, or ``None``.
+    """Return the most recent year discoverable in the URL, or ``None``.
 
-    Searches the URL path and query string for any year in the 1900-2099
-    range. Returns the most recent year if multiple are present.
+    Scans the percent-decoded path and query for any 4-digit year in the
+    1900-2099 range (decoding first prevents ``%2009.921``-style false
+    matches across percent-encoding boundaries) and also recognises
+    ``/YYYYMM/`` upload-folder segments.
     """
-    parsed = urlsplit(url)
+    decoded = unquote(url)
+    parsed = urlsplit(decoded)
     haystack = f"{parsed.path} {parsed.query}"
     candidates: list[int] = []
     for match in _YEAR_PATTERN.finditer(haystack):
         year = int(match.group(0))
         if 1900 <= year <= 2099:
             candidates.append(year)
+    for match in _UPLOAD_MONTH_PATTERN.finditer(parsed.path):
+        candidates.append(int(match.group(1)))
     if not candidates:
         return None
     return max(candidates)
@@ -132,7 +154,7 @@ def extract_sema_rs_detail_urls(listing_html: str, listing_url: str) -> list[str
     soup = BeautifulSoup(listing_html, "html.parser")
     discovered: list[str] = []
     seen: set[str] = set()
-    signal_pattern = re.compile(r"\b(edital|chamada|chamamento)\b", re.IGNORECASE)
+    signal_pattern = _SIGNAL_PATTERN
     listing_host = (urlsplit(listing_url).hostname or "").lower()
 
     for link in soup.find_all("a"):
@@ -182,6 +204,88 @@ def extract_sema_rs_detail_urls(listing_html: str, listing_url: str) -> list[str
     return discovered
 
 
+def extract_static_service_pdf_urls(page_html: str, page_url: str) -> list[str]:
+    """Discover edital PDF anchors on a SEMA-RS static service page.
+
+    The residuos-solidos page mixes call documents with guidance reports
+    and off-host statute PDFs. Only same-host PDF anchors whose
+    href / text / title / aria-label carries a SEMA-RS signal token are
+    kept, and anchors inside a panel that also contains a closure marker
+    ("Resultado Final" / "encerrad…") are skipped as concluded calls.
+    """
+    soup = BeautifulSoup(page_html, "html.parser")
+    return _extract_static_service_pdf_urls_from_soup(soup, page_url)
+
+
+def _extract_static_service_pdf_urls_from_soup(
+    soup: BeautifulSoup, page_url: str,
+) -> list[str]:
+    page_host = (urlsplit(page_url).hostname or "").lower()
+    discovered: list[str] = []
+    seen: set[str] = set()
+
+    for link in soup.find_all("a"):
+        if not isinstance(link, Tag):
+            continue
+
+        href = link.get("href")
+        if not isinstance(href, str) or not href:
+            continue
+
+        resolved = urljoin(page_url, href)
+        normalized = urlsplit(resolved)
+        if (normalized.hostname or "").lower() != page_host:
+            continue
+        if not looks_like_pdf_url(resolved):
+            continue
+
+        signal_text = " ".join(
+            [
+                href,
+                link.get_text(" ", strip=True),
+                str(link.get("title") or ""),
+                str(link.get("aria-label") or ""),
+            ]
+        )
+        if not _SIGNAL_PATTERN.search(signal_text):
+            continue
+
+        # Skip concluded calls: if the enclosing panel also advertises a
+        # final result / closed period, the edital is no longer open.
+        panel = link.find_parent("div", class_="panel-body")
+        if panel is not None and _CLOSURE_MARKER_PATTERN.search(
+            panel.get_text(" ", strip=True),
+        ):
+            continue
+
+        canonical = urlunsplit(
+            (
+                normalized.scheme,
+                normalized.netloc,
+                normalized.path,
+                normalized.query,
+                "",
+            )
+        )
+        if canonical in seen:
+            continue
+        seen.add(canonical)
+        discovered.append(canonical)
+
+    return discovered
+
+
+def _listing_body_has_articles(listing_html: str) -> bool:
+    """Whether a listing body fragment contains result articles.
+
+    The AJAX endpoint returns a short "Nenhuma informação a ser exibida."
+    placeholder body once results are exhausted; article-bearing pages
+    (even ones whose anchors carry no signal tokens) are not the end of
+    the listing.
+    """
+    return "<article" in listing_html
+
+
 def _candidate_passes_edital_prefilter(
     url: str, filter_policy: FilterPolicy = "default",
 ) -> bool:
@@ -226,11 +330,15 @@ def build_candidate(
     return {"url": url, "kind": "pdf", "metadata": metadata}
 
 
-def _fetch_keyword_listing_html(keyword: str, current_page: int, *, stats: dict[str, int]) -> str | None:
+def _fetch_keyword_listing_html(
+    keyword: str, current_page: int, *, stats: dict[str, int],
+) -> tuple[str, int | None] | None:
     """Fetch a SEMA-RS JSON listing page for ``keyword``.
 
-    Returns the ``body`` HTML fragment, or ``None`` if every retry
-    attempt fails (caller is expected to count failures).
+    Returns ``(body_html, pagecount)`` where ``pagecount`` is the
+    server-reported total page count (or ``None`` when absent), or
+    ``None`` if every retry attempt fails (caller is expected to count
+    failures).
     """
     url = SEMA_RS_LISTING_URL_TEMPLATE.format(current_page=current_page, keyword=keyword)
     last_error: Exception | None = None
@@ -242,8 +350,11 @@ def _fetch_keyword_listing_html(keyword: str, current_page: int, *, stats: dict[
                 timeout=SEMA_RS_FETCH_TIMEOUT_SECONDS,
             )
             response.raise_for_status()
-            body = response.json().get("body", "")
-            return body if isinstance(body, str) else ""
+            payload = response.json()
+            body = payload.get("body", "") if isinstance(payload, dict) else ""
+            raw_pagecount = payload.get("pagecount") if isinstance(payload, dict) else None
+            pagecount = raw_pagecount if isinstance(raw_pagecount, int) else None
+            return (body if isinstance(body, str) else "", pagecount)
         except Exception as exc:
             last_error = exc
             if attempt < SEMA_RS_FETCH_MAX_ATTEMPTS - 1:
@@ -281,13 +392,20 @@ def _paginate_keyword(
 ) -> bool:
     """Paginate the SEMA-RS listing for ``keyword``.
 
-    Returns ``True`` if pagination yielded at least one detail URL,
-    otherwise ``False``. Stops on stale pages, consecutive failures,
-    or when ``SEMA_RS_MAX_PAGES_PER_KEYWORD`` is reached.
+    Returns ``True`` if pagination yielded at least one detail URL for
+    this keyword, otherwise ``False``. The AJAX endpoint is a full-text
+    search: early pages can carry many articles whose anchors do not
+    contain the signal tokens, so an empty extraction is not the end of
+    the listing. Stops when the server-reported ``pagecount`` is
+    exhausted, when a page carries no article items at all, on stale
+    pages, on consecutive failures, or when
+    ``SEMA_RS_MAX_PAGES_PER_KEYWORD`` is reached.
     """
     current_page = 1
     stale_pages = 0
     consecutive_failures = 0
+    known_pagecount: int | None = None
+    yielded_details = False
 
     while True:
         if current_page > SEMA_RS_MAX_PAGES_PER_KEYWORD:
@@ -296,9 +414,11 @@ def _paginate_keyword(
                 SEMA_RS_MAX_PAGES_PER_KEYWORD,
             )
             break
+        if known_pagecount is not None and current_page > known_pagecount:
+            break
 
-        listing_html = _fetch_keyword_listing_html(keyword, current_page, stats=stats)
-        if listing_html is None:
+        fetched = _fetch_keyword_listing_html(keyword, current_page, stats=stats)
+        if fetched is None:
             consecutive_failures += 1
             if consecutive_failures >= 3:
                 logger.warning(
@@ -310,12 +430,18 @@ def _paginate_keyword(
             continue
 
         consecutive_failures = 0
+        listing_html, pagecount = fetched
+        if pagecount is not None:
+            known_pagecount = pagecount
         if not listing_html:
             listing_html = ""
 
-        page_detail_urls = extract_sema_rs_detail_urls(listing_html, SEMA_RS_LISTING_ORIGIN)
-        if not page_detail_urls:
+        # End of results: the endpoint returns a placeholder body with no
+        # article items once pages are exhausted.
+        if not _listing_body_has_articles(listing_html):
             break
+
+        page_detail_urls = extract_sema_rs_detail_urls(listing_html, SEMA_RS_LISTING_ORIGIN)
 
         new_detail_urls: list[str] = []
         for detail_url in page_detail_urls:
@@ -327,6 +453,7 @@ def _paginate_keyword(
         if new_detail_urls:
             stale_pages = 0
             detail_urls_out.extend(new_detail_urls)
+            yielded_details = True
         else:
             stale_pages += 1
             if stale_pages >= SEMA_RS_MAX_STALE_PAGES:
@@ -338,7 +465,7 @@ def _paginate_keyword(
 
         current_page += 1
 
-    return bool(detail_urls_out)
+    return yielded_details
 
 
 def _ingest_pdfs(
@@ -450,7 +577,11 @@ def discover_candidates(
 
     for static_page_url in SEMA_RS_STATIC_SERVICE_PAGES:
         try:
-            static_pdfs = discover_pdf_urls_on_page(static_page_url, stats=stats)
+            static_pdfs = discover_pdf_urls_on_page(
+                static_page_url,
+                stats=stats,
+                extractor=_extract_static_service_pdf_urls_from_soup,
+            )
         except Exception as exc:
             log_source_failure(
                 "Failed to fetch SEMA-RS static page %s: %s",

@@ -76,5 +76,5 @@ def test_current_nextjs_detail_shell_is_parsed():
     )
     assert opportunity is not None
     assert opportunity["source_record_id"] == "floresta-viva"
-    assert opportunity["application_deadline"].startswith("2026-08-31")
+    assert opportunity["application_deadline"] == "2026-09-01T02:59:00+00:00"
     assert "Politica de Privacidade" not in opportunity["source_markdown"]

@@ -1,0 +1,305 @@
+{
+  "captured_at_utc_start": "2026-09-14T22:00:05Z",
+  "captured_at_utc_end": "2026-09-14T22:00:09Z",
+  "api_base": "https://www.finep.gov.br/o/c/chamadapublicas",
+  "page_size": 20,
+  "pages_fetched": 24,
+  "advertised_last_page": 24,
+  "total_records": 474,
+  "unique_ids": 470,
+  "duplicate_ids": [
+    "754839",
+    "745169",
+    "733756",
+    "712169"
+  ],
+  "lifecycle_counts": {
+    "open": 35,
+    "closed": 439
+  },
+  "excluded_reason_counts": {},
+  "pages": [
+    {
+      "page": 1,
+      "items": 20,
+      "advertised_total_count": 474,
+      "advertised_page_size": 20,
+      "advertised_last_page": 24,
+      "advertised_page": 1,
+      "http_status": 200,
+      "content_type": "application/json",
+      "fetched_at_utc": "2026-09-14T22:00:06Z"
+    },
+    {
+      "page": 2,
+      "items": 20,
+      "advertised_total_count": 474,
+      "advertised_page_size": 20,
+      "advertised_last_page": 24,
+      "advertised_page": 2,
+      "http_status": 200,
+      "content_type": "application/json",
+      "fetched_at_utc": "2026-09-14T22:00:06Z"
+    },
+    {
+      "page": 3,
+      "items": 20,
+      "advertised_total_count": 474,
+      "advertised_page_size": 20,
+      "advertised_last_page": 24,
+      "advertised_page": 3,
+      "http_status": 200,
+      "content_type": "application/json",
+      "fetched_at_utc": "2026-09-14T22:00:06Z"
+    },
+    {
+      "page": 4,
+      "items": 20,
+      "advertised_total_count": 474,
+      "advertised_page_size": 20,
+      "advertised_last_page": 24,
+      "advertised_page": 4,
+      "http_status": 200,
+      "content_type": "application/json",
+      "fetched_at_utc": "2026-09-14T22:00:06Z"
+    },
+    {
+      "page": 5,
+      "items": 20,
+      "advertised_total_count": 474,
+      "advertised_page_size": 20,
+      "advertised_last_page": 24,
+      "advertised_page": 5,
+      "http_status": 200,
+      "content_type": "application/json",
+      "fetched_at_utc": "2026-09-14T22:00:06Z"
+    },
+    {
+      "page": 6,
+      "items": 20,
+      "advertised_total_count": 474,
+      "advertised_page_size": 20,
+      "advertised_last_page": 24,
+      "advertised_page": 6,
+      "http_status": 200,
+      "content_type": "application/json",
+      "fetched_at_utc": "2026-09-14T22:00:07Z"
+    },
+    {
+      "page": 7,
+      "items": 20,
+      "advertised_total_count": 474,
+      "advertised_page_size": 20,
+      "advertised_last_page": 24,
+      "advertised_page": 7,
+      "http_status": 200,
+      "content_type": "application/json",
+      "fetched_at_utc": "2026-09-14T22:00:07Z"
+    },
+    {
+      "page": 8,
+      "items": 20,
+      "advertised_total_count": 474,
+      "advertised_page_size": 20,
+      "advertised_last_page": 24,
+      "advertised_page": 8,
+      "http_status": 200,
+      "content_type": "application/json",
+      "fetched_at_utc": "2026-09-14T22:00:07Z"
+    },
+    {
+      "page": 9,
+      "items": 20,
+      "advertised_total_count": 474,
+      "advertised_page_size": 20,
+      "advertised_last_page": 24,
+      "advertised_page": 9,
+      "http_status": 200,
+      "content_type": "application/json",
+      "fetched_at_utc": "2026-09-14T22:00:07Z"
+    },
+    {
+      "page": 10,
+      "items": 20,
+      "advertised_total_count": 474,
+      "advertised_page_size": 20,
+      "advertised_last_page": 24,
+      "advertised_page": 10,
+      "http_status": 200,
+      "content_type": "application/json",
+      "fetched_at_utc": "2026-09-14T22:00:07Z"
+    },
+    {
+      "page": 11,
+      "items": 20,
+      "advertised_total_count": 474,
+      "advertised_page_size": 20,
+      "advertised_last_page": 24,
+      "advertised_page": 11,
+      "http_status": 200,
+      "content_type": "application/json",
+      "fetched_at_utc": "2026-09-14T22:00:07Z"
+    },
+    {
+      "page": 12,
+      "items": 20,
+      "advertised_total_count": 474,
+      "advertised_page_size": 20,
+      "advertised_last_page": 24,
+      "advertised_page": 12,
+      "http_status": 200,
+      "content_type": "application/json",
+      "fetched_at_utc": "2026-09-14T22:00:07Z"
+    },
+    {
+      "page": 13,
+      "items": 20,
+      "advertised_total_count": 474,
+      "advertised_page_size": 20,
+      "advertised_last_page": 24,
+      "advertised_page": 13,
+      "http_status": 200,
+      "content_type": "application/json",
+      "fetched_at_utc": "2026-09-14T22:00:07Z"
+    },
+    {
+      "page": 14,
+      "items": 20,
+      "advertised_total_count": 474,
+      "advertised_page_size": 20,
+      "advertised_last_page": 24,
+      "advertised_page": 14,
+      "http_status": 200,
+      "content_type": "application/json",
+      "fetched_at_utc": "2026-09-14T22:00:08Z"
+    },
+    {
+      "page": 15,
+      "items": 20,
+      "advertised_total_count": 474,
+      "advertised_page_size": 20,
+      "advertised_last_page": 24,
+      "advertised_page": 15,
+      "http_status": 200,
+      "content_type": "application/json",
+      "fetched_at_utc": "2026-09-14T22:00:08Z"
+    },
+    {
+      "page": 16,
+      "items": 20,
+      "advertised_total_count": 474,
+      "advertised_page_size": 20,
+      "advertised_last_page": 24,
+      "advertised_page": 16,
+      "http_status": 200,
+      "content_type": "application/json",
+      "fetched_at_utc": "2026-09-14T22:00:08Z"
+    },
+    {
+      "page": 17,
+      "items": 20,
+      "advertised_total_count": 474,
+      "advertised_page_size": 20,
+      "advertised_last_page": 24,
+      "advertised_page": 17,
+      "http_status": 200,
+      "content_type": "application/json",
+      "fetched_at_utc": "2026-09-14T22:00:08Z"
+    },
+    {
+      "page": 18,
+      "items": 20,
+      "advertised_total_count": 474,
+      "advertised_page_size": 20,
+      "advertised_last_page": 24,
+      "advertised_page": 18,
+      "http_status": 200,
+      "content_type": "application/json",
+      "fetched_at_utc": "2026-09-14T22:00:08Z"
+    },
+    {
+      "page": 19,
+      "items": 20,
+      "advertised_total_count": 474,
+      "advertised_page_size": 20,
+      "advertised_last_page": 24,
+      "advertised_page": 19,
+      "http_status": 200,
+      "content_type": "application/json",
+      "fetched_at_utc": "2026-09-14T22:00:08Z"
+    },
+    {
+      "page": 20,
+      "items": 20,
+      "advertised_total_count": 474,
+      "advertised_page_size": 20,
+      "advertised_last_page": 24,
+      "advertised_page": 20,
+      "http_status": 200,
+      "content_type": "application/json",
+      "fetched_at_utc": "2026-09-14T22:00:08Z"
+    },
+    {
+      "page": 21,
+      "items": 20,
+      "advertised_total_count": 474,
+      "advertised_page_size": 20,
+      "advertised_last_page": 24,
+      "advertised_page": 21,
+      "http_status": 200,
+      "content_type": "application/json",
+      "fetched_at_utc": "2026-09-14T22:00:09Z"
+    },
+    {
+      "page": 22,
+      "items": 20,
+      "advertised_total_count": 474,
+      "advertised_page_size": 20,
+      "advertised_last_page": 24,
+      "advertised_page": 22,
+      "http_status": 200,
+      "content_type": "application/json",
+      "fetched_at_utc": "2026-09-14T22:00:09Z"
+    },
+    {
+      "page": 23,
+      "items": 20,
+      "advertised_total_count": 474,
+      "advertised_page_size": 20,
+      "advertised_last_page": 24,
+      "advertised_page": 23,
+      "http_status": 200,
+      "content_type": "application/json",
+      "fetched_at_utc": "2026-09-14T22:00:09Z"
+    },
+    {
+      "page": 24,
+      "items": 14,
+      "advertised_total_count": 474,
+      "advertised_page_size": 20,
+      "advertised_last_page": 24,
+      "advertised_page": 24,
+      "http_status": 200,
+      "content_type": "application/json",
+      "fetched_at_utc": "2026-09-14T22:00:09Z"
+    }
+  ],
+  "errors": [
+    {
+      "url": "http://www.finep.gov.br/images/chamadas-publicas/2026/27_02_2026_PA_Anexo_1_Rerratificado.pdf",
+      "final_url": null,
+      "http_status": null,
+      "content_type": null,
+      "bytes": 0,
+      "fetched_at_utc_start": "2026-09-14T22:00:09Z",
+      "fetched_at_utc_end": "2026-09-14T22:00:09Z",
+      "truncated": false,
+      "error": "HTTPError: HTTP Error 404: Not Found"
+    }
+  ],
+  "situacao_distribution": {
+    "aberta": 35,
+    "encerrada": 439
+  },
+  "doc_checks": 1
+}

@@ -116,6 +116,36 @@ class TestExtractGovbrMmaDetailUrls:
             "licitacoes-e-contratos/editais/edital-2026",
         ]
 
+    def test_skips_dead_resolveuid_stubs(self) -> None:
+        """Plone ``resolveuid/<sha>`` stubs must not become detail pages.
+
+        The live MMA listing still carries a ``resolveuid`` link for
+        "PLANO ANUAL DE CONTRATAÇÕES 2020" that HTTP 404s; the shared
+        transport counts that as a discovery error and the audit
+        orchestrator then fails the run as a partial inventory.
+        """
+        from bs4 import BeautifulSoup
+
+        from discover_govbr_mma_candidates import extract_govbr_mma_detail_urls
+
+        html = """
+        <html><body>
+          <div id="content-core">
+            <a href="./resolveuid/d15fde5a95621797247065f0234df6253563ae95">
+              PLANO ANUAL DE CONTRATAÇÕES 2020
+            </a>
+            <a href="./edital-2026">Detalhe válido</a>
+          </div>
+        </body></html>
+        """
+        soup = BeautifulSoup(html, "html.parser")
+        discovered = extract_govbr_mma_detail_urls(soup, LISTING_URL)
+
+        assert discovered == [
+            "https://www.gov.br/mma/pt-br/acesso-a-informacao/"
+            "licitacoes-e-contratos/editais/edital-2026",
+        ]
+
 
 class TestListingUrl:
     def test_default_listing_url(self) -> None:

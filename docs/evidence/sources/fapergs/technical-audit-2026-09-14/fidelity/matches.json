@@ -1,0 +1,55 @@
+[
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://fapergs.rs.gov.br/upload/arquivos/202607/27144415-edital-06-2026-profix-cb.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://fapergs.rs.gov.br/upload/arquivos/202607/27144415-edital-06-2026-profix-cb.pdf"
+      ],
+      "published_at": null,
+      "source_key": "fapergs",
+      "source_record_id": "https://fapergs.rs.gov.br/upload/arquivos/202607/27144415-edital-06-2026-profix-cb.pdf",
+      "status": null,
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://fapergs.rs.gov.br/upload/arquivos/202607/27144415-edital-06-2026-profix-cb.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://fapergs.rs.gov.br/upload/arquivos/202607/27144415-edital-06-2026-profix-cb.pdf"
+      ],
+      "published_at": null,
+      "source_key": "fapergs",
+      "source_record_id": "https://fapergs.rs.gov.br/upload/arquivos/202607/27144415-edital-06-2026-profix-cb.pdf",
+      "status": "open",
+      "title": "EDITAL FAPERGS/CNPq/CAPES 06/2026 PROFIX-CB (principal edital PDF)"
+    },
+    "match_key": "('fapergs', 'https://fapergs.rs.gov.br/upload/arquivos/202607/27144415-edital-06-2026-profix-cb.pdf')",
+    "match_method": "stable_id"
+  }
+]

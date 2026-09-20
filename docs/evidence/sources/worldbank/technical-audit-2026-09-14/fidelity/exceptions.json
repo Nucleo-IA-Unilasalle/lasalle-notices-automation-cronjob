@@ -1,0 +1,47 @@
+[
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "deadline",
+      "inventory": "2026-05-19T00:00:00Z",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "status",
+      "inventory": "closed",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "origin": "inventory",
+      "rationale": "Funding-decision announcement PDF linked under RELATED > Funding decisions. No adapter signal token (call for proposals, request for proposals, expression of interest, eoi, procurement, funding strategy, resolution) in href, path, link text, title or aria-label; outside the adapter signal-token contract. HEAD 200 application/pdf 228904 bytes (2026-09-14T21:47:56Z).",
+      "record": {
+        "canonical_url": "https://thedocs.worldbank.org/en/doc/8edffdcd096b9275c8786996b33c21ce-0090052026/original/Call-8-announcement.pdf",
+        "deadline": null,
+        "document_hashes": [],
+        "document_urls": [
+          "https://thedocs.worldbank.org/en/doc/8edffdcd096b9275c8786996b33c21ce-0090052026/original/Call-8-announcement.pdf"
+        ],
+        "evidence": {
+          "rationale": "Funding-decision announcement PDF linked under RELATED > Funding decisions. No adapter signal token (call for proposals, request for proposals, expression of interest, eoi, procurement, funding strategy, resolution) in href, path, link text, title or aria-label; outside the adapter signal-token contract. HEAD 200 application/pdf 228904 bytes (2026-09-14T21:47:56Z)."
+        },
+        "published_at": null,
+        "reason_code": "out_of_scope",
+        "source_key": "worldbank",
+        "source_record_id": "https://thedocs.worldbank.org/en/doc/8edffdcd096b9275c8786996b33c21ce-0090052026/original/Call-8-announcement.pdf",
+        "status": "excluded",
+        "title": "Presenting the evaluations of the EdTech for Foundational Learning Window - funding-decision announcement PDF"
+      }
+    },
+    "reason_code": "out_of_scope",
+    "severity": "non_blocking"
+  }
+]

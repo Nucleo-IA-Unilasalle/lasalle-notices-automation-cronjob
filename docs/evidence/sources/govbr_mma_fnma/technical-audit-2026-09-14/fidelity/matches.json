@@ -1,0 +1,59 @@
+[
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.gov.br/mma/pt-br/composicao/secex/dfre/fundo-nacional-do-meio-ambiente/editais-e-termos-de-referencia-1/edital-fnma-1-de-2026-iniciativa-arborizacidades.pdf",
+      "deadline": "2026-07-13",
+      "document_hashes": [],
+      "document_urls": [
+        "https://www.gov.br/mma/pt-br/composicao/secex/dfre/fundo-nacional-do-meio-ambiente/editais-e-termos-de-referencia-1/edital-fnma-1-de-2026-iniciativa-arborizacidades.pdf"
+      ],
+      "published_at": null,
+      "source_key": "govbr_mma_fnma",
+      "source_record_id": "fnma-2026-edital-fnma-1-2026-iniciativa-arborizacidades",
+      "status": "closed",
+      "title": "Edital FNMA 1/2026 – Iniciativa ArborizaCidades"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-07-13T00:00:00Z",
+        "inventory": "2026-07-13T00:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "closed",
+        "inventory": "closed",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://www.gov.br/mma/pt-br/composicao/secex/dfre/fundo-nacional-do-meio-ambiente/editais-e-termos-de-referencia-1/edital-fnma-1-de-2026-iniciativa-arborizacidades.pdf",
+      "deadline": "2026-07-13",
+      "document_hashes": [],
+      "document_urls": [
+        "https://www.gov.br/mma/pt-br/composicao/secex/dfre/fundo-nacional-do-meio-ambiente/editais-e-termos-de-referencia-1/edital-fnma-1-de-2026-iniciativa-arborizacidades.pdf",
+        "https://www.gov.br/mma/pt-br/composicao/secex/dfre/fundo-nacional-do-meio-ambiente/editais-e-termos-de-referencia-1/RetificaodoEditaln01de2026IniciativaArborizaCidades.pdf"
+      ],
+      "published_at": null,
+      "source_key": "govbr_mma_fnma",
+      "source_record_id": "fnma-2026-edital-fnma-1-2026-iniciativa-arborizacidades",
+      "status": "closed",
+      "title": "Edital FNMA 1/2026 – Iniciativa ArborizaCidades"
+    },
+    "match_key": "('govbr_mma_fnma', 'fnma-2026-edital-fnma-1-2026-iniciativa-arborizacidades')",
+    "match_method": "stable_id"
+  }
+]

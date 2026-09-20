@@ -542,6 +542,22 @@ def discover_opportunities(
         opportunity["canonical_url"] = (
             f"{TNC_OPPORTUNITIES_URL}?consultancy={fallback_id.removeprefix('consultancy:')}"
         )
+        # A TDR URL reused across distinct consultancy blocks cannot serve as a
+        # unique document identity: two different stable IDs sharing the same
+        # document URL fail source-fidelity (identity_mismatch). Drop the shared
+        # document metadata and keep the TDR link only as free-text provenance.
+        shared_tdr_urls = [
+            document.get("url")
+            for document in opportunity.get("documents") or []
+            if document.get("url")
+        ]
+        opportunity["documents"] = []
+        if shared_tdr_urls:
+            markdown = opportunity.get("source_markdown") or ""
+            provenance = "\n\n## Documentos compartilhados na página\n\n" + "\n".join(
+                shared_tdr_urls
+            )
+            opportunity["source_markdown"] = markdown + provenance
     return {
         "blocks": len(blocks),
         "opportunities": len(opportunities),

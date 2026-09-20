@@ -322,10 +322,25 @@ class TestDiscoverCandidates:
         for c in candidates:
             meta = c["metadata"]
             assert "source_record_id" in meta
+            assert meta["row_source_record_id"]
+            # Per-document identity keeps multi-PDF rows free of
+            # duplicate_identity blockers in candidate-contract audits.
+            assert meta["source_record_id"].startswith(meta["row_source_record_id"] + "::")
+            assert meta["source_record_id"] != meta["row_source_record_id"]
             assert "detail_url" in meta
             assert meta["detail_url"].startswith(LISTING_URL + "?")
             assert meta["title"]
             assert meta["published_at"]
+
+    def test_document_source_record_ids_are_unique(self) -> None:
+        from discover_wwf_candidates import discover_candidates
+
+        with patch_request_with_safe_redirects(_default_responses()):
+            _, candidates = discover_candidates()
+
+        sids = [c["metadata"]["source_record_id"] for c in candidates]
+        assert len(sids) == len(set(sids))
+        assert all("::" in sid for sid in sids)
 
     def test_missing_detail_content_area_is_a_failure(self) -> None:
         from discover_wwf_candidates import discover_candidates

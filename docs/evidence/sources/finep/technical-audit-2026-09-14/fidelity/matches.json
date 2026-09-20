@@ -1,0 +1,1256 @@
+[
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/1019381",
+      "deadline": "2026-09-09T13:00:00+00:00",
+      "document_hashes": [],
+      "document_urls": [],
+      "published_at": "2026-08-05T00:00:00+00:00",
+      "source_key": "finep",
+      "source_record_id": "1019381",
+      "status": "open",
+      "title": "5ª Chamada Pública Conjunta - Finep e Conselho Norueguês de Pesquisa (RCN)"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-09-09T13:00:00Z",
+        "inventory": "2026-09-09T13:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/1019381",
+      "content_type_validated": null,
+      "deadline": "2026-09-09T13:00:00Z",
+      "document_hashes": [],
+      "document_urls": [],
+      "evidence": {
+        "api_page": 1,
+        "captured_at_utc": "2026-09-14T22:01:52Z",
+        "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+        "detail_url": "https://www.finep.gov.br/chamada-publica/222684/1019381",
+        "principal_document": null,
+        "situacao_key": "aberta",
+        "situacao_name": "Aberta",
+        "vigencia_inicio": "2026-08-05T00:00:00Z"
+      },
+      "hash_validated": null,
+      "published_at": "2026-08-05T00:00:00Z",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "finep",
+      "source_record_id": "1019381",
+      "status": "open",
+      "title": "5ª Chamada Pública Conjunta - Finep e Conselho Norueguês de Pesquisa (RCN)"
+    },
+    "match_key": "('finep', '1019381')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/754473",
+      "deadline": "2026-11-30T18:00:00+00:00",
+      "document_hashes": [],
+      "document_urls": [],
+      "published_at": "2026-02-06T00:00:00+00:00",
+      "source_key": "finep",
+      "source_record_id": "754473",
+      "status": "open",
+      "title": "Finep Mais Inovação Brasil – Rodada 2 – Transformação Mineral"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-11-30T18:00:00Z",
+        "inventory": "2026-11-30T18:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/754473",
+      "content_type_validated": null,
+      "deadline": "2026-11-30T18:00:00Z",
+      "document_hashes": [],
+      "document_urls": [],
+      "evidence": {
+        "api_page": 1,
+        "captured_at_utc": "2026-09-14T22:01:52Z",
+        "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+        "detail_url": "https://www.finep.gov.br/chamada-publica/222684/754473",
+        "principal_document": null,
+        "situacao_key": "aberta",
+        "situacao_name": "Aberta",
+        "vigencia_inicio": "2026-02-06T00:00:00Z"
+      },
+      "hash_validated": null,
+      "published_at": "2026-02-06T00:00:00Z",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "finep",
+      "source_record_id": "754473",
+      "status": "open",
+      "title": "Finep Mais Inovação Brasil – Rodada 2 – Transformação Mineral"
+    },
+    "match_key": "('finep', '754473')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/754839",
+      "deadline": "2026-09-30T17:00:00+00:00",
+      "document_hashes": [],
+      "document_urls": [],
+      "published_at": "2026-02-06T00:00:00+00:00",
+      "source_key": "finep",
+      "source_record_id": "754839",
+      "status": "open",
+      "title": "Finep Mais Inovação Brasil – Rodada 2 – Cadeias Agroindustriais Sustentáveis"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-09-30T17:00:00Z",
+        "inventory": "2026-09-30T17:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/754839",
+      "content_type_validated": null,
+      "deadline": "2026-09-30T17:00:00Z",
+      "document_hashes": [],
+      "document_urls": [],
+      "evidence": {
+        "api_page": 1,
+        "captured_at_utc": "2026-09-14T22:01:52Z",
+        "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+        "detail_url": "https://www.finep.gov.br/chamada-publica/222684/754839",
+        "principal_document": null,
+        "situacao_key": "aberta",
+        "situacao_name": "Aberta",
+        "vigencia_inicio": "2026-02-06T00:00:00Z"
+      },
+      "hash_validated": null,
+      "published_at": "2026-02-06T00:00:00Z",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "finep",
+      "source_record_id": "754839",
+      "status": "open",
+      "title": "Finep Mais Inovação Brasil – Rodada 2 – Cadeias Agroindustriais Sustentáveis"
+    },
+    "match_key": "('finep', '754839')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/754961",
+      "deadline": "2026-10-02T18:00:00+00:00",
+      "document_hashes": [],
+      "document_urls": [],
+      "published_at": "2026-02-06T00:00:00+00:00",
+      "source_key": "finep",
+      "source_record_id": "754961",
+      "status": "open",
+      "title": "Finep Mais Inovação Brasil – Rodada 2 - Base Industrial de Defesa"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-10-02T18:00:00Z",
+        "inventory": "2026-10-02T18:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/754961",
+      "content_type_validated": null,
+      "deadline": "2026-10-02T18:00:00Z",
+      "document_hashes": [],
+      "document_urls": [],
+      "evidence": {
+        "api_page": 1,
+        "captured_at_utc": "2026-09-14T22:01:52Z",
+        "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+        "detail_url": "https://www.finep.gov.br/chamada-publica/222684/754961",
+        "principal_document": null,
+        "situacao_key": "aberta",
+        "situacao_name": "Aberta",
+        "vigencia_inicio": "2026-02-06T00:00:00Z"
+      },
+      "hash_validated": null,
+      "published_at": "2026-02-06T00:00:00Z",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "finep",
+      "source_record_id": "754961",
+      "status": "open",
+      "title": "Finep Mais Inovação Brasil – Rodada 2 - Base Industrial de Defesa"
+    },
+    "match_key": "('finep', '754961')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/755080",
+      "deadline": "2026-04-09T17:00:00+00:00",
+      "document_hashes": [],
+      "document_urls": [],
+      "published_at": "2026-02-06T00:00:00+00:00",
+      "source_key": "finep",
+      "source_record_id": "755080",
+      "status": "open",
+      "title": "Finep Mais Inovação Brasil - Rodada 2 - Subvenção Econômica Regional"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-04-09T17:00:00Z",
+        "inventory": "2026-04-09T17:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/755080",
+      "content_type_validated": null,
+      "deadline": "2026-04-09T17:00:00Z",
+      "document_hashes": [],
+      "document_urls": [],
+      "evidence": {
+        "api_page": 1,
+        "captured_at_utc": "2026-09-14T22:01:52Z",
+        "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+        "detail_url": "https://www.finep.gov.br/chamada-publica/222684/755080",
+        "principal_document": null,
+        "situacao_key": "aberta",
+        "situacao_name": "Aberta",
+        "vigencia_inicio": "2026-02-06T00:00:00Z"
+      },
+      "hash_validated": null,
+      "published_at": "2026-02-06T00:00:00Z",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "finep",
+      "source_record_id": "755080",
+      "status": "open",
+      "title": "Finep Mais Inovação Brasil - Rodada 2 - Subvenção Econômica Regional"
+    },
+    "match_key": "('finep', '755080')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/755376",
+      "deadline": "2026-09-25T18:00:00+00:00",
+      "document_hashes": [],
+      "document_urls": [],
+      "published_at": "2026-03-06T00:00:00+00:00",
+      "source_key": "finep",
+      "source_record_id": "755376",
+      "status": "open",
+      "title": "Finep Mais Inovação Brasil – Rodada 2 – Mobilidade Sustentável"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-09-25T18:00:00Z",
+        "inventory": "2026-09-25T18:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/755376",
+      "content_type_validated": null,
+      "deadline": "2026-09-25T18:00:00Z",
+      "document_hashes": [],
+      "document_urls": [],
+      "evidence": {
+        "api_page": 1,
+        "captured_at_utc": "2026-09-14T22:01:52Z",
+        "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+        "detail_url": "https://www.finep.gov.br/chamada-publica/222684/755376",
+        "principal_document": null,
+        "situacao_key": "aberta",
+        "situacao_name": "Aberta",
+        "vigencia_inicio": "2026-03-06T00:00:00Z"
+      },
+      "hash_validated": null,
+      "published_at": "2026-03-06T00:00:00Z",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "finep",
+      "source_record_id": "755376",
+      "status": "open",
+      "title": "Finep Mais Inovação Brasil – Rodada 2 – Mobilidade Sustentável"
+    },
+    "match_key": "('finep', '755376')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/755485",
+      "deadline": "2026-09-30T17:00:00+00:00",
+      "document_hashes": [],
+      "document_urls": [],
+      "published_at": "2026-03-12T00:00:00+00:00",
+      "source_key": "finep",
+      "source_record_id": "755485",
+      "status": "open",
+      "title": "Finep Mais Inovação Brasil - Rodada 2 – Tecnologias Digitais"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-09-30T17:00:00Z",
+        "inventory": "2026-09-30T17:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/755485",
+      "content_type_validated": null,
+      "deadline": "2026-09-30T17:00:00Z",
+      "document_hashes": [],
+      "document_urls": [],
+      "evidence": {
+        "api_page": 1,
+        "captured_at_utc": "2026-09-14T22:01:52Z",
+        "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+        "detail_url": "https://www.finep.gov.br/chamada-publica/222684/755485",
+        "principal_document": null,
+        "situacao_key": "aberta",
+        "situacao_name": "Aberta",
+        "vigencia_inicio": "2026-03-12T00:00:00Z"
+      },
+      "hash_validated": null,
+      "published_at": "2026-03-12T00:00:00Z",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "finep",
+      "source_record_id": "755485",
+      "status": "open",
+      "title": "Finep Mais Inovação Brasil - Rodada 2 – Tecnologias Digitais"
+    },
+    "match_key": "('finep', '755485')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/755605",
+      "deadline": "2026-09-30T17:00:00+00:00",
+      "document_hashes": [],
+      "document_urls": [],
+      "published_at": "2026-03-12T00:00:00+00:00",
+      "source_key": "finep",
+      "source_record_id": "755605",
+      "status": "open",
+      "title": "Finep Mais Inovação Brasil – Rodada 2 – Semicondutores"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-09-30T17:00:00Z",
+        "inventory": "2026-09-30T17:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/755605",
+      "content_type_validated": null,
+      "deadline": "2026-09-30T17:00:00Z",
+      "document_hashes": [],
+      "document_urls": [],
+      "evidence": {
+        "api_page": 1,
+        "captured_at_utc": "2026-09-14T22:01:52Z",
+        "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+        "detail_url": "https://www.finep.gov.br/chamada-publica/222684/755605",
+        "principal_document": null,
+        "situacao_key": "aberta",
+        "situacao_name": "Aberta",
+        "vigencia_inicio": "2026-03-12T00:00:00Z"
+      },
+      "hash_validated": null,
+      "published_at": "2026-03-12T00:00:00Z",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "finep",
+      "source_record_id": "755605",
+      "status": "open",
+      "title": "Finep Mais Inovação Brasil – Rodada 2 – Semicondutores"
+    },
+    "match_key": "('finep', '755605')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/755727",
+      "deadline": "2026-05-11T17:00:00+00:00",
+      "document_hashes": [],
+      "document_urls": [],
+      "published_at": "2026-03-13T00:00:00+00:00",
+      "source_key": "finep",
+      "source_record_id": "755727",
+      "status": "open",
+      "title": "Prêmio Mulheres Inovadoras – 7ª edição – 2026"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-05-11T17:00:00Z",
+        "inventory": "2026-05-11T17:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/755727",
+      "content_type_validated": null,
+      "deadline": "2026-05-11T17:00:00Z",
+      "document_hashes": [],
+      "document_urls": [],
+      "evidence": {
+        "api_page": 1,
+        "captured_at_utc": "2026-09-14T22:01:52Z",
+        "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+        "detail_url": "https://www.finep.gov.br/chamada-publica/222684/755727",
+        "principal_document": null,
+        "situacao_key": "aberta",
+        "situacao_name": "Aberta",
+        "vigencia_inicio": "2026-03-13T00:00:00Z"
+      },
+      "hash_validated": null,
+      "published_at": "2026-03-13T00:00:00Z",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "finep",
+      "source_record_id": "755727",
+      "status": "open",
+      "title": "Prêmio Mulheres Inovadoras – 7ª edição – 2026"
+    },
+    "match_key": "('finep', '755727')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/755795",
+      "deadline": "2026-06-08T17:00:00+00:00",
+      "document_hashes": [],
+      "document_urls": [],
+      "published_at": "2026-03-25T00:00:00+00:00",
+      "source_key": "finep",
+      "source_record_id": "755795",
+      "status": "open",
+      "title": "Ecossistema Tecnológico de Biorrefino"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-06-08T17:00:00Z",
+        "inventory": "2026-06-08T17:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/755795",
+      "content_type_validated": null,
+      "deadline": "2026-06-08T17:00:00Z",
+      "document_hashes": [],
+      "document_urls": [],
+      "evidence": {
+        "api_page": 1,
+        "captured_at_utc": "2026-09-14T22:01:52Z",
+        "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+        "detail_url": "https://www.finep.gov.br/chamada-publica/222684/755795",
+        "principal_document": null,
+        "situacao_key": "aberta",
+        "situacao_name": "Aberta",
+        "vigencia_inicio": "2026-03-25T00:00:00Z"
+      },
+      "hash_validated": null,
+      "published_at": "2026-03-25T00:00:00Z",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "finep",
+      "source_record_id": "755795",
+      "status": "open",
+      "title": "Ecossistema Tecnológico de Biorrefino"
+    },
+    "match_key": "('finep', '755795')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/755892",
+      "deadline": "2026-07-03T17:00:00+00:00",
+      "document_hashes": [],
+      "document_urls": [],
+      "published_at": "2026-03-25T00:00:00+00:00",
+      "source_key": "finep",
+      "source_record_id": "755892",
+      "status": "open",
+      "title": "Agricultura familiar para ICTs 2026"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-07-03T17:00:00Z",
+        "inventory": "2026-07-03T17:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/755892",
+      "content_type_validated": null,
+      "deadline": "2026-07-03T17:00:00Z",
+      "document_hashes": [],
+      "document_urls": [],
+      "evidence": {
+        "api_page": 1,
+        "captured_at_utc": "2026-09-14T22:01:52Z",
+        "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+        "detail_url": "https://www.finep.gov.br/chamada-publica/222684/755892",
+        "principal_document": null,
+        "situacao_key": "aberta",
+        "situacao_name": "Aberta",
+        "vigencia_inicio": "2026-03-25T00:00:00Z"
+      },
+      "hash_validated": null,
+      "published_at": "2026-03-25T00:00:00Z",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "finep",
+      "source_record_id": "755892",
+      "status": "open",
+      "title": "Agricultura familiar para ICTs 2026"
+    },
+    "match_key": "('finep', '755892')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/756012",
+      "deadline": "2026-05-28T17:00:00+00:00",
+      "document_hashes": [],
+      "document_urls": [],
+      "published_at": "2026-04-09T00:00:00+00:00",
+      "source_key": "finep",
+      "source_record_id": "756012",
+      "status": "open",
+      "title": "FIP Startup Inteligência Artificial"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-05-28T17:00:00Z",
+        "inventory": "2026-05-28T17:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/756012",
+      "content_type_validated": null,
+      "deadline": "2026-05-28T17:00:00Z",
+      "document_hashes": [],
+      "document_urls": [],
+      "evidence": {
+        "api_page": 1,
+        "captured_at_utc": "2026-09-14T22:01:52Z",
+        "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+        "detail_url": "https://www.finep.gov.br/chamada-publica/222684/756012",
+        "principal_document": null,
+        "situacao_key": "aberta",
+        "situacao_name": "Aberta",
+        "vigencia_inicio": "2026-04-09T00:00:00Z"
+      },
+      "hash_validated": null,
+      "published_at": "2026-04-09T00:00:00Z",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "finep",
+      "source_record_id": "756012",
+      "status": "open",
+      "title": "FIP Startup Inteligência Artificial"
+    },
+    "match_key": "('finep', '756012')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/943682",
+      "deadline": "2026-09-18T17:00:00+00:00",
+      "document_hashes": [],
+      "document_urls": [],
+      "published_at": "2026-05-26T00:00:00+00:00",
+      "source_key": "finep",
+      "source_record_id": "943682",
+      "status": "open",
+      "title": "CARTA CONVITE MCTI/FINEP/FNDCT - PROMOÇÃO DA AUTONOMIA TECNOLÓGICA NA ÁREA DA DEFESA"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-09-18T17:00:00Z",
+        "inventory": "2026-09-18T17:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/943682",
+      "content_type_validated": null,
+      "deadline": "2026-09-18T17:00:00Z",
+      "document_hashes": [],
+      "document_urls": [],
+      "evidence": {
+        "api_page": 1,
+        "captured_at_utc": "2026-09-14T22:01:52Z",
+        "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+        "detail_url": "https://www.finep.gov.br/chamada-publica/222684/943682",
+        "principal_document": null,
+        "situacao_key": "aberta",
+        "situacao_name": "Aberta",
+        "vigencia_inicio": "2026-05-26T00:00:00Z"
+      },
+      "hash_validated": null,
+      "published_at": "2026-05-26T00:00:00Z",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "finep",
+      "source_record_id": "943682",
+      "status": "open",
+      "title": "CARTA CONVITE MCTI/FINEP/FNDCT - PROMOÇÃO DA AUTONOMIA TECNOLÓGICA NA ÁREA DA DEFESA"
+    },
+    "match_key": "('finep', '943682')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/945796",
+      "deadline": "2026-08-06T17:00:00+00:00",
+      "document_hashes": [],
+      "document_urls": [],
+      "published_at": "2026-05-29T00:00:00+00:00",
+      "source_key": "finep",
+      "source_record_id": "945796",
+      "status": "open",
+      "title": "MANUTENÇÃO UNIDADES DE PESQUISA MCTI – PROINFRA 2026"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-08-06T17:00:00Z",
+        "inventory": "2026-08-06T17:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/945796",
+      "content_type_validated": null,
+      "deadline": "2026-08-06T17:00:00Z",
+      "document_hashes": [],
+      "document_urls": [],
+      "evidence": {
+        "api_page": 1,
+        "captured_at_utc": "2026-09-14T22:01:52Z",
+        "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+        "detail_url": "https://www.finep.gov.br/chamada-publica/222684/945796",
+        "principal_document": null,
+        "situacao_key": "aberta",
+        "situacao_name": "Aberta",
+        "vigencia_inicio": "2026-05-29T00:00:00Z"
+      },
+      "hash_validated": null,
+      "published_at": "2026-05-29T00:00:00Z",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "finep",
+      "source_record_id": "945796",
+      "status": "open",
+      "title": "MANUTENÇÃO UNIDADES DE PESQUISA MCTI – PROINFRA 2026"
+    },
+    "match_key": "('finep', '945796')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/958302",
+      "deadline": "2026-08-03T18:00:00+00:00",
+      "document_hashes": [],
+      "document_urls": [],
+      "published_at": "2026-06-12T00:00:00+00:00",
+      "source_key": "finep",
+      "source_record_id": "958302",
+      "status": "open",
+      "title": "CARTA CONVITE MCTI/FINEP - PROGRAMA TECNOVA 2026/2027"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-08-03T18:00:00Z",
+        "inventory": "2026-08-03T18:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/958302",
+      "content_type_validated": null,
+      "deadline": "2026-08-03T18:00:00Z",
+      "document_hashes": [],
+      "document_urls": [],
+      "evidence": {
+        "api_page": 1,
+        "captured_at_utc": "2026-09-14T22:01:52Z",
+        "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+        "detail_url": "https://www.finep.gov.br/chamada-publica/222684/958302",
+        "principal_document": null,
+        "situacao_key": "aberta",
+        "situacao_name": "Aberta",
+        "vigencia_inicio": "2026-06-12T00:00:00Z"
+      },
+      "hash_validated": null,
+      "published_at": "2026-06-12T00:00:00Z",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "finep",
+      "source_record_id": "958302",
+      "status": "open",
+      "title": "CARTA CONVITE MCTI/FINEP - PROGRAMA TECNOVA 2026/2027"
+    },
+    "match_key": "('finep', '958302')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/968467",
+      "deadline": "2026-09-21T18:00:00+00:00",
+      "document_hashes": [],
+      "document_urls": [],
+      "published_at": "2026-06-16T00:00:00+00:00",
+      "source_key": "finep",
+      "source_record_id": "968467",
+      "status": "open",
+      "title": "DESAFIO TECNOLÓGICO ELETROLISADOR NACIONAL"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-09-21T18:00:00Z",
+        "inventory": "2026-09-21T18:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/968467",
+      "content_type_validated": null,
+      "deadline": "2026-09-21T18:00:00Z",
+      "document_hashes": [],
+      "document_urls": [],
+      "evidence": {
+        "api_page": 1,
+        "captured_at_utc": "2026-09-14T22:01:52Z",
+        "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+        "detail_url": "https://www.finep.gov.br/chamada-publica/222684/968467",
+        "principal_document": null,
+        "situacao_key": "aberta",
+        "situacao_name": "Aberta",
+        "vigencia_inicio": "2026-06-16T00:00:00Z"
+      },
+      "hash_validated": null,
+      "published_at": "2026-06-16T00:00:00Z",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "finep",
+      "source_record_id": "968467",
+      "status": "open",
+      "title": "DESAFIO TECNOLÓGICO ELETROLISADOR NACIONAL"
+    },
+    "match_key": "('finep', '968467')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/972778",
+      "deadline": "2026-12-01T18:00:00+00:00",
+      "document_hashes": [],
+      "document_urls": [],
+      "published_at": "2026-06-18T00:00:00+00:00",
+      "source_key": "finep",
+      "source_record_id": "972778",
+      "status": "open",
+      "title": "Subvenção Descentralizada Seleção de Parceiros em Fluxo Contínuo - Pró Amazônia Empreende"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-12-01T18:00:00Z",
+        "inventory": "2026-12-01T18:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/972778",
+      "content_type_validated": null,
+      "deadline": "2026-12-01T18:00:00Z",
+      "document_hashes": [],
+      "document_urls": [],
+      "evidence": {
+        "api_page": 1,
+        "captured_at_utc": "2026-09-14T22:01:52Z",
+        "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+        "detail_url": "https://www.finep.gov.br/chamada-publica/222684/972778",
+        "principal_document": null,
+        "situacao_key": "aberta",
+        "situacao_name": "Aberta",
+        "vigencia_inicio": "2026-06-18T00:00:00Z"
+      },
+      "hash_validated": null,
+      "published_at": "2026-06-18T00:00:00Z",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "finep",
+      "source_record_id": "972778",
+      "status": "open",
+      "title": "Subvenção Descentralizada Seleção de Parceiros em Fluxo Contínuo - Pró Amazônia Empreende"
+    },
+    "match_key": "('finep', '972778')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/986129",
+      "deadline": "2026-08-12T18:00:00+00:00",
+      "document_hashes": [],
+      "document_urls": [],
+      "published_at": "2026-06-24T00:00:00+00:00",
+      "source_key": "finep",
+      "source_record_id": "986129",
+      "status": "open",
+      "title": "FIP Conexões Startups – 2026"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-08-12T18:00:00Z",
+        "inventory": "2026-08-12T18:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/986129",
+      "content_type_validated": null,
+      "deadline": "2026-08-12T18:00:00Z",
+      "document_hashes": [],
+      "document_urls": [],
+      "evidence": {
+        "api_page": 1,
+        "captured_at_utc": "2026-09-14T22:01:52Z",
+        "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+        "detail_url": "https://www.finep.gov.br/chamada-publica/222684/986129",
+        "principal_document": null,
+        "situacao_key": "aberta",
+        "situacao_name": "Aberta",
+        "vigencia_inicio": "2026-06-24T00:00:00Z"
+      },
+      "hash_validated": null,
+      "published_at": "2026-06-24T00:00:00Z",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "finep",
+      "source_record_id": "986129",
+      "status": "open",
+      "title": "FIP Conexões Startups – 2026"
+    },
+    "match_key": "('finep', '986129')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/991625",
+      "deadline": "2026-08-14T18:00:00+00:00",
+      "document_hashes": [],
+      "document_urls": [],
+      "published_at": "2026-06-30T00:00:00+00:00",
+      "source_key": "finep",
+      "source_record_id": "991625",
+      "status": "open",
+      "title": "BRICs - Chamada pública Cooperação Multilateral em Inovação"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-08-14T18:00:00Z",
+        "inventory": "2026-08-14T18:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/991625",
+      "content_type_validated": null,
+      "deadline": "2026-08-14T18:00:00Z",
+      "document_hashes": [],
+      "document_urls": [],
+      "evidence": {
+        "api_page": 1,
+        "captured_at_utc": "2026-09-14T22:01:52Z",
+        "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+        "detail_url": "https://www.finep.gov.br/chamada-publica/222684/991625",
+        "principal_document": null,
+        "situacao_key": "aberta",
+        "situacao_name": "Aberta",
+        "vigencia_inicio": "2026-06-30T00:00:00Z"
+      },
+      "hash_validated": null,
+      "published_at": "2026-06-30T00:00:00Z",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "finep",
+      "source_record_id": "991625",
+      "status": "open",
+      "title": "BRICs - Chamada pública Cooperação Multilateral em Inovação"
+    },
+    "match_key": "('finep', '991625')",
+    "match_method": "stable_id"
+  }
+]

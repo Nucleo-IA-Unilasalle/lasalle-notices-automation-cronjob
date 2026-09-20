@@ -57,3 +57,10 @@ def test_reused_tdr_url_gets_distinct_fallback_identities():
         for item in opportunities
     )
     assert len({item["canonical_url"] for item in opportunities}) == 2
+    # Shared TDR URL must not remain a document identity on either record:
+    # two stable IDs with the same document_url fail fidelity (identity_mismatch).
+    assert all(item["documents"] == [] for item in opportunities)
+    # The TDR link is still preserved as free-text provenance in the markdown.
+    assert all(
+        "/shared.pdf" in (item.get("source_markdown") or "") for item in opportunities
+    )

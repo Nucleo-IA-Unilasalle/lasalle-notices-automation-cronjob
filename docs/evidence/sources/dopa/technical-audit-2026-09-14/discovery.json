@@ -1,0 +1,75 @@
+[
+  {
+    "canonical_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627585/detalhes",
+    "deadline": null,
+    "document_hashes": [],
+    "document_urls": [
+      "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627585/exportar-pdf",
+      "https://dopaonlineupload.procempa.com.br/dopaonlineupload/6167_ce_627585_1.pdf"
+    ],
+    "published_at": "2026-09-15T03:00:00+00:00",
+    "source_key": "dopa",
+    "source_record_id": "627585",
+    "status": "open",
+    "title": "EDITAL de Abertura Programas de Resid\u00eancia M\u00e9dica R4 em Medicina Fetal e Endoscopia Ginecol\u00f3gica do Hospital Materno Infantil Presidente Vargas \u2013 HMIPV - SEI: 26.0.000139584-9 EDITAL 002/2026"
+  },
+  {
+    "canonical_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627564/detalhes",
+    "deadline": null,
+    "document_hashes": [],
+    "document_urls": [
+      "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627564/exportar-pdf",
+      "https://dopaonlineupload.procempa.com.br/dopaonlineupload/6167_ce_627564_1.pdf",
+      "https://dopaonlineupload.procempa.com.br/dopaonlineupload/6167_ce_627564_2.pdf",
+      "https://dopaonlineupload.procempa.com.br/dopaonlineupload/6167_ce_627564_3.pdf",
+      "https://dopaonlineupload.procempa.com.br/dopaonlineupload/6167_ce_627564_4.pdf"
+    ],
+    "published_at": "2026-09-15T03:00:00+00:00",
+    "source_key": "dopa",
+    "source_record_id": "627564",
+    "status": "open",
+    "title": "CHAMAMENTO P\u00daBLICO 012/2026, Oficinas, Oficineiros PROCESSO 25.0.000060674-2"
+  },
+  {
+    "canonical_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627563/detalhes",
+    "deadline": null,
+    "document_hashes": [],
+    "document_urls": [
+      "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627563/exportar-pdf",
+      "https://dopaonlineupload.procempa.com.br/dopaonlineupload/6167_ce_627563_1.pdf"
+    ],
+    "published_at": "2026-09-15T03:00:00+00:00",
+    "source_key": "dopa",
+    "source_record_id": "627563",
+    "status": "open",
+    "title": "EDITAL de Abertura Programa de Resid\u00eancia PRIMURGE - EDITAL 001/2026 RESID\u00caNCIA INTEGRADA MULTIPROFISSIONAL EM SA\u00daDE COM \u00caNFASE EM URG\u00caNCIA E EMERG\u00caNCIA - PRIMURGE PROCESSO 24.0.000088173-9"
+  },
+  {
+    "canonical_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627460/detalhes",
+    "deadline": "2026-10-15T02:59:59+00:00",
+    "document_hashes": [],
+    "document_urls": [
+      "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627460/exportar-pdf"
+    ],
+    "published_at": "2026-09-15T03:00:00+00:00",
+    "source_key": "dopa",
+    "source_record_id": "627460",
+    "status": "open",
+    "title": "26.0.000072486-5 Parque Gabriel Knijnik AVISO DE PRORROGA\u00c7\u00c3O EDITAL DE CHAMAMENTO P\u00daBLICO DPC-SMP 004/2026 PROCESSO 26.0.000072486-5"
+  },
+  {
+    "canonical_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627176/detalhes",
+    "deadline": "2026-10-10T02:59:59+00:00",
+    "document_hashes": [],
+    "document_urls": [
+      "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627176/exportar-pdf",
+      "https://dopaonlineupload.procempa.com.br/dopaonlineupload/6167_ce_627176_1.pdf",
+      "https://dopaonlineupload.procempa.com.br/dopaonlineupload/6167_ce_627176_2.pdf"
+    ],
+    "published_at": "2026-09-15T03:00:00+00:00",
+    "source_key": "dopa",
+    "source_record_id": "627176",
+    "status": "open",
+    "title": "EDITAL DE SORTEIO N\u00ba 001/2026 - SORTEIO P\u00daBLICO PARA CONCESS\u00c3O DE LICEN\u00c7A DE ESTACIONAMENTO EM PONTO FIXO DE T\u00c1XI DO MUNIC\u00cdPIO DE PORTO ALEGRE - PROCESSO 25.16.000023573-0"
+  }
+]

@@ -32,6 +32,36 @@ _OWNED_DOCUMENT = re.compile(
     r"\b(edital|chamada|regulamento|termo|anexo)\b", re.IGNORECASE
 )
 
+# Source lifecycle vocabulary → the worker-wide open/closed/unknown contract
+# used by authoritative_status, inventory status, and source-fidelity audits.
+_LIFECYCLE_STATUS_BY_KEY = {
+    "aberta": "open",
+    "aberto": "open",
+    "open": "open",
+    "encerrada": "closed",
+    "encerrado": "closed",
+    "closed": "closed",
+    "cancelada": "closed",
+    "cancelado": "closed",
+    "suspenso": "closed",
+}
+
+
+def _lifecycle_status(value: Any) -> str:
+    """Map a Finep ``situacao`` (object or string) to open/closed/unknown."""
+    candidates: list[str] = []
+    if isinstance(value, dict):
+        for key in ("key", "name", "label"):
+            candidate = value.get(key)
+            if candidate:
+                candidates.append(str(candidate).strip().lower())
+    elif value is not None:
+        candidates.append(str(value).strip().lower())
+    for text in candidates:
+        if text and text in _LIFECYCLE_STATUS_BY_KEY:
+            return _LIFECYCLE_STATUS_BY_KEY[text]
+    return "unknown"
+
 
 def _choice_name(value: Any) -> str | None:
     if isinstance(value, dict):
@@ -122,7 +152,7 @@ def record_to_inventory(record: dict[str, Any]) -> dict[str, Any]:
         "source_record_id": record_id,
         "canonical_url": f"{FINEP_DETAIL_BASE_URL}/{record_id}",
         "title": str(record.get("titulo") or "").strip(),
-        "status": (_choice_name(record.get("situacao")) or "unknown").lower(),
+        "status": _lifecycle_status(record.get("situacao")),
         "published_at": _iso(record.get("dataDePublicacao")),
         "deadline": _iso(record.get("prazoProposto")),
         "document_urls": [document["url"] for document in documents],
@@ -144,7 +174,7 @@ def record_to_opportunity(
         "canonical_url": f"{FINEP_DETAIL_BASE_URL}/{record_id}",
         "title": str(record.get("titulo") or "").strip(),
         "description": str(record.get("descricaoRawText") or "").strip() or None,
-        "authoritative_status": _choice_name(record.get("situacao")),
+        "authoritative_status": _lifecycle_status(record.get("situacao")),
         "source_published_at": _iso(record.get("dataDePublicacao")),
         "source_updated_at": _iso(record.get("dateModified")),
         "proposal_opens_at": _iso(record.get("vigenciaInicio")),
@@ -185,6 +215,11 @@ def fetch_api_pages(
     records: list[dict[str, Any]] = []
     pages_completed: list[int] = []
     last_page: int | None = None
+    # The live Liferay listing can repeat a record across page boundaries
+    # (observed 2026-09-14: id 754839 on pages 1 and 2). Identity must stay
+    # unique so downstream fidelity never sees duplicate_identity.
+    seen_ids: set[str] = set()
+    duplicates_skipped = 0
     for page in range(1, FINEP_MAX_PAGES_PER_RUN + 1):
         url = (
             f"{FINEP_API_URL}?sort=dataDePublicacao:desc"
@@ -194,7 +229,16 @@ def fetch_api_pages(
         items = payload.get("items")
         if not isinstance(items, list):
             raise ValueError("FINEP API response is missing items")
-        records.extend(item for item in items if isinstance(item, dict))
+        for item in items:
+            if not isinstance(item, dict):
+                continue
+            record_id = str(item.get("id") or "").strip()
+            if record_id:
+                if record_id in seen_ids:
+                    duplicates_skipped += 1
+                    continue
+                seen_ids.add(record_id)
+            records.append(item)
         pages_completed.append(page)
         try:
             last_page = int(payload.get("lastPage") or page)
@@ -206,6 +250,7 @@ def fetch_api_pages(
         progress["pages_completed"] = list(pages_completed)
         progress["last_page"] = last_page
         progress["page_size"] = FINEP_PAGE_SIZE
+        progress["duplicate_records_skipped"] = duplicates_skipped
     return records
 
 
@@ -231,8 +276,8 @@ def discover_opportunities(
         if min_year and published and int(published[:4]) < min_year:
             rejected += 1
             continue
-        status = (_choice_name(record.get("situacao")) or "").lower()
-        if status not in {"aberta", "open"}:
+        status = _lifecycle_status(record.get("situacao"))
+        if status != "open":
             rejected += 1
             continue
         opportunities.append(
@@ -248,6 +293,7 @@ def discover_opportunities(
         "candidate_cap_reached": int(capped),
         "page_cap_reached": int(bool(progress.get("last_page")) and
                                 max(progress.get("pages_completed") or [0]) < progress["last_page"]),
+        "duplicate_records_skipped": int(progress.get("duplicate_records_skipped") or 0),
         # Resumable pagination position for the versioned Finep cursor.
         # Telemetry normalization ignores these keys; the managed path
         # builds the scope-bound cursor from them.

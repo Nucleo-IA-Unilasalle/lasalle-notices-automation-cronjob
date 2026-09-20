@@ -1,0 +1,1284 @@
+[
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-metodologiapsa-para.pdf",
+    "content_type_validated": true,
+    "deadline": "2026-09-26T02:59:00Z",
+    "document_hashes": [
+      "ac35f49cca7ee6d888e6caaa60870bf5c3555877f1a9cfe275abee6ffa733e9d"
+    ],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-metodologiapsa-para.pdf"
+    ],
+    "evidence": {
+      "block_index": 0,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block on official Trabalhe Conosco page with PRAZO deadline in the future (or same-day not-yet-past); counted as open.",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "pdf_bytes": 140858,
+      "pdf_sha256": "ac35f49cca7ee6d888e6caaa60870bf5c3555877f1a9cfe275abee6ffa733e9d",
+      "prazo_text": "PRAZO: 25/09/2026",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-metodologiapsa-para.pdf",
+      "principal_http_status": 200
+    },
+    "hash_validated": true,
+    "published_at": null,
+    "renderable": true,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-metodologiapsa-para.pdf",
+    "status": "open",
+    "title": "Termo de Referência para a contratação de consultoria técnica para consolidação e aprimoramento metodológico do Subprograma de Territórios Coletivos do Programa Estadual de Pagamento por Serviços Ambientais do Pará - PEPSA/PA"
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdR_Sist_Mon_RVN_front-end_VF.pdf",
+    "deadline": "2026-09-14T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdR_Sist_Mon_RVN_front-end_VF.pdf"
+    ],
+    "evidence": {
+      "block_index": 1,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 13/09/2026",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdR_Sist_Mon_RVN_front-end_VF.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdR_Sist_Mon_RVN_front-end_VF.pdf",
+    "status": "expired",
+    "title": "Termo de Referência para a Contratação de Consultoria Especializada para apoiar a elaboração do sistema de monitoramento geoespacial e reporte da recuperação da vegetação nativa do Brasil no âmbito do Projeto Restaura Biomas – perfil front end"
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TDR-Requalifica%C3%A7%C3%A3oComercialnoPara.pdf",
+    "deadline": "2026-09-05T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TDR-Requalifica%C3%A7%C3%A3oComercialnoPara.pdf"
+    ],
+    "evidence": {
+      "block_index": 2,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "NOVO PRAZO: 04/09/2026",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TDR-Requalifica%C3%A7%C3%A3oComercialnoPara.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TDR-Requalifica%C3%A7%C3%A3oComercialnoPara.pdf",
+    "status": "expired",
+    "title": "Termo de Referência para a contratação de consultoria para realização de estudo diagnóstico de requalificação comercial da pecuária em propriedades rurais de pequeno e médio porte no Pará"
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TDR-Regulariza%C3%A7%C3%A3o-Ambiental-no-Para.pdf",
+    "deadline": "2026-09-05T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TDR-Regulariza%C3%A7%C3%A3o-Ambiental-no-Para.pdf"
+    ],
+    "evidence": {
+      "block_index": 3,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "NOVO PRAZO: 04/09/2026",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TDR-Regulariza%C3%A7%C3%A3o-Ambiental-no-Para.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TDR-Regulariza%C3%A7%C3%A3o-Ambiental-no-Para.pdf",
+    "status": "expired",
+    "title": "Termo de Referência para a contratação de consultoria para realização de estudo diagnóstico da regularização ambiental da pecuária em propriedades rurais de pequeno e médio porte no Pará"
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdR_Sist_Mon_RVN_backend_VF.pdf",
+    "deadline": "2026-09-04T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdR_Sist_Mon_RVN_backend_VF.pdf"
+    ],
+    "evidence": {
+      "block_index": 4,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 03/09/2026",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdR_Sist_Mon_RVN_backend_VF.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdR_Sist_Mon_RVN_backend_VF.pdf",
+    "status": "expired",
+    "title": "Termo de Referência para a Contratação de Consultoria Especializada para apoiar a elaboração do sistema de monitoramento geoespacial e reporte da recuperação da vegetação nativa do Brasil no âmbito do Projeto Restaura Biomas – perfil back end"
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdR_Analise_Geoespacial_Sul_Sudeste_Para.pdf",
+    "deadline": "2026-08-11T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdR_Analise_Geoespacial_Sul_Sudeste_Para.pdf"
+    ],
+    "evidence": {
+      "block_index": 5,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 10/08/2026",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdR_Analise_Geoespacial_Sul_Sudeste_Para.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdR_Analise_Geoespacial_Sul_Sudeste_Para.pdf",
+    "status": "expired",
+    "title": "Termo de Referência para Contratação de Serviços de Análises Geoespaciais e Design da Informação para a Elaboração de Mapas Temáticos e Infográficos de Apoio à Iniciativa Territorial Sul/Sudeste do Pará"
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-consultoria-juridico-tributaria.pdf",
+    "deadline": "2026-08-01T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-consultoria-juridico-tributaria.pdf"
+    ],
+    "evidence": {
+      "block_index": 6,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 31/07/2026",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-consultoria-juridico-tributaria.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-consultoria-juridico-tributaria.pdf",
+    "status": "expired",
+    "title": "Termo de Referência para Contratação de Consultoria Jurídico Tributária para apoiar o PEPSA do Pará"
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdR_Rastreabilidade_PA.pdf",
+    "deadline": "2026-07-24T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdR_Rastreabilidade_PA.pdf"
+    ],
+    "evidence": {
+      "block_index": 7,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 23/07/2026",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdR_Rastreabilidade_PA.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdR_Rastreabilidade_PA.pdf",
+    "status": "expired",
+    "title": "Termo de Referência para consultoria técnica para estruturação e implantação piloto de sistema voluntário de rastreabilidade, interoperabilidade socioambiental e alianças mercadológicas na pecuária do Pará."
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdR_Consultoria_Arquitetura_Financiamento_PPTI.pdf",
+    "deadline": "2026-08-01T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdR_Consultoria_Arquitetura_Financiamento_PPTI.pdf"
+    ],
+    "evidence": {
+      "block_index": 8,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 31/07/2026",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdR_Consultoria_Arquitetura_Financiamento_PPTI.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdR_Consultoria_Arquitetura_Financiamento_PPTI.pdf",
+    "status": "expired",
+    "title": "Termo de Referência para Consultoria para estudo da arquitetura de financiamento do Programa de Proteção de Terras Indígenas (PPTI)"
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-salvaguardas-omecs-jun26.pdf",
+    "deadline": "2026-07-18T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-salvaguardas-omecs-jun26.pdf"
+    ],
+    "evidence": {
+      "block_index": 9,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 17/07/2026",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-salvaguardas-omecs-jun26.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-salvaguardas-omecs-jun26.pdf",
+    "status": "expired",
+    "title": "Termo de Referência para apoiar a elaboração de documento técnico sobre salvaguardas socioambientais em OMECs."
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-restaura-biomas-pps.pdf",
+    "deadline": "2026-07-19T21:00:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-restaura-biomas-pps.pdf"
+    ],
+    "evidence": {
+      "block_index": 10,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 19/07/2026 até 18h",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-restaura-biomas-pps.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-restaura-biomas-pps.pdf",
+    "status": "expired",
+    "title": "Termo de referência para contratação de Consultoria Especializada no âmbito do projeto Restaura Biomas para elaborar diagnóstico, proposição de melhorias em políticas, marcos legais e infralegais para acelerar a recuperação da vegetação nativa no Brasil em níveis nacional e subnacional."
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TDR-ConsultoriadeTreinamentosdosNAPs.pdf",
+    "deadline": "2026-06-11T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TDR-ConsultoriadeTreinamentosdosNAPs.pdf"
+    ],
+    "evidence": {
+      "block_index": 11,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 10/06/2026",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TDR-ConsultoriadeTreinamentosdosNAPs.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TDR-ConsultoriadeTreinamentosdosNAPs.pdf",
+    "status": "expired",
+    "title": "Termo de referência para contratação de empresa especializada para execução de treinamentos presenciais e remotos nos Núcleos de Atendimento aos Produtores(as) e Criadores(as) (NAPs) do Programa Pecuária Sustentável do Pará"
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdR-gestao-de-projetos-PSA-em-territorios-coletivos-PA.pdf",
+    "deadline": "2026-06-13T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdR-gestao-de-projetos-PSA-em-territorios-coletivos-PA.pdf"
+    ],
+    "evidence": {
+      "block_index": 12,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 12/06/2026",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdR-gestao-de-projetos-PSA-em-territorios-coletivos-PA.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdR-gestao-de-projetos-PSA-em-territorios-coletivos-PA.pdf",
+    "status": "expired",
+    "title": "Termo de referência para Contratação de Consultoria de Gestão de Projetos para Estruturação e Pilotagem de PSA em Territórios Coletivos no Pará"
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-PD-Mantiqueira.pdf",
+    "deadline": "2026-06-19T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-PD-Mantiqueira.pdf"
+    ],
+    "evidence": {
+      "block_index": 13,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "NOVO PRAZO: 18/06/2026",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-PD-Mantiqueira.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-PD-Mantiqueira.pdf",
+    "status": "expired",
+    "title": "Contratar consultoria técnica especializada (Pessoa jurídica) para agrupar, complementar, consolidar, revisar e atualizar os documentos que irão compor o Project Document (PD) e o primeiro relatório de monitoramento, assegurando integral aderência aos requisitos do VCS (Standard v4.7, metodologia VM0047) e do CCB, tornando o documento final pronto para validação por entidade acreditada."
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-inventario-mantiqueira.pdf",
+    "deadline": "2026-06-13T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-inventario-mantiqueira.pdf"
+    ],
+    "evidence": {
+      "block_index": 14,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 12/06/2026",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-inventario-mantiqueira.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-inventario-mantiqueira.pdf",
+    "status": "expired",
+    "title": "Contratação de serviços de consultoria pessoa jurídica para realização de inventário florestal por amostragem, das áreas inseridas no projeto Forest Restoration in Mantiqueira, Brazil, que visa geração e créditos de carbono no mercado voluntário por meio de regeneração natural da vegetação nativa."
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-consultoria-de-construcao.pdf",
+    "deadline": "2026-05-26T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-consultoria-de-construcao.pdf"
+    ],
+    "evidence": {
+      "block_index": 15,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 25/05/2026",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-consultoria-de-construcao.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-consultoria-de-construcao.pdf",
+    "status": "expired",
+    "title": "Contratação de empresa especializada para construção do sistema de gestão integrada (SGI) dos núcleos de atendimento aos produtores(as) e criadores(as) (NAPS) do programa pecuária sustentável do pará"
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-prog-ucs_f.pdf",
+    "deadline": "2026-04-20T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-prog-ucs_f.pdf"
+    ],
+    "evidence": {
+      "block_index": 16,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 19/04/2026",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-prog-ucs_f.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-prog-ucs_f.pdf",
+    "status": "expired",
+    "title": "Contratação de Consultoria Especializada no âmbito do projeto Restaura Biomas para apoiar o Instituto Chico Mendes de Conservação para Biodiversidade (ICMBio) na elaboração do Programa de Recuperação da Vegetação Nativa em Unidades de Conservação Federais."
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-facilitador-ami.pdf",
+    "deadline": "2026-03-23T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-facilitador-ami.pdf"
+    ],
+    "evidence": {
+      "block_index": 17,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 22/03/2026",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-facilitador-ami.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-facilitador-ami.pdf",
+    "status": "expired",
+    "title": "A TNC e a COIAB lançam termo de referência para a contratação de profissional especialista em facilitação do curso de formação dos Agentes de Monitoramento Indígena (AMIs) da Rede COIAB."
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr_consultoria_governanca_dados.pdf",
+    "deadline": "2026-03-28T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr_consultoria_governanca_dados.pdf"
+    ],
+    "evidence": {
+      "block_index": 18,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "NOVO PRAZO: 27/03/2026",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr_consultoria_governanca_dados.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr_consultoria_governanca_dados.pdf",
+    "status": "expired",
+    "title": "Termo de Referência para Contratação de Consultoria em Gestão e Governança de Dados e IA para a transição tecnológica da TNC – Brasil (fase de diagnóstico e documentação)"
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-secretaria-executiva-conaveg.pdf",
+    "deadline": "2026-02-20T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-secretaria-executiva-conaveg.pdf"
+    ],
+    "evidence": {
+      "block_index": 19,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 19/02/2026",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-secretaria-executiva-conaveg.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-secretaria-executiva-conaveg.pdf",
+    "status": "expired",
+    "title": "Termo de Referência para Contratação de Consultoria Especializada para apoiar a Secretaria Executiva da Comissão Nacional para Recuperação da Vegetação Nativa (CONAVEG) no âmbito do Projeto Restaura Biomas - Viabilizando a restauração em larga escala por meio da Política Nacional de Recuperação a Vegetação Nativa no Brasil"
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr//tdr-consultoria-smartsheet.pdf",
+    "deadline": "2026-02-14T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr//tdr-consultoria-smartsheet.pdf"
+    ],
+    "evidence": {
+      "block_index": 20,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "NOVO PRAZO: 13/02/2026",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr//tdr-consultoria-smartsheet.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr//tdr-consultoria-smartsheet.pdf",
+    "status": "expired",
+    "title": "Termo de Referência para Contratação de Consultoria para suporte em Tecnologia da Informação com foco em Smartsheet para a iniciativa AGPP – Aprimoramento da Gestão de Projetos e Portfolio da TNC Brasil."
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-estudo-mecanismo-financeiro-rastreabilidade-tocantins.pdf",
+    "deadline": "2026-01-17T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-estudo-mecanismo-financeiro-rastreabilidade-tocantins.pdf"
+    ],
+    "evidence": {
+      "block_index": 21,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 16/01/2026",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-estudo-mecanismo-financeiro-rastreabilidade-tocantins.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-estudo-mecanismo-financeiro-rastreabilidade-tocantins.pdf",
+    "status": "expired",
+    "title": "Termo de referência para contratação de empresa de consultoria para estudo de mecanismos financeiros e arranjos institucionais para acelerar a adoção da rastreabilidade individual e da pecuária sustentável no estado do Tocantins, no âmbito do Programa Estadual de Rastreabilidade do Tocantins."
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-estudoseplanos-altoaraguaia.pdf",
+    "deadline": "2026-01-10T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-estudoseplanos-altoaraguaia.pdf"
+    ],
+    "evidence": {
+      "block_index": 22,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 09/01/2026",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-estudoseplanos-altoaraguaia.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-estudoseplanos-altoaraguaia.pdf",
+    "status": "expired",
+    "title": "Termo de referência para contratação de Empresa para Elaboração de Estudos e Planos Técnicos Correlatos ao Fortalecimento da Gestão e Governança Hídrica na Bacia do Alto Araguaia."
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-produtoraCLPI.pdf",
+    "deadline": "2026-01-09T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-produtoraCLPI.pdf"
+    ],
+    "evidence": {
+      "block_index": 23,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 08/01/2026",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-produtoraCLPI.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-produtoraCLPI.pdf",
+    "status": "expired",
+    "title": "Termo de referência para Contratação de empresa produtora de eventos para apoio ao processo de consultas do Sistema Jurisdicional de REDD+ do Estado do Pará."
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-viabilidade-financeira.pdf",
+    "deadline": "2026-01-16T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-viabilidade-financeira.pdf"
+    ],
+    "evidence": {
+      "block_index": 24,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 15/01/2026",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-viabilidade-financeira.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-viabilidade-financeira.pdf",
+    "status": "expired",
+    "title": "Termo de referência para Contratação de consultoria especializada para elaboração de Modelos de Negócio e Planos Operacionais de Assistência Técnica e Extensão Rural"
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdRConsultoriajur%C3%ADdica_Carbono_Cerrado_v2.pdf",
+    "deadline": "2025-12-27T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdRConsultoriajur%C3%ADdica_Carbono_Cerrado_v2.pdf"
+    ],
+    "evidence": {
+      "block_index": 25,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 26/12/2025",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdRConsultoriajur%C3%ADdica_Carbono_Cerrado_v2.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdRConsultoriajur%C3%ADdica_Carbono_Cerrado_v2.pdf",
+    "status": "expired",
+    "title": "Termo de referência para contratação de consultoria para avaliação legal de projetos de carbono no Cerrado"
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-gravacaoaudiovideo.pdf",
+    "deadline": "2025-12-06T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-gravacaoaudiovideo.pdf"
+    ],
+    "evidence": {
+      "block_index": 26,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 05/12/2025",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-gravacaoaudiovideo.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-gravacaoaudiovideo.pdf",
+    "status": "expired",
+    "title": "Termo de Referência para contratação de consultoria especializada para gravação de áudio e vídeo de processos de consulta a povos e comunidades tradicionais"
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-relatoria.pdf",
+    "deadline": "2025-12-06T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-relatoria.pdf"
+    ],
+    "evidence": {
+      "block_index": 27,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 05/12/2025",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-relatoria.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-relatoria.pdf",
+    "status": "expired",
+    "title": "Termo de Referência Contratação de consultoria especializada para elaboração de relatoria e consolidação de informações de processos de consulta a povos e comunidades tradicionais."
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-facilitacao-grafica.pdf",
+    "deadline": "2025-12-06T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-facilitacao-grafica.pdf"
+    ],
+    "evidence": {
+      "block_index": 28,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 05/12/2025",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-facilitacao-grafica.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-facilitacao-grafica.pdf",
+    "status": "expired",
+    "title": "Termo de Referência para contratação de consultoria técnica para facilitação gráfica de eventos para povos e comunidades tradicionais"
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-instalacao-treinamento.pdf",
+    "deadline": "2025-12-21T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-instalacao-treinamento.pdf"
+    ],
+    "evidence": {
+      "block_index": 29,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 20/12/2025",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-instalacao-treinamento.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-instalacao-treinamento.pdf",
+    "status": "expired",
+    "title": "Termo de Referência para Contratação de Consultoria Especializada para Instalação de Estação Fluviométrica e Capacitação no Monitoramento Hidrológico quanto ao Manuseio e Coleta de Dados das Estações Fluviométricas, para Apoiar a Central das Associações Agroextrativistas do Rio Manicoré e suas Associações Comunitárias no Território de Uso Comum do Rio Manicoré, Estado do Amazonas."
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-treinamento-comunicacao-riomanicore.pdf",
+    "deadline": "2025-11-15T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-treinamento-comunicacao-riomanicore.pdf"
+    ],
+    "evidence": {
+      "block_index": 30,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 14/11/2025",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-treinamento-comunicacao-riomanicore.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-treinamento-comunicacao-riomanicore.pdf",
+    "status": "expired",
+    "title": "Termo de referência para contratação de consultoria especializada para treinamento sobre comunicação comunitária para apoiar a Central das Associações Agroextrativista do Rio Manicoré e suas associações comunitárias no território de uso comum do Rio Manicoré, estado do Amazonas."
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-estudocusto.pdf",
+    "deadline": "2025-11-18T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-estudocusto.pdf"
+    ],
+    "evidence": {
+      "block_index": 31,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "NOVO PRAZO: 17/11/2025",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-estudocusto.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-estudocusto.pdf",
+    "status": "expired",
+    "title": "Termo de referência para contratação de empresa de consultoria para estudo de custo-benefício e modelos de engajamento da indústria frigorífica da estratégia Núcleo de Atendimento aos Produtores no estado do Mato Grosso."
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/TDR-PROGRAMA-PRO-MANANCIAIS.pdf",
+    "deadline": "2025-10-31T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/TDR-PROGRAMA-PRO-MANANCIAIS.pdf"
+    ],
+    "evidence": {
+      "block_index": 32,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 30/10/2025",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/TDR-PROGRAMA-PRO-MANANCIAIS.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/TDR-PROGRAMA-PRO-MANANCIAIS.pdf",
+    "status": "expired",
+    "title": "Termo de referência para contratação de consultoria de Pessoa Jurídica (PJ) para realização de avaliação crítica da execução do Programa Socioambiental de Proteção de Mananciais (Pró-Mananciais) no ciclo de 2017 a 2024 e busca de sugestões de aprimoramento da estrutura, da eficiência e da gestão do programa."
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-desenvolvimento-maturidade-institucional.pdf",
+    "deadline": "2025-10-20T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-desenvolvimento-maturidade-institucional.pdf"
+    ],
+    "evidence": {
+      "block_index": 33,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 19/10/2025",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-desenvolvimento-maturidade-institucional.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-desenvolvimento-maturidade-institucional.pdf",
+    "status": "expired",
+    "title": "Termo de referência para contratação de empresa de consultoria para aprimoramento da maturidade organizacional de 08 instituições de base no Estado do Pará."
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-plataforma-redes-coiab.pdf",
+    "deadline": "2025-11-04T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-plataforma-redes-coiab.pdf"
+    ],
+    "evidence": {
+      "block_index": 34,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 03/11/2025",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-plataforma-redes-coiab.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-plataforma-redes-coiab.pdf",
+    "status": "expired",
+    "title": "A The Nature Conservancy (TNC) e a Coordenação das Organizações Indígenas da Amazônia Brasileira (COIAB) lançam termo de referência para contratação de empresa especializada em desenvolvimento de software para construção de Plataforma."
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-diagnostico-socioambiental-fundiario-geoprocessamento-areas-guarani-kaiowa.pdf",
+    "deadline": "2025-09-15T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-diagnostico-socioambiental-fundiario-geoprocessamento-areas-guarani-kaiowa.pdf"
+    ],
+    "evidence": {
+      "block_index": 35,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 14/09/2025",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-diagnostico-socioambiental-fundiario-geoprocessamento-areas-guarani-kaiowa.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-diagnostico-socioambiental-fundiario-geoprocessamento-areas-guarani-kaiowa.pdf",
+    "status": "expired",
+    "title": "Termo de Referência para contratação de profissional para realizar diagnóstico socioambiental, fundiário e geoprocessamento de dados, visando caracterizar as áreas ocupadas por indígenas Guarani e Kaiowa, ainda não regularizadas e/ou em litígio possessório"
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-monitoramento-avaliacao.pdf",
+    "deadline": "2025-10-04T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-monitoramento-avaliacao.pdf"
+    ],
+    "evidence": {
+      "block_index": 36,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 03/10/2025",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-monitoramento-avaliacao.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-monitoramento-avaliacao.pdf",
+    "status": "expired",
+    "title": "Termo de referência para contratação de consultoria para a implementação das atividades de Monitoramento, Avaliação e Aprendizado (MEL) relacionadas a estratégias de projetos de Agricultura Familiar no estado do Pará"
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-gestao-governanca.pdf",
+    "deadline": "2025-10-01T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-gestao-governanca.pdf"
+    ],
+    "evidence": {
+      "block_index": 37,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 30/09/2025",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-gestao-governanca.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-gestao-governanca.pdf",
+    "status": "expired",
+    "title": "Termo de referência para contratação de consultoria para realizar treinamento sobre Gestão Financeira"
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-consultoria-tbc.pdf",
+    "deadline": "2025-10-01T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-consultoria-tbc.pdf"
+    ],
+    "evidence": {
+      "block_index": 38,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 30/09/2025",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-consultoria-tbc.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-consultoria-tbc.pdf",
+    "status": "expired",
+    "title": "Termo de referência para contratação de consultoria especializada em Turismo de Base Comunitária para TUC rio Manicoré."
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-treinamento-gestao-financeira.pdf",
+    "deadline": "2025-10-01T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-treinamento-gestao-financeira.pdf"
+    ],
+    "evidence": {
+      "block_index": 39,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 30/09/2025",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-treinamento-gestao-financeira.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-treinamento-gestao-financeira.pdf",
+    "status": "expired",
+    "title": "Termo de Referência para contratação de consultoria para realizar treinamento sobre Gestão Financeira."
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-secretaria-executiva-pepsa.pdf",
+    "deadline": "2025-09-27T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-secretaria-executiva-pepsa.pdf"
+    ],
+    "evidence": {
+      "block_index": 40,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 26/09/2025",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-secretaria-executiva-pepsa.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-secretaria-executiva-pepsa.pdf",
+    "status": "expired",
+    "title": "Termo de Referência para contratação de consultoria para Secretaria Executiva para o Grupo de Trabalho de Estruturação do Programa Estadual de Pagamento por Serviços Ambientais do Pará (GT-PEPSA/PA)"
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr//tdr-diagnostico-areas-guarani-kaiowa.pdf",
+    "deadline": "2025-09-15T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr//tdr-diagnostico-areas-guarani-kaiowa.pdf"
+    ],
+    "evidence": {
+      "block_index": 41,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 14/09/2025",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr//tdr-diagnostico-areas-guarani-kaiowa.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr//tdr-diagnostico-areas-guarani-kaiowa.pdf",
+    "status": "expired",
+    "title": "Termo de Referência para contratação de profissional para realizar diagnóstico multidisciplinar de natureza socioambiental e fundiária em áreas ocupadas por indígenas Guarani e Kaiowa, ainda não regularizadas e/ou em litígio possessório."
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-fundiario-gabinete-guarani-kaiowa.pdf",
+    "deadline": "2025-09-15T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-fundiario-gabinete-guarani-kaiowa.pdf"
+    ],
+    "evidence": {
+      "block_index": 42,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 14/09/2025",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-fundiario-gabinete-guarani-kaiowa.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-fundiario-gabinete-guarani-kaiowa.pdf",
+    "status": "expired",
+    "title": "Termo de Referência para contratação de profissional com especialidade em geoprocessamento para elaborar mapas temáticos e realizar levantamento fundiário de terras indígenas em fase de estudos de identificação e delimitação."
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-diagnostico-reservas-spi.pdf",
+    "deadline": "2025-09-15T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-diagnostico-reservas-spi.pdf"
+    ],
+    "evidence": {
+      "block_index": 43,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 14/09/2025",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-diagnostico-reservas-spi.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-diagnostico-reservas-spi.pdf",
+    "status": "expired",
+    "title": "Termo de Referência para contratação de profissional para realizar estudo de natureza histórica e arquivística sobre as áreas reservadas aos indígenas Guarani e Kaiowa nas primeiras décadas do século XX."
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/?consultancy=0120cea7166d40cd97cf110d0c7881ee923ea804e03622007b74ae619833bfd7",
+    "deadline": "2025-09-15T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [],
+    "evidence": {
+      "block_index": 44,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "dedup_resolution": "duplicate_tdr_url_fallback_id",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 14/09/2025",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-empresa-especializada-nap.pdf",
+      "shared_tdr_on_page": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-empresa-especializada-nap.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "consultancy:0120cea7166d40cd97cf110d0c7881ee923ea804e03622007b74ae619833bfd7",
+    "status": "expired",
+    "title": "Termo de Referência para contratação de profissional para realizar diagnóstico socioambiental, fundiário e geoprocessamento de dados, visando caracterizar as áreas ocupadas por indígenas Guarani e Kaiowa, ainda não regularizadas e/ou em litígio possessório"
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/?consultancy=456ab54dc6c0d9c8cd20dc049ce070055673bfcae8d39bff1fce752d7a7b5f92",
+    "deadline": "2025-08-28T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [],
+    "evidence": {
+      "block_index": 45,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "dedup_resolution": "duplicate_tdr_url_fallback_id",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 27/08/2025",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-empresa-especializada-nap.pdf",
+      "shared_tdr_on_page": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-empresa-especializada-nap.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "consultancy:456ab54dc6c0d9c8cd20dc049ce070055673bfcae8d39bff1fce752d7a7b5f92",
+    "status": "expired",
+    "title": "Termo de Referência para ontratação de empresa especializada para orientação de produtores das ações do Programa Pecuária Sustentável do Pará"
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-redes-governanca.pdf",
+    "deadline": "2025-08-25T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-redes-governanca.pdf"
+    ],
+    "evidence": {
+      "block_index": 46,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 24/08/2025",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-redes-governanca.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-redes-governanca.pdf",
+    "status": "expired",
+    "title": "Termo de Referência para contratação de consultoria para a criação e formação de Redes de Governança na Transamazônica e Sudeste Paraense"
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-consultor-tecnico-sema-am.pdf",
+    "deadline": "2025-08-27T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-consultor-tecnico-sema-am.pdf"
+    ],
+    "evidence": {
+      "block_index": 47,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 26/08/2025",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-consultor-tecnico-sema-am.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-consultor-tecnico-sema-am.pdf",
+    "status": "expired",
+    "title": "Termo de Referência para contratação de consultoria especializada no fortalecimento da política pública pesqueira e na implementação do ordenamento pesqueiro, com o objetivo de apoiar a execução do Acordo de Cooperação firmado entre a Secretaria de Estado do Meio Ambiente (SEMA) do Amazonas e a The Nature Conservancy (TNC)."
+  },
+  {
+    "canonical_url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TERMO_DE_REFERENCIA_ATER_VERSAO_010825.pdf",
+    "deadline": "2025-08-25T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TERMO_DE_REFERENCIA_ATER_VERSAO_010825.pdf"
+    ],
+    "evidence": {
+      "block_index": 48,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "captured_via": "direct-http-official-tnc-org-br-trabalhe-conosco",
+      "content_type": "text/html;charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo",
+      "http_status": 200,
+      "lifecycle_assessment": "Consultancy block with PRAZO deadline already past as of capture; counted as closed/expired (provenance only, not open-in-scope).",
+      "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "page_bytes": 91671,
+      "prazo_text": "PRAZO: 24/08/2025",
+      "principal_document": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TERMO_DE_REFERENCIA_ATER_VERSAO_010825.pdf"
+    },
+    "published_at": null,
+    "source_key": "tnc",
+    "source_record_id": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TERMO_DE_REFERENCIA_ATER_VERSAO_010825.pdf",
+    "status": "expired",
+    "title": "Termo de Referência para contratação de consultoria especializada para avaliação de formas de financiamento de serviços de Assistência Técnica e Extensão Rural (ATER) para ações de restauro florestal em propriedades rurais no âmbito das políticas públicas de incentivos do estado do Pará."
+  }
+]

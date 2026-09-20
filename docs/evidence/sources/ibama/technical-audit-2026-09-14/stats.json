@@ -1,0 +1,18 @@
+{
+  "candidate_cap_reached": 0,
+  "cap_reached": 0,
+  "details_fetched": 12,
+  "document_cap_reached": 0,
+  "errors": 0,
+  "inventory_parse_failed": 0,
+  "listings_fetched": 3,
+  "opportunities": 8,
+  "partial_inventory": 0,
+  "pncp_rejected": 0,
+  "policy_rejected": 39,
+  "records": 47,
+  "related_documents": 8,
+  "retifications_merged": 0,
+  "rss_fetched": 2,
+  "unsupported_documents": 0
+}

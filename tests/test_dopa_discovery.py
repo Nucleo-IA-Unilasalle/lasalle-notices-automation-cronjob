@@ -301,3 +301,147 @@ def test_detail_failure_marks_discovery_incomplete(monkeypatch):
     assert opportunities == []
     assert stats["detail_failures"] == 1
     assert stats["inventory_parse_failed"] == 1
+
+
+def test_resultado_preliminar_and_gabarito_definitivo_are_post_acts():
+    # Live DOPA regression 2026-09-14: ids 627632/627636/627635.
+    for body in (
+        "<p>EDITAL 098/2026</p><p>torna publico o Resultado Preliminar de "
+        "Inscritos e as Notas Preliminares, conforme Anexo Unico.</p>",
+        "<p>EDITAL 097/2026</p><p>O Gabarito Definitivo da Prova Objetiva "
+        "consta abaixo.</p>",
+        "<p>EDITAL 100/2026</p><p>As Respostas aos Recursos e o Gabarito "
+        "Definitivo das Provas Objetivas.</p>",
+    ):
+        record = {
+            "idConteudo": 627632,
+            "tituloConteudo": "Processo Seletivo; Professores; EDITAL 098/2026",
+            "dataConteudo": "14/09/2026",
+            "tipo": "Executivo",
+        }
+        detail = {
+            "protocolo": 627632,
+            "hierarquiaPoderSecao": "Executivo - Documentos Oficiais",
+            "hierarquiaTipoConteudo": "Documentos Oficiais",
+            "dataPublicacao": "15/09/2026",
+            "textoConteudo": body,
+            "anexos": [],
+        }
+        assert dopa.record_to_opportunity(
+            record, detail, snapshot_at=SNAPSHOT, now=SNAPSHOT
+        ) is None
+
+
+def test_sorteio_inscricoes_reverse_order_and_permanecer_aberto_are_open():
+    record = {
+        "idConteudo": 627176,
+        "tituloConteudo": "EDITAL DE SORTEIO 001/2026 - SORTEIO PUBLICO",
+        "dataConteudo": "09/09/2026",
+        "tipo": "Executivo",
+    }
+    detail = {
+        "protocolo": 627176,
+        "hierarquiaPoderSecao": "Executivo - Documentos Oficiais",
+        "hierarquiaTipoConteudo": "Documentos Oficiais",
+        "dataPublicacao": "15/09/2026",
+        "textoConteudo": (
+            "<p>EDITAL DE SORTEIO 001/2026</p><p>que estao abertas as "
+            "inscricoes para o sorteio. As inscricoes serao efetuadas do dia "
+            "25/09/2026 ao dia 09/10/2026.</p>"
+        ),
+        "anexos": [],
+    }
+    opportunity = dopa.record_to_opportunity(
+        record, detail, snapshot_at=SNAPSHOT, now=SNAPSHOT
+    )
+    assert opportunity is not None
+    assert opportunity["authoritative_status"] == "open"
+    assert opportunity["application_deadline"] == "2026-10-10T02:59:59+00:00"
+
+    record = {
+        "idConteudo": 627564,
+        "tituloConteudo": "CHAMAMENTO PUBLICO 012/2026, Oficinas",
+        "dataConteudo": "11/09/2026",
+        "tipo": "Executivo",
+    }
+    detail = {
+        "protocolo": 627564,
+        "hierarquiaPoderSecao": "Executivo - Editais",
+        "hierarquiaTipoConteudo": "Editais",
+        "dataPublicacao": "15/09/2026",
+        "textoConteudo": (
+            "<p>ABERTURA DE CHAMAMENTO PUBLICO 012/2026</p><p>O Edital de "
+            "Credenciamento permanecera aberto por 12 meses.</p>"
+        ),
+        "anexos": [],
+    }
+    opportunity = dopa.record_to_opportunity(
+        record, detail, snapshot_at=SNAPSHOT, now=SNAPSHOT
+    )
+    assert opportunity is not None
+    assert opportunity["authoritative_status"] == "open"
+    assert opportunity["application_deadline"] is None
+
+
+def test_ao_day_range_deadline_after_long_url():
+    # Live regression 627176: dates sit past a long form URL after "inscricoes".
+    deadline = dopa.extract_deadline(
+        "As inscricoes deverao ser efetuadas, exclusivamente, a Empresa "
+        "Publica, pelo endereco eletronico "
+        "http://sistemas.eptc.com.br/formularios-internet/sorteioPontoFixo.php, "
+        "do dia 25/09/2026 ao dia 09/10/2026.",
+        default_year=2026,
+        now=SNAPSHOT,
+    )
+    assert deadline == "2026-10-10T02:59:59+00:00"
+
+
+def test_edital_das_vagas_counts_as_open_substantive_signal():
+    record = {
+        "idConteudo": 627585,
+        "tituloConteudo": "EDITAL de Abertura Programas de Residencia Medica",
+        "dataConteudo": "14/09/2026",
+        "tipo": "Executivo",
+    }
+    detail = {
+        "protocolo": 627585,
+        "hierarquiaPoderSecao": "Executivo - Documentos Oficiais",
+        "hierarquiaTipoConteudo": "Documentos Oficiais",
+        "dataPublicacao": "15/09/2026",
+        "textoConteudo": (
+            "<p>EDITAL 002/2026</p><p>torna publico o Edital das vagas dos "
+            "Programas de Residencia Medica para ingresso no ano de 2027.</p>"
+        ),
+        "anexos": [],
+    }
+    opportunity = dopa.record_to_opportunity(
+        record, detail, snapshot_at=SNAPSHOT, now=SNAPSHOT
+    )
+    assert opportunity is not None
+    assert opportunity["authoritative_status"] == "open"
+
+
+def test_edital_de_abertura_residency_is_opportunity_signal():
+    record = {
+        "idConteudo": 627563,
+        "tituloConteudo": "EDITAL de Abertura Programa de Residencia PRIMURGE",
+        "dataConteudo": "14/09/2026",
+        "tipo": "Executivo",
+    }
+    detail = {
+        "protocolo": 627563,
+        "hierarquiaPoderSecao": "Executivo - Documentos Oficiais",
+        "hierarquiaTipoConteudo": "Documentos Oficiais",
+        "dataPublicacao": "15/09/2026",
+        "textoConteudo": (
+            "<p>EDITAL 001/2026</p><p>torna publico o Edital de Abertura as "
+            "vagas para o Programa de Residencia Integrada Multiprofissional "
+            "PRIMURGE para ingresso no ano de 2027.</p>"
+        ),
+        "anexos": [],
+    }
+    opportunity = dopa.record_to_opportunity(
+        record, detail, snapshot_at=SNAPSHOT, now=SNAPSHOT
+    )
+    assert opportunity is not None
+    assert opportunity["authoritative_status"] == "open"

@@ -1,0 +1,154 @@
+{
+  "captured_at_utc": "2026-09-14T21:54:23.176532Z",
+  "listing": {
+    "url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/",
+    "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/",
+    "status": 200,
+    "content_type": "text/html;charset=UTF-8",
+    "content_length": 192453,
+    "fetched_at_utc_start": "2026-09-14T21:54:19.969201Z",
+    "fetched_at_utc_end": "2026-09-14T21:54:20.583631Z",
+    "ok": true,
+    "error": null
+  },
+  "findings": {
+    "open_heading_found": true,
+    "closed_heading_found": true
+  },
+  "rows_parsed": 10,
+  "inventory_records": 20,
+  "status_counts": {
+    "open": 7,
+    "closed": 13,
+    "upcoming": 0,
+    "excluded": 0,
+    "unknown": 0
+  },
+  "out_of_scope": 1,
+  "details_fetched": 10,
+  "detail_cap": 20,
+  "detail_cap_reached": false,
+  "capture_log": [
+    {
+      "url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/",
+      "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/",
+      "status": 200,
+      "content_type": "text/html;charset=UTF-8",
+      "content_length": 192453,
+      "fetched_at_utc_start": "2026-09-14T21:54:19.969201Z",
+      "fetched_at_utc_end": "2026-09-14T21:54:20.583631Z",
+      "ok": true,
+      "error": null
+    },
+    {
+      "url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95223/Consultoria-para-intervencoes-em-campo-para-promover-a-gestao-integrada-dos-recursos-hidricos-e-as-financas-sustentaveis-no-Pantanal",
+      "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95223/Consultoria-para-intervencoes-em-campo-para-promover-a-gestao-integrada-dos-recursos-hidricos-e-as-financas-sustentaveis-no-Pantanal",
+      "status": 200,
+      "content_type": "text/html;charset=UTF-8",
+      "content_length": 67850,
+      "fetched_at_utc_start": "2026-09-14T21:54:20.608364Z",
+      "fetched_at_utc_end": "2026-09-14T21:54:20.833964Z",
+      "ok": true,
+      "error": null
+    },
+    {
+      "url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95221/Consultoria-para-revisao-e-atualizacao-dos-Guias-de-Criterios-Minimos-DCF-do-WWF-Brasil",
+      "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95221/Consultoria-para-revisao-e-atualizacao-dos-Guias-de-Criterios-Minimos-DCF-do-WWF-Brasil",
+      "status": 200,
+      "content_type": "text/html;charset=UTF-8",
+      "content_length": 71489,
+      "fetched_at_utc_start": "2026-09-14T21:54:20.854604Z",
+      "fetched_at_utc_end": "2026-09-14T21:54:21.103237Z",
+      "ok": true,
+      "error": null
+    },
+    {
+      "url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95184/Consultoria-para-engajamento-da-Rede-PainelMar",
+      "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95184/Consultoria-para-engajamento-da-Rede-PainelMar",
+      "status": 200,
+      "content_type": "text/html;charset=UTF-8",
+      "content_length": 71203,
+      "fetched_at_utc_start": "2026-09-14T21:54:21.119313Z",
+      "fetched_at_utc_end": "2026-09-14T21:54:21.358560Z",
+      "ok": true,
+      "error": null
+    },
+    {
+      "url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95182/Contratacao-de-assistente-de-apoio-operacional",
+      "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95182/Contratacao-de-assistente-de-apoio-operacional",
+      "status": 200,
+      "content_type": "text/html;charset=UTF-8",
+      "content_length": 71098,
+      "fetched_at_utc_start": "2026-09-14T21:54:21.371695Z",
+      "fetched_at_utc_end": "2026-09-14T21:54:21.612992Z",
+      "ok": true,
+      "error": null
+    },
+    {
+      "url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95100/Consultoria-para-priorizacao-operacional-do-Plano-de-Uso-Publico-do-Parque-Nacional-da-Amazonia",
+      "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95100/Consultoria-para-priorizacao-operacional-do-Plano-de-Uso-Publico-do-Parque-Nacional-da-Amazonia",
+      "status": 200,
+      "content_type": "text/html;charset=UTF-8",
+      "content_length": 71577,
+      "fetched_at_utc_start": "2026-09-14T21:54:21.627280Z",
+      "fetched_at_utc_end": "2026-09-14T21:54:21.857464Z",
+      "ok": true,
+      "error": null
+    },
+    {
+      "url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95081/Consultoria-para-elaboracao-de-publicacao-sobre-a-participacao-do-Brasil-na-COP17",
+      "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95081/Consultoria-para-elaboracao-de-publicacao-sobre-a-participacao-do-Brasil-na-COP17",
+      "status": 200,
+      "content_type": "text/html;charset=UTF-8",
+      "content_length": 71686,
+      "fetched_at_utc_start": "2026-09-14T21:54:21.867452Z",
+      "fetched_at_utc_end": "2026-09-14T21:54:22.112207Z",
+      "ok": true,
+      "error": null
+    },
+    {
+      "url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95080/Consultoria-para-acompanhamento-tecnico-de-duas-Unidades-Demonstrativas-de-transicao-de-areas-de-cacau",
+      "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95080/Consultoria-para-acompanhamento-tecnico-de-duas-Unidades-Demonstrativas-de-transicao-de-areas-de-cacau",
+      "status": 200,
+      "content_type": "text/html;charset=UTF-8",
+      "content_length": 71708,
+      "fetched_at_utc_start": "2026-09-14T21:54:22.123684Z",
+      "fetched_at_utc_end": "2026-09-14T21:54:22.375268Z",
+      "ok": true,
+      "error": null
+    },
+    {
+      "url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95044/Consultoria-para-redacao-e-traducao-de-textos-cientificos",
+      "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95044/Consultoria-para-redacao-e-traducao-de-textos-cientificos",
+      "status": 200,
+      "content_type": "text/html;charset=UTF-8",
+      "content_length": 71168,
+      "fetched_at_utc_start": "2026-09-14T21:54:22.388027Z",
+      "fetched_at_utc_end": "2026-09-14T21:54:22.630039Z",
+      "ok": true,
+      "error": null
+    },
+    {
+      "url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95041/Consultoria-para-Facilitacao-Desenvolvimento-e-Inteligencia-Estrategica-em-captacao-de-recursos-e-relacionamento-com-Financiadores",
+      "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95041/Consultoria-para-Facilitacao-Desenvolvimento-e-Inteligencia-Estrategica-em-captacao-de-recursos-e-relacionamento-com-Financiadores",
+      "status": 200,
+      "content_type": "text/html;charset=UTF-8",
+      "content_length": 74032,
+      "fetched_at_utc_start": "2026-09-14T21:54:22.652213Z",
+      "fetched_at_utc_end": "2026-09-14T21:54:22.888538Z",
+      "ok": true,
+      "error": null
+    },
+    {
+      "url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?94961/Consultoria-para-avaliacao-de-meio-termo-do-Projeto-Bem-Viver-e-Bioeconomia",
+      "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?94961/Consultoria-para-avaliacao-de-meio-termo-do-Projeto-Bem-Viver-e-Bioeconomia",
+      "status": 200,
+      "content_type": "text/html;charset=UTF-8",
+      "content_length": 73936,
+      "fetched_at_utc_start": "2026-09-14T21:54:22.912356Z",
+      "fetched_at_utc_end": "2026-09-14T21:54:23.153448Z",
+      "ok": true,
+      "error": null
+    }
+  ]
+}

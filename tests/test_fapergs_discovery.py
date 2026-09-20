@@ -238,14 +238,17 @@ class TestDiscoverCandidates:
         with patch_request_with_safe_redirects(responses):
             stats, candidates = discover_candidates()
 
-        assert stats["candidates"] == 2
+        # One principal PDF per detail page; sibling PDFs become
+        # related_document_urls metadata (not separate candidates).
+        assert stats["candidates"] == 1
         assert stats["listings_fetched"] == 1
         assert stats["details_fetched"] == 2
         urls = [c["url"] for c in candidates]
         assert "https://fapergs.rs.gov.br/upload/arquivos/2026/centelha.pdf" in urls
+        related = candidates[0]["metadata"].get("related_document_urls", [])
         assert (
             "https://fapergs.rs.gov.br/upload/arquivos/2026/anexo-centelha-2026.pdf?download=1"
-        ) in urls
+        ) in related
 
     def test_ajax_response_adds_detail_urls(self) -> None:
         from discover_fapergs_candidates import discover_candidates
@@ -393,3 +396,36 @@ class TestSubmitHandoff:
                 },
             ):
                 assert dpc.main() == 0
+
+
+class TestPrincipalPdfAndYearFolder:
+    """Regression: YYYYMM upload folders and one-principal-per-detail."""
+
+    def test_upload_month_folder_year_is_extracted(self) -> None:
+        import discover_fapergs_candidates as dpc
+
+        url = "https://fapergs.rs.gov.br/upload/arquivos/202109/28075734-regulamento-pdti.pdf"
+        assert dpc._extract_year_from_url(url) == 2021
+        assert dpc._passes_year_guard(url, min_year=2026) is False
+
+    def test_select_principal_prefers_edital_over_related(self) -> None:
+        import discover_fapergs_candidates as dpc
+
+        pdfs = [
+            "https://fapergs.rs.gov.br/upload/arquivos/202608/28110031-primeiro-aditivo-edital-06-2026-profix-cb-31-08.pdf",
+            "https://fapergs.rs.gov.br/upload/arquivos/202607/27144415-edital-06-2026-profix-cb.pdf",
+            "https://fapergs.rs.gov.br/upload/arquivos/202608/28110106-edital-06-2026-profix-cb-versao-consolidada-texto-original-com-as-alteracoes-incorporadas-em-31-08-2026.pdf",
+        ]
+        principal = dpc._select_principal_pdf(pdfs)
+        assert principal is not None
+        assert "27144415-edital-06-2026-profix-cb.pdf" in principal
+        assert "aditivo" not in principal
+        assert "consolidada" not in principal
+
+    def test_select_principal_returns_none_when_only_related(self) -> None:
+        import discover_fapergs_candidates as dpc
+
+        pdfs = [
+            "https://fapergs.rs.gov.br/upload/arquivos/202109/28075734-regulamento-pdti.pdf",
+        ]
+        assert dpc._select_principal_pdf(pdfs) is None

@@ -177,6 +177,81 @@ def test_portuguese_month_deadline_and_expired_extension_status() -> None:
     ) == "closed"
 
 
+def test_status_ignores_incidental_suspension_phrases() -> None:
+    """Debt/court phrases containing 'suspensa' must not mark the call suspended."""
+    now = datetime(2026, 9, 14, tzinfo=ibama.SAO_PAULO)
+    agu_text = (
+        "AGU prorroga edital de negociação\n"
+        "A AGU prorrogou o edital de transação. O prazo para adesão começou às 10h "
+        "do dia 9 de junho e vai até 30 de novembro de 2026. Créditos com a "
+        "exigibilidade suspensa por decisão judicial ficam de fora."
+    )
+    assert (
+        ibama._status(agu_text, "2026-11-30T23:59:59-03:00", now) == "open"
+    )
+    candonga_text = (
+        "Consulta Pública Candonga\n"
+        "A consulta pública foi prorrogada. Contribuições até 04/04/2026. "
+        "Há pedido de ativação do mecanismo de suspensão de prazos no TRF6."
+    )
+    assert (
+        ibama._status(candonga_text, "2026-04-04T23:59:59-03:00", now) == "closed"
+    )
+    assert (
+        ibama._status(
+            "Chamamento público\nO edital foi suspenso pela coordenação até novo aviso.",
+            None,
+            now,
+        )
+        == "suspended"
+    )
+
+
+def test_schedule_prefers_deadline_cued_date_over_publication_date() -> None:
+    """A DOU publication date after the deadline must not win as the deadline."""
+    description = (
+        "O Ibama informa que termina no dia 2 de setembro de 2026 o prazo para "
+        "envio de contribuições acerca das alterações propostas nos formulários. "
+        "A convocação da consulta foi publicada no Diário Oficial de 28 de junho "
+        "de 2026. Data de encerramento: 2 de setembro de 2026"
+    )
+    opens, deadline = ibama._extract_schedule(description, default_year=2026)
+    assert deadline is not None
+    assert deadline.startswith("2026-09-02")
+    assert deadline.endswith("23:59:59-03:00")
+
+
+def test_schedule_start_time_does_not_force_midnight_deadline() -> None:
+    """'começou às 10h' is a start time; the closing date stays end-of-day."""
+    description = (
+        "O prazo para adesão começou às 10h do dia 9 de junho e vai até "
+        "31 de janeiro de 2027 deste ano."
+    )
+    opens, deadline = ibama._extract_schedule(description, default_year=2026)
+    assert deadline is not None
+    assert deadline.startswith("2027-01-31")
+    assert deadline.endswith("23:59:59-03:00")
+
+
+def test_detail_published_before_min_year_is_rejected() -> None:
+    """Historical pages without a URL year must still respect the year guard."""
+    html = """
+    <html><head><meta name="DC.date.created" content="2020-03-06T22:45:00-03:00"/></head>
+    <body><h1>Audiência Pública apresenta Relatório de Impacto Ambiental</h1>
+    <main><p>O Ibama realizará Audiência Pública sobre o RIMA, nos termos do
+    Edital nº 14/2020. Participação social no licenciamento ambiental.</p>
+    <a href="rima.pdf">RIMA PDF</a></main></body></html>
+    """
+    assert (
+        ibama.parse_detail(
+            "https://www.gov.br/ibama/pt-br/assuntos/notas/copy_of_notas/audiencia-publica-rima-lt500",
+            html,
+            min_year=2026,
+        )
+        is None
+    )
+
+
 def test_discovered_payload_matches_coordinated_repo_a_enums_and_keys() -> None:
     stats, opportunities = ibama.discover_opportunities(fetch_html=_pages().__getitem__)
     assert stats["inventory_parse_failed"] == 0

@@ -1,0 +1,56 @@
+{
+  "capture_at_utc": "2026-09-14T22:18:23.331967+00:00",
+  "capture_day_local_brasilia": "2026-09-14",
+  "query_bound": {
+    "endpoint": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+    "uf": "RS",
+    "modalities": {
+      "6": "Pregao Eletronico",
+      "8": "Dispensa de Licitacao",
+      "4": "Concorrencia Eletronica"
+    },
+    "date_window": "20260914..20260914",
+    "min_year": 2026,
+    "page_size": 50,
+    "max_pages_per_query": 20,
+    "full_enumeration_within_bound": true
+  },
+  "queries": [
+    {
+      "modality": "6",
+      "total_registros": 184,
+      "total_paginas": 4,
+      "date_window": "20260914..20260914"
+    },
+    {
+      "modality": "8",
+      "total_registros": 425,
+      "total_paginas": 9,
+      "date_window": "20260914..20260914"
+    },
+    {
+      "modality": "4",
+      "total_registros": 30,
+      "total_paginas": 1,
+      "date_window": "20260914..20260914"
+    }
+  ],
+  "pages_fetched": 14,
+  "page_caps": [],
+  "counts": {
+    "open": 150,
+    "closed": 16,
+    "upcoming": 105,
+    "excluded": 0,
+    "unknown": 368
+  },
+  "unique_controls": 639,
+  "open_records_total": 150,
+  "open_records_in_inventory_file": 79,
+  "doc_lookups": 80,
+  "doc_failures": 0,
+  "errors": [],
+  "cap_reached": true,
+  "hard_open_cap": 50,
+  "rate_limit_events": 0
+}

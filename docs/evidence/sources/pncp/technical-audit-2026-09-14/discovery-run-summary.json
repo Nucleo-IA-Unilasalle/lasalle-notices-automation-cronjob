@@ -1,0 +1,30 @@
+{
+  "stats": {
+    "records": 15,
+    "pre_download_rejected": 0,
+    "document_lookups": 15,
+    "candidates": 47,
+    "document_failures": 0,
+    "search_failures": 2,
+    "candidate_cap_reached": 0,
+    "pncp_pages_attempted": 3,
+    "pncp_pages_completed": 1,
+    "pncp_raw_records": 30,
+    "pncp_records_enumerated": 15
+  },
+  "discovery_time_utc": "2026-09-14T22:34:43.742921+00:00",
+  "candidates_raw": 47,
+  "discovery_records": 15,
+  "checkpoint_written": false,
+  "env": {
+    "PNCP_LOOKBACK_DAYS": 1,
+    "PNCP_PROPOSTA_FORWARD_DAYS": 1,
+    "PNCP_MAX_CANDIDATES_PER_RUN": 200,
+    "PNCP_MAX_DOCUMENT_LOOKUPS_PER_RUN": 100,
+    "PNCP_DEFAULT_MODALITY_CODES": [
+      "4"
+    ],
+    "FEDERAL_CNPJS": [],
+    "SOURCE_WORK_ENABLED": null
+  }
+}

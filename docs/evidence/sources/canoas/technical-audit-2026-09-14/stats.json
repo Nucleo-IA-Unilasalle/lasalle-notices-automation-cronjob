@@ -1,0 +1,18 @@
+{
+  "attachment_cap_reached": 0,
+  "candidate_cap_reached": 0,
+  "daily_failures": 0,
+  "days_fetched": 3,
+  "days_requested": 3,
+  "duplicates": 0,
+  "errors": 0,
+  "opportunities": 1,
+  "policy_rejected": 47,
+  "publication_cap_reached": 0,
+  "records": 48,
+  "wordpress_failures": 0,
+  "wordpress_lookup_cap_reached": 0,
+  "wordpress_lookups": 1,
+  "wordpress_matches": 0,
+  "wordpress_pages_fetched": 0
+}

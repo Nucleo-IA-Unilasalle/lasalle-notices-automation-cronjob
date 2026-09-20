@@ -1,0 +1,59 @@
+2026-09-14T20:28:39.834967+00:00 GET https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais
+2026-09-14T20:28:42.274706+00:00 status=200 content_type=text/html;charset=utf-8 final_url=https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais bytes=184527
+2026-09-14T20:28:42.314084+00:00 parent-fieldname-text root found=True
+2026-09-14T20:28:42.314501+00:00 anchors=10 internal_details=6 listing_pdfs=0
+2026-09-14T20:28:42.314515+00:00   detail: https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/resolveuid/d15fde5a95621797247065f0234df6253563ae95
+2026-09-14T20:28:42.314520+00:00   detail: https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/licitacoes/licitacoes
+2026-09-14T20:28:42.314524+00:00   detail: https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/compras-diretas
+2026-09-14T20:28:42.314527+00:00   detail: https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/ata-de-registro-de-preco
+2026-09-14T20:28:42.314530+00:00   detail: https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/chamamento-publico-locacao-de-imovel
+2026-09-14T20:28:42.314533+00:00   detail: https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/portarias/portarias
+2026-09-14T20:28:42.314537+00:00 GET https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/resolveuid/d15fde5a95621797247065f0234df6253563ae95
+2026-09-14T20:28:42.387275+00:00 status=404 content_type=application/json final_url=https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/resolveuid/d15fde5a95621797247065f0234df6253563ae95 bytes=26
+2026-09-14T20:28:42.387310+00:00 GET https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/licitacoes/licitacoes
+2026-09-14T20:28:44.707510+00:00 status=200 content_type=text/html;charset=utf-8 final_url=https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/licitacoes/licitacoes bytes=186471
+2026-09-14T20:28:44.758201+00:00 detail_pdfs=0 deadline=None wording_open=True wording_closed=False
+2026-09-14T20:28:44.758241+00:00 GET https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/compras-diretas
+2026-09-14T20:28:46.860638+00:00 status=200 content_type=text/html;charset=utf-8 final_url=https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/compras-diretas bytes=177992
+2026-09-14T20:28:46.896985+00:00 detail_pdfs=0 deadline=None wording_open=False wording_closed=False
+2026-09-14T20:28:46.897021+00:00 GET https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/ata-de-registro-de-preco
+2026-09-14T20:28:49.184634+00:00 status=200 content_type=text/html;charset=utf-8 final_url=https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/ata-de-registro-de-preco bytes=178396
+2026-09-14T20:28:49.222196+00:00 detail_pdfs=0 deadline=None wording_open=False wording_closed=False
+2026-09-14T20:28:49.222229+00:00 GET https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/chamamento-publico-locacao-de-imovel
+2026-09-14T20:28:51.575243+00:00 status=200 content_type=text/html;charset=utf-8 final_url=https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/chamamento-publico-locacao-de-imovel bytes=185040
+2026-09-14T20:28:51.610546+00:00 detail_pdfs=9 deadline=None wording_open=False wording_closed=False
+2026-09-14T20:28:51.610575+00:00   pdf: https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/edital-de-chamamento-publico-locacao-imovel-02.pdf
+2026-09-14T20:28:51.610581+00:00   pdf: https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-jornal-brasilia.pdf
+2026-09-14T20:28:51.610584+00:00   pdf: https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-correio.pdf
+2026-09-14T20:28:51.610587+00:00   pdf: https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-dou.pdf
+2026-09-14T20:28:51.610590+00:00   pdf: https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/chamamento-publico-aviso-de-errata.pdf
+2026-09-14T20:28:51.610593+00:00   pdf: https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-resultado-chamamento-dou.pdf
+2026-09-14T20:28:51.610597+00:00   pdf: https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-resultado-chamamento-jornaldebrasilia.pdf
+2026-09-14T20:28:51.610601+00:00   pdf: https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-resultado-chamamento-correiobraziliense.pdf
+2026-09-14T20:28:51.610606+00:00   pdf: https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso.pdf
+2026-09-14T20:28:51.610640+00:00 GET https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/portarias/portarias
+2026-09-14T20:28:53.897772+00:00 status=200 content_type=text/html;charset=utf-8 final_url=https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/portarias/portarias bytes=180769
+2026-09-14T20:28:53.932053+00:00 detail_pdfs=1 deadline=None wording_open=False wording_closed=False
+2026-09-14T20:28:53.932089+00:00   pdf: https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/portarias/PORTARIAPREGOEIROSn22026_10_2016.pdf
+2026-09-14T20:28:53.932106+00:00 no detail cap reached
+2026-09-14T20:28:53.932111+00:00 records=10 errors=1
+
+# --- appended: principal document verification (independent, not via adapter) ---
+# 2026-09-14T20:31Z GET each chamamento PDF (requests, UA=lasalle-notices-independent-audit/1.0):
+#   edital-de-chamamento-publico-locacao-imovel-02.pdf -> 200 application/pdf 404713 bytes
+#   aviso-chamamento-publico-locacao-jornal-brasilia.pdf -> 200 application/pdf 283374 bytes
+#   aviso-chamamento-publico-locacao-correio.pdf -> 200 application/pdf 1194814 bytes
+#   aviso-chamamento-publico-locacao-dou.pdf -> 200 application/pdf 54639 bytes
+#   chamamento-publico-aviso-de-errata.pdf -> 200 application/pdf 136512 bytes
+#   aviso-resultado-chamamento-dou.pdf -> 200 application/pdf 53871 bytes
+#   aviso-resultado-chamamento-jornaldebrasilia.pdf -> 200 application/pdf 328721 bytes
+#   aviso-resultado-chamamento-correiobraziliense.pdf -> 200 application/pdf 1182239 bytes
+#   aviso.pdf -> 200 application/pdf 459779 bytes
+#   PORTARIAPREGOEIROSn22026_10_2016.pdf (portarias page) -> year 2016 in path; year-guard rejected by adapter
+# pypdf text extraction of edital-de-chamamento-publico-locacao-imovel-02.pdf (16 pages):
+#   item 7.1: propostas recebidas ate 18h de 20/01/2017 -> deadline 2017-01-20 -> status=closed as of 2026-09-14
+#   page text contains no open/future submission window; result notices (aviso-resultado-*) published -> process concluded
+# Year subpages under compras-diretas/{2016,2018,2020} and ata-de-registro-de-preco/{2017,2018,2020} hold
+#   historical PDFs only (all years < 2026); adapter does not recurse into them (single-level detail crawl),
+#   which is correct lifecycle filtering for the 2026 min-year policy. No open 2026 items found there.
+# licitacoes/licitacoes page: no PDFs under the editais prefix (navigation-only; redirects users to comprasnet).

@@ -1,0 +1,134 @@
+[
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "deadline",
+      "inventory": "2026-12-04T20:00:00Z",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "status",
+      "inventory": "open",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "captured_via": "webfetch-direct-official-page",
+      "detail_page_reverified_at_local": "2026-09-14 (second pass)",
+      "disposition_rationale": "Open CPSI call links only to worldlabs.org. The bndes adapter contract ingests BNDES-hosted edital PDFs only (host filter bndes.gov.br); external-only calls are explicitly out of scope, not missing candidates.",
+      "lifecycle_quote": "Chamadas em andamento / CPSI Nº 001/2026",
+      "link_host": "worldlabs.org (external; not bndes.gov.br PDF)",
+      "listing_url": "https://www.bndes.gov.br/wps/vanityurl/chamadadeinovacao",
+      "origin": "inventory",
+      "record": {
+        "canonical_url": "https://www.worldlabs.org/opportunity/inteligencia-dados-saude",
+        "content_type_validated": null,
+        "deadline": null,
+        "document_hashes": [],
+        "document_urls": [
+          "https://www.worldlabs.org/opportunity/inteligencia-dados-saude"
+        ],
+        "evidence": {
+          "captured_via": "webfetch-direct-official-page",
+          "detail_page_reverified_at_local": "2026-09-14 (second pass)",
+          "disposition_rationale": "Open CPSI call links only to worldlabs.org. The bndes adapter contract ingests BNDES-hosted edital PDFs only (host filter bndes.gov.br); external-only calls are explicitly out of scope, not missing candidates.",
+          "lifecycle_quote": "Chamadas em andamento / CPSI Nº 001/2026",
+          "link_host": "worldlabs.org (external; not bndes.gov.br PDF)",
+          "listing_url": "https://www.bndes.gov.br/wps/vanityurl/chamadadeinovacao",
+          "section": "Chamadas em andamento"
+        },
+        "hash_validated": null,
+        "published_at": null,
+        "reason_code": "out_of_scope",
+        "renderable": null,
+        "source_key": "bndes",
+        "source_record_id": "bndes-cpsi-001-2026-inteligencia-dados-saude",
+        "status": "open",
+        "title": "CPSI Nº 001/2026 – Desafio BNDES Inteligência de Dados em Saúde"
+      },
+      "section": "Chamadas em andamento"
+    },
+    "reason_code": "out_of_scope",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "captured_via": "webfetch-direct-official-page",
+      "detail_page_reverified_at_local": "2026-09-14 (second pass)",
+      "disposition_rationale": "Open CPSI call links only to worldlabs.org. The bndes adapter contract ingests BNDES-hosted edital PDFs only (host filter bndes.gov.br); external-only calls are explicitly out of scope, not missing candidates.",
+      "link_host": "worldlabs.org (external; not bndes.gov.br PDF)",
+      "origin": "inventory",
+      "record": {
+        "canonical_url": "https://www.worldlabs.org/opportunity/desafio-bndes-ia-juridica",
+        "content_type_validated": null,
+        "deadline": null,
+        "document_hashes": [],
+        "document_urls": [
+          "https://www.worldlabs.org/opportunity/desafio-bndes-ia-juridica"
+        ],
+        "evidence": {
+          "captured_via": "webfetch-direct-official-page",
+          "detail_page_reverified_at_local": "2026-09-14 (second pass)",
+          "disposition_rationale": "Open CPSI call links only to worldlabs.org. The bndes adapter contract ingests BNDES-hosted edital PDFs only (host filter bndes.gov.br); external-only calls are explicitly out of scope, not missing candidates.",
+          "link_host": "worldlabs.org (external; not bndes.gov.br PDF)",
+          "section": "Chamadas em andamento"
+        },
+        "hash_validated": null,
+        "published_at": null,
+        "reason_code": "out_of_scope",
+        "renderable": null,
+        "source_key": "bndes",
+        "source_record_id": "bndes-cpsi-003-2025-ia-juridica",
+        "status": "open",
+        "title": "CPSI Nº 003/2025 – Desafio BNDES IA Jurídica"
+      },
+      "section": "Chamadas em andamento"
+    },
+    "reason_code": "out_of_scope",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "captured_via": "webfetch-direct-official-page",
+      "detail_page_reverified_at_local": "2026-09-14 (second pass)",
+      "disposition_rationale": "Open CPSI call links only to worldlabs.org. The bndes adapter contract ingests BNDES-hosted edital PDFs only (host filter bndes.gov.br); external-only calls are explicitly out of scope, not missing candidates.",
+      "link_host": "worldlabs.org (external; not bndes.gov.br PDF)",
+      "origin": "inventory",
+      "record": {
+        "canonical_url": "https://www.worldlabs.org/opportunity/desafio-bndes-score-inteligente-de-mei-e-micro",
+        "content_type_validated": null,
+        "deadline": null,
+        "document_hashes": [],
+        "document_urls": [
+          "https://www.worldlabs.org/opportunity/desafio-bndes-score-inteligente-de-mei-e-micro"
+        ],
+        "evidence": {
+          "captured_via": "webfetch-direct-official-page",
+          "detail_page_reverified_at_local": "2026-09-14 (second pass)",
+          "disposition_rationale": "Open CPSI call links only to worldlabs.org. The bndes adapter contract ingests BNDES-hosted edital PDFs only (host filter bndes.gov.br); external-only calls are explicitly out of scope, not missing candidates.",
+          "link_host": "worldlabs.org (external; not bndes.gov.br PDF)",
+          "section": "Chamadas em andamento"
+        },
+        "hash_validated": null,
+        "published_at": null,
+        "reason_code": "out_of_scope",
+        "renderable": null,
+        "source_key": "bndes",
+        "source_record_id": "bndes-cpsi-002-2025-score-mei",
+        "status": "open",
+        "title": "CPSI Nº 002/2025 – Desafio BNDES Score Inteligente de MEI e Microempresas"
+      },
+      "section": "Chamadas em andamento"
+    },
+    "reason_code": "out_of_scope",
+    "severity": "non_blocking"
+  }
+]

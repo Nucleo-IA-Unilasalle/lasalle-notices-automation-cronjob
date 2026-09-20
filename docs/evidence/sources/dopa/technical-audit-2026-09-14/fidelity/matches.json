@@ -1,0 +1,330 @@
+[
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627176/detalhes",
+      "deadline": "2026-10-10T02:59:59+00:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627176/exportar-pdf",
+        "https://dopaonlineupload.procempa.com.br/dopaonlineupload/6167_ce_627176_1.pdf",
+        "https://dopaonlineupload.procempa.com.br/dopaonlineupload/6167_ce_627176_2.pdf"
+      ],
+      "published_at": "2026-09-15T03:00:00+00:00",
+      "source_key": "dopa",
+      "source_record_id": "627176",
+      "status": "open",
+      "title": "EDITAL DE SORTEIO Nº 001/2026 - SORTEIO PÚBLICO PARA CONCESSÃO DE LICENÇA DE ESTACIONAMENTO EM PONTO FIXO DE TÁXI DO MUNICÍPIO DE PORTO ALEGRE - PROCESSO 25.16.000023573-0"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-10-10T02:59:59Z",
+        "inventory": "2026-10-10T02:59:59Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627176/detalhes",
+      "content_type_validated": null,
+      "deadline": "2026-10-10T02:59:59+00:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627176/exportar-pdf"
+      ],
+      "evidence": {
+        "captured_via": "direct-official-api-urllib",
+        "detail_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627176/detalhes",
+        "lifecycle_quote": "edital de sorteio publico; inscricoes 25/09/2026-09/10/2026 (end-of-day AO deadline 2026-10-09 -> UTC 2026-10-10T02:59:59)",
+        "note": "independent lifecycle classification; not from repo adapter",
+        "search_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/busca-avancada?dataInicial=2026-09-12&dataFinal=2026-09-14&escopo=executivo"
+      },
+      "hash_validated": null,
+      "published_at": "2026-09-15T03:00:00+00:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "dopa",
+      "source_record_id": "627176",
+      "status": "open",
+      "title": "EDITAL DE SORTEIO 001/2026 SORTEIO PÚBLICO LICENÇA ESTACIONAMENTO TÁXI"
+    },
+    "match_key": "('dopa', '627176')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627460/detalhes",
+      "deadline": "2026-10-15T02:59:59+00:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627460/exportar-pdf"
+      ],
+      "published_at": "2026-09-15T03:00:00+00:00",
+      "source_key": "dopa",
+      "source_record_id": "627460",
+      "status": "open",
+      "title": "26.0.000072486-5 Parque Gabriel Knijnik AVISO DE PRORROGAÇÃO EDITAL DE CHAMAMENTO PÚBLICO DPC-SMP 004/2026 PROCESSO 26.0.000072486-5"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-10-15T02:59:59Z",
+        "inventory": "2026-10-15T02:59:59Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627460/detalhes",
+      "content_type_validated": null,
+      "deadline": "2026-10-15T02:59:59+00:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627460/exportar-pdf"
+      ],
+      "evidence": {
+        "captured_via": "direct-official-api-urllib",
+        "detail_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627460/detalhes",
+        "lifecycle_quote": "prorrogacao ate 14/10/2026 18h AO",
+        "note": "independent lifecycle classification; not from repo adapter",
+        "search_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/busca-avancada?dataInicial=2026-09-12&dataFinal=2026-09-14&escopo=executivo"
+      },
+      "hash_validated": null,
+      "published_at": "2026-09-15T03:00:00+00:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "dopa",
+      "source_record_id": "627460",
+      "status": "open",
+      "title": "AVISO DE PRORROGAÇÃO EDITAL DE CHAMAMENTO PÚBLICO DPC-SMP 004/2026"
+    },
+    "match_key": "('dopa', '627460')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627563/detalhes",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627563/exportar-pdf",
+        "https://dopaonlineupload.procempa.com.br/dopaonlineupload/6167_ce_627563_1.pdf"
+      ],
+      "published_at": "2026-09-15T03:00:00+00:00",
+      "source_key": "dopa",
+      "source_record_id": "627563",
+      "status": "open",
+      "title": "EDITAL de Abertura Programa de Residência PRIMURGE - EDITAL 001/2026 RESIDÊNCIA INTEGRADA MULTIPROFISSIONAL EM SAÚDE COM ÊNFASE EM URGÊNCIA E EMERGÊNCIA - PRIMURGE PROCESSO 24.0.000088173-9"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627563/detalhes",
+      "content_type_validated": null,
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627563/exportar-pdf"
+      ],
+      "evidence": {
+        "captured_via": "direct-official-api-urllib",
+        "detail_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627563/detalhes",
+        "lifecycle_quote": "edital de abertura PRIMURGE 2027 publicado 14/09/2026; prazo no anexo PDF",
+        "note": "independent lifecycle classification; not from repo adapter",
+        "search_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/busca-avancada?dataInicial=2026-09-12&dataFinal=2026-09-14&escopo=executivo"
+      },
+      "hash_validated": null,
+      "published_at": "2026-09-15T03:00:00+00:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "dopa",
+      "source_record_id": "627563",
+      "status": "open",
+      "title": "EDITAL 001/2026 RESIDÊNCIA PRIMURGE"
+    },
+    "match_key": "('dopa', '627563')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627564/detalhes",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627564/exportar-pdf",
+        "https://dopaonlineupload.procempa.com.br/dopaonlineupload/6167_ce_627564_1.pdf",
+        "https://dopaonlineupload.procempa.com.br/dopaonlineupload/6167_ce_627564_2.pdf",
+        "https://dopaonlineupload.procempa.com.br/dopaonlineupload/6167_ce_627564_3.pdf",
+        "https://dopaonlineupload.procempa.com.br/dopaonlineupload/6167_ce_627564_4.pdf"
+      ],
+      "published_at": "2026-09-15T03:00:00+00:00",
+      "source_key": "dopa",
+      "source_record_id": "627564",
+      "status": "open",
+      "title": "CHAMAMENTO PÚBLICO 012/2026, Oficinas, Oficineiros PROCESSO 25.0.000060674-2"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627564/detalhes",
+      "content_type_validated": null,
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627564/exportar-pdf"
+      ],
+      "evidence": {
+        "captured_via": "direct-official-api-urllib",
+        "detail_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627564/detalhes",
+        "lifecycle_quote": "chamamento publico credenciamento permanece aberto 12 meses",
+        "note": "independent lifecycle classification; not from repo adapter",
+        "search_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/busca-avancada?dataInicial=2026-09-12&dataFinal=2026-09-14&escopo=executivo"
+      },
+      "hash_validated": null,
+      "published_at": "2026-09-15T03:00:00+00:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "dopa",
+      "source_record_id": "627564",
+      "status": "open",
+      "title": "CHAMAMENTO PÚBLICO 012/2026 CREDENCIAMENTO DE OFICINEIROS"
+    },
+    "match_key": "('dopa', '627564')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627585/detalhes",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627585/exportar-pdf",
+        "https://dopaonlineupload.procempa.com.br/dopaonlineupload/6167_ce_627585_1.pdf"
+      ],
+      "published_at": "2026-09-15T03:00:00+00:00",
+      "source_key": "dopa",
+      "source_record_id": "627585",
+      "status": "open",
+      "title": "EDITAL de Abertura Programas de Residência Médica R4 em Medicina Fetal e Endoscopia Ginecológica do Hospital Materno Infantil Presidente Vargas – HMIPV - SEI: 26.0.000139584-9 EDITAL 002/2026"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627585/detalhes",
+      "content_type_validated": null,
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627585/exportar-pdf"
+      ],
+      "evidence": {
+        "captured_via": "direct-official-api-urllib",
+        "detail_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627585/detalhes",
+        "lifecycle_quote": "edital de abertura residencia medica 2027 publicado 14/09/2026; prazo no anexo PDF",
+        "note": "independent lifecycle classification; not from repo adapter",
+        "search_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/busca-avancada?dataInicial=2026-09-12&dataFinal=2026-09-14&escopo=executivo"
+      },
+      "hash_validated": null,
+      "published_at": "2026-09-15T03:00:00+00:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "dopa",
+      "source_record_id": "627585",
+      "status": "open",
+      "title": "EDITAL 002/2026 RESIDÊNCIA MÉDICA MEDICINA FETAL E ENDOSCOPIA"
+    },
+    "match_key": "('dopa', '627585')",
+    "match_method": "stable_id"
+  }
+]

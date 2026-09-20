@@ -1,0 +1,10 @@
+{
+  "open": 10,
+  "closed": 2,
+  "upcoming": 0,
+  "excluded": 123,
+  "unknown": 10,
+  "records": 145,
+  "duplicate_rows": 0,
+  "detail_failures": 0
+}

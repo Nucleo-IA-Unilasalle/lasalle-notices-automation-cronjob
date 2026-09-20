@@ -1,0 +1,174 @@
+# Source Fidelity Report
+
+## Quantitative Gates
+
+- Inventory accounting: 100.0% (15/15)
+- Candidate traceability: 100.0% (15/15)
+
+### Blocking exception counts
+- authoritative_deadline_mismatch: 0
+- authoritative_status_mismatch: 0
+- duplicate_identity: 0
+- extra_submission: 0
+- identity_mismatch: 0
+- missing_open: 0
+- parser_failure: 0
+- renderability_mismatch: 0
+
+Total blocking exceptions: 0
+
+## Matches
+
+- key=('pncp', '87489910000168-1-000083/2026') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-10-06T11:30:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('pncp', '87897740000150-1-000157/2026') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-09-29T13:30:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('pncp', '87897740000150-1-000158/2026') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-09-29T13:30:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('pncp', '87897740000150-1-000159/2026') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-09-29T13:30:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('pncp', '88084942000146-1-000477/2026') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-09-28T17:00:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('pncp', '88368386000130-1-000290/2026') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-11-09T12:00:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('pncp', '88743604000179-1-000071/2026') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-09-28T12:59:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('pncp', '88743604000179-1-000072/2026') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-09-28T15:59:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('pncp', '88818299000137-1-000302/2026') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-10-26T11:30:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('pncp', '88818299000137-1-000303/2026') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-10-26T11:31:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('pncp', '90832619000155-1-000490/2026') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-10-21T12:29:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('pncp', '92000215000120-1-000183/2026') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-09-28T16:50:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('pncp', '92242080000100-1-000156/2026') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-10-20T12:00:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('pncp', '92406248000175-1-000158/2026') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-09-18T12:00:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('pncp', '95591764000105-1-000236/2026') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-09-28T12:00:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+
+## Exceptions
+
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-09-18T12:00:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-09-28T12:00:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-09-28T12:59:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-09-28T15:59:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-09-28T16:50:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-09-28T17:00:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-09-29T13:30:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-09-29T13:30:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-09-29T13:30:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-10-06T11:30:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-10-20T12:00:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-10-21T12:29:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-10-26T11:30:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-10-26T11:31:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-11-09T12:00:00Z
+  - origin: discovery

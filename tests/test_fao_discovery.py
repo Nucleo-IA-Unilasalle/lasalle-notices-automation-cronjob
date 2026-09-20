@@ -107,6 +107,51 @@ class TestExtractFaoPdfUrls:
             "https://www.fao.org/resources/procurement-2026.pdf",
         ]
 
+    def test_excludes_strategy_and_resolution_governance_pdfs(self) -> None:
+        """Regression for the 2026-09-14 audit: the official funding page
+        is the Funding Strategy policy page. ``funding strategy`` and
+        ``resolution`` tokens matched governance PDFs (nb780en, no028en,
+        cc3636en) that are never open opportunities.
+        """
+        from bs4 import BeautifulSoup
+
+        from discover_fao_candidates import extract_fao_pdf_urls
+
+        html = """
+        <html><body>
+          <a href="/3/nb780en/nb780en.pdf">Funding Strategy</a>
+          <a href="/3/nb780en/nb780en.pdf#page=7">Results Framework for the Funding Strategy</a>
+          <a href="/3/no028en/no028en.pdf">Resolution 4/2023</a>
+          <a href="/3/cc3636en/cc3636en.pdf">The Funding Strategy of the ITPGRFA 2020-2025</a>
+          <a href="/3/cc0235en/cc0235en.pdf">Text of the Fifth Call for Proposals</a>
+        </body></html>
+        """
+        soup = BeautifulSoup(html, "html.parser")
+        assert extract_fao_pdf_urls(soup, LISTING_URL) == [
+            "https://www.fao.org/3/cc0235en/cc0235en.pdf",
+        ]
+
+    def test_official_funding_page_fixture_yields_no_governance_pdfs(self) -> None:
+        """Live-page shape (2026-09-14): only strategy/resolution PDFs are
+        present; the narrowed signal set must discover none of them.
+        """
+        from bs4 import BeautifulSoup
+
+        from discover_fao_candidates import extract_fao_pdf_urls
+
+        html = """
+        <html><body>
+          <a href="/3/nb780en/nb780en.pdf" title="Opens external link">Funding Strategy</a>
+          <a href="/3/nb780en/nb780en.pdf#page=7">Results Framework for the Funding Strategy</a>
+          <a href="/3/nb780en/nb780en.pdf">Resolution 3/2019</a>
+          <a href="/3/no028en/no028en.pdf">Resolution 4/2023</a>
+          <a href="/3/cc3636en/cc3636en.pdf">The Funding Strategy of the ITPGRFA 2020-2025</a>
+          <a href="/3/cc3626en/cc3626en.pdf">Food Processing Industry Engagement Strategy</a>
+        </body></html>
+        """
+        soup = BeautifulSoup(html, "html.parser")
+        assert extract_fao_pdf_urls(soup, LISTING_URL) == []
+
 
 class TestListingUrl:
     def test_default_listing_url(self) -> None:

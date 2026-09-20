@@ -1,0 +1,63 @@
+{
+  "captured_at_utc": "2026-09-14T20:40:00Z",
+  "listing_url": "https://fundacaogrupoboticario.org.br/",
+  "via": "independent: direct HTTP + playwright-chromium (no adapter import)",
+  "budget_max_requests": 40,
+  "request_count_approx": 16,
+  "errors": [],
+  "pagination_caps_hit": false,
+  "detail_cap": 20,
+  "detail_urls_found_count": 2,
+  "detail_urls_found": [
+    "https://fundacaogrupoboticario.org.br/sprint-chuvas-el-nino",
+    "https://fundacaogrupoboticario.org.br/teia-sprint-chuvas-do-el-nino"
+  ],
+  "http_listing": {
+    "url": "https://fundacaogrupoboticario.org.br/",
+    "http_status": 200,
+    "content_type": "text/html; charset=UTF-8",
+    "bytes": 130868,
+    "fetched_at_utc": "2026-09-14T20:25:39.441868Z"
+  },
+  "playwright_listing": {
+    "url": "https://fundacaogrupoboticario.org.br/",
+    "http_status": 200,
+    "anchors_after_render": 85,
+    "detail_urls": 2
+  },
+  "detail_verifications": [
+    {
+      "url": "https://fundacaogrupoboticario.org.br/teia-sprint-chuvas-do-el-nino/",
+      "http_status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "status": "closed",
+      "deadline": "2026-08-03",
+      "pdf_anchors": 0
+    },
+    {
+      "url": "https://fundacaogrupoboticario.org.br/sprint-chuvas-el-nino/",
+      "http_status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "status": "closed",
+      "deadline": null,
+      "pdf_anchors": 0
+    }
+  ],
+  "lifecycle_accounting": {
+    "open": 0,
+    "closed": 2,
+    "upcoming": 0,
+    "excluded": 0,
+    "unknown": 0
+  },
+  "principal_documents": {
+    "pdf_anchors_on_detail_pages": 0,
+    "external_edital_links": [
+      "https://sprint.teiadesolucoes.com.br",
+      "https://sprintchuvas.paniclobster.com/"
+    ]
+  },
+  "goias_fapeg_links_on_listing": 0,
+  "signal_tokens": ["chamada", "edital", "sprint", "bolsa"],
+  "notes": "Static and rendered listing agree on two detail URLs. Both sprint pages closed as of capture; open inventory empty; adapter PDF discovery correctly emits zero candidates."
+}

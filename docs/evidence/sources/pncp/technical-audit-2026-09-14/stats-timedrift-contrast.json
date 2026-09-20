@@ -1,0 +1,13 @@
+{
+  "records": 27,
+  "pre_download_rejected": 0,
+  "document_lookups": 27,
+  "candidates": 74,
+  "document_failures": 0,
+  "search_failures": 1,
+  "candidate_cap_reached": 0,
+  "pncp_pages_attempted": 5,
+  "pncp_pages_completed": 4,
+  "pncp_raw_records": 150,
+  "pncp_records_enumerated": 27
+}

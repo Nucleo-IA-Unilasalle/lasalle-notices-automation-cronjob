@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import os
 import re
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Callable
 from urllib.parse import urljoin, urlsplit, urlunsplit
 
@@ -16,6 +16,24 @@ from scraper_transport import fetch_html_with_retry
 FBDS_LISTING_URL = "https://restaura-amazonia.fbds.org.br/Editais"
 FBDS_MAX_DETAILS_PER_RUN = int(os.environ.get("FBDS_MAX_DETAILS_PER_RUN", "20"))
 FBDS_FETCH_TIMEOUT_SECONDS = int(os.environ.get("FBDS_FETCH_TIMEOUT_SECONDS", "30"))
+
+# Brazil no longer observes DST; official edital copy states "horário de Brasília".
+_BRASILIA = timezone(timedelta(hours=-3))
+
+_CLOSED_BADGE_RE = re.compile(r"\b(conclu[ií]dos?|conclu[ií]das?|encerrados?|encerradas?)\b", re.I)
+_OPEN_BADGE_RE = re.compile(r"\b(abertos?|abertas?)\b", re.I)
+_STATUS_TEXT_RE = re.compile(
+    r"\b(abertos?|abertas?|encerrados?|encerradas?|conclu[ií]dos?|conclu[ií]das?)\b",
+    re.I,
+)
+_DEADLINE_KEYWORD_RE = re.compile(
+    r"(?:prazo|encerramento|inscri(?:cao|ções|coes))", re.I
+)
+_DEADLINE_DATE_RE = re.compile(r"(\d{2})/(\d{2})/(\d{4})")
+_DEADLINE_CLOCK_RE = re.compile(
+    r"at[eé]\s+as?\s+(\d{1,2}):(\d{2}).{0,80}?Bras[íi]lia",
+    re.I,
+)
 
 
 def canonical_url(url: str) -> str:
@@ -61,6 +79,60 @@ def extract_fbds_records(listing_html: str, listing_url: str) -> list[dict[str, 
     return records
 
 
+def _normalize_status_token(token: str) -> str:
+    lowered = token.lower()
+    if lowered.startswith(("conclu", "encerrado", "encerrada")):
+        return "closed"
+    if lowered.startswith("abert"):
+        return "open"
+    return "unknown"
+
+
+def _status_from_badge(content: Tag) -> str | None:
+    """Read the SPIP status badge (e.g. ``Edital 004/2025 ... Concluído``)."""
+    for badge in content.select(".button, .tag, .badge"):
+        if not isinstance(badge, Tag):
+            continue
+        badge_text = badge.get_text(" ", strip=True)
+        if not badge_text:
+            continue
+        closed = _CLOSED_BADGE_RE.search(badge_text)
+        if closed:
+            return "closed"
+        opened = _OPEN_BADGE_RE.search(badge_text)
+        if opened:
+            return "open"
+    return None
+
+
+def _extract_deadline(text: str) -> str | None:
+    """Capture the submission deadline, preferring the Brasília clock form."""
+    clock = _DEADLINE_CLOCK_RE.search(text)
+    if clock:
+        clock_window = text[clock.end() : clock.end() + 80]
+        date_match = _DEADLINE_DATE_RE.search(clock_window)
+        if date_match:
+            hour, minute, day, month, year = (
+                int(clock.group(1)),
+                int(clock.group(2)),
+                int(date_match.group(1)),
+                int(date_match.group(2)),
+                int(date_match.group(3)),
+            )
+            return datetime(year, month, day, hour, minute, tzinfo=_BRASILIA).isoformat()
+    for keyword in _DEADLINE_KEYWORD_RE.finditer(text):
+        window = text[keyword.end() : keyword.end() + 120]
+        date_match = _DEADLINE_DATE_RE.search(window)
+        if date_match:
+            day, month, year = (
+                int(date_match.group(1)),
+                int(date_match.group(2)),
+                int(date_match.group(3)),
+            )
+            return datetime(year, month, day, 23, 59, tzinfo=_BRASILIA).isoformat()
+    return None
+
+
 def parse_fbds_detail(
     record: dict[str, str],
     detail_html: str,
@@ -74,18 +146,11 @@ def parse_fbds_detail(
     heading = content.find(["h1", "h2"])
     title = heading.get_text(" ", strip=True) if isinstance(heading, Tag) else record["title"]
     text = re.sub(r"\s+", " ", content.get_text(" ", strip=True)).strip()
-    deadline_match = re.search(
-        r"(?:prazo|encerramento|inscri(?:cao|ções|coes)).{0,40}?(\d{2}/\d{2}/\d{4})",
-        text,
-        re.I,
-    )
-    deadline = None
-    if deadline_match:
-        deadline = datetime.strptime(deadline_match.group(1), "%d/%m/%Y").replace(
-            hour=23, minute=59, tzinfo=timezone.utc
-        ).isoformat()
-    status_match = re.search(r"\b(aberto|aberta|encerrado|encerrada)\b", text, re.I)
-    status = status_match.group(1).lower() if status_match else "unknown"
+    deadline_value = _extract_deadline(text)
+    status = _status_from_badge(content) if isinstance(content, Tag) else None
+    if status is None:
+        status_match = _STATUS_TEXT_RE.search(text)
+        status = _normalize_status_token(status_match.group(1)) if status_match else "unknown"
     documents: list[dict[str, object]] = []
     seen: set[str] = set()
     for link in content.find_all("a"):
@@ -107,7 +172,7 @@ def parse_fbds_detail(
                 "url": url,
                 "filename": urlsplit(url).path.rsplit("/", 1)[-1],
                 "mime_type": "application/zip" if kind == "zip" else "application/pdf",
-                "is_principal": False,
+                "is_principal": link.get("id") == "Download",
                 "is_renderable": False,
             }
         )
@@ -125,7 +190,7 @@ def parse_fbds_detail(
         "source_published_at": None,
         "source_updated_at": None,
         "proposal_opens_at": None,
-        "application_deadline": deadline,
+        "application_deadline": deadline_value,
         "source_snapshot_at": snapshot.astimezone(timezone.utc).isoformat(),
         "source_markdown": markdown,
         "source_content_hash": "",
