@@ -1,4 +1,4 @@
-"""UNEP BeautifulSoup source discoverer for the cronjob pipeline.
+r"""UNEP BeautifulSoup source discoverer for the cronjob pipeline.
 
 Phase 3 port of
 ``lasalle-notices-automation/app/services/scraper/sources/unep.py``.
@@ -17,14 +17,21 @@ anti-bot challenge is bypassed because the shared
 ``User-Agent`` header (the Mozilla/Chrome string defined in
 ``scraper_transport.DEFAULT_HEADERS``) on every request.
 
-Signal pattern matches ``call[s_-]*for[s_-]*proposals?``,
-``concept[\s_-]*note``, ``gfc[\s_-]*fund``,
-``applying[\s_-]*for[\s_-]*funding``, ``request[\s_-]*for[\s_-]*proposals?``
+Signal pattern matches open-call tokens only:
+``call[\s_-]*for[\s_-]*proposals?``,
+``applying[\s_-]*for[\s_-]*funding``,
+``request[\s_-]*for[\s_-]*proposals?``
 (case-insensitive, tolerant of hyphen/underscore/space separators).
-PDF anchors whose href / path / text / title / aria-label does not
-carry one of those tokens are dropped. Tracking query parameters
-(``utm_*``, ``fbclid``, ``gclid``, ``mc_cid``, ``mc_eid``) are
-stripped before the URL is canonicalised.
+The generic fund branding token ``gfc[\s_-]*fund`` and the standing
+application template token ``concept[\s_-]*note`` are deliberately
+**not** signals: the official applying-for-funding page permanently
+links GFC Fund guidance PDFs (EN/FR/SP) and a concept-note template
+that remain present between application rounds (the second round
+closed 15 December 2025), and matching them produced false-positive
+candidates. PDF anchors whose href / path / text / title / aria-label
+does not carry an open-call token are dropped. Tracking query
+parameters (``utm_*``, ``fbclid``, ``gclid``, ``mc_cid``, ``mc_eid``)
+are stripped before the URL is canonicalised.
 
 Filter pipeline (per plan §9):
 - ``UNEP_MIN_NOTICE_YEAR`` (default ``2026``) drops URLs whose
@@ -104,20 +111,21 @@ def _passes_year_guard(url: str, *, min_year: int) -> bool:
 def extract_unep_pdf_urls(listing_html: str, listing_url: str) -> list[str]:
     """Discover PDF URLs from the UNEP listing HTML.
 
-    Verbatim port of ``extract_unep_pdf_urls`` from the FastAPI repo.
     The extractor keeps only ``.pdf`` anchors on the ``unep.org``
-    host (and subdomains) that carry one of the UNEP signal tokens
-    (``call for proposals``, ``concept note``, ``gfc fund``,
-    ``applying for funding``, ``request for proposals``), strips
-    tracking query parameters (``utm_*``, ``fbclid``, ``gclid``,
-    ``mc_cid``, ``mc_eid``), and canonicalises the netloc to
-    ``www.unep.org`` when the host is bare ``unep.org``.
+    host (and subdomains, including ``wedocs.unep.org``) that carry an
+    open-call signal token (``call for proposals``, ``applying for
+    funding``, ``request for proposals``). Generic ``gfc fund`` branding
+    and standing ``concept note`` template anchors are excluded so
+    guidance/application-form PDFs linked between rounds are not emitted
+    as candidates. Tracking query parameters (``utm_*``, ``fbclid``,
+    ``gclid``, ``mc_cid``, ``mc_eid``) are stripped and the netloc is
+    canonicalised to ``www.unep.org`` when the host is bare ``unep.org``.
     """
     soup = BeautifulSoup(listing_html, "html.parser")
     discovered: list[str] = []
     seen: set[str] = set()
     signal_pattern = re.compile(
-        r"(call[\s_-]*for[\s_-]*proposals?|concept[\s_-]*note|gfc[\s_-]*fund|applying[\s_-]*for[\s_-]*funding|request[\s_-]*for[\s_-]*proposals?)",
+        r"(call[\s_-]*for[\s_-]*proposals?|applying[\s_-]*for[\s_-]*funding|request[\s_-]*for[\s_-]*proposals?)",
         re.IGNORECASE,
     )
     tracking_prefixes = ("utm_",)

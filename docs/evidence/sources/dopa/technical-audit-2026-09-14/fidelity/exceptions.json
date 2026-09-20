@@ -1,0 +1,98 @@
+[
+  {
+    "evidence": {
+      "captured_via": "direct-official-api-urllib",
+      "detail_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627632/detalhes",
+      "lifecycle_quote": "post_act: resultado preliminar de inscritos; prazo recurso 16/09/2026",
+      "note": "post-publication act; must not be emitted as opportunity",
+      "origin": "inventory",
+      "record": {
+        "canonical_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627632/detalhes",
+        "content_type_validated": null,
+        "deadline": null,
+        "document_hashes": [],
+        "document_urls": [],
+        "evidence": {
+          "captured_via": "direct-official-api-urllib",
+          "detail_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627632/detalhes",
+          "lifecycle_quote": "post_act: resultado preliminar de inscritos; prazo recurso 16/09/2026",
+          "note": "post-publication act; must not be emitted as opportunity"
+        },
+        "hash_validated": null,
+        "published_at": "2026-09-15T03:00:00+00:00",
+        "reason_code": "out_of_scope",
+        "renderable": null,
+        "source_key": "dopa",
+        "source_record_id": "627632",
+        "status": "excluded",
+        "title": "Proc.: 26.0.000113739-4; Processo Seletivo; Professores; EDITAL 098/2026"
+      }
+    },
+    "reason_code": "out_of_scope",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "captured_via": "direct-official-api-urllib",
+      "detail_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627635/detalhes",
+      "lifecycle_quote": "post_act: respostas recursos + gabarito definitivo + notas preliminares",
+      "note": "post-publication act; must not be emitted as opportunity",
+      "origin": "inventory",
+      "record": {
+        "canonical_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627635/detalhes",
+        "content_type_validated": null,
+        "deadline": null,
+        "document_hashes": [],
+        "document_urls": [],
+        "evidence": {
+          "captured_via": "direct-official-api-urllib",
+          "detail_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627635/detalhes",
+          "lifecycle_quote": "post_act: respostas recursos + gabarito definitivo + notas preliminares",
+          "note": "post-publication act; must not be emitted as opportunity"
+        },
+        "hash_validated": null,
+        "published_at": "2026-09-15T03:00:00+00:00",
+        "reason_code": "out_of_scope",
+        "renderable": null,
+        "source_key": "dopa",
+        "source_record_id": "627635",
+        "status": "excluded",
+        "title": "Proc.: 26.0.000069920-8; Concurso Público; Administrador, Assistente Social, Cirurgião-Dentista, Fonoaudiólogo. Psicólogo; Fundação La Salle; Edital 100 CONCURSOS PÚBLICOS 869 A 87"
+      }
+    },
+    "reason_code": "out_of_scope",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "captured_via": "direct-official-api-urllib",
+      "detail_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627636/detalhes",
+      "lifecycle_quote": "post_act: gabarito definitivo prova objetiva",
+      "note": "post-publication act; must not be emitted as opportunity",
+      "origin": "inventory",
+      "record": {
+        "canonical_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627636/detalhes",
+        "content_type_validated": null,
+        "deadline": null,
+        "document_hashes": [],
+        "document_urls": [],
+        "evidence": {
+          "captured_via": "direct-official-api-urllib",
+          "detail_url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627636/detalhes",
+          "lifecycle_quote": "post_act: gabarito definitivo prova objetiva",
+          "note": "post-publication act; must not be emitted as opportunity"
+        },
+        "hash_validated": null,
+        "published_at": "2026-09-15T03:00:00+00:00",
+        "reason_code": "out_of_scope",
+        "renderable": null,
+        "source_key": "dopa",
+        "source_record_id": "627636",
+        "status": "excluded",
+        "title": "Proc.: 26.0.000071242-5; PROCESSO SELETIVO SIMPLIFICADO 006/2026; Programa de Residência Jurídica; Edital 97; Fundação La Salle"
+      }
+    },
+    "reason_code": "out_of_scope",
+    "severity": "non_blocking"
+  }
+]

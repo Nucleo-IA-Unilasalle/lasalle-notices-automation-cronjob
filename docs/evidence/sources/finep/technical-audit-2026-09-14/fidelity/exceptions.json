@@ -1,0 +1,648 @@
+[
+  {
+    "evidence": {
+      "api_page": 10,
+      "captured_at_utc": "2026-09-14T22:01:52Z",
+      "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+      "detail_url": "https://www.finep.gov.br/chamada-publica/222684/719676",
+      "origin": "inventory",
+      "policy_disposition": "excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta",
+      "principal_document": null,
+      "record": {
+        "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/719676",
+        "content_type_validated": null,
+        "deadline": null,
+        "document_hashes": [],
+        "document_urls": [],
+        "evidence": {
+          "api_page": 10,
+          "captured_at_utc": "2026-09-14T22:01:52Z",
+          "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+          "detail_url": "https://www.finep.gov.br/chamada-publica/222684/719676",
+          "policy_disposition": "excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta",
+          "principal_document": null,
+          "situacao_key": "aberta",
+          "situacao_name": "Aberta",
+          "vigencia_inicio": null
+        },
+        "hash_validated": null,
+        "published_at": "2015-10-13T00:00:00Z",
+        "reason_code": "out_of_scope",
+        "renderable": null,
+        "source_key": "finep",
+        "source_record_id": "719676",
+        "status": "open",
+        "title": "Chamada Pública Bilateral Finep-CDTI"
+      },
+      "situacao_key": "aberta",
+      "situacao_name": "Aberta",
+      "vigencia_inicio": null
+    },
+    "reason_code": "out_of_scope",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "api_page": 2,
+      "captured_at_utc": "2026-09-14T22:01:52Z",
+      "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+      "detail_url": "https://www.finep.gov.br/chamada-publica/222684/752474",
+      "origin": "inventory",
+      "policy_disposition": "excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta",
+      "principal_document": null,
+      "record": {
+        "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/752474",
+        "content_type_validated": null,
+        "deadline": null,
+        "document_hashes": [],
+        "document_urls": [],
+        "evidence": {
+          "api_page": 2,
+          "captured_at_utc": "2026-09-14T22:01:52Z",
+          "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+          "detail_url": "https://www.finep.gov.br/chamada-publica/222684/752474",
+          "policy_disposition": "excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta",
+          "principal_document": null,
+          "situacao_key": "aberta",
+          "situacao_name": "Aberta",
+          "vigencia_inicio": null
+        },
+        "hash_validated": null,
+        "published_at": "2025-04-07T00:00:00Z",
+        "reason_code": "out_of_scope",
+        "renderable": null,
+        "source_key": "finep",
+        "source_record_id": "752474",
+        "status": "open",
+        "title": "Seleção de Gestor para o FIP Complexo da Saúde"
+      },
+      "situacao_key": "aberta",
+      "situacao_name": "Aberta",
+      "vigencia_inicio": null
+    },
+    "reason_code": "out_of_scope",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "api_page": 2,
+      "captured_at_utc": "2026-09-14T22:01:52Z",
+      "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+      "detail_url": "https://www.finep.gov.br/chamada-publica/222684/752871",
+      "origin": "inventory",
+      "policy_disposition": "excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta",
+      "principal_document": null,
+      "record": {
+        "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/752871",
+        "content_type_validated": null,
+        "deadline": null,
+        "document_hashes": [],
+        "document_urls": [],
+        "evidence": {
+          "api_page": 2,
+          "captured_at_utc": "2026-09-14T22:01:52Z",
+          "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+          "detail_url": "https://www.finep.gov.br/chamada-publica/222684/752871",
+          "policy_disposition": "excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta",
+          "principal_document": null,
+          "situacao_key": "aberta",
+          "situacao_name": "Aberta",
+          "vigencia_inicio": null
+        },
+        "hash_validated": null,
+        "published_at": "2025-06-04T00:00:00Z",
+        "reason_code": "out_of_scope",
+        "renderable": null,
+        "source_key": "finep",
+        "source_record_id": "752871",
+        "status": "open",
+        "title": "FIP Transição Energética e Descarbonização"
+      },
+      "situacao_key": "aberta",
+      "situacao_name": "Aberta",
+      "vigencia_inicio": null
+    },
+    "reason_code": "out_of_scope",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "api_page": 2,
+      "captured_at_utc": "2026-09-14T22:01:52Z",
+      "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+      "detail_url": "https://www.finep.gov.br/chamada-publica/222684/752980",
+      "origin": "inventory",
+      "policy_disposition": "excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta",
+      "principal_document": null,
+      "record": {
+        "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/752980",
+        "content_type_validated": null,
+        "deadline": null,
+        "document_hashes": [],
+        "document_urls": [],
+        "evidence": {
+          "api_page": 2,
+          "captured_at_utc": "2026-09-14T22:01:52Z",
+          "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+          "detail_url": "https://www.finep.gov.br/chamada-publica/222684/752980",
+          "policy_disposition": "excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta",
+          "principal_document": null,
+          "situacao_key": "aberta",
+          "situacao_name": "Aberta",
+          "vigencia_inicio": null
+        },
+        "hash_validated": null,
+        "published_at": "2025-11-11T00:00:00Z",
+        "reason_code": "out_of_scope",
+        "renderable": null,
+        "source_key": "finep",
+        "source_record_id": "752980",
+        "status": "open",
+        "title": "FIP Bioeconomia e Sustentabilidade"
+      },
+      "situacao_key": "aberta",
+      "situacao_name": "Aberta",
+      "vigencia_inicio": null
+    },
+    "reason_code": "out_of_scope",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "api_page": 2,
+      "captured_at_utc": "2026-09-14T22:01:52Z",
+      "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+      "detail_url": "https://www.finep.gov.br/chamada-publica/222684/753680",
+      "origin": "inventory",
+      "policy_disposition": "excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta",
+      "principal_document": null,
+      "record": {
+        "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/753680",
+        "content_type_validated": null,
+        "deadline": null,
+        "document_hashes": [],
+        "document_urls": [],
+        "evidence": {
+          "api_page": 2,
+          "captured_at_utc": "2026-09-14T22:01:52Z",
+          "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+          "detail_url": "https://www.finep.gov.br/chamada-publica/222684/753680",
+          "policy_disposition": "excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta",
+          "principal_document": null,
+          "situacao_key": "aberta",
+          "situacao_name": "Aberta",
+          "vigencia_inicio": null
+        },
+        "hash_validated": null,
+        "published_at": "2025-12-05T00:00:00Z",
+        "reason_code": "out_of_scope",
+        "renderable": null,
+        "source_key": "finep",
+        "source_record_id": "753680",
+        "status": "open",
+        "title": "PROCESSO DE SELEÇÃO Nº 01/2025 PARA CELEBRAÇÃO DE CONVÊNIO COM ENTIDADE FECHADA DE PREVIDÊNCIA COMPLEMENTAR - EFPC"
+      },
+      "situacao_key": "aberta",
+      "situacao_name": "Aberta",
+      "vigencia_inicio": null
+    },
+    "reason_code": "out_of_scope",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "api_page": 2,
+      "captured_at_utc": "2026-09-14T22:01:52Z",
+      "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+      "detail_url": "https://www.finep.gov.br/chamada-publica/222684/753688",
+      "doc_check:http://www.finep.gov.br/images/chamadas-publicas/2026/27_02_2026_PA_Anexo_1_Rerratificado.pdf": {
+        "bytes": 0,
+        "content_type": null,
+        "error": "HTTPError: HTTP Error 404: Not Found",
+        "fetched_at_utc": "2026-09-14T22:00:09Z",
+        "http_status": null
+      },
+      "origin": "inventory",
+      "policy_disposition": "excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta",
+      "principal_document": "http://www.finep.gov.br/images/chamadas-publicas/2026/27_02_2026_PA_Anexo_1_Rerratificado.pdf",
+      "record": {
+        "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/753688",
+        "content_type_validated": null,
+        "deadline": "2026-05-29T17:00:00Z",
+        "document_hashes": [],
+        "document_urls": [
+          "http://www.finep.gov.br/images/chamadas-publicas/2026/27_02_2026_PA_Anexo_1_Rerratificado.pdf"
+        ],
+        "evidence": {
+          "api_page": 2,
+          "captured_at_utc": "2026-09-14T22:01:52Z",
+          "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+          "detail_url": "https://www.finep.gov.br/chamada-publica/222684/753688",
+          "doc_check:http://www.finep.gov.br/images/chamadas-publicas/2026/27_02_2026_PA_Anexo_1_Rerratificado.pdf": {
+            "bytes": 0,
+            "content_type": null,
+            "error": "HTTPError: HTTP Error 404: Not Found",
+            "fetched_at_utc": "2026-09-14T22:00:09Z",
+            "http_status": null
+          },
+          "policy_disposition": "excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta",
+          "principal_document": "http://www.finep.gov.br/images/chamadas-publicas/2026/27_02_2026_PA_Anexo_1_Rerratificado.pdf",
+          "situacao_key": "aberta",
+          "situacao_name": "Aberta",
+          "vigencia_inicio": "2025-02-19T00:00:00Z"
+        },
+        "hash_validated": null,
+        "published_at": "2025-12-19T00:00:00Z",
+        "reason_code": "out_of_scope",
+        "renderable": null,
+        "source_key": "finep",
+        "source_record_id": "753688",
+        "status": "open",
+        "title": "Pesquisa Aplicada Em Centros Temáticos 2025"
+      },
+      "situacao_key": "aberta",
+      "situacao_name": "Aberta",
+      "vigencia_inicio": "2025-02-19T00:00:00Z"
+    },
+    "reason_code": "out_of_scope",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "api_page": 2,
+      "captured_at_utc": "2026-09-14T22:01:52Z",
+      "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+      "detail_url": "https://www.finep.gov.br/chamada-publica/222684/754098",
+      "origin": "inventory",
+      "policy_disposition": "excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta",
+      "principal_document": null,
+      "record": {
+        "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/754098",
+        "content_type_validated": null,
+        "deadline": null,
+        "document_hashes": [],
+        "document_urls": [],
+        "evidence": {
+          "api_page": 2,
+          "captured_at_utc": "2026-09-14T22:01:52Z",
+          "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+          "detail_url": "https://www.finep.gov.br/chamada-publica/222684/754098",
+          "policy_disposition": "excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta",
+          "principal_document": null,
+          "situacao_key": "aberta",
+          "situacao_name": "Aberta",
+          "vigencia_inicio": null
+        },
+        "hash_validated": null,
+        "published_at": "2025-12-23T00:00:00Z",
+        "reason_code": "out_of_scope",
+        "renderable": null,
+        "source_key": "finep",
+        "source_record_id": "754098",
+        "status": "open",
+        "title": "SELEÇÃO PÚBLICA MCTI/FINEP/FNDCT - Subvenção Econômica à Inovação - DESAFIOS TECNOLÓGICOS PARA AGRICULTURA FAMILIAR"
+      },
+      "situacao_key": "aberta",
+      "situacao_name": "Aberta",
+      "vigencia_inicio": null
+    },
+    "reason_code": "out_of_scope",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "api_page": 3,
+      "captured_at_utc": "2026-09-14T22:01:52Z",
+      "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+      "detail_url": "https://www.finep.gov.br/chamada-publica/222684/747009",
+      "origin": "inventory",
+      "policy_disposition": "excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta",
+      "principal_document": null,
+      "record": {
+        "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/747009",
+        "content_type_validated": null,
+        "deadline": null,
+        "document_hashes": [],
+        "document_urls": [],
+        "evidence": {
+          "api_page": 3,
+          "captured_at_utc": "2026-09-14T22:01:52Z",
+          "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+          "detail_url": "https://www.finep.gov.br/chamada-publica/222684/747009",
+          "policy_disposition": "excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta",
+          "principal_document": null,
+          "situacao_key": "aberta",
+          "situacao_name": "Aberta",
+          "vigencia_inicio": null
+        },
+        "hash_validated": null,
+        "published_at": "2024-01-31T00:00:00Z",
+        "reason_code": "out_of_scope",
+        "renderable": null,
+        "source_key": "finep",
+        "source_record_id": "747009",
+        "status": "open",
+        "title": "Chamada pública conjunta Finep e Rede Eureka 2024"
+      },
+      "situacao_key": "aberta",
+      "situacao_name": "Aberta",
+      "vigencia_inicio": null
+    },
+    "reason_code": "out_of_scope",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "api_page": 3,
+      "captured_at_utc": "2026-09-14T22:01:52Z",
+      "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+      "detail_url": "https://www.finep.gov.br/chamada-publica/222684/748141",
+      "origin": "inventory",
+      "policy_disposition": "excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta",
+      "principal_document": null,
+      "record": {
+        "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/748141",
+        "content_type_validated": null,
+        "deadline": null,
+        "document_hashes": [],
+        "document_urls": [],
+        "evidence": {
+          "api_page": 3,
+          "captured_at_utc": "2026-09-14T22:01:52Z",
+          "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+          "detail_url": "https://www.finep.gov.br/chamada-publica/222684/748141",
+          "policy_disposition": "excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta",
+          "principal_document": null,
+          "situacao_key": "aberta",
+          "situacao_name": "Aberta",
+          "vigencia_inicio": "2024-07-08T00:00:00Z"
+        },
+        "hash_validated": null,
+        "published_at": "2024-07-08T00:00:00Z",
+        "reason_code": "out_of_scope",
+        "renderable": null,
+        "source_key": "finep",
+        "source_record_id": "748141",
+        "status": "open",
+        "title": "SOLUÇÕES TECNOLÓGICAS PARA AUMENTO DA PRODUTIVIDADE NA AGRICULTURA FAMILIAR, AQUICULTURA E PESCA ARTESANAL"
+      },
+      "situacao_key": "aberta",
+      "situacao_name": "Aberta",
+      "vigencia_inicio": "2024-07-08T00:00:00Z"
+    },
+    "reason_code": "out_of_scope",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "api_page": 3,
+      "captured_at_utc": "2026-09-14T22:01:52Z",
+      "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+      "detail_url": "https://www.finep.gov.br/chamada-publica/222684/749273",
+      "origin": "inventory",
+      "policy_disposition": "excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta",
+      "principal_document": null,
+      "record": {
+        "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/749273",
+        "content_type_validated": null,
+        "deadline": null,
+        "document_hashes": [],
+        "document_urls": [],
+        "evidence": {
+          "api_page": 3,
+          "captured_at_utc": "2026-09-14T22:01:52Z",
+          "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+          "detail_url": "https://www.finep.gov.br/chamada-publica/222684/749273",
+          "policy_disposition": "excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta",
+          "principal_document": null,
+          "situacao_key": "aberta",
+          "situacao_name": "Aberta",
+          "vigencia_inicio": null
+        },
+        "hash_validated": null,
+        "published_at": "2024-07-10T00:00:00Z",
+        "reason_code": "out_of_scope",
+        "renderable": null,
+        "source_key": "finep",
+        "source_record_id": "749273",
+        "status": "open",
+        "title": "Edital FIP Nordeste Capital Semente"
+      },
+      "situacao_key": "aberta",
+      "situacao_name": "Aberta",
+      "vigencia_inicio": null
+    },
+    "reason_code": "out_of_scope",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "api_page": 3,
+      "captured_at_utc": "2026-09-14T22:01:52Z",
+      "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+      "detail_url": "https://www.finep.gov.br/chamada-publica/222684/749717",
+      "origin": "inventory",
+      "policy_disposition": "excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta",
+      "principal_document": null,
+      "record": {
+        "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/749717",
+        "content_type_validated": null,
+        "deadline": "2026-09-11T18:00:00Z",
+        "document_hashes": [],
+        "document_urls": [],
+        "evidence": {
+          "api_page": 3,
+          "captured_at_utc": "2026-09-14T22:01:52Z",
+          "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+          "detail_url": "https://www.finep.gov.br/chamada-publica/222684/749717",
+          "policy_disposition": "excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta",
+          "principal_document": null,
+          "situacao_key": "aberta",
+          "situacao_name": "Aberta",
+          "vigencia_inicio": null
+        },
+        "hash_validated": null,
+        "published_at": "2024-08-07T00:00:00Z",
+        "reason_code": "out_of_scope",
+        "renderable": null,
+        "source_key": "finep",
+        "source_record_id": "749717",
+        "status": "open",
+        "title": "Conhecimento Brasil"
+      },
+      "situacao_key": "aberta",
+      "situacao_name": "Aberta",
+      "vigencia_inicio": null
+    },
+    "reason_code": "out_of_scope",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "api_page": 9,
+      "captured_at_utc": "2026-09-14T22:01:52Z",
+      "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+      "detail_url": "https://www.finep.gov.br/chamada-publica/222684/721088",
+      "origin": "inventory",
+      "policy_disposition": "excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta",
+      "principal_document": null,
+      "record": {
+        "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/721088",
+        "content_type_validated": null,
+        "deadline": null,
+        "document_hashes": [],
+        "document_urls": [],
+        "evidence": {
+          "api_page": 9,
+          "captured_at_utc": "2026-09-14T22:01:52Z",
+          "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+          "detail_url": "https://www.finep.gov.br/chamada-publica/222684/721088",
+          "policy_disposition": "excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta",
+          "principal_document": null,
+          "situacao_key": "aberta",
+          "situacao_name": "Aberta",
+          "vigencia_inicio": null
+        },
+        "hash_validated": null,
+        "published_at": "2017-05-08T00:00:00Z",
+        "reason_code": "out_of_scope",
+        "renderable": null,
+        "source_key": "finep",
+        "source_record_id": "721088",
+        "status": "open",
+        "title": "COOPERAÇÃO ICT-EMPRESA – 01/2017"
+      },
+      "situacao_key": "aberta",
+      "situacao_name": "Aberta",
+      "vigencia_inicio": null
+    },
+    "reason_code": "out_of_scope",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "api_page": 9,
+      "captured_at_utc": "2026-09-14T22:01:52Z",
+      "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+      "detail_url": "https://www.finep.gov.br/chamada-publica/222684/721094",
+      "origin": "inventory",
+      "policy_disposition": "excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta",
+      "principal_document": null,
+      "record": {
+        "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/721094",
+        "content_type_validated": null,
+        "deadline": null,
+        "document_hashes": [],
+        "document_urls": [],
+        "evidence": {
+          "api_page": 9,
+          "captured_at_utc": "2026-09-14T22:01:52Z",
+          "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+          "detail_url": "https://www.finep.gov.br/chamada-publica/222684/721094",
+          "policy_disposition": "excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta",
+          "principal_document": null,
+          "situacao_key": "aberta",
+          "situacao_name": "Aberta",
+          "vigencia_inicio": null
+        },
+        "hash_validated": null,
+        "published_at": "2017-05-07T00:00:00Z",
+        "reason_code": "out_of_scope",
+        "renderable": null,
+        "source_key": "finep",
+        "source_record_id": "721094",
+        "status": "open",
+        "title": "Finep / CDTI - COOPERAÇÃO ICT-EMPRESA – 01/2017"
+      },
+      "situacao_key": "aberta",
+      "situacao_name": "Aberta",
+      "vigencia_inicio": null
+    },
+    "reason_code": "out_of_scope",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "api_page": 9,
+      "captured_at_utc": "2026-09-14T22:01:52Z",
+      "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+      "detail_url": "https://www.finep.gov.br/chamada-publica/222684/721681",
+      "origin": "inventory",
+      "policy_disposition": "excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta",
+      "principal_document": null,
+      "record": {
+        "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/721681",
+        "content_type_validated": null,
+        "deadline": null,
+        "document_hashes": [],
+        "document_urls": [],
+        "evidence": {
+          "api_page": 9,
+          "captured_at_utc": "2026-09-14T22:01:52Z",
+          "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+          "detail_url": "https://www.finep.gov.br/chamada-publica/222684/721681",
+          "policy_disposition": "excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta",
+          "principal_document": null,
+          "situacao_key": "aberta",
+          "situacao_name": "Aberta",
+          "vigencia_inicio": null
+        },
+        "hash_validated": null,
+        "published_at": "2017-11-21T00:00:00Z",
+        "reason_code": "out_of_scope",
+        "renderable": null,
+        "source_key": "finep",
+        "source_record_id": "721681",
+        "status": "open",
+        "title": "Programa de Investimento em Startups Inovadoras 2ª Rodada"
+      },
+      "situacao_key": "aberta",
+      "situacao_name": "Aberta",
+      "vigencia_inicio": null
+    },
+    "reason_code": "out_of_scope",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "api_page": 9,
+      "captured_at_utc": "2026-09-14T22:01:52Z",
+      "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+      "detail_url": "https://www.finep.gov.br/chamada-publica/222684/721708",
+      "origin": "inventory",
+      "policy_disposition": "excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta",
+      "principal_document": null,
+      "record": {
+        "canonical_url": "https://www.finep.gov.br/chamada-publica/222684/721708",
+        "content_type_validated": null,
+        "deadline": null,
+        "document_hashes": [],
+        "document_urls": [],
+        "evidence": {
+          "api_page": 9,
+          "captured_at_utc": "2026-09-14T22:01:52Z",
+          "captured_via": "direct-http-public-liferay-chamadapublicas-api",
+          "detail_url": "https://www.finep.gov.br/chamada-publica/222684/721708",
+          "policy_disposition": "excluded by declared MIN_NOTICE_YEAR=2026 worker filter; source situacao remains aberta",
+          "principal_document": null,
+          "situacao_key": "aberta",
+          "situacao_name": "Aberta",
+          "vigencia_inicio": null
+        },
+        "hash_validated": null,
+        "published_at": "2017-11-21T00:00:00Z",
+        "reason_code": "out_of_scope",
+        "renderable": null,
+        "source_key": "finep",
+        "source_record_id": "721708",
+        "status": "open",
+        "title": "Programa de Investimento em Startups Inovadoras 2ª Rodada"
+      },
+      "situacao_key": "aberta",
+      "situacao_name": "Aberta",
+      "vigencia_inicio": null
+    },
+    "reason_code": "out_of_scope",
+    "severity": "non_blocking"
+  }
+]

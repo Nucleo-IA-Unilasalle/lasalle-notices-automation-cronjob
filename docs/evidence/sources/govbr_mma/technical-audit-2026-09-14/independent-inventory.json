@@ -1,0 +1,152 @@
+[
+  {
+    "source_key": "govbr_mma",
+    "source_record_id": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/edital-de-chamamento-publico-locacao-imovel-02.pdf",
+    "canonical_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/edital-de-chamamento-publico-locacao-imovel-02.pdf",
+    "title": "Edital de Chamamento Público - Locação de Imóvel (MMA; propostas até 20/01/2017; closed)",
+    "status": "closed",
+    "published_at": null,
+    "deadline": "2017-01-20",
+    "document_urls": [
+      "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/edital-de-chamamento-publico-locacao-imovel-02.pdf"
+    ],
+    "document_hashes": []
+  },
+  {
+    "source_key": "govbr_mma",
+    "source_record_id": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-jornal-brasilia.pdf",
+    "canonical_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-jornal-brasilia.pdf",
+    "title": "Aviso de Chamamento Público - Locação de Imóvel - Jornal de Brasília (publication notice of closed 2017 chamamento)",
+    "status": "closed",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-jornal-brasilia.pdf"
+    ],
+    "document_hashes": []
+  },
+  {
+    "source_key": "govbr_mma",
+    "source_record_id": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-correio.pdf",
+    "canonical_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-correio.pdf",
+    "title": "Aviso de Chamamento Público - Locação de Imóvel - Correio (publication notice of closed 2017 chamamento)",
+    "status": "closed",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-correio.pdf"
+    ],
+    "document_hashes": []
+  },
+  {
+    "source_key": "govbr_mma",
+    "source_record_id": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-dou.pdf",
+    "canonical_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-dou.pdf",
+    "title": "Aviso de Chamamento Público - Locação de Imóvel - DOU (publication notice of closed 2017 chamamento)",
+    "status": "closed",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-dou.pdf"
+    ],
+    "document_hashes": []
+  },
+  {
+    "source_key": "govbr_mma",
+    "source_record_id": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso.pdf",
+    "canonical_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso.pdf",
+    "title": "Aviso - Chamamento Público Locação de Imóvel (companion notice of closed 2017 chamamento)",
+    "status": "closed",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso.pdf"
+    ],
+    "document_hashes": []
+  },
+  {
+    "source_key": "govbr_mma",
+    "source_record_id": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/chamamento-publico-aviso-de-errata.pdf",
+    "canonical_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/chamamento-publico-aviso-de-errata.pdf",
+    "title": "Aviso de Errata - Chamamento Público Locação de Imóvel (excluded: errata prefilter)",
+    "status": "closed",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/chamamento-publico-aviso-de-errata.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": "out_of_scope",
+    "evidence": {
+      "exclusion": "EDITAL_EXCLUSION_PATTERNS errata; correct prefilter rejection of closed 2017 chamamento companion document"
+    }
+  },
+  {
+    "source_key": "govbr_mma",
+    "source_record_id": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-resultado-chamamento-dou.pdf",
+    "canonical_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-resultado-chamamento-dou.pdf",
+    "title": "Aviso de Resultado - Chamamento Público - DOU (excluded: resultado prefilter)",
+    "status": "closed",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-resultado-chamamento-dou.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": "out_of_scope",
+    "evidence": {
+      "exclusion": "EDITAL_EXCLUSION_PATTERNS resultado; result notice of closed 2017 chamamento"
+    }
+  },
+  {
+    "source_key": "govbr_mma",
+    "source_record_id": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-resultado-chamamento-jornaldebrasilia.pdf",
+    "canonical_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-resultado-chamamento-jornaldebrasilia.pdf",
+    "title": "Aviso de Resultado - Chamamento Público - Jornal de Brasília (excluded: resultado prefilter)",
+    "status": "closed",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-resultado-chamamento-jornaldebrasilia.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": "out_of_scope",
+    "evidence": {
+      "exclusion": "EDITAL_EXCLUSION_PATTERNS resultado; result notice of closed 2017 chamamento"
+    }
+  },
+  {
+    "source_key": "govbr_mma",
+    "source_record_id": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-resultado-chamamento-correiobraziliense.pdf",
+    "canonical_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-resultado-chamamento-correiobraziliense.pdf",
+    "title": "Aviso de Resultado - Chamamento Público - Correio Braziliense (excluded: resultado prefilter)",
+    "status": "closed",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-resultado-chamamento-correiobraziliense.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": "out_of_scope",
+    "evidence": {
+      "exclusion": "EDITAL_EXCLUSION_PATTERNS resultado; result notice of closed 2017 chamamento"
+    }
+  },
+  {
+    "source_key": "govbr_mma",
+    "source_record_id": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/portarias/PORTARIAPREGOEIROSn22026_10_2016.pdf",
+    "canonical_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/portarias/PORTARIAPREGOEIROSn22026_10_2016.pdf",
+    "title": "Portaria MMA nº 220 de 26/10/2016 - Equipe de Pregão (excluded: year guard 2016 < 2026)",
+    "status": "closed",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/portarias/PORTARIAPREGOEIROSn22026_10_2016.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": "out_of_scope",
+    "evidence": {
+      "exclusion": "extracted_year=2016 rejected by GOVBR_MMA_MIN_NOTICE_YEAR=2026; administrative portaria, not an open call"
+    }
+  }
+]

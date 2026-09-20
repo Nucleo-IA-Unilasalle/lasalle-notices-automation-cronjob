@@ -1,0 +1,42 @@
+{
+  "capture_at_utc": "2026-09-14T22:25:46.669089+00:00",
+  "capture_day_local_brasilia": "2026-09-14",
+  "query_bound": {
+    "endpoint": "https://pncp.gov.br/api/consulta/v1/contratacoes/publicacao",
+    "uf": "RS",
+    "modalities": {
+      "4": "Concorrencia Eletronica"
+    },
+    "date_window": "20260913..20260914",
+    "min_year": 2026,
+    "page_size": 50,
+    "max_pages_per_query": 20,
+    "full_enumeration_within_bound": true
+  },
+  "queries": [
+    {
+      "modality": "4",
+      "total_registros": 30,
+      "total_paginas": 1,
+      "date_window": "20260913..20260914"
+    }
+  ],
+  "pages_fetched": 1,
+  "page_caps": [],
+  "counts": {
+    "open": 15,
+    "closed": 4,
+    "upcoming": 11,
+    "excluded": 0,
+    "unknown": 0
+  },
+  "unique_controls": 30,
+  "open_records_total": 15,
+  "open_with_principal_docs": 15,
+  "doc_lookups": 15,
+  "doc_failures": 0,
+  "errors": [],
+  "cap_reached": false,
+  "rate_limit_events": 0,
+  "bound_note": "Representative bound: RS + modality 4 (Concorr\u00eancia Eletr\u00f4nica) only, publication window yesterday..today to match adapter lookback=1. Modalities 6/8 and federal CNPJ sweeps and the proposta/atualizacao endpoints are OUT of this independent bound (high volume; full-window capture would require hundreds of pages). Any page or doc cap inside the bound is a failure signal."
+}

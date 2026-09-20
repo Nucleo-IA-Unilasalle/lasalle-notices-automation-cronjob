@@ -63,3 +63,58 @@ def test_current_spip_principal_section_is_supported():
     opportunity = fbds.parse_fbds_detail(records[0], detail)
     assert records[0]["source_record_id"] == "24"
     assert opportunity["documents"][0]["document_kind"] == "zip"
+
+
+def test_concluido_badge_is_closed_not_unknown():
+    detail = """
+    <html><body><section id="Principal">
+      <div class="button is-small is-uppercase">Edital 004/2025 - Unidades de Conservacao
+        <b>Concluído</b>
+      </div>
+      <h1>Apoio a Restauracao</h1>
+      <p>Submissão das propostas até as 18:00 (horário de Brasília) do dia 10/11/2025.</p>
+      <a id="Download" href="/IMG/zip/edital.zip">Baixe o edital</a>
+    </section></body></html>
+    """
+    record = {
+        "source_record_id": "24",
+        "canonical_url": "https://restaura-amazonia.fbds.org.br/record-24",
+        "title": "Edital 004/2025",
+    }
+    opportunity = fbds.parse_fbds_detail(record, detail)
+    assert opportunity["authoritative_status"] == "closed"
+    assert opportunity["application_deadline"] == "2025-11-10T18:00:00-03:00"
+    assert opportunity["documents"][0]["is_principal"] is True
+
+
+def test_body_open_mention_does_not_override_concluido_badge():
+    detail = """
+    <html><body><section id="Principal">
+      <div class="button is-small is-uppercase">Edital 002/2025 <b>Concluído</b></div>
+      <h1>Apoio a Restauracao</h1>
+      <p>Nota: está aberto um edital com foco em Terras Indígenas (Edital 003).</p>
+    </section></body></html>
+    """
+    record = {
+        "source_record_id": "e",
+        "canonical_url": "https://restaura-amazonia.fbds.org.br/record-e",
+        "title": "Edital 002/2025",
+    }
+    opportunity = fbds.parse_fbds_detail(record, detail)
+    assert opportunity["authoritative_status"] == "closed"
+
+
+def test_status_text_fallback_normalizes_to_open_closed():
+    record = {
+        "source_record_id": "1",
+        "canonical_url": "https://restaura-amazonia.fbds.org.br/record-1",
+        "title": "Edital",
+    }
+    open_opp = fbds.parse_fbds_detail(
+        record, "<html><body><main>Inscricoes abertas. Prazo: 30/09/2026.</main></body></html>"
+    )
+    assert open_opp["authoritative_status"] == "open"
+    closed_opp = fbds.parse_fbds_detail(
+        record, "<html><body><main>Edital encerrado. Prazo: 01/01/2025.</main></body></html>"
+    )
+    assert closed_opp["authoritative_status"] == "closed"

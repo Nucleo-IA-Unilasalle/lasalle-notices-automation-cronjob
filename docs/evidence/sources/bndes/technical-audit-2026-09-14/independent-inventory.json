@@ -1,0 +1,234 @@
+[
+  {
+    "source_key": "bndes",
+    "source_record_id": "https://www.bndes.gov.br/wps/wcm/connect/site/018598bc-e26c-4543-9ff9-3757aa2f4315/Roteiro+BNDES+Periferias+em+Rede_6%C2%B0+ciclo.pdf?MOD=AJPERES",
+    "canonical_url": "https://www.bndes.gov.br/wps/wcm/connect/site/018598bc-e26c-4543-9ff9-3757aa2f4315/Roteiro+BNDES+Periferias+em+Rede_6%C2%B0+ciclo.pdf?MOD=AJPERES",
+    "title": "Chamada de Projetos para o 6º ciclo do BNDES Periferias (BNDES Periferias em Rede)",
+    "status": "open",
+    "published_at": null,
+    "deadline": "2026-12-04T17:00:00-03:00",
+    "document_urls": [
+      "https://www.bndes.gov.br/wps/wcm/connect/site/018598bc-e26c-4543-9ff9-3757aa2f4315/Roteiro+BNDES+Periferias+em+Rede_6%C2%B0+ciclo.pdf?MOD=AJPERES"
+    ],
+    "document_hashes": [],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "webfetch-direct-official-page",
+      "detail_page_reverified_at_local": "2026-09-14 (second pass, text/html)",
+      "lifecycle_quote": "Chamada de projetos para 6º ciclo do BNDES Periferias - até às 17h de 04.12.2026. Ciclo para recebimento de propostas: de 18.08.2026 até às 17h de 04.12.2026.",
+      "listing_url": "https://www.bndes.gov.br/wps/portal/site/home/financiamento/produto/bndes-fundo-socioambiental",
+      "principal_document_label": "Conheça o modelo de roteiro de apresentação de projetos para o 6º ciclo do BNDES Periferias",
+      "identity_note": "source_record_id is the principal PDF URL without the per-fetch CVID cache-buster, matching adapter identity normalization."
+    }
+  },
+  {
+    "source_key": "bndes",
+    "source_record_id": "bndes-periferias-ciclo-5-mulheres",
+    "canonical_url": "https://www.bndes.gov.br/wps/portal/site/home/onde-atuamos/social/bndes-periferias",
+    "title": "BNDES Periferias Edição Mulheres (5º ciclo) - protocolo encerrado",
+    "status": "closed",
+    "published_at": null,
+    "deadline": "2026-03-12T17:00:00-03:00",
+    "document_urls": [],
+    "document_hashes": [],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "webfetch-direct-official-page",
+      "detail_page_reverified_at_local": "2026-09-14 (second pass, text/html)",
+      "lifecycle_quote": "resultado da chamada para a Edição BNDES Periferias Mulheres (5º ciclo), cujo protocolo encerrou em 12.03.2026 está previsto para o último trimestre de 2026.",
+      "note": "Fundo listing still describes 5º Ciclo as open for Corais/Periferias Mulheres; detail page is authoritative that 5º ciclo protocol closed 2026-03-12."
+    }
+  },
+  {
+    "source_key": "bndes",
+    "source_record_id": "bndes-corais-chamada-permanente",
+    "canonical_url": "https://www.bndes.gov.br/wps/portal/site/home/onde-atuamos/meio-ambiente/bndes-azul/bndes-corais",
+    "title": "Chamada Permanente BNDES Corais (Fundo Socioambiental - Meio Ambiente)",
+    "status": "closed",
+    "published_at": null,
+    "deadline": "2024-07-05T17:00:00-03:00",
+    "document_urls": [
+      "https://www.bndes.gov.br/wps/wcm/connect/site/feb1c058-7879-492f-a27e-9eec790a3b98/Modelo%2BRoteiro%2BMA_Corais_Web.pdf?MOD=AJPERES"
+    ],
+    "document_hashes": [],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "webfetch-direct-official-page",
+      "detail_page_reverified_at_local": "2026-09-14 (second pass, text/html)",
+      "lifecycle_quote": "O BNDES informa que a Chamada BNDES Corais foi encerrada em 05/07/2024. Período para protocolo das propostas: até 05.07.2024, às 17h.",
+      "principal_document_label": "Roteiro de Apresentação de Projeto – BNDES Corais – modelo apenas para conhecimento",
+      "conflict_note": "Fundo listing text still says Chamada Permanente is open for Corais; detail page explicitly closed 2024-07-05. Independent inventory uses detail-page lifecycle."
+    }
+  },
+  {
+    "source_key": "bndes",
+    "source_record_id": "bndes-bioinsumos-ciclo-2",
+    "canonical_url": "https://www.bndes.gov.br/wps/portal/site/home/onde-atuamos/social/bndes-bioinsumos",
+    "title": "Chamada de projetos para o 2º ciclo do BNDES Bioinsumos",
+    "status": "closed",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://www.bndes.gov.br/wps/wcm/connect/site/226b122e-79fb-49b0-96d2-5eb893a2f18f/Roteiro_Projetos_Bioinsumos_2%C2%BACiclo+05-05+vf.pdf?MOD=AJPERES"
+    ],
+    "document_hashes": [],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "webfetch-direct-official-page",
+      "detail_page_reverified_at_local": "2026-09-14 (second pass, text/html)",
+      "lifecycle_quote": "Segundo ciclo encerrado - Projetos em análise pela equipe técnica do BNDES",
+      "principal_document_label": "modelo de Roteiro de Apresentação de Projetos (PDF - 223 kB)"
+    }
+  },
+  {
+    "source_key": "bndes",
+    "source_record_id": "bndes-sertao-mais-produtivo",
+    "canonical_url": "https://www.bndes.gov.br/wps/portal/site/home/onde-atuamos/social/sertao-mais-produtivo",
+    "title": "Sertão + Produtivo (BNDES/Petrobras) - seleção divulgada",
+    "status": "closed",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [],
+    "document_hashes": [],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "webfetch-direct-official-page",
+      "detail_page_reverified_at_local": "2026-09-14 (second pass, text/html)",
+      "lifecycle_quote": "ATENÇÃO: Comunicamos o Resultado Final do Edital Sertão + Produtivo. ... Divulgação do resultado final da Seleção: 02/06/2025",
+      "listing_url": "https://www.bndes.gov.br/wps/portal/site/home/financiamento/produto/bndes-fundo-socioambiental"
+    }
+  },
+  {
+    "source_key": "bndes",
+    "source_record_id": "bndes-periferias-fortes",
+    "canonical_url": "https://www.bndes.gov.br/wps/portal/site/home/onde-atuamos/social/bndes-periferias-fortes",
+    "title": "BNDES Periferias Fortes - resultado fase classificatória final",
+    "status": "closed",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [],
+    "document_hashes": [],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "webfetch-direct-official-page",
+      "detail_page_reverified_at_local": "2026-09-14 (second pass, text/html)",
+      "lifecycle_quote": "Editais BNDES Periferias Fortes - Divulgado o resultado da Fase Classificatória Final. Acesse a página da seleção e veja o resultado. Editais abertos: não há",
+      "note": "Dedicated Fortes page still describes OSP registration open via external partner sites (phi.org.br / ekloos.org); those are not BNDES-hosted edital PDFs and host-filter would drop them. BNDES edital status remains closed (no open BNDES-hosted call)."
+    }
+  },
+  {
+    "source_key": "bndes",
+    "source_record_id": "bndes-cpsi-001-2026-inteligencia-dados-saude",
+    "canonical_url": "https://www.worldlabs.org/opportunity/inteligencia-dados-saude",
+    "title": "CPSI Nº 001/2026 – Desafio BNDES Inteligência de Dados em Saúde",
+    "status": "open",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://www.worldlabs.org/opportunity/inteligencia-dados-saude"
+    ],
+    "document_hashes": [],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": "out_of_scope",
+    "evidence": {
+      "captured_via": "webfetch-direct-official-page",
+      "detail_page_reverified_at_local": "2026-09-14 (second pass)",
+      "section": "Chamadas em andamento",
+      "lifecycle_quote": "Chamadas em andamento / CPSI Nº 001/2026",
+      "link_host": "worldlabs.org (external; not bndes.gov.br PDF)",
+      "listing_url": "https://www.bndes.gov.br/wps/vanityurl/chamadadeinovacao",
+      "disposition_rationale": "Open CPSI call links only to worldlabs.org. The bndes adapter contract ingests BNDES-hosted edital PDFs only (host filter bndes.gov.br); external-only calls are explicitly out of scope, not missing candidates."
+    }
+  },
+  {
+    "source_key": "bndes",
+    "source_record_id": "bndes-cpsi-003-2025-ia-juridica",
+    "canonical_url": "https://www.worldlabs.org/opportunity/desafio-bndes-ia-juridica",
+    "title": "CPSI Nº 003/2025 – Desafio BNDES IA Jurídica",
+    "status": "open",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://www.worldlabs.org/opportunity/desafio-bndes-ia-juridica"
+    ],
+    "document_hashes": [],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": "out_of_scope",
+    "evidence": {
+      "captured_via": "webfetch-direct-official-page",
+      "detail_page_reverified_at_local": "2026-09-14 (second pass)",
+      "section": "Chamadas em andamento",
+      "link_host": "worldlabs.org (external; not bndes.gov.br PDF)",
+      "disposition_rationale": "Open CPSI call links only to worldlabs.org. The bndes adapter contract ingests BNDES-hosted edital PDFs only (host filter bndes.gov.br); external-only calls are explicitly out of scope, not missing candidates."
+    }
+  },
+  {
+    "source_key": "bndes",
+    "source_record_id": "bndes-cpsi-002-2025-score-mei",
+    "canonical_url": "https://www.worldlabs.org/opportunity/desafio-bndes-score-inteligente-de-mei-e-micro",
+    "title": "CPSI Nº 002/2025 – Desafio BNDES Score Inteligente de MEI e Microempresas",
+    "status": "open",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://www.worldlabs.org/opportunity/desafio-bndes-score-inteligente-de-mei-e-micro"
+    ],
+    "document_hashes": [],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": "out_of_scope",
+    "evidence": {
+      "captured_via": "webfetch-direct-official-page",
+      "detail_page_reverified_at_local": "2026-09-14 (second pass)",
+      "section": "Chamadas em andamento",
+      "link_host": "worldlabs.org (external; not bndes.gov.br PDF)",
+      "disposition_rationale": "Open CPSI call links only to worldlabs.org. The bndes adapter contract ingests BNDES-hosted edital PDFs only (host filter bndes.gov.br); external-only calls are explicitly out of scope, not missing candidates."
+    }
+  },
+  {
+    "source_key": "bndes",
+    "source_record_id": "bndes-cpsi-01-2024-risco-sac",
+    "canonical_url": "https://www.worldlabs.org/opportunity/desafio-bndes-risco-sac",
+    "title": "CPSI No 01/2024 - Desafio BNDES RiscoSAC",
+    "status": "closed",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://www.worldlabs.org/opportunity/desafio-bndes-risco-sac"
+    ],
+    "document_hashes": [],
+    "renderable": null,
+    "content_type_validated": null,
+    "hash_validated": null,
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "webfetch-direct-official-page",
+      "detail_page_reverified_at_local": "2026-09-14 (second pass)",
+      "section": "Chamadas já realizadas",
+      "link_host": "worldlabs.org (external; not bndes.gov.br PDF)"
+    }
+  }
+]

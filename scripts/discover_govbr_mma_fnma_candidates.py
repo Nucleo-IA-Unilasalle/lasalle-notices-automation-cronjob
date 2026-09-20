@@ -37,7 +37,7 @@ import os
 import re
 import sys
 import unicodedata
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any
 from urllib.parse import urljoin, urlsplit, urlunsplit
@@ -226,6 +226,15 @@ def _extract_listing_metadata(root: Tag, *, year: int | None) -> dict[str, Any]:
         parsed = _extract_date(match.group(0), year=year)
         if parsed is not None:
             deadline = parsed
+
+    # A past application deadline is authoritative even when the page still
+    # shows open/prorrogação wording without an explicit "encerrado".
+    if deadline is not None and status == "open":
+        try:
+            if date.fromisoformat(deadline) < datetime.now(timezone.utc).date():
+                status = "closed"
+        except ValueError:
+            pass
 
     published_at = None
     document = root.find_parent("html") or root

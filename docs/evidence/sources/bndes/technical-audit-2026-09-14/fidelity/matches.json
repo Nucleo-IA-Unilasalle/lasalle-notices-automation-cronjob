@@ -1,0 +1,67 @@
+[
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.bndes.gov.br/wps/wcm/connect/site/018598bc-e26c-4543-9ff9-3757aa2f4315/Roteiro+BNDES+Periferias+em+Rede_6%C2%B0+ciclo.pdf?MOD=AJPERES",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://www.bndes.gov.br/wps/wcm/connect/site/018598bc-e26c-4543-9ff9-3757aa2f4315/Roteiro+BNDES+Periferias+em+Rede_6%C2%B0+ciclo.pdf?MOD=AJPERES"
+      ],
+      "published_at": null,
+      "source_key": "bndes",
+      "source_record_id": "https://www.bndes.gov.br/wps/wcm/connect/site/018598bc-e26c-4543-9ff9-3757aa2f4315/Roteiro+BNDES+Periferias+em+Rede_6%C2%B0+ciclo.pdf?MOD=AJPERES",
+      "status": null,
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "2026-12-04T20:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://www.bndes.gov.br/wps/wcm/connect/site/018598bc-e26c-4543-9ff9-3757aa2f4315/Roteiro+BNDES+Periferias+em+Rede_6%C2%B0+ciclo.pdf?MOD=AJPERES",
+      "content_type_validated": null,
+      "deadline": "2026-12-04T17:00:00-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://www.bndes.gov.br/wps/wcm/connect/site/018598bc-e26c-4543-9ff9-3757aa2f4315/Roteiro+BNDES+Periferias+em+Rede_6%C2%B0+ciclo.pdf?MOD=AJPERES"
+      ],
+      "evidence": {
+        "captured_via": "webfetch-direct-official-page",
+        "detail_page_reverified_at_local": "2026-09-14 (second pass, text/html)",
+        "identity_note": "source_record_id is the principal PDF URL without the per-fetch CVID cache-buster, matching adapter identity normalization.",
+        "lifecycle_quote": "Chamada de projetos para 6º ciclo do BNDES Periferias - até às 17h de 04.12.2026. Ciclo para recebimento de propostas: de 18.08.2026 até às 17h de 04.12.2026.",
+        "listing_url": "https://www.bndes.gov.br/wps/portal/site/home/financiamento/produto/bndes-fundo-socioambiental",
+        "principal_document_label": "Conheça o modelo de roteiro de apresentação de projetos para o 6º ciclo do BNDES Periferias"
+      },
+      "hash_validated": null,
+      "published_at": null,
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "bndes",
+      "source_record_id": "https://www.bndes.gov.br/wps/wcm/connect/site/018598bc-e26c-4543-9ff9-3757aa2f4315/Roteiro+BNDES+Periferias+em+Rede_6%C2%B0+ciclo.pdf?MOD=AJPERES",
+      "status": "open",
+      "title": "Chamada de Projetos para o 6º ciclo do BNDES Periferias (BNDES Periferias em Rede)"
+    },
+    "match_key": "('bndes', 'https://www.bndes.gov.br/wps/wcm/connect/site/018598bc-e26c-4543-9ff9-3757aa2f4315/Roteiro+BNDES+Periferias+em+Rede_6%C2%B0+ciclo.pdf?MOD=AJPERES')",
+    "match_method": "stable_id"
+  }
+]

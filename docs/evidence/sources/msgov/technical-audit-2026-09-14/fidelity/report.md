@@ -1,0 +1,285 @@
+# Source Fidelity Report
+
+## Quantitative Gates
+
+- Inventory accounting: 100.0% (29/29)
+- Candidate traceability: 100.0% (29/29)
+
+### Blocking exception counts
+- authoritative_deadline_mismatch: 0
+- authoritative_status_mismatch: 0
+- duplicate_identity: 0
+- extra_submission: 0
+- identity_mismatch: 0
+- missing_open: 0
+- parser_failure: 0
+- renderability_mismatch: 0
+
+Total blocking exceptions: 0
+
+## Matches
+
+- key=('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/980/655/original/Edital_03-2026_EVENTO_DE_EXTENSAO_290126_-_DO.pdf') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-12-10T20:30:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+- key=('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/981/959/original/Fluxograma_Evento_de_Extensao.pdf') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-12-10T20:30:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+- key=('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/327/original/Edital_34.2026_-_PIBICin_2026.pdf') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-10-02T21:00:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+- key=('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/345/original/Edital_35.2026_-_PIBICIN-AAF.pdf') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-10-02T21:00:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+- key=('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/376/original/Edital_36.2026_-_Pibexin.pdf') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-10-02T21:00:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+- key=('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/401/original/Edital_37-2026_PIBIDin.pdf') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-10-02T21:00:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+- key=('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/450/original/Edital_39-2026_-pos-graducao.pdf') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-10-16T21:00:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+- key=('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/472/original/Edital_40-2026_Servidores.pdf') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-10-16T21:00:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+- key=('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/493/original/Edital_41-2026-PQ_e_Rede.pdf') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-10-16T21:00:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+- key=('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/993/072/original/Edital_38-2026_Alunos_concluintes.pdf') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-10-02T21:00:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+- key=('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/016/831/original/Publicacao_Edital.pdf') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-09-29T21:00:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+- key=('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/022/265/original/Edital_CAPES-Global_-_UEMS__MESTRADO__corrigido.pdf') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-09-15T22:00:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+- key=('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/038/542/original/EDITAL_25_PRESERVACAO_DO12272_04_09_2026.pdf') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-11-04T21:00:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+- key=('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/038/545/original/EDITAL_26_PRODUCAO_DE_CURTAS_DO12272_04_09_2026.pdf') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-11-04T21:00:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+- key=('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/046/166/original/Edital_xx-2026_-_Edital_CAP_2026-2027.pdf') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-09-15T22:00:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+- key=('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/050/384/original/DO12110_26_03_2026.pdf') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=3000-12-31T00:00:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+- key=('msgov', 'https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/583/612/original/Edital_03-2026-fluxo_continuo_acao_internacionalizacao.pdf') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-12-04T21:00:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+- key=('msgov', 'https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/590/762/original/EDITAL_002_2026_-_p%C3%A1gina.pdf') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-12-01T22:00:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+- key=('msgov', 'https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/590/791/original/Tutorial_Prosas.pdf') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-12-01T22:00:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+- key=('msgov', 'https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/601/309/original/Edital_05_2026_Pesquisa.pdf') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=3000-12-31T00:00:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+- key=('msgov', 'https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/601/331/original/Edital_04_2026_Pesquisa.pdf') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=3000-12-31T00:00:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+- key=('msgov', 'https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/603/918/original/Tutorial_Prosas.pdf') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-12-01T22:00:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+- key=('msgov', 'https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/668/536/original/Edital_03-2026_EVENTO_DE_EXTENS%C3%83O_290126_-_DO.pdf') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-12-01T22:00:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+- key=('msgov', 'https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/669/262/original/_Fluxograma_-__LA_2026.pdf') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=3000-12-31T00:00:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+- key=('msgov', 'https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/680/724/original/Edital_n%C2%BA_20.2026_DCULT_PROEC_UEMS.pdf') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-12-01T21:30:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+- key=('msgov', 'https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/681/082/original/Edital_n%C2%BA_21.2026_DCULT_PROEC_UEMS.pdf') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-12-01T21:30:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+- key=('msgov', 'https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/703/327/original/Edital_009-2026_Fluxo_Continuo_Ejs_DO.pdf') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-12-01T21:00:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+- key=('msgov', 'https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/703/334/original/Tutorial_para_Cadastro_no_Prosas.pdf') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-12-01T21:00:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+- key=('msgov', 'https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/958/249/original/Edital_007_DO12228_21_07_2026.pdf') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-12-01T21:00:00Z discovery=unknown dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+
+## Exceptions
+
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-09-15T22:00:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-09-15T22:00:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-09-29T21:00:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-10-02T21:00:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-10-02T21:00:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-10-02T21:00:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-10-02T21:00:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-10-02T21:00:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-10-16T21:00:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-10-16T21:00:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-10-16T21:00:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-11-04T21:00:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-11-04T21:00:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-12-01T21:00:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-12-01T21:00:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-12-01T21:00:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-12-01T21:30:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-12-01T21:30:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-12-01T22:00:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-12-01T22:00:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-12-01T22:00:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-12-01T22:00:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-12-04T21:00:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-12-10T20:30:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 2026-12-10T20:30:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 3000-12-31T00:00:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 3000-12-31T00:00:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 3000-12-31T00:00:00Z
+  - origin: discovery
+- [non_blocking] missing_optional_metadata
+  - discovery: None
+  - field: deadline
+  - inventory: 3000-12-31T00:00:00Z
+  - origin: discovery

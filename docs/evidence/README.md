@@ -19,6 +19,11 @@ adds the sanitized old-ref, queued/running, direct-CLI, API, scheduler, and
 executor inventory plus guarded operator commands; it is also not production
 evidence or release approval.
 
+The [2026-09-14 source technical-audit review](technical-audit-2026-09-14-FIX-REVIEW.md)
+indexes source-local adapter fixes and captured artifacts for all 23 sources.
+Those artifacts are regression and diagnostic evidence only: they do not fill
+the independent audit slots below or close canary, soak, or release gates.
+
 [Post-review validation](POST-REVIEW-VALIDATION-2026-09-08.md) records the next
 offline integration checks and read-only staging preflight, including the
 unresolved direct schema-verification connection failure.

@@ -1,0 +1,2039 @@
+[
+  {
+    "utc": "2026-09-14T20:42:19.771663+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/busca-avancada?dataInicial=2026-09-12&dataFinal=2026-09-14&escopo=executivo",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 52958
+  },
+  {
+    "utc": "2026-09-14T20:42:20.057008+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627639/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2178
+  },
+  {
+    "utc": "2026-09-14T20:42:20.575030+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627638/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1885
+  },
+  {
+    "utc": "2026-09-14T20:42:21.042768+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627637/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 3868
+  },
+  {
+    "utc": "2026-09-14T20:42:21.766829+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627636/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 25943
+  },
+  {
+    "utc": "2026-09-14T20:42:22.264298+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627635/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 3517
+  },
+  {
+    "utc": "2026-09-14T20:42:22.522750+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627632/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 3709
+  },
+  {
+    "utc": "2026-09-14T20:42:22.993073+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627625/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1969
+  },
+  {
+    "utc": "2026-09-14T20:42:23.293568+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627609/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2777
+  },
+  {
+    "utc": "2026-09-14T20:42:23.743699+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627601/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2590
+  },
+  {
+    "utc": "2026-09-14T20:42:23.972097+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627600/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1787
+  },
+  {
+    "utc": "2026-09-14T20:42:24.183648+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627599/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2564
+  },
+  {
+    "utc": "2026-09-14T20:42:24.406799+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627598/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2421
+  },
+  {
+    "utc": "2026-09-14T20:42:24.612250+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627597/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 3485
+  },
+  {
+    "utc": "2026-09-14T20:42:24.846001+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627595/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1601
+  },
+  {
+    "utc": "2026-09-14T20:42:25.044026+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627591/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2096
+  },
+  {
+    "utc": "2026-09-14T20:42:25.277433+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627590/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 4184
+  },
+  {
+    "utc": "2026-09-14T20:42:25.727401+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627589/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 3521
+  },
+  {
+    "utc": "2026-09-14T20:42:26.154849+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627588/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 11625
+  },
+  {
+    "utc": "2026-09-14T20:42:26.343987+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627587/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2322
+  },
+  {
+    "utc": "2026-09-14T20:42:26.578910+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627586/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2321
+  },
+  {
+    "utc": "2026-09-14T20:42:27.123224+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627585/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2036
+  },
+  {
+    "utc": "2026-09-14T20:42:27.339391+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627583/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1899
+  },
+  {
+    "utc": "2026-09-14T20:42:27.864018+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627582/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 5321
+  },
+  {
+    "utc": "2026-09-14T20:42:28.045653+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627581/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 5124
+  },
+  {
+    "utc": "2026-09-14T20:42:28.333207+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627580/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1684
+  },
+  {
+    "utc": "2026-09-14T20:42:28.598063+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627579/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2073
+  },
+  {
+    "utc": "2026-09-14T20:42:29.333076+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627578/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2298
+  },
+  {
+    "utc": "2026-09-14T20:42:29.808263+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627577/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2996
+  },
+  {
+    "utc": "2026-09-14T20:42:30.383638+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627576/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1386
+  },
+  {
+    "utc": "2026-09-14T20:42:30.902237+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627574/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2042
+  },
+  {
+    "utc": "2026-09-14T20:42:31.163779+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627573/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2941
+  },
+  {
+    "utc": "2026-09-14T20:42:31.384393+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627572/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1923
+  },
+  {
+    "utc": "2026-09-14T20:42:31.687187+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627571/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 4287
+  },
+  {
+    "utc": "2026-09-14T20:42:32.152225+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627570/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 3695
+  },
+  {
+    "utc": "2026-09-14T20:42:32.381175+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627569/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 3157
+  },
+  {
+    "utc": "2026-09-14T20:42:37.628477+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627568/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 4107
+  },
+  {
+    "utc": "2026-09-14T20:42:37.842002+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627567/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 5657
+  },
+  {
+    "utc": "2026-09-14T20:42:38.067941+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627566/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2709
+  },
+  {
+    "utc": "2026-09-14T20:42:38.543146+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627565/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1595
+  },
+  {
+    "utc": "2026-09-14T20:42:38.796023+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627564/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 3102
+  },
+  {
+    "utc": "2026-09-14T20:42:39.518235+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627563/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2197
+  },
+  {
+    "utc": "2026-09-14T20:42:40.029858+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627562/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1344
+  },
+  {
+    "utc": "2026-09-14T20:42:40.522557+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627561/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1332
+  },
+  {
+    "utc": "2026-09-14T20:42:40.715710+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627559/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 4896
+  },
+  {
+    "utc": "2026-09-14T20:42:41.174726+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627558/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 3954
+  },
+  {
+    "utc": "2026-09-14T20:42:41.625674+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627557/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1630
+  },
+  {
+    "utc": "2026-09-14T20:42:42.076509+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627556/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1106
+  },
+  {
+    "utc": "2026-09-14T20:42:42.560215+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627555/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1473
+  },
+  {
+    "utc": "2026-09-14T20:42:42.775575+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627554/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2443
+  },
+  {
+    "utc": "2026-09-14T20:42:43.010780+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627553/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1512
+  },
+  {
+    "utc": "2026-09-14T20:42:43.216061+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627552/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2735
+  },
+  {
+    "utc": "2026-09-14T20:42:43.666213+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627551/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2181
+  },
+  {
+    "utc": "2026-09-14T20:42:43.911143+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627550/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 5418
+  },
+  {
+    "utc": "2026-09-14T20:42:44.107617+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627548/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1616
+  },
+  {
+    "utc": "2026-09-14T20:42:44.332295+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627547/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2088
+  },
+  {
+    "utc": "2026-09-14T20:42:44.558312+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627546/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 3726
+  },
+  {
+    "utc": "2026-09-14T20:42:44.906945+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627545/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2253
+  },
+  {
+    "utc": "2026-09-14T20:42:45.508335+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627544/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 3108
+  },
+  {
+    "utc": "2026-09-14T20:42:45.714955+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627543/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1159
+  },
+  {
+    "utc": "2026-09-14T20:42:46.221233+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627542/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 3723
+  },
+  {
+    "utc": "2026-09-14T20:42:46.929025+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627541/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1463
+  },
+  {
+    "utc": "2026-09-14T20:42:47.570513+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627540/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2044
+  },
+  {
+    "utc": "2026-09-14T20:42:47.805158+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627539/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1884
+  },
+  {
+    "utc": "2026-09-14T20:42:47.995193+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627538/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1604
+  },
+  {
+    "utc": "2026-09-14T20:42:48.190627+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627537/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1438
+  },
+  {
+    "utc": "2026-09-14T20:42:48.662057+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627536/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2035
+  },
+  {
+    "utc": "2026-09-14T20:42:49.124381+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627535/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1529
+  },
+  {
+    "utc": "2026-09-14T20:42:49.595141+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627534/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2239
+  },
+  {
+    "utc": "2026-09-14T20:42:50.075244+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627533/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1152
+  },
+  {
+    "utc": "2026-09-14T20:42:50.404346+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627532/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1214
+  },
+  {
+    "utc": "2026-09-14T20:42:50.606975+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627531/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1695
+  },
+  {
+    "utc": "2026-09-14T20:42:50.821545+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627530/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2381
+  },
+  {
+    "utc": "2026-09-14T20:42:51.030801+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627529/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 3313
+  },
+  {
+    "utc": "2026-09-14T20:42:51.247341+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627528/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1162
+  },
+  {
+    "utc": "2026-09-14T20:42:51.506515+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627527/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1177
+  },
+  {
+    "utc": "2026-09-14T20:42:51.759736+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627526/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1222
+  },
+  {
+    "utc": "2026-09-14T20:42:52.262482+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627525/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1194
+  },
+  {
+    "utc": "2026-09-14T20:42:52.573381+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627524/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1723
+  },
+  {
+    "utc": "2026-09-14T20:42:52.774302+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627523/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1242
+  },
+  {
+    "utc": "2026-09-14T20:42:53.270617+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627521/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 11328
+  },
+  {
+    "utc": "2026-09-14T20:42:53.734007+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627520/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1086
+  },
+  {
+    "utc": "2026-09-14T20:42:53.985080+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627519/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1188
+  },
+  {
+    "utc": "2026-09-14T20:42:54.204766+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627518/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1218
+  },
+  {
+    "utc": "2026-09-14T20:42:54.439579+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627517/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1235
+  },
+  {
+    "utc": "2026-09-14T20:42:54.982818+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627516/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 4483
+  },
+  {
+    "utc": "2026-09-14T20:42:55.380290+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627515/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 3440
+  },
+  {
+    "utc": "2026-09-14T20:42:55.686512+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627514/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2285
+  },
+  {
+    "utc": "2026-09-14T20:42:55.906409+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627512/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2279
+  },
+  {
+    "utc": "2026-09-14T20:42:56.193441+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627511/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 11659
+  },
+  {
+    "utc": "2026-09-14T20:42:56.422587+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627510/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 7882
+  },
+  {
+    "utc": "2026-09-14T20:42:56.610946+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627509/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 5306
+  },
+  {
+    "utc": "2026-09-14T20:42:56.826010+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627508/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1330
+  },
+  {
+    "utc": "2026-09-14T20:42:57.396453+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627506/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1408
+  },
+  {
+    "utc": "2026-09-14T20:42:57.650041+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627505/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1373
+  },
+  {
+    "utc": "2026-09-14T20:42:58.112862+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627504/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1398
+  },
+  {
+    "utc": "2026-09-14T20:42:58.569466+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627503/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1230
+  },
+  {
+    "utc": "2026-09-14T20:42:58.803957+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627502/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1462
+  },
+  {
+    "utc": "2026-09-14T20:42:59.640290+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627501/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1437
+  },
+  {
+    "utc": "2026-09-14T20:43:04.837783+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627500/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1403
+  },
+  {
+    "utc": "2026-09-14T20:43:05.165772+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627499/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1431
+  },
+  {
+    "utc": "2026-09-14T20:43:05.408884+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627498/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 3065
+  },
+  {
+    "utc": "2026-09-14T20:43:05.644067+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627497/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 3137
+  },
+  {
+    "utc": "2026-09-14T20:43:05.866563+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627496/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2032
+  },
+  {
+    "utc": "2026-09-14T20:43:06.065655+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627495/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1100
+  },
+  {
+    "utc": "2026-09-14T20:43:06.529118+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627494/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1125
+  },
+  {
+    "utc": "2026-09-14T20:43:07.108049+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627493/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2310
+  },
+  {
+    "utc": "2026-09-14T20:43:07.292483+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627492/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 3490
+  },
+  {
+    "utc": "2026-09-14T20:43:12.769542+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627491/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 3071
+  },
+  {
+    "utc": "2026-09-14T20:43:13.011113+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627490/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2090
+  },
+  {
+    "utc": "2026-09-14T20:43:13.612553+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627489/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1102
+  },
+  {
+    "utc": "2026-09-14T20:43:13.835517+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627488/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2067
+  },
+  {
+    "utc": "2026-09-14T20:43:14.029990+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627486/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1560
+  },
+  {
+    "utc": "2026-09-14T20:43:14.247044+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627485/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1994
+  },
+  {
+    "utc": "2026-09-14T20:43:14.429252+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627484/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2361
+  },
+  {
+    "utc": "2026-09-14T20:43:14.651781+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627483/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1491
+  },
+  {
+    "utc": "2026-09-14T20:43:14.944003+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627481/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1287
+  },
+  {
+    "utc": "2026-09-14T20:43:15.124414+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627480/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1426
+  },
+  {
+    "utc": "2026-09-14T20:43:15.361384+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627479/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 5020
+  },
+  {
+    "utc": "2026-09-14T20:43:15.570171+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627478/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 3891
+  },
+  {
+    "utc": "2026-09-14T20:43:15.801667+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627477/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 6587
+  },
+  {
+    "utc": "2026-09-14T20:43:16.003461+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627476/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 7971
+  },
+  {
+    "utc": "2026-09-14T20:43:16.274627+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627474/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2251
+  },
+  {
+    "utc": "2026-09-14T20:43:16.479381+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627473/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1226
+  },
+  {
+    "utc": "2026-09-14T20:43:16.725740+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627472/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1428
+  },
+  {
+    "utc": "2026-09-14T20:43:16.919422+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627471/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1186
+  },
+  {
+    "utc": "2026-09-14T20:43:17.519652+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627470/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1224
+  },
+  {
+    "utc": "2026-09-14T20:43:17.786269+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627468/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2473
+  },
+  {
+    "utc": "2026-09-14T20:43:17.994556+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627460/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 4316
+  },
+  {
+    "utc": "2026-09-14T20:43:18.203983+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627459/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2248
+  },
+  {
+    "utc": "2026-09-14T20:43:18.432599+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627458/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2216
+  },
+  {
+    "utc": "2026-09-14T20:43:18.905883+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627457/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 3322
+  },
+  {
+    "utc": "2026-09-14T20:43:19.132412+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627456/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2649
+  },
+  {
+    "utc": "2026-09-14T20:43:19.333256+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627455/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2188
+  },
+  {
+    "utc": "2026-09-14T20:43:19.531373+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627453/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1097
+  },
+  {
+    "utc": "2026-09-14T20:43:19.718625+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627452/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1164
+  },
+  {
+    "utc": "2026-09-14T20:43:19.973326+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627450/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 4232
+  },
+  {
+    "utc": "2026-09-14T20:43:20.779640+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627448/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1299
+  },
+  {
+    "utc": "2026-09-14T20:43:21.042473+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627447/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1298
+  },
+  {
+    "utc": "2026-09-14T20:43:21.587651+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627229/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 22296
+  },
+  {
+    "utc": "2026-09-14T20:43:21.814588+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627217/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1482
+  },
+  {
+    "utc": "2026-09-14T20:43:22.299586+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627196/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1258
+  },
+  {
+    "utc": "2026-09-14T20:43:27.552412+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627193/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 2719
+  },
+  {
+    "utc": "2026-09-14T20:43:27.741873+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627190/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1271
+  },
+  {
+    "utc": "2026-09-14T20:43:28.206649+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627176/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 11607
+  },
+  {
+    "utc": "2026-09-14T20:43:28.673401+00:00",
+    "url": "https://apigateway.procempa.com.br/apiman-gateway/administracao-planejamento/dopa/1.1/api/diarios/conteudo/627154/detalhes",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 1228
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627639",
+    "status": "excluded",
+    "title": "RESULTADO DE JULGAMENTO - PREGÃO ELETRÔNICO 145/2026 – PROCESSO 26.0.000065146-9, para a aquisição de faixa de brim tape",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627638",
+    "status": "excluded",
+    "title": "RESULTADO DE JULGAMENTO - PREGÃO ELETRÔNICO 287/2026 – PROCESSO 26.0.000113343-7 AQUISIÇÃO DE EQUIPAMENTO HOSPITALAR - S",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627637",
+    "status": "excluded",
+    "title": "RESULTADO DE JULGAMENTO - PREGÃO ELETRÔNICO 267/2026 – PROCESSO 26.0.000109619-1 REGISTRO DE PREÇOS PARA A AQUISIÇÃO DE ",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627636",
+    "status": "unknown",
+    "title": "Proc.: 26.0.000071242-5; PROCESSO SELETIVO SIMPLIFICADO 006/2026; Programa de Residência Jurídica; Edital 97; Fundação L",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627635",
+    "status": "unknown",
+    "title": "Proc.: 26.0.000069920-8; Concurso Público; Administrador, Assistente Social, Cirurgião-Dentista, Fonoaudiólogo. Psicólog",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627632",
+    "status": "open",
+    "title": "Proc.: 26.0.000113739-4; Processo Seletivo; Professores; EDITAL 098/2026",
+    "deadline": "2026-09-17T02:59:59+00:00"
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627625",
+    "status": "excluded",
+    "title": "ALTERAÇÃO DE EDITAL E DATA DE ABERTURA - PREGÃO ELETRÔNICO 277/2026 – PROCESSO 26.0.000110853-0, para o REGISTRO DE PREÇ",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627609",
+    "status": "excluded",
+    "title": "26.0.000053425-0; resultado parcial de edital de chamamento público; edital 006/2026; pnab; pnab - ciclo 2",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627601",
+    "status": "excluded",
+    "title": "APOSENTADORIA, 26.13.000003018-0, BETINA STAMPE, 141905-1, SMED",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627600",
+    "status": "excluded",
+    "title": "APOSENTADORIA, 26.13.000002988-2, ILSE INES HEINEN DA SILVA, 469200, SMS",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627599",
+    "status": "excluded",
+    "title": "APOSENTADORIA, 26.13.000003049-0, VERA ROSANE DA FONSECA MARTINS, 440167, SMS",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627598",
+    "status": "excluded",
+    "title": "APOSENTADORIA, 26.13.000004815-1, DEBORA HAUSCHILDT TEIXEIRA NEU, 1164392-1, SMED",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627597",
+    "status": "excluded",
+    "title": "APOSENTADORIA, 26.13.000002614-0, FERNANDO ANDRE NEUWALD, 678585, DMAE",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627595",
+    "status": "excluded",
+    "title": "APOSENTADORIA, 26.13.000002753-7, DANIEL HEISLER TASSINARI, 812575, SMS",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627591",
+    "status": "excluded",
+    "title": "EXTRATO DE INEXIGIBILIDADE Nº 977/2026, PROCESSO: 26.0.000133449-1, 7.545.827 ADRIANO CANDIOTA MACEDO FILHO,",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627590",
+    "status": "excluded",
+    "title": "26.0.000122799-7, 26.0.000122777-6, 26.0.000122713-0, 26.0.000132773-8, 26.0.000125340-8, 26.0.000125359-9, 26.0.0001226",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627589",
+    "status": "excluded",
+    "title": "APOSENTADORIA, 26.13.000003030-9, JAQUELINE NIEDERAUER BUCKER, 120884, DMAE",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627588",
+    "status": "excluded",
+    "title": "Altera Portaria 40829785/2026, Fiscais Contrato nº 101846/2026, 728886, 1201786, 1746421, 1747134, 1103687, 864150, 1317",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627587",
+    "status": "excluded",
+    "title": "EXTRATO DE CONTRATO Nº 104319/2026, PROCESSO 26.0.000133449-1, 7.545.827 ADRIANO CANDIOTA MACEDO FILHO, CNPJ 19.983.300/",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627586",
+    "status": "excluded",
+    "title": "APOSENTADORIA, 26.13.000002895-9, CARLA ROZANA LIMA RAMAZINI, 367348, SMED",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627585",
+    "status": "unknown",
+    "title": "EDITAL de Abertura Programas de Residência Médica R4 em Medicina Fetal e Endoscopia Ginecológica do Hospital Materno Inf",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627583",
+    "status": "excluded",
+    "title": "APOSENTADORIA, 26.13.000004793-7, ROSELAINE DE MELLO PACHECO BRAGA, 889316, SMS",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627582",
+    "status": "excluded",
+    "title": "DMAE; DESIGNA FISCAL DE CONTRATO E SERVIÇO; 26.10.000007858-0; 41301057.",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627581",
+    "status": "excluded",
+    "title": "Designa, Fiscal de Contrato, Serviço, ELTON BENÍCIO ESCOBAR SALDANHA, 1540360/1, LEONARDO QUADROS DE MEDEIROS, Paulo Dia",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627580",
+    "status": "excluded",
+    "title": "Conversão TORNA SEM EFEITO22.13.000000456-0 GILSON SOUZA PIRES, 364359, SMS 22.13.000006541-0 UBIRAJARA DE QUADROS ROSA,",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627579",
+    "status": "excluded",
+    "title": "EXTRATO DE INEXIGIBILIDADE Nº 976/2026, PROCESSO: 26.0.000140343-4, LEONARDO QUADROS DE MEDEIROS 02999577052,",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627578",
+    "status": "excluded",
+    "title": "EXTRATO DE CONTRATO Nº 104318/2026, PROCESSO 26.0.000140343-4, LEONARDO QUADROS DE MEDEIROS 02999577052,",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627577",
+    "status": "excluded",
+    "title": "APOSENTADORIA, 26.13.000005240-0, ROSANE ASSIS HENDRES, 495016, SMS",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627576",
+    "status": "excluded",
+    "title": "MODIFICA Conversão 23.13.000005090-7 AMERICO DA SILVA PEREIRA, 748356, DMAE",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627574",
+    "status": "excluded",
+    "title": "PROCESSO 22.0.000111593-0; ERRATA DE EXTRATO DO 4º TERMO DE APOSTILAMENTO Nº 99.922/2026; Philips Medical Systems Ltda.;",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627573",
+    "status": "excluded",
+    "title": "APOSENTADORIA, 26.13.000000900-8, MARIA CATARINA CORREA VARGAS, 711140, DMAE",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627572",
+    "status": "unknown",
+    "title": "EDITAL 029/2026 INSTAURAÇÃO REURB-S LOTEAMENTO ALBION 168 PROCESSO 26.0.000144936-1",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627571",
+    "status": "excluded",
+    "title": "EXTRATO DE CONTRATO; 21.0.000116734-8; Associação Cristã de Moços do Rio Grande do Sul - ACM Morro Santana, CNPJ n.° 92.",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627570",
+    "status": "open",
+    "title": "PROC. 22.0.000111593-0; EXTRATO DE TERMO ADITIVO; Philips Medical Systems Ltda.; Serviços de manutenção preventiva e cor",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627569",
+    "status": "excluded",
+    "title": "APOSENTADORIA, 26.13.000005113-6, ANITA MARQUES, 461584, SMS",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627568",
+    "status": "unknown",
+    "title": "EDITAL DE EXTRATO DE LISTA COMPLEMENTAR DE CRF - EDITAL 089/2026 LOTEAMENTO: CONJUNTO RESIDENCIAL DONA EUGÊNIA PROCESSO ",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627567",
+    "status": "excluded",
+    "title": "Extrato de Ata de Materiais - PROCESSO 26.0.000048900-9 - PE 094/2026 – material de consumo hospitalar EXTRATO DE ATA DE",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627566",
+    "status": "excluded",
+    "title": "APOSENTADORIA, 26.13.000005244-2, PAULO ROBERTO BAPTISTA DE LIMA, 125456, SMAP",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627565",
+    "status": "excluded",
+    "title": "APOSENTADORIA, 26.13.000000652-1, ERNANI STEIN, 710171, DMAE",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627564",
+    "status": "unknown",
+    "title": "CHAMAMENTO PÚBLICO 012/2026, Oficinas, Oficineiros PROCESSO 25.0.000060674-2",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627563",
+    "status": "unknown",
+    "title": "EDITAL de Abertura Programa de Residência PRIMURGE - EDITAL 001/2026 RESIDÊNCIA INTEGRADA MULTIPROFISSIONAL EM SAÚDE COM",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627562",
+    "status": "excluded",
+    "title": "25.0.000176525-9, ELOA GIOSANE BRUM RAMBO DE AVILA, 1168789, DELIMITA",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627561",
+    "status": "excluded",
+    "title": "23.0.000098833-2, VALDEMIR DE SOUZA ESTRAN, 763783, DELIMITA",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627559",
+    "status": "excluded",
+    "title": "DESIGNA Elton Benício Escobar Saldanha, 1540360, Eliseu da Silva Rodrigues,511393 Cainã Gomes Süffert,1693310, Clóvis Ma",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627558",
+    "status": "excluded",
+    "title": "Portaria 41341482, de 11/09/2026 (Processo 26.0.000039481-4) DELMAR ROGERIO LEMMERTZ MENTZ VIVIANE MOSNA DEMOLY DIEGO RO",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627557",
+    "status": "excluded",
+    "title": "TORNA SEM EFEITO, 26.13.000004793-7, ROSELAINE DE MELLO PACHECO BRAGA, 889316, SMS.",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627556",
+    "status": "excluded",
+    "title": "INDEFERE - 25.13.000006030-0, LEOPOLDO ZARNOTT, 34089.6, DEMHAB.",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627555",
+    "status": "excluded",
+    "title": "Processo 26.0.000123253-2 - NOMEIA RAUL FERNANDES VIEGAS, 1167944/3",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627554",
+    "status": "excluded",
+    "title": "APOSENTADORIA, 26.13.000005583-2, HIROXIMA DE CARVALHO BLASINA, 500838, SMED",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627553",
+    "status": "excluded",
+    "title": "TORNA SEM EFEITO, 26.13.000005583-2, HIROXIMA DE CARVALHO BLASINA, 500838, SMED",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627552",
+    "status": "excluded",
+    "title": "EXTRATO DO 5º TERMO ADITIVO AO CONTRATO Nº 050/2023 PROCESSO 23.17.000004363-2, DEPARTAMENTO MUNICIPAL DE LIMPEZA URBANA",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627551",
+    "status": "excluded",
+    "title": "26.0.000132842-4 JINCA INVESTIGAÇÃO E PRODUÇÃO AFRO LTDA 24.588.145/0001-13 EVENTO CULTURAL DIA DO TAMBOR 5ª EDIÇÃO R$ 2",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627550",
+    "status": "excluded",
+    "title": "Portaria 41330711 de 11/09/2026 (processo 26.17.000002884-2) DESIGNA Fiscais de Contrato e de Serviço para fiscalizar o ",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627548",
+    "status": "excluded",
+    "title": "APOSENTADORIA, 26.13.000003249-2, CLÁUDIO TADEU RODRIGUES DA SILVA, 252107, SMS",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627547",
+    "status": "open",
+    "title": "ELEIÇÃO SUPERVISOR E VICE SUPERVISOR DO PONTO FIXO HOSPITAL MOINHOS DE VENTO - PROCESSO 22.16.000033530-4",
+    "deadline": "2027-11-19T02:59:59+00:00"
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627546",
+    "status": "excluded",
+    "title": "DESIGNA Camila Silveira Cardoso, 129774, Alex Ribeiro Martins, 1044419, Gustavo Müller Alves 1080776, Elvira Rosilei Sig",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627545",
+    "status": "excluded",
+    "title": "APOSENTADORIA, 26.13.000003164-0, JACQUELINE JUNKER FUQUES, 500656, SMED",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627544",
+    "status": "excluded",
+    "title": "APOSENTADORIA, 26.13.000003053-8, SIMONE LUTZ LOPES, 459292, SMS",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627543",
+    "status": "excluded",
+    "title": "24.0.000080241-3 – DEFERE o pedido de abono de faltas registradas entre os dias 10/07/2026 à 23/07/2026 e entre os dias ",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627542",
+    "status": "open",
+    "title": "PROC. 25.0.000053352-4; EXTRATO DE TERMO ADITIVO; Philips Medical Systems Ltda.; Manutenção preventiva e corretiva, com ",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627541",
+    "status": "excluded",
+    "title": "Processo 26.0.000131902-6 MARIA LUISA DE OLIVEIRA Portaria 41255669",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627540",
+    "status": "excluded",
+    "title": "ALTERAÇÃO DE EDITAL E NOVA DATA DE ABERTURA - PREGÃO ELETRÔNICO 322/2026 – PROCESSO 26.0.000110728-2, para a aquisição d",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627539",
+    "status": "excluded",
+    "title": "ALTERAÇÃO DA DATA DE ABERTURA - PREGÃO ELETRÔNICO 307/2026 – PROCESSO 26.0.000032142-6, para a aquisição e instalação de",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627538",
+    "status": "open",
+    "title": "Portaria 41336233, MARIA APARECIDA ANDREZA LEOPOLDINO, matrícula 1073125, Processo 25.0.000085020-1.",
+    "deadline": "2027-02-16T02:59:59+00:00"
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627537",
+    "status": "excluded",
+    "title": "FAZ CESSAR - ELISABETE SABKA(22.0.000112614-1),VANESSA VERONA(22.0.000150952-0)",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627536",
+    "status": "excluded",
+    "title": "CONCEDE - VANESSA VERONA(22.0.000150952-0),MARCIO RECHIA(26.0.000130718-4)",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627535",
+    "status": "excluded",
+    "title": "MOFIFICA Averbação 23.13.000000419-0 ROSANE MARIA MORO TORRES, 1477129, SMED",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627534",
+    "status": "excluded",
+    "title": "APOSENTADORIA, 26.13.000003615-3, RENATA DAVIS, 346140, SMED",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627533",
+    "status": "excluded",
+    "title": "DESIGNA JULIANE DE AGUIAR GARCIA LAUREANO, 1731416, Função Gratificada de Responsável por Serviço, DMLU, 26.17.000002979",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627532",
+    "status": "excluded",
+    "title": "FAZ CESSAR JULIANE DE AGUIAR GARCIA LAUREANO, 1731416, efeitos da Portaria 37981004, insalubridade, DMLU, 26.17.00000297",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627531",
+    "status": "excluded",
+    "title": "Processo 25.10.000013193-0 MARIO GILBERTO DOS SANTOS Portaria 41252060",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627530",
+    "status": "excluded",
+    "title": "Extrato de Ata de Prestação de Serviços- PROCESSO 26.0.000073865-3 - PE 195/2026 - locação de ambulância EXTRATO DE ATA ",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627529",
+    "status": "excluded",
+    "title": "EDITAL DE NOTIFICAÇÃO DE RESULTADO 26.0.000113300-3 TERESINHA BIONDO",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627528",
+    "status": "excluded",
+    "title": "DMAE; MARCOS JOSÉ ARNOLD MACHADO; Portaria 41334256; Processo 26.0.000142010-0",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627527",
+    "status": "excluded",
+    "title": "Processo 26.0.000133488-2 DANIELA SANTOS ESCARRONE Portaria 41330118",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627526",
+    "status": "excluded",
+    "title": "Processo 26.0.000140536-4 CAROLINE MACHADO SIMON Portaria 41331255",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627525",
+    "status": "excluded",
+    "title": "Processo 26.0.000140775-8 DANIELLE MARQUES DUTRA Portaria 41330905",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627524",
+    "status": "excluded",
+    "title": "Processo 18.10.000000655-0 PAULO JOSE GATTELLI FERNANDES Portaria 41236443",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627523",
+    "status": "excluded",
+    "title": "DMAE; MARCOS JOSÉ ARNOLD MACHADO; 390899/3; Regime de Dedicação Exclusiva; Portaria 41330996; Processo 26.0.000142010-0",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627521",
+    "status": "open",
+    "title": "EDITAL 110/2026, PROCESSO SELETIVO 28/2025, 01, 02 e 03/2026 – PROFESSOR, PROCESSO 26.0.000071632-3;",
+    "deadline": "2026-09-25T02:59:59+00:00"
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627520",
+    "status": "excluded",
+    "title": "DEFERE exclusão falta, VALDIRENE CARLA DIAS MORCH, 1181912/04, 26.0.000142188-2, SMED",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627519",
+    "status": "excluded",
+    "title": "Processo 26.0.000134182-0 IOLANDA DIAS DE MATTOS Portaria 41322661",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627518",
+    "status": "excluded",
+    "title": "Processo 26.0.000140526-7 ALINE ASSIS GROSS Portaria 41318564",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627517",
+    "status": "excluded",
+    "title": "Processo 26.0.000140464-3 FRANCISLEINE RODRIGUES LEMOS CABRAL Portaria 41319436",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627516",
+    "status": "excluded",
+    "title": "DMAE; DESIGNA FISCAL DE CONTRATO E DE SERVIÇO; 24.10.000005921-5; 41304955.",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627515",
+    "status": "open",
+    "title": "PROCESSO 22.0.000047958-0; EXTRATO DE TERMO ADITIVO; Nucleorad Soluções em Proteção Radiológica Ltda.; Prestação de serv",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627514",
+    "status": "excluded",
+    "title": "Notificação. Termo de prorrogação Ação Fiscal nº 56/2026. Ação Fiscal LDV. SEI 26.0.000074783-0 EDITAL DE NOTIFICAÇÃO IS",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627512",
+    "status": "excluded",
+    "title": "Notificação. Termo de prorrogação Ação Fiscal nº 51/2026. Ação Fiscal LDV. SEI 26.0.000074783-0 EDITAL DE NOTIFICAÇÃO IS",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627511",
+    "status": "excluded",
+    "title": "DMAE; DESIGNA FISCAL DE CONTRATO E DE SERVIÇO; 26.10.000003692-5; 41344145.",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627510",
+    "status": "excluded",
+    "title": "Portaria 41319063/2026 - CONTRATADA: Licitapro Consultoria em Licitações e Gestão de Contratos Unipessoal Ltda. - CNPJ n",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627509",
+    "status": "excluded",
+    "title": "DMAE; DESIGNA FISCAL DE CONTRATO E DE SERVIÇO; 23.10.000011150-5; 41321113.",
+    "deadline": "2027-09-01T02:59:59+00:00"
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627508",
+    "status": "excluded",
+    "title": "Processo 26.0.000142130-0, PAULA BARBOSA PINHEIRO, matrícula 1530429/02, art. 90, da LC 133/85, 15/09/2026 a 10/11/2026.",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627506",
+    "status": "excluded",
+    "title": "Processo 25.0.000012472-1 CAROLINE VANAZZI GUADAGNIN Portaria 41287182",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627505",
+    "status": "excluded",
+    "title": "Processo 25.0.000012472-1 FABIANA MULLER DE SOUZA Portaria 41287183",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627504",
+    "status": "excluded",
+    "title": "Processo 26.0.000065043-8 CHRISTIANE DIAS DA ROSA Portaria 41286741",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627503",
+    "status": "excluded",
+    "title": "Processo 26.0.000142868-2 VICTORIA TRINDADE DE OLIVEIRA Portaria 41315302",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627502",
+    "status": "excluded",
+    "title": "Processo 26.0.000142976-0 ROSIELEN DA SILVA CHAVES Portaria 41302172",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627501",
+    "status": "excluded",
+    "title": "Processo 22.0.000081944-5 LEONARDO KLIMACH FAGUNDES DA SILVA Portaria 41286521",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627500",
+    "status": "excluded",
+    "title": "Processo 25.0.000012472-1 DANIELA PACHECO VIEIRA PADAO Portaria 41287172",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627499",
+    "status": "excluded",
+    "title": "Processo 25.0.000012472-1 JULIO CESAR GUIMARAES DOS SANTOS Portaria 41287161",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627498",
+    "status": "excluded",
+    "title": "Processo 25.0.000071794-3, Contrato 98762/2025, Aditivo 104307/2026, I9 ENGENHARIA & CONSULTORIA LTDA, 29.080.860/0001-6",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627497",
+    "status": "open",
+    "title": "EXTRATO DE TERMO DE FOMENTO; PROCESSO 26.0.000064757-7; CONTRATO REGISTRADO PGM/ANO: 104196/2026; IRMANDADE DA SANTA CAS",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627496",
+    "status": "excluded",
+    "title": "Extrato de Termo Aditivo Inclusão de Marca - PROCESSO 25.0.000095956-4 - PE 314/2025 – COMERCIAL DE PRODUTOS COLONIAIS A",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627495",
+    "status": "excluded",
+    "title": "Processo 26.0.000129822-3 - RESCINDE FRANKO TELOKEN",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627494",
+    "status": "excluded",
+    "title": "Processo 26.0.000130560-2 - RESCINDE JULYANNE JICARO DOS SANTOS",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627493",
+    "status": "excluded",
+    "title": "EXTRATO DO TERMO DE FOMENTO PROCESSO 25.0.000175724-8. SOCIEDADE BENEFICENTE FILHAS DE JESUS. EMENDA 224/2026.",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627492",
+    "status": "closed",
+    "title": "EXTRATO DE TERMO DE RESCISÃO PROCESSO 26.0.000032876-5. CLUBE DE PAIS E MÃES CONSTRUINDO O AMANHÃ. TERMO DE RESCISÃO: nº",
+    "deadline": "2026-07-26T02:59:59+00:00"
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627491",
+    "status": "excluded",
+    "title": "EXTRATO DE TERMO DE APOSTILAMENTO; PROCESSO 25.0.000177413-4; INSTITUTO DE CARDIOLOGIA - FUNDAÇÃO UNIVERSITÁRIA DE CARDI",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627490",
+    "status": "unknown",
+    "title": "EDITAL 030/2026, CADASTRAMENTO DE LOGRADOURO, PROCESSO 26.0.000099109-, LOTEAMENTO MORADAS DE PETRÓPOLIS R TRES MIL CENT",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627489",
+    "status": "excluded",
+    "title": "Processo 26.0.000125268-1 – DEFERE o pedido de exclusão do atraso do dia 02/06/2026, relativo à servidora LORENA NICOLAU",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627488",
+    "status": "unknown",
+    "title": "EDITAL 029/2026, CADASTRAMENTO DE LOGRADOURO, PROCESSO 26.0.000073674-0, CONDOMINIO RENASCER, R B LOT DEODORO, R MANOEL ",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627486",
+    "status": "excluded",
+    "title": "Processo 26.0.000036495-8 - DEFERE, em 11/09/2026, redução de carga horária para frequentar aulas obrigatórias do curso ",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627485",
+    "status": "excluded",
+    "title": "RESULTADO DE JULGAMENTO; PREGÃO ELETRÔNICO 153/2026; PROCESSO 26.10.000010599-4; OBJETO: Aquisição de Martelo demolidor ",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627484",
+    "status": "open",
+    "title": "Processo 26.16.000032848-2 - PE 031/2026 - Modernização do Parque Semafórico",
+    "deadline": "2026-10-08T02:59:59+00:00"
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627483",
+    "status": "excluded",
+    "title": "Processo 26.10.000013977-5 THIAGO ALEXANDRE MARQUES THOMAZ Portaria 41260681",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627481",
+    "status": "excluded",
+    "title": "NOMEIA ALLAN GUEDES POZZEBON, LUCAS HOMEM NADLER Diretor da Diretoria de Água 41210637 25.10.000009851-8",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627480",
+    "status": "excluded",
+    "title": "Processo 26.0.000140994-7 MARCO AURELIO SILVA Portaria 41281001",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627479",
+    "status": "excluded",
+    "title": "EXTRATO DE APOSTILAMENTO III; PROCESSO 22.0.000030536-0; MITRA da Arquidiocese de Porto Alegre, CNPJ n.° 92.858.000/0034",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627478",
+    "status": "excluded",
+    "title": "EXTRATO DE ATA DE REGISTRO DE PREÇOS de Materiais - PROCESSO 26.0.000069298-0 - PE 162/2026 – material odontológico",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627477",
+    "status": "excluded",
+    "title": "EXTRATO DE JUSTIFICATIVA DE INEXIGIBILIDADE DE CHAMAMENTO PÚBLICO, OSC ASSOCIAÇÃO DOS MORADORES DO CONJUNTO RESIDENCIAL ",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627476",
+    "status": "closed",
+    "title": "DMAE; COMISSÃO DOS PROCESSOS SELETIVOS SIMPLIFICADOS 046/2026 E 047/2026; 26.10.000013759-4; 41282176.",
+    "deadline": "2026-09-10T02:59:59+00:00"
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627474",
+    "status": "excluded",
+    "title": "RESULTADO DE JULGAMENTO PREGÃO ELETRÔNICO 113/2026 PROCESSO 26.10.000008157-2; OBJETO: Aquisição de aparelhos de medição",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627473",
+    "status": "excluded",
+    "title": "Processo 26.0.000142557-8 MARIA TERESA ALMEIDA WEBER Portaria 41297545",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627472",
+    "status": "excluded",
+    "title": "Processo 26.10.000000047-5 FRANCYNE DE SOUZA FRAGA Portaria 41275496",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627471",
+    "status": "excluded",
+    "title": "Processo 26.0.000142557-8 MARIA TERESA ALMEIDA WEBER Portaria 41297541",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627470",
+    "status": "excluded",
+    "title": "Processo 26.0.000143415-1 MARIANNA ALBERCHE MORIGI Portaria 41313236",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627468",
+    "status": "excluded",
+    "title": "INTENÇÃO DE REVOGAÇÃO DE ITEM DO PREGÃO ELETRÔNICO - PREGÃO ELETRÔNICO 213/2026 – PROCESSO 26.0.000091861-9, AQUISIÇÃO D",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627460",
+    "status": "open",
+    "title": "26.0.000072486-5 Parque Gabriel Knijnik AVISO DE PRORROGAÇÃO EDITAL DE CHAMAMENTO PÚBLICO DPC-SMP 004/2026 PROCESSO 26.0",
+    "deadline": "2026-10-15T02:59:59+00:00"
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627459",
+    "status": "excluded",
+    "title": "Aprova Projeto de Captação de Recursos da OSC SOCIEDADE PORTO ALEGRENSE DE AUXILIO AOS NECESSITADOS - SPAAN SEI 26.0.000",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627458",
+    "status": "excluded",
+    "title": "Aprova Projeto de Captação de Recursos da OSC IRMANDADE DA SANTA CASA DE MISERICÓRDIA DE PORTO ALEGRE CONSELHO MUNICIPAL",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627457",
+    "status": "excluded",
+    "title": "DMAE; DESIGNA; 26.10.000010815-2; 888130/2; 711217/2; 715788/1; 1716379/1; 748526/2",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627456",
+    "status": "excluded",
+    "title": "Processo 26.0.000043995-8 - SMAP - CLEVERSON A M SOARES LTDA - aquisição material permanente - drone para imageamento re",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627455",
+    "status": "excluded",
+    "title": "Portaria 206/2026 - Prorroga portaria 052/2026 - Fiscais de Contrato/Serviço - V TA, Contrato 103844/2026 - PRIME CONSUL",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627453",
+    "status": "excluded",
+    "title": "EXONERA ALINE CAVALHEIRO KAYSER, 1734695, do cargo de Assistente Administrativo, DMLU, 26.17.000002949-0",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627452",
+    "status": "excluded",
+    "title": "Processo 26.0.000127845-1 – DEFERE o pedido de abono das faltas e meias-faltas dos dias 03, 07, 08, 09, 10, 14, 15, 16, ",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627450",
+    "status": "excluded",
+    "title": "PRIME CONSULTORIA E ASSESSORIA EMPRESARIAL LTDA,22.0.000025526-6,FÁBIO LEGEREM LAURINDO,SIMONE PÉRES SIQUEIRA",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627448",
+    "status": "excluded",
+    "title": "Processo 25.0.000105470-0 ALINE CASARIL Portaria 41246452",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627447",
+    "status": "excluded",
+    "title": "Processo 25.0.000105470-0 VANESSA VERONA Portaria 41246469",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627229",
+    "status": "excluded",
+    "title": "26.0.000108867-9 RESOLUÇÃO Nº 01/2026 REGIMENTO INTERNO DO COMITÊ MUNICIPAL INTERSETORIAL DA PRIMEIRA INFÂNCIA – CMIPI C",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627217",
+    "status": "excluded",
+    "title": "Portaria 41293639/2026, 1447963/02, 1638777/01, 1696181/01, Contrato Registrado SECON 103483/2026, TCAP 75966/2021, 19.0",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627196",
+    "status": "excluded",
+    "title": "26.0.000125402-1, Portaria 543/26-GP AUTORIZA VIAGEM ANDRE SILVA FLORES, para participar de visita institucional ao Muni",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627193",
+    "status": "excluded",
+    "title": "26.0.000137147-8, Portaria 542/26-GP AUTORIZA VIAGEM RAFAEL MINUSCOLI MENEZES, LUCAS GUIMARÃES ABATI E CESAR ELENIR LOPE",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627190",
+    "status": "excluded",
+    "title": "26.0.000131089-4, Portaria 541/26-GP AUTORIZA LILIANA CARDOSO RODRIGUES DOS SANTOS DUARTE, para participar de visita ins",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627176",
+    "status": "unknown",
+    "title": "EDITAL DE SORTEIO Nº 001/2026 - SORTEIO PÚBLICO PARA CONCESSÃO DE LICENÇA DE ESTACIONAMENTO EM PONTO FIXO DE TÁXI DO MUN",
+    "deadline": null
+  },
+  {
+    "utc": "2026-09-14T20:42:19.146499+00:00",
+    "record": "627154",
+    "status": "excluded",
+    "title": "26.10.000013098-0, Portaria 540/26-GP AUTORIZA VIAGEM VICENTE ALTMAYER PERRONE, para participar das atividades vinculada",
+    "deadline": null
+  }
+]

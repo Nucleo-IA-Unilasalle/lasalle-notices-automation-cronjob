@@ -1,0 +1,86 @@
+[
+  {
+    "evidence": {
+      "canonical_url": "https://www.fao.org/3/cc3636en/cc3636en.pdf",
+      "document_urls": [
+        "https://www.fao.org/3/cc3636en/cc3636en.pdf"
+      ],
+      "origin": "discovery",
+      "record": {
+        "canonical_url": "https://www.fao.org/3/cc3636en/cc3636en.pdf",
+        "deadline": null,
+        "document_hashes": [],
+        "document_urls": [
+          "https://www.fao.org/3/cc3636en/cc3636en.pdf"
+        ],
+        "published_at": null,
+        "source_key": "fao",
+        "source_record_id": "https://www.fao.org/3/cc3636en/cc3636en.pdf",
+        "status": null,
+        "title": null
+      },
+      "stable_id": [
+        "fao",
+        "https://www.fao.org/3/cc3636en/cc3636en.pdf"
+      ]
+    },
+    "reason_code": "extra_submission",
+    "severity": "blocking"
+  },
+  {
+    "evidence": {
+      "canonical_url": "https://www.fao.org/3/nb780en/nb780en.pdf",
+      "document_urls": [
+        "https://www.fao.org/3/nb780en/nb780en.pdf"
+      ],
+      "origin": "discovery",
+      "record": {
+        "canonical_url": "https://www.fao.org/3/nb780en/nb780en.pdf",
+        "deadline": null,
+        "document_hashes": [],
+        "document_urls": [
+          "https://www.fao.org/3/nb780en/nb780en.pdf"
+        ],
+        "published_at": null,
+        "source_key": "fao",
+        "source_record_id": "https://www.fao.org/3/nb780en/nb780en.pdf",
+        "status": null,
+        "title": null
+      },
+      "stable_id": [
+        "fao",
+        "https://www.fao.org/3/nb780en/nb780en.pdf"
+      ]
+    },
+    "reason_code": "extra_submission",
+    "severity": "blocking"
+  },
+  {
+    "evidence": {
+      "canonical_url": "https://www.fao.org/3/no028en/no028en.pdf",
+      "document_urls": [
+        "https://www.fao.org/3/no028en/no028en.pdf"
+      ],
+      "origin": "discovery",
+      "record": {
+        "canonical_url": "https://www.fao.org/3/no028en/no028en.pdf",
+        "deadline": null,
+        "document_hashes": [],
+        "document_urls": [
+          "https://www.fao.org/3/no028en/no028en.pdf"
+        ],
+        "published_at": null,
+        "source_key": "fao",
+        "source_record_id": "https://www.fao.org/3/no028en/no028en.pdf",
+        "status": null,
+        "title": null
+      },
+      "stable_id": [
+        "fao",
+        "https://www.fao.org/3/no028en/no028en.pdf"
+      ]
+    },
+    "reason_code": "extra_submission",
+    "severity": "blocking"
+  }
+]

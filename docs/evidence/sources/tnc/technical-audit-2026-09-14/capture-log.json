@@ -1,0 +1,64 @@
+{
+  "source": "tnc",
+  "captured_at_window_utc": [
+    "2026-09-14T20:37:36Z",
+    "2026-09-14T20:38:50Z"
+  ],
+  "listing_url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+  "requests": [
+    {
+      "url": "https://www.tnc.org.br/conecte-se/trabalhe-conosco/",
+      "http_status": 200,
+      "content_type": "text/html;charset=utf-8",
+      "bytes": 91671,
+      "captured_at_utc": "2026-09-14T20:37:36Z",
+      "note": "Official Trabalhe Conosco page; consultancy section in rich-text-editor after heading 'Conheça também nossas oportunidades para consultoria e prestação de serviços'."
+    },
+    {
+      "url": "https://www.tnc.org.br/conecte-se/comunicacao/noticias/",
+      "http_status": 200,
+      "content_type": "text/html;charset=utf-8",
+      "bytes": 616024,
+      "captured_at_utc": "2026-09-14T20:37:37Z",
+      "note": "News listing checked for open edital/chamada/tdr signal detail pages; 0 signal detail URLs currently."
+    }
+  ],
+  "accounting": {
+    "open": 1,
+    "closed": 48,
+    "upcoming": 0,
+    "excluded": 0,
+    "unknown": 0,
+    "malformed_blocks": 0,
+    "pagination": {
+      "page_limit_registry": 5,
+      "listing_pages": 1,
+      "detail_limit_registry": 20,
+      "details_enumerated": 0,
+      "page_limit_hit": false,
+      "detail_cap_hit": false,
+      "note": "Single static HTML page; no pagination parameters; entire consultancy section (49 blocks) enumerated in one response."
+    },
+    "news_listing_signal_detail_urls": 0
+  },
+  "dedup": {
+    "duplicate_tdr_url_groups": 1,
+    "records_with_fallback_ids": 2
+  },
+  "open_pdf_validations": [
+    {
+      "url": "https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-metodologiapsa-para.pdf",
+      "http_status": 200,
+      "content_type": "application/pdf",
+      "bytes": 140858,
+      "sha256": "ac35f49cca7ee6d888e6caaa60870bf5c3555877f1a9cfe275abee6ffa733e9d",
+      "pdf_magic_ok": true,
+      "captured_at_utc": "2026-09-14T20:38:50Z"
+    }
+  ],
+  "block_accounting": {
+    "total_blocks": 49,
+    "with_title_and_deadline": 49,
+    "duplicate_source_ids_resolved": 2
+  }
+}

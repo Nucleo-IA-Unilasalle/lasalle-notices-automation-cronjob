@@ -1,0 +1,52 @@
+[
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "status",
+      "inventory": "open",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "origin": "inventory",
+      "record": {
+        "canonical_url": "https://fapergs.rs.gov.br/chamada-confap-propostas-do-programa-desafios-da-amazonia-2026-iniciativa-amazonia-10",
+        "deadline": null,
+        "document_hashes": [],
+        "document_urls": [],
+        "published_at": null,
+        "reason_code": "out_of_scope",
+        "source_key": "fapergs",
+        "source_record_id": "chamada-confap-propostas-do-programa-desafios-da-amazonia-2026-iniciativa-amazonia-10",
+        "status": "open",
+        "title": "CHAMADA CONFAP - PROPOSTAS DO PROGRAMA DESAFIOS DA AMAZONIA (2026) - Iniciativa Amazonia +10"
+      }
+    },
+    "reason_code": "out_of_scope",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "origin": "inventory",
+      "record": {
+        "canonical_url": "https://fapergs.rs.gov.br/programa-horizon-europe-da-comunidade-europeia",
+        "deadline": null,
+        "document_hashes": [],
+        "document_urls": [
+          "https://fapergs.rs.gov.br/upload/arquivos/202410/03160733-pt-horizon-europe-fapergs-guidelines-2024-v4.pdf"
+        ],
+        "published_at": null,
+        "reason_code": "out_of_scope",
+        "source_key": "fapergs",
+        "source_record_id": "programa-horizon-europe-da-comunidade-europeia",
+        "status": "open",
+        "title": "Programa Horizon Europe da Comunidade Europeia (permanent program page; guidelines PDF 2024 year-guard rejected)"
+      }
+    },
+    "reason_code": "out_of_scope",
+    "severity": "non_blocking"
+  }
+]

@@ -46,16 +46,52 @@ class TestExtractUnepPdfUrls:
         )
 
 # The fixture has:
-        # - "documents/gfc-concept-note-template.pdf" -> signal match (gfc fund)
-        # - "/resources/report/call-proposals-african-elephant-fund.pdf?download=1" -> signal
+        # - "documents/gfc-concept-note-template.pdf" -> excluded (gfc fund /
+        #   concept note are no longer open-call signals; standing template)
+        # - "/resources/report/call-proposals-african-elephant-fund.pdf?download=1"
+        #   -> signal match (call for proposals)
         # - duplicate with fragment -> deduped
         # - "/resources/report/call-for-proposals-african-elephant-fund.docx" -> not PDF
         # - "/resources/report/annual-report-2025.pdf" -> no signal
         # - external.example.org -> off host
         # - /events/award -> not PDF
         assert discovered == [
-            "https://www.unep.org/global-framework-chemicals/gfc-fund/documents/gfc-concept-note-template.pdf",
             "https://www.unep.org/resources/report/call-proposals-african-elephant-fund.pdf?download=1",
+        ]
+
+    def test_excludes_standing_gfc_guidance_and_concept_note_pdfs(self) -> None:
+        """Live-page guidance/template anchors must not become candidates.
+
+        The official applying-for-funding page permanently links these
+        wedocs.unep.org PDFs between application rounds (second round
+        closed 15 December 2025); emitting them produced false positives.
+        """
+        from discover_unep_candidates import extract_unep_pdf_urls
+
+        html = """
+        <html><body>
+          <a href="https://wedocs.unep.org/bitstream/handle/20.500.11822/48729/GFC-Fund-Guidance-on-the-scope.pdf?sequence=1&isAllowed=y">English</a>
+          <a href="https://wedocs.unep.org/bitstream/handle/20.500.11822/48729/GFC-Fund-Guidance-on-the-scope_FR.pdf?sequence=2&isAllowed=y">French</a>
+          <a href="https://wedocs.unep.org/bitstream/handle/20.500.11822/48729/GFC-Fund-Guidance-on-the-scope_SP.pdf?sequence=3&isAllowed=y">Spanish</a>
+          <a href="https://wedocs.unep.org/bitstream/handle/20.500.11822/48724/02_GFC_Fund_Concept_Note.pdf?sequence=3&isAllowed=y">Concept note</a>
+          <a href="https://www.unep.org/resources/call-for-proposals-2026.pdf">Open call</a>
+        </body></html>
+        """
+        assert extract_unep_pdf_urls(html, LISTING_URL) == [
+            "https://www.unep.org/resources/call-for-proposals-2026.pdf",
+        ]
+
+    def test_gfc_fund_branding_alone_is_not_a_signal(self) -> None:
+        from discover_unep_candidates import extract_unep_pdf_urls
+
+        html = """
+        <html><body>
+          <a href="/resources/gfc-fund-annual-report-2026.pdf">GFC Fund report</a>
+          <a href="/resources/request-for-proposals-gfc.pdf">Request for proposals</a>
+        </body></html>
+        """
+        assert extract_unep_pdf_urls(html, LISTING_URL) == [
+            "https://www.unep.org/resources/request-for-proposals-gfc.pdf",
         ]
 
     def test_rejects_external_hosts(self) -> None:
@@ -239,16 +275,16 @@ class TestDiscoverCandidates:
         ):
             stats, candidates = discover_candidates()
 
-        assert stats["candidates"] == 2
+        assert stats["candidates"] == 1
         assert stats["listings_fetched"] == 1
 
         urls = [c["url"] for c in candidates]
         assert (
-            "https://www.unep.org/global-framework-chemicals/gfc-fund/documents/gfc-concept-note-template.pdf"
-        ) in urls
-        assert (
             "https://www.unep.org/resources/report/call-proposals-african-elephant-fund.pdf?download=1"
         ) in urls
+        assert (
+            "https://www.unep.org/global-framework-chemicals/gfc-fund/documents/gfc-concept-note-template.pdf"
+        ) not in urls
 
     def test_year_filter_excludes_pre_2026_signal_pdf(self) -> None:
         from discover_unep_candidates import discover_candidates

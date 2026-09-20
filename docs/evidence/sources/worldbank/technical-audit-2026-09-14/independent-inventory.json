@@ -1,0 +1,38 @@
+[
+  {
+    "source_key": "worldbank",
+    "source_record_id": "https://thedocs.worldbank.org/en/doc/15fc51eee03c29f8e5ed847b76ed9d55-0090052026/original/SIEF-Call-8-EdTech-040926.pdf",
+    "canonical_url": "https://thedocs.worldbank.org/en/doc/15fc51eee03c29f8e5ed847b76ed9d55-0090052026/original/SIEF-Call-8-EdTech-040926.pdf",
+    "title": "SIEF Call for Proposals 8: EdTech for Foundational Learning - principal call PDF",
+    "status": "closed",
+    "published_at": "2026-04-08T00:00:00+00:00",
+    "deadline": "2026-05-19T00:00:00+00:00",
+    "document_urls": [
+      "https://thedocs.worldbank.org/en/doc/15fc51eee03c29f8e5ed847b76ed9d55-0090052026/original/SIEF-Call-8-EdTech-040926.pdf"
+    ],
+    "document_hashes": [],
+    "evidence": {
+      "captured_via": "Direct HTTP GET of https://www.worldbank.org/en/programs/sief-trust-fund/brief/sief-call-for-proposals-8-edtech-for-foundational-learning (2026-09-14T21:47:10Z, HTTP 200, text/html;charset=utf-8, 40793 bytes)",
+      "lifecycle_rationale": "Page published April 8, 2026; main application form Due May 19, 2026 and quick assessment form Due April 22, 2026. Both deadlines are in the past as of the 2026-09-14T21:47Z capture, so authoritative lifecycle is closed (page remains publicly listed).",
+      "pdf_check": "HEAD 200 application/pdf 430260 bytes (2026-09-14T21:47:56Z)",
+      "principal_document": true
+    }
+  },
+  {
+    "source_key": "worldbank",
+    "source_record_id": "https://thedocs.worldbank.org/en/doc/8edffdcd096b9275c8786996b33c21ce-0090052026/original/Call-8-announcement.pdf",
+    "canonical_url": "https://thedocs.worldbank.org/en/doc/8edffdcd096b9275c8786996b33c21ce-0090052026/original/Call-8-announcement.pdf",
+    "title": "Presenting the evaluations of the EdTech for Foundational Learning Window - funding-decision announcement PDF",
+    "status": "excluded",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://thedocs.worldbank.org/en/doc/8edffdcd096b9275c8786996b33c21ce-0090052026/original/Call-8-announcement.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": "out_of_scope",
+    "evidence": {
+      "rationale": "Funding-decision announcement PDF linked under RELATED > Funding decisions. No adapter signal token (call for proposals, request for proposals, expression of interest, eoi, procurement, funding strategy, resolution) in href, path, link text, title or aria-label; outside the adapter signal-token contract. HEAD 200 application/pdf 228904 bytes (2026-09-14T21:47:56Z)."
+    }
+  }
+]

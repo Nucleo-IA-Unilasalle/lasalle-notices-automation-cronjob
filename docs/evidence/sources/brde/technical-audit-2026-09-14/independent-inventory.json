@@ -1,0 +1,105 @@
+[
+  {
+    "source_key": "brde",
+    "source_record_id": "https://brde.com.br/wp-content/uploads/2026/06/0-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-TV-VOD-PRODUTORAS-2026.pdf",
+    "canonical_url": "https://brde.com.br/wp-content/uploads/2026/06/0-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-TV-VOD-PRODUTORAS-2026.pdf",
+    "title": "Chamada Pública BRDE/FSA - TV E VOD: DESEMPENHO COMERCIAL DE PRODUTORAS 2026",
+    "status": "open",
+    "published_at": null,
+    "deadline": "2026-09-25",
+    "document_urls": [
+      "https://brde.com.br/wp-content/uploads/2026/06/0-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-TV-VOD-PRODUTORAS-2026.pdf"
+    ],
+    "document_hashes": []
+  },
+  {
+    "source_key": "brde",
+    "source_record_id": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-PORTUGAL-2026.pdf",
+    "canonical_url": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-PORTUGAL-2026.pdf",
+    "title": "Chamada Pública BRDE/FSA - COPRODUÇÃO BRASIL-PORTUGAL 2026",
+    "status": "open",
+    "published_at": null,
+    "deadline": "2026-09-25",
+    "document_urls": [
+      "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-PORTUGAL-2026.pdf"
+    ],
+    "document_hashes": []
+  },
+  {
+    "source_key": "brde",
+    "source_record_id": "https://brde.com.br/chamada-publica-brde-fsa-nucleos--criativos-2026/",
+    "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-nucleos-criativos-2026/",
+    "title": "Chamada Pública BRDE/FSA - NÚCLEOS CRIATIVOS 2026",
+    "status": "closed",
+    "published_at": null,
+    "deadline": "2026-09-04",
+    "document_urls": [],
+    "document_hashes": []
+  },
+  {
+    "source_key": "brde",
+    "source_record_id": "https://brde.com.br/chamada-publica-brde-fsa-desempenho-artistico-2026/",
+    "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-desempenho-artistico-2026/",
+    "title": "Chamada Pública BRDE/FSA - DESEMPENHO ARTÍSTICO 2026",
+    "status": "closed",
+    "published_at": null,
+    "deadline": "2026-08-03",
+    "document_urls": [],
+    "document_hashes": []
+  },
+  {
+    "source_key": "brde",
+    "source_record_id": "https://brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-argentina-2026/",
+    "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-argentina-2026/",
+    "title": "Chamada Pública BRDE/FSA - COPRODUÇÃO BRASIL-ARGENTINA 2026",
+    "status": "closed",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [],
+    "document_hashes": []
+  },
+  {
+    "source_key": "brde",
+    "source_record_id": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-produtoras-2026/",
+    "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-produtoras-2026/",
+    "title": "Chamada Pública BRDE/FSA - CINEMA DESEMPENHO COMERCIAL PRODUTORAS 2026",
+    "status": "closed",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [],
+    "document_hashes": []
+  },
+  {
+    "source_key": "brde",
+    "source_record_id": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-distribuidoras-2026/",
+    "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-cinema-desempenho-comercial-distribuidoras-2026/",
+    "title": "Chamada Pública BRDE/FSA - CINEMA DESEMPENHO COMERCIAL DISTRIBUIDORAS 2026",
+    "status": "closed",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [],
+    "document_hashes": []
+  },
+  {
+    "source_key": "brde",
+    "source_record_id": "https://brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-uruguai-2026/",
+    "canonical_url": "https://brde.com.br/chamada-publica-brde-fsa-coproducao-brasil-uruguai-2026/",
+    "title": "Chamada Pública BRDE/FSA - COPRODUÇÃO BRASIL-URUGUAI 2026",
+    "status": "closed",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [],
+    "document_hashes": []
+  },
+  {
+    "source_key": "brde",
+    "source_record_id": "palacete-editais-encerrado-sections",
+    "canonical_url": "https://www.brde.com.br/palacete/editais/",
+    "title": "Palacete Editais (Encerrado sections: 2026, 2024-2025, 2019-2020)",
+    "status": "closed",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [],
+    "document_hashes": []
+  }
+]

@@ -1,0 +1,711 @@
+[
+  {
+    "source_key": "wwf",
+    "source_record_id": "95223",
+    "canonical_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95223/Consultoria-para-intervencoes-em-campo-para-promover-a-gestao-integrada-dos-recursos-hidricos-e-as-financas-sustentaveis-no-Pantanal",
+    "title": "03 set 2026 Consultoria para intervenções em campo para promover a gestão integrada dos recursos hídricos e as ... Pantanal-CARP",
+    "status": "open",
+    "published_at": "2026-09-03T00:00:00Z",
+    "deadline": null,
+    "document_urls": [],
+    "document_hashes": [],
+    "reason_code": "out_of_scope",
+    "evidence": {
+      "captured_via": "independent-direct-requests",
+      "listing_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/",
+      "row_source_record_id": "95223",
+      "detail_id": "95223",
+      "listing_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:20.583631Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/"
+      },
+      "detail_content_area": true,
+      "detail_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:20.833964Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95223/Consultoria-para-intervencoes-em-campo-para-promover-a-gestao-integrada-dos-recursos-hidricos-e-as-financas-sustentaveis-no-Pantanal"
+      },
+      "pdfs_found": [],
+      "pdfs_rejected": [],
+      "note": "Detail content area has no PDF links; only non-PDF attachments (e.g. DOCX TDRs). Candidate/PDF pipeline cannot ingest this open edital."
+    }
+  },
+  {
+    "source_key": "wwf",
+    "source_record_id": "005936::divulgacao_publicacao-no-site_sc005936.pdf",
+    "canonical_url": "https://wwfbrnew.awsassets.panda.org/downloads/divulgacao_publicacao-no-site_sc005936.pdf",
+    "title": "03 set 2026 Consultoria para revisão e atualização dos Guias de Critérios Mínimos DCF do WWF-Brasil Processo de Contratação nº 005936",
+    "status": "open",
+    "published_at": "2026-09-03T00:00:00Z",
+    "deadline": null,
+    "document_urls": [
+      "https://wwfbrnew.awsassets.panda.org/downloads/divulgacao_publicacao-no-site_sc005936.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "independent-direct-requests",
+      "listing_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/",
+      "row_source_record_id": "005936",
+      "detail_id": "95221",
+      "listing_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:20.583631Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/"
+      },
+      "detail_content_area": true,
+      "detail_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:21.103237Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95221/Consultoria-para-revisao-e-atualizacao-dos-Guias-de-Criterios-Minimos-DCF-do-WWF-Brasil"
+      },
+      "principal_document": true,
+      "pdfs_rejected": []
+    }
+  },
+  {
+    "source_key": "wwf",
+    "source_record_id": "005936::carta_convite_concorrencia_dcf2_sc005936.pdf",
+    "canonical_url": "https://wwfbrnew.awsassets.panda.org/downloads/carta_convite_concorrencia_dcf2_sc005936.pdf",
+    "title": "03 set 2026 Consultoria para revisão e atualização dos Guias de Critérios Mínimos DCF do WWF-Brasil Processo de Contratação nº 005936",
+    "status": "open",
+    "published_at": "2026-09-03T00:00:00Z",
+    "deadline": null,
+    "document_urls": [
+      "https://wwfbrnew.awsassets.panda.org/downloads/carta_convite_concorrencia_dcf2_sc005936.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "independent-direct-requests",
+      "listing_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/",
+      "row_source_record_id": "005936",
+      "detail_id": "95221",
+      "listing_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:20.583631Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/"
+      },
+      "detail_content_area": true,
+      "detail_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:21.103237Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95221/Consultoria-para-revisao-e-atualizacao-dos-Guias-de-Criterios-Minimos-DCF-do-WWF-Brasil"
+      },
+      "principal_document": true,
+      "pdfs_rejected": []
+    }
+  },
+  {
+    "source_key": "wwf",
+    "source_record_id": "005945::divulgacao_publicacao-no-site_sc005945_1.pdf",
+    "canonical_url": "https://wwfbrnew.awsassets.panda.org/downloads/divulgacao_publicacao-no-site_sc005945_1.pdf",
+    "title": "01 set 2026 Consultoria para engajamento da Rede PainelMar Processo de Contratação nº 005945",
+    "status": "open",
+    "published_at": "2026-09-01T00:00:00Z",
+    "deadline": null,
+    "document_urls": [
+      "https://wwfbrnew.awsassets.panda.org/downloads/divulgacao_publicacao-no-site_sc005945_1.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "independent-direct-requests",
+      "listing_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/",
+      "row_source_record_id": "005945",
+      "detail_id": "95184",
+      "listing_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:20.583631Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/"
+      },
+      "detail_content_area": true,
+      "detail_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:21.358560Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95184/Consultoria-para-engajamento-da-Rede-PainelMar"
+      },
+      "principal_document": true,
+      "pdfs_rejected": []
+    }
+  },
+  {
+    "source_key": "wwf",
+    "source_record_id": "005945::carta-convite_wwf_consultoria-para-engajamento_sc005945_1.pdf",
+    "canonical_url": "https://wwfbrnew.awsassets.panda.org/downloads/carta-convite_wwf_consultoria-para-engajamento_sc005945_1.pdf",
+    "title": "01 set 2026 Consultoria para engajamento da Rede PainelMar Processo de Contratação nº 005945",
+    "status": "open",
+    "published_at": "2026-09-01T00:00:00Z",
+    "deadline": null,
+    "document_urls": [
+      "https://wwfbrnew.awsassets.panda.org/downloads/carta-convite_wwf_consultoria-para-engajamento_sc005945_1.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "independent-direct-requests",
+      "listing_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/",
+      "row_source_record_id": "005945",
+      "detail_id": "95184",
+      "listing_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:20.583631Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/"
+      },
+      "detail_content_area": true,
+      "detail_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:21.358560Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95184/Consultoria-para-engajamento-da-Rede-PainelMar"
+      },
+      "principal_document": true,
+      "pdfs_rejected": []
+    }
+  },
+  {
+    "source_key": "wwf",
+    "source_record_id": "005943::divulgacao_publicacao-no-site_sc005943.pdf",
+    "canonical_url": "https://wwfbrnew.awsassets.panda.org/downloads/divulgacao_publicacao-no-site_sc005943.pdf",
+    "title": "01 set 2026 Contratação de assistente de apoio operacional Processo de Contratação nº 005943",
+    "status": "open",
+    "published_at": "2026-09-01T00:00:00Z",
+    "deadline": null,
+    "document_urls": [
+      "https://wwfbrnew.awsassets.panda.org/downloads/divulgacao_publicacao-no-site_sc005943.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "independent-direct-requests",
+      "listing_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/",
+      "row_source_record_id": "005943",
+      "detail_id": "95182",
+      "listing_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:20.583631Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/"
+      },
+      "detail_content_area": true,
+      "detail_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:21.612992Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95182/Contratacao-de-assistente-de-apoio-operacional"
+      },
+      "principal_document": true,
+      "pdfs_rejected": []
+    }
+  },
+  {
+    "source_key": "wwf",
+    "source_record_id": "005943::carta-convite-wwf_assistente-de-apoio-operacional_sc005943.pdf",
+    "canonical_url": "https://wwfbrnew.awsassets.panda.org/downloads/carta-convite-wwf_assistente-de-apoio-operacional_sc005943.pdf",
+    "title": "01 set 2026 Contratação de assistente de apoio operacional Processo de Contratação nº 005943",
+    "status": "open",
+    "published_at": "2026-09-01T00:00:00Z",
+    "deadline": null,
+    "document_urls": [
+      "https://wwfbrnew.awsassets.panda.org/downloads/carta-convite-wwf_assistente-de-apoio-operacional_sc005943.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "independent-direct-requests",
+      "listing_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/",
+      "row_source_record_id": "005943",
+      "detail_id": "95182",
+      "listing_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:20.583631Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/"
+      },
+      "detail_content_area": true,
+      "detail_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:21.612992Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95182/Contratacao-de-assistente-de-apoio-operacional"
+      },
+      "principal_document": true,
+      "pdfs_rejected": []
+    }
+  },
+  {
+    "source_key": "wwf",
+    "source_record_id": "005874::divulgacao_publicacao-no-site_sc005874.pdf",
+    "canonical_url": "https://wwfbrnew.awsassets.panda.org/downloads/divulgacao_publicacao-no-site_sc005874.pdf",
+    "title": "21 ago 2026 [ENCERRADO] Consultoria para priorização operacional do Plano de Uso Público do Parque Nacional da ... Processo de Contratação nº 005874",
+    "status": "closed",
+    "published_at": "2026-08-21T00:00:00Z",
+    "deadline": null,
+    "document_urls": [
+      "https://wwfbrnew.awsassets.panda.org/downloads/divulgacao_publicacao-no-site_sc005874.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "independent-direct-requests",
+      "listing_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/",
+      "row_source_record_id": "005874",
+      "detail_id": "95100",
+      "listing_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:20.583631Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/"
+      },
+      "detail_content_area": true,
+      "detail_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:21.857464Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95100/Consultoria-para-priorizacao-operacional-do-Plano-de-Uso-Publico-do-Parque-Nacional-da-Amazonia"
+      },
+      "principal_document": true,
+      "pdfs_rejected": []
+    }
+  },
+  {
+    "source_key": "wwf",
+    "source_record_id": "005874::carta-convite-priorizacao-operacional-do-plano-de-uso-publico-do-parque-nacional-da-a.pdf",
+    "canonical_url": "https://wwfbrnew.awsassets.panda.org/downloads/carta-convite-priorizacao-operacional-do-plano-de-uso-publico-do-parque-nacional-da-a.pdf",
+    "title": "21 ago 2026 [ENCERRADO] Consultoria para priorização operacional do Plano de Uso Público do Parque Nacional da ... Processo de Contratação nº 005874",
+    "status": "closed",
+    "published_at": "2026-08-21T00:00:00Z",
+    "deadline": null,
+    "document_urls": [
+      "https://wwfbrnew.awsassets.panda.org/downloads/carta-convite-priorizacao-operacional-do-plano-de-uso-publico-do-parque-nacional-da-a.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "independent-direct-requests",
+      "listing_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/",
+      "row_source_record_id": "005874",
+      "detail_id": "95100",
+      "listing_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:20.583631Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/"
+      },
+      "detail_content_area": true,
+      "detail_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:21.857464Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95100/Consultoria-para-priorizacao-operacional-do-Plano-de-Uso-Publico-do-Parque-Nacional-da-Amazonia"
+      },
+      "principal_document": true,
+      "pdfs_rejected": []
+    }
+  },
+  {
+    "source_key": "wwf",
+    "source_record_id": "005746::divulgacao_publicacao-no-site_sc005746.pdf",
+    "canonical_url": "https://wwfbrnew.awsassets.panda.org/downloads/divulgacao_publicacao-no-site_sc005746.pdf",
+    "title": "20 ago 2026 [ENCERRADO] Consultoria para elaboração de publicação sobre a participação do Brasil na COP17 Processo de Contratação nº 005746",
+    "status": "closed",
+    "published_at": "2026-08-20T00:00:00Z",
+    "deadline": null,
+    "document_urls": [
+      "https://wwfbrnew.awsassets.panda.org/downloads/divulgacao_publicacao-no-site_sc005746.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "independent-direct-requests",
+      "listing_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/",
+      "row_source_record_id": "005746",
+      "detail_id": "95081",
+      "listing_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:20.583631Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/"
+      },
+      "detail_content_area": true,
+      "detail_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:22.112207Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95081/Consultoria-para-elaboracao-de-publicacao-sobre-a-participacao-do-Brasil-na-COP17"
+      },
+      "principal_document": true,
+      "pdfs_rejected": []
+    }
+  },
+  {
+    "source_key": "wwf",
+    "source_record_id": "005746::carta-convite-consultoria_cop17_sc005746.pdf",
+    "canonical_url": "https://wwfbrnew.awsassets.panda.org/downloads/carta-convite-consultoria_cop17_sc005746.pdf",
+    "title": "20 ago 2026 [ENCERRADO] Consultoria para elaboração de publicação sobre a participação do Brasil na COP17 Processo de Contratação nº 005746",
+    "status": "closed",
+    "published_at": "2026-08-20T00:00:00Z",
+    "deadline": null,
+    "document_urls": [
+      "https://wwfbrnew.awsassets.panda.org/downloads/carta-convite-consultoria_cop17_sc005746.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "independent-direct-requests",
+      "listing_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/",
+      "row_source_record_id": "005746",
+      "detail_id": "95081",
+      "listing_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:20.583631Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/"
+      },
+      "detail_content_area": true,
+      "detail_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:22.112207Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95081/Consultoria-para-elaboracao-de-publicacao-sobre-a-participacao-do-Brasil-na-COP17"
+      },
+      "principal_document": true,
+      "pdfs_rejected": []
+    }
+  },
+  {
+    "source_key": "wwf",
+    "source_record_id": "005789::divulgacao_publicacao-no-site_sc005789_prorrogacao.pdf",
+    "canonical_url": "https://wwfbrnew.awsassets.panda.org/downloads/divulgacao_publicacao-no-site_sc005789_prorrogacao.pdf",
+    "title": "20 ago 2026 [ENCERRADO] Consultoria para acompanhamento técnico de duas Unidades Demonstrativas de transição de ... Processo de Contratação nº 005789",
+    "status": "closed",
+    "published_at": "2026-08-20T00:00:00Z",
+    "deadline": null,
+    "document_urls": [
+      "https://wwfbrnew.awsassets.panda.org/downloads/divulgacao_publicacao-no-site_sc005789_prorrogacao.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "independent-direct-requests",
+      "listing_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/",
+      "row_source_record_id": "005789",
+      "detail_id": "95080",
+      "listing_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:20.583631Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/"
+      },
+      "detail_content_area": true,
+      "detail_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:22.375268Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95080/Consultoria-para-acompanhamento-tecnico-de-duas-Unidades-Demonstrativas-de-transicao-de-areas-de-cacau"
+      },
+      "principal_document": true,
+      "pdfs_rejected": []
+    }
+  },
+  {
+    "source_key": "wwf",
+    "source_record_id": "005789::carta-convite-concorrencia-wwf_udsmulherescacau_it_sc005789_prorrogacao.pdf",
+    "canonical_url": "https://wwfbrnew.awsassets.panda.org/downloads/carta-convite-concorrencia-wwf_udsmulherescacau_it_sc005789_prorrogacao.pdf",
+    "title": "20 ago 2026 [ENCERRADO] Consultoria para acompanhamento técnico de duas Unidades Demonstrativas de transição de ... Processo de Contratação nº 005789",
+    "status": "closed",
+    "published_at": "2026-08-20T00:00:00Z",
+    "deadline": null,
+    "document_urls": [
+      "https://wwfbrnew.awsassets.panda.org/downloads/carta-convite-concorrencia-wwf_udsmulherescacau_it_sc005789_prorrogacao.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "independent-direct-requests",
+      "listing_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/",
+      "row_source_record_id": "005789",
+      "detail_id": "95080",
+      "listing_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:20.583631Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/"
+      },
+      "detail_content_area": true,
+      "detail_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:22.375268Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95080/Consultoria-para-acompanhamento-tecnico-de-duas-Unidades-Demonstrativas-de-transicao-de-areas-de-cacau"
+      },
+      "principal_document": true,
+      "pdfs_rejected": []
+    }
+  },
+  {
+    "source_key": "wwf",
+    "source_record_id": "005812::divulgacao_publicacao-no-site_sc005812.pdf",
+    "canonical_url": "https://wwfbrnew.awsassets.panda.org/downloads/divulgacao_publicacao-no-site_sc005812.pdf",
+    "title": "18 ago 2026 [ENCERRADO] Consultoria para redação e tradução de textos científicos Processo de Contratação nº 005812",
+    "status": "closed",
+    "published_at": "2026-08-18T00:00:00Z",
+    "deadline": null,
+    "document_urls": [
+      "https://wwfbrnew.awsassets.panda.org/downloads/divulgacao_publicacao-no-site_sc005812.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "independent-direct-requests",
+      "listing_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/",
+      "row_source_record_id": "005812",
+      "detail_id": "95044",
+      "listing_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:20.583631Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/"
+      },
+      "detail_content_area": true,
+      "detail_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:22.630039Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95044/Consultoria-para-redacao-e-traducao-de-textos-cientificos"
+      },
+      "principal_document": true,
+      "pdfs_rejected": []
+    }
+  },
+  {
+    "source_key": "wwf",
+    "source_record_id": "005812::carta-convite-concorrencia-wwf_consultor-interno_sc005812.pdf",
+    "canonical_url": "https://wwfbrnew.awsassets.panda.org/downloads/carta-convite-concorrencia-wwf_consultor-interno_sc005812.pdf",
+    "title": "18 ago 2026 [ENCERRADO] Consultoria para redação e tradução de textos científicos Processo de Contratação nº 005812",
+    "status": "closed",
+    "published_at": "2026-08-18T00:00:00Z",
+    "deadline": null,
+    "document_urls": [
+      "https://wwfbrnew.awsassets.panda.org/downloads/carta-convite-concorrencia-wwf_consultor-interno_sc005812.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "independent-direct-requests",
+      "listing_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/",
+      "row_source_record_id": "005812",
+      "detail_id": "95044",
+      "listing_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:20.583631Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/"
+      },
+      "detail_content_area": true,
+      "detail_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:22.630039Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95044/Consultoria-para-redacao-e-traducao-de-textos-cientificos"
+      },
+      "principal_document": true,
+      "pdfs_rejected": []
+    }
+  },
+  {
+    "source_key": "wwf",
+    "source_record_id": "005845::divulgacao_publicacao-no-site_sc005845.pdf",
+    "canonical_url": "https://wwfbrnew.awsassets.panda.org/downloads/divulgacao_publicacao-no-site_sc005845.pdf",
+    "title": "17 ago 2026 [ENCERRADO] Consultoria para Facilitação, Desenvolvimento e Inteligência Estratégica em captação de ... Processo de Contratação nº 005845",
+    "status": "closed",
+    "published_at": "2026-08-17T00:00:00Z",
+    "deadline": null,
+    "document_urls": [
+      "https://wwfbrnew.awsassets.panda.org/downloads/divulgacao_publicacao-no-site_sc005845.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "independent-direct-requests",
+      "listing_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/",
+      "row_source_record_id": "005845",
+      "detail_id": "95041",
+      "listing_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:20.583631Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/"
+      },
+      "detail_content_area": true,
+      "detail_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:22.888538Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95041/Consultoria-para-Facilitacao-Desenvolvimento-e-Inteligencia-Estrategica-em-captacao-de-recursos-e-relacionamento-com-Financiadores"
+      },
+      "principal_document": true,
+      "pdfs_rejected": [
+        "https://wwfbrnew.awsassets.panda.org/downloads/resultado_carta_convite_consultoria_captacao-de-recursos_sc005845.pdf"
+      ]
+    }
+  },
+  {
+    "source_key": "wwf",
+    "source_record_id": "005845::carta-convite_captacao-de-recursos_sc005845.pdf",
+    "canonical_url": "https://wwfbrnew.awsassets.panda.org/downloads/carta-convite_captacao-de-recursos_sc005845.pdf",
+    "title": "17 ago 2026 [ENCERRADO] Consultoria para Facilitação, Desenvolvimento e Inteligência Estratégica em captação de ... Processo de Contratação nº 005845",
+    "status": "closed",
+    "published_at": "2026-08-17T00:00:00Z",
+    "deadline": null,
+    "document_urls": [
+      "https://wwfbrnew.awsassets.panda.org/downloads/carta-convite_captacao-de-recursos_sc005845.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "independent-direct-requests",
+      "listing_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/",
+      "row_source_record_id": "005845",
+      "detail_id": "95041",
+      "listing_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:20.583631Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/"
+      },
+      "detail_content_area": true,
+      "detail_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:22.888538Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?95041/Consultoria-para-Facilitacao-Desenvolvimento-e-Inteligencia-Estrategica-em-captacao-de-recursos-e-relacionamento-com-Financiadores"
+      },
+      "principal_document": true,
+      "pdfs_rejected": [
+        "https://wwfbrnew.awsassets.panda.org/downloads/resultado_carta_convite_consultoria_captacao-de-recursos_sc005845.pdf"
+      ]
+    }
+  },
+  {
+    "source_key": "wwf",
+    "source_record_id": "005722::divulgacao-respostas_site_v3_sc005722.pdf",
+    "canonical_url": "https://wwfbrnew.awsassets.panda.org/downloads/divulgacao-respostas_site_v3_sc005722.pdf",
+    "title": "21 jul 2026 [ENCERRADO] Consultoria para avaliação de meio termo do Projeto Bem Viver e Bioeconomia Processo de Contratação nº 005722",
+    "status": "closed",
+    "published_at": "2026-07-21T00:00:00Z",
+    "deadline": null,
+    "document_urls": [
+      "https://wwfbrnew.awsassets.panda.org/downloads/divulgacao-respostas_site_v3_sc005722.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "independent-direct-requests",
+      "listing_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/",
+      "row_source_record_id": "005722",
+      "detail_id": "94961",
+      "listing_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:20.583631Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/"
+      },
+      "detail_content_area": true,
+      "detail_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:23.153448Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?94961/Consultoria-para-avaliacao-de-meio-termo-do-Projeto-Bem-Viver-e-Bioeconomia"
+      },
+      "principal_document": true,
+      "pdfs_rejected": [
+        "https://wwfbrnew.awsassets.panda.org/downloads/resultado_selecao_cc_carta-convite_analise_car_sc005722.pdf"
+      ]
+    }
+  },
+  {
+    "source_key": "wwf",
+    "source_record_id": "005722::divulgacao_site_v3_sc005722.pdf",
+    "canonical_url": "https://wwfbrnew.awsassets.panda.org/downloads/divulgacao_site_v3_sc005722.pdf",
+    "title": "21 jul 2026 [ENCERRADO] Consultoria para avaliação de meio termo do Projeto Bem Viver e Bioeconomia Processo de Contratação nº 005722",
+    "status": "closed",
+    "published_at": "2026-07-21T00:00:00Z",
+    "deadline": null,
+    "document_urls": [
+      "https://wwfbrnew.awsassets.panda.org/downloads/divulgacao_site_v3_sc005722.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "independent-direct-requests",
+      "listing_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/",
+      "row_source_record_id": "005722",
+      "detail_id": "94961",
+      "listing_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:20.583631Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/"
+      },
+      "detail_content_area": true,
+      "detail_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:23.153448Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?94961/Consultoria-para-avaliacao-de-meio-termo-do-Projeto-Bem-Viver-e-Bioeconomia"
+      },
+      "principal_document": true,
+      "pdfs_rejected": [
+        "https://wwfbrnew.awsassets.panda.org/downloads/resultado_selecao_cc_carta-convite_analise_car_sc005722.pdf"
+      ]
+    }
+  },
+  {
+    "source_key": "wwf",
+    "source_record_id": "005722::carta-convite-concorrencia-wwf_br_avalicao_meio_termo_projeto_bem_viver_bioeconomia_u_1.pdf",
+    "canonical_url": "https://wwfbrnew.awsassets.panda.org/downloads/carta-convite-concorrencia-wwf_br_avalicao_meio_termo_projeto_bem_viver_bioeconomia_u_1.pdf",
+    "title": "21 jul 2026 [ENCERRADO] Consultoria para avaliação de meio termo do Projeto Bem Viver e Bioeconomia Processo de Contratação nº 005722",
+    "status": "closed",
+    "published_at": "2026-07-21T00:00:00Z",
+    "deadline": null,
+    "document_urls": [
+      "https://wwfbrnew.awsassets.panda.org/downloads/carta-convite-concorrencia-wwf_br_avalicao_meio_termo_projeto_bem_viver_bioeconomia_u_1.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": null,
+    "evidence": {
+      "captured_via": "independent-direct-requests",
+      "listing_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/",
+      "row_source_record_id": "005722",
+      "detail_id": "94961",
+      "listing_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:20.583631Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/"
+      },
+      "detail_content_area": true,
+      "detail_http": {
+        "status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "fetched_at_utc_end": "2026-09-14T21:54:23.153448Z",
+        "final_url": "https://www.wwf.org.br/sobrenos/aquisicoesecontratacoes/?94961/Consultoria-para-avaliacao-de-meio-termo-do-Projeto-Bem-Viver-e-Bioeconomia"
+      },
+      "principal_document": true,
+      "pdfs_rejected": [
+        "https://wwfbrnew.awsassets.panda.org/downloads/resultado_selecao_cc_carta-convite_analise_car_sc005722.pdf"
+      ]
+    }
+  }
+]

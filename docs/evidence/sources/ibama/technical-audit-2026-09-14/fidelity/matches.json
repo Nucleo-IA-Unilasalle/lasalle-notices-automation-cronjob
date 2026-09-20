@@ -1,0 +1,582 @@
+[
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-prorroga-prazo-para-solicitacao-de-audiencia-publica-sobre-licenciamento-do-fso-odisseia-na-bacia-de-campos",
+      "deadline": "2026-10-15T23:59:59-03:00",
+      "document_hashes": [],
+      "document_urls": [],
+      "published_at": "2026-09-01T17:22:00-03:00",
+      "source_key": "ibama",
+      "source_record_id": "edital-20-2026",
+      "status": "open",
+      "title": "Ibama prorroga prazo para solicitação de audiência pública sobre licenciamento do FSO Odisseia na Bacia de Campos"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-10-16T02:59:59Z",
+        "inventory": "2026-10-16T02:59:59Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-prorroga-prazo-para-solicitacao-de-audiencia-publica-sobre-licenciamento-do-fso-odisseia-na-bacia-de-campos",
+      "deadline": "2026-10-15T23:59:59-03:00",
+      "document_hashes": [],
+      "document_urls": [],
+      "evidence": {
+        "captured_via": "independent-direct-requests",
+        "detail_content_area": true,
+        "disposition_note": null,
+        "gt_note": "Edital 20/2026 hearing-request period prorrogated to 2026-10-15; participatory call",
+        "http": {
+          "content_type": "text/html;charset=utf-8",
+          "fetched_at_utc_end": "2026-09-14T22:04:56.055100Z",
+          "final_url": "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-prorroga-prazo-para-solicitacao-de-audiencia-publica-sobre-licenciamento-do-fso-odisseia-na-bacia-de-campos",
+          "status": 200
+        },
+        "listing_kind": "notas2026",
+        "listing_url": "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/",
+        "proposal_opens_at": null,
+        "raw_status": "open",
+        "source_updated_at": null
+      },
+      "published_at": "2026-09-01T17:22:00-03:00",
+      "reason_code": null,
+      "source_key": "ibama",
+      "source_record_id": "edital-20-2026",
+      "status": "open",
+      "title": "Ibama prorroga prazo para solicitação de audiência pública sobre licenciamento do FSO Odisseia na Bacia de Campos"
+    },
+    "match_key": "('ibama', 'edital-20-2026')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/orientacoes-sobre-o-edital-de-chamamento-publico-no-22-2026-2013-credenciamento-de-projetos-para-recuperacao-de-vegetacao-nativa",
+      "deadline": "2026-09-08T23:59:59-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/orientacoes-sobre-o-edital-de-chamamento-publico-no-22-2026-2013-credenciamento-de-projetos-para-recuperacao-de-vegetacao-nativa/anexo_i_declaracao_instituicao_privada.pdf",
+        "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/orientacoes-sobre-o-edital-de-chamamento-publico-no-22-2026-2013-credenciamento-de-projetos-para-recuperacao-de-vegetacao-nativa/anexo_ii_declaracao_instituicao_publica.pdf",
+        "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/orientacoes-sobre-o-edital-de-chamamento-publico-no-22-2026-2013-credenciamento-de-projetos-para-recuperacao-de-vegetacao-nativa/anexo_iii_minuta_de_termo_de_adesao.pdf",
+        "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/orientacoes-sobre-o-edital-de-chamamento-publico-no-22-2026-2013-credenciamento-de-projetos-para-recuperacao-de-vegetacao-nativa/anexo_iv_cronograma_do_edital.pdf",
+        "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/orientacoes-sobre-o-edital-de-chamamento-publico-no-22-2026-2013-credenciamento-de-projetos-para-recuperacao-de-vegetacao-nativa/anexo_v_modelo_de_cronograma_de_execucao_e_orcamento.ods",
+        "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/orientacoes-sobre-o-edital-de-chamamento-publico-no-22-2026-2013-credenciamento-de-projetos-para-recuperacao-de-vegetacao-nativa/2026-07-08_manual_sispro_proponente.pdf",
+        "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/orientacoes-sobre-o-edital-de-chamamento-publico-no-22-2026-2013-credenciamento-de-projetos-para-recuperacao-de-vegetacao-nativa/20260708_perguntas_resposta.pdf",
+        "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/orientacoes-sobre-o-edital-de-chamamento-publico-no-22-2026-2013-credenciamento-de-projetos-para-recuperacao-de-vegetacao-nativa/20260902_Respostas_aos_pedidos_de_esclarecimento.pdf"
+      ],
+      "published_at": "2026-07-08T18:08:00-03:00",
+      "source_key": "ibama",
+      "source_record_id": "edital-22-2026",
+      "status": "closed",
+      "title": "Orientações sobre o Edital de Chamamento Público nº 22/2026 – credenciamento de projetos para recuperação de vegetação nativa"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-09-09T02:59:59Z",
+        "inventory": "2026-09-09T02:59:59Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "closed",
+        "inventory": "closed",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/orientacoes-sobre-o-edital-de-chamamento-publico-no-22-2026-2013-credenciamento-de-projetos-para-recuperacao-de-vegetacao-nativa",
+      "deadline": "2026-09-08T23:59:59-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/orientacoes-sobre-o-edital-de-chamamento-publico-no-22-2026-2013-credenciamento-de-projetos-para-recuperacao-de-vegetacao-nativa/anexo_i_declaracao_instituicao_privada.pdf",
+        "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/orientacoes-sobre-o-edital-de-chamamento-publico-no-22-2026-2013-credenciamento-de-projetos-para-recuperacao-de-vegetacao-nativa/anexo_ii_declaracao_instituicao_publica.pdf",
+        "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/orientacoes-sobre-o-edital-de-chamamento-publico-no-22-2026-2013-credenciamento-de-projetos-para-recuperacao-de-vegetacao-nativa/anexo_iii_minuta_de_termo_de_adesao.pdf",
+        "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/orientacoes-sobre-o-edital-de-chamamento-publico-no-22-2026-2013-credenciamento-de-projetos-para-recuperacao-de-vegetacao-nativa/anexo_iv_cronograma_do_edital.pdf",
+        "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/orientacoes-sobre-o-edital-de-chamamento-publico-no-22-2026-2013-credenciamento-de-projetos-para-recuperacao-de-vegetacao-nativa/anexo_v_modelo_de_cronograma_de_execucao_e_orcamento.ods",
+        "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/orientacoes-sobre-o-edital-de-chamamento-publico-no-22-2026-2013-credenciamento-de-projetos-para-recuperacao-de-vegetacao-nativa/2026-07-08_manual_sispro_proponente.pdf",
+        "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/orientacoes-sobre-o-edital-de-chamamento-publico-no-22-2026-2013-credenciamento-de-projetos-para-recuperacao-de-vegetacao-nativa/20260708_perguntas_resposta.pdf",
+        "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/orientacoes-sobre-o-edital-de-chamamento-publico-no-22-2026-2013-credenciamento-de-projetos-para-recuperacao-de-vegetacao-nativa/20260902_Respostas_aos_pedidos_de_esclarecimento.pdf"
+      ],
+      "evidence": {
+        "captured_via": "independent-direct-requests",
+        "detail_content_area": true,
+        "disposition_note": null,
+        "http": {
+          "content_type": "text/html;charset=utf-8",
+          "fetched_at_utc_end": "2026-09-14T22:04:39.261842Z",
+          "final_url": "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/orientacoes-sobre-o-edital-de-chamamento-publico-no-22-2026-2013-credenciamento-de-projetos-para-recuperacao-de-vegetacao-nativa",
+          "status": 200
+        },
+        "listing_kind": "chamamentos",
+        "listing_url": "https://www.gov.br/ibama/pt-br/acesso-a-informacao/editais-e-convites/chamamentos-publicos/chamamentos-publicos",
+        "proposal_opens_at": "2026-08-03T00:00:00-03:00",
+        "raw_status": "closed",
+        "source_updated_at": "2026-09-02T10:39:00-03:00"
+      },
+      "published_at": "2026-07-08T18:08:00-03:00",
+      "reason_code": null,
+      "source_key": "ibama",
+      "source_record_id": "edital-22-2026",
+      "status": "closed",
+      "title": "Orientações sobre o Edital de Chamamento Público nº 22/2026 – credenciamento de projetos para recuperação de vegetação nativa"
+    },
+    "match_key": "('ibama', 'edital-22-2026')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-abre-prazo-de-45-dias-para-pedido-de-audiencia-publica-sobre-implantacao-da-br-242-mt",
+      "deadline": "2026-08-13T23:59:59-03:00",
+      "document_hashes": [],
+      "document_urls": [],
+      "published_at": "2026-08-17T11:34:00-03:00",
+      "source_key": "ibama",
+      "source_record_id": "edital-26-2026",
+      "status": "closed",
+      "title": "Ibama abre prazo de 45 dias para pedido de audiência pública sobre implantação da BR-242/MT"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-08-14T02:59:59Z",
+        "inventory": "2026-08-14T02:59:59Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "closed",
+        "inventory": "closed",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-abre-prazo-de-45-dias-para-pedido-de-audiencia-publica-sobre-implantacao-da-br-242-mt",
+      "deadline": "2026-08-13T23:59:59-03:00",
+      "document_hashes": [],
+      "document_urls": [],
+      "evidence": {
+        "captured_via": "independent-direct-requests",
+        "detail_content_area": true,
+        "disposition_note": null,
+        "http": {
+          "content_type": "text/html;charset=utf-8",
+          "fetched_at_utc_end": "2026-09-14T22:05:03.890338Z",
+          "final_url": "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-abre-prazo-de-45-dias-para-pedido-de-audiencia-publica-sobre-implantacao-da-br-242-mt",
+          "status": 200
+        },
+        "listing_kind": "notas2026",
+        "listing_url": "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/",
+        "proposal_opens_at": null,
+        "raw_status": "closed",
+        "source_updated_at": null
+      },
+      "published_at": "2026-08-17T11:34:00-03:00",
+      "reason_code": null,
+      "source_key": "ibama",
+      "source_record_id": "edital-26-2026",
+      "status": "closed",
+      "title": "Ibama abre prazo de 45 dias para pedido de audiência pública sobre implantação da BR-242/MT"
+    },
+    "match_key": "('ibama', 'edital-26-2026')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/agu-prorroga-edital-de-negociacao-para-pequenos-devedores-do-ibama-ate-30-de-novembro-de-2026",
+      "deadline": "2026-11-30T23:59:59-03:00",
+      "document_hashes": [],
+      "document_urls": [],
+      "published_at": "2026-09-04T18:15:00-03:00",
+      "source_key": "ibama",
+      "source_record_id": "edital-4-2026",
+      "status": "open",
+      "title": "AGU prorroga edital de negociação para pequenos devedores do Ibama até 30 de novembro de 2026"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-12-01T02:59:59Z",
+        "inventory": "2026-12-01T02:59:59Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/agu-prorroga-edital-de-negociacao-para-pequenos-devedores-do-ibama-ate-30-de-novembro-de-2026",
+      "deadline": "2026-11-30T23:59:59-03:00",
+      "document_hashes": [],
+      "document_urls": [],
+      "evidence": {
+        "captured_via": "independent-direct-requests",
+        "detail_content_area": true,
+        "disposition_note": null,
+        "gt_note": "public adhesion deadline 2026-11-30 (formalization until 2027-01-31 is post-submission)",
+        "http": {
+          "content_type": "text/html;charset=utf-8",
+          "fetched_at_utc_end": "2026-09-14T22:04:53.848871Z",
+          "final_url": "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/agu-prorroga-edital-de-negociacao-para-pequenos-devedores-do-ibama-ate-30-de-novembro-de-2026",
+          "status": 200
+        },
+        "listing_kind": "notas2026",
+        "listing_url": "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/",
+        "proposal_opens_at": "2026-06-09T00:00:00-03:00",
+        "raw_status": "open",
+        "source_updated_at": null
+      },
+      "published_at": "2026-09-04T18:15:00-03:00",
+      "reason_code": null,
+      "source_key": "ibama",
+      "source_record_id": "edital-4-2026",
+      "status": "open",
+      "title": "AGU prorroga edital de negociação para pequenos devedores do Ibama até 30 de novembro de 2026"
+    },
+    "match_key": "('ibama', 'edital-4-2026')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/consulta-publica-sobre-alteracoes-nos-formularios-de-efluentes-liquidos-e-uso-do-patrimonio-genetico-do-rapp-termina-em-2-de-setembro",
+      "deadline": "2026-09-02T23:59:59-03:00",
+      "document_hashes": [],
+      "document_urls": [],
+      "published_at": "2026-08-25T17:55:00-03:00",
+      "source_key": "ibama",
+      "source_record_id": "slug-consulta-publica-sobre-alteracoes-nos-formularios-de-efluentes-liquidos-e-uso-do-patrimonio-genetico-do-rapp-termina-em-2-de-setembro",
+      "status": "closed",
+      "title": "Consulta pública sobre alterações nos formulários de Efluentes Líquidos e Uso do Patrimônio Genético do Rapp termina em 2 de setembro"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-09-03T02:59:59Z",
+        "inventory": "2026-09-03T02:59:59Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "closed",
+        "inventory": "closed",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/consulta-publica-sobre-alteracoes-nos-formularios-de-efluentes-liquidos-e-uso-do-patrimonio-genetico-do-rapp-termina-em-2-de-setembro",
+      "deadline": "2026-09-02T23:59:59-03:00",
+      "document_hashes": [],
+      "document_urls": [],
+      "evidence": {
+        "captured_via": "independent-direct-requests",
+        "detail_content_area": true,
+        "disposition_note": null,
+        "gt_note": "deadline is termina 2 Sept 2026; DOU 28 June is publication only",
+        "http": {
+          "content_type": "text/html;charset=utf-8",
+          "fetched_at_utc_end": "2026-09-14T22:04:56.362278Z",
+          "final_url": "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/consulta-publica-sobre-alteracoes-nos-formularios-de-efluentes-liquidos-e-uso-do-patrimonio-genetico-do-rapp-termina-em-2-de-setembro",
+          "status": 200
+        },
+        "listing_kind": "notas2026",
+        "listing_url": "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/",
+        "proposal_opens_at": null,
+        "raw_status": "closed",
+        "source_updated_at": null
+      },
+      "published_at": "2026-08-25T17:55:00-03:00",
+      "reason_code": null,
+      "source_key": "ibama",
+      "source_record_id": "slug-consulta-publica-sobre-alteracoes-nos-formularios-de-efluentes-liquidos-e-uso-do-patrimonio-genetico-do-rapp-termina-em-2-de-setembro",
+      "status": "closed",
+      "title": "Consulta pública sobre alterações nos formulários de Efluentes Líquidos e Uso do Patrimônio Genético do Rapp termina em 2 de setembro"
+    },
+    "match_key": "('ibama', 'slug-consulta-publica-sobre-alteracoes-nos-formularios-de-efluentes-liquidos-e-uso-do-patrimonio-genetico-do-rapp-termina-em-2-de-setembro')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/consulta-publica-tr-sobre-estudos-ambientais-da-gestao-dos-rejeitos-na-uhe-candonga-e-estudos-conceituais-da-samarco-disponiveis-para-contribuicoes",
+      "deadline": "2026-04-04T23:59:59-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/consulta-publica-tr-sobre-estudos-ambientais-da-gestao-dos-rejeitos-na-uhe-candonga-e-estudos-conceituais-da-samarco-disponiveis-para-contribuicoes/20260514_SEI_27086360_Termo_de_Referencia.pdf",
+        "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/consulta-publica-tr-sobre-estudos-ambientais-da-gestao-dos-rejeitos-na-uhe-candonga-e-estudos-conceituais-da-samarco-disponiveis-para-contribuicoes/20260515_SEI_27097402_Nota_Tecnica_4.pdf"
+      ],
+      "published_at": "2026-02-04T19:43:00-03:00",
+      "source_key": "ibama",
+      "source_record_id": "slug-consulta-publica-tr-sobre-estudos-ambientais-da-gestao-dos-rejeitos-na-uhe-candonga-e-estudos-conceituais-da-samarco-disponiveis-para-contribuicoes",
+      "status": "closed",
+      "title": "Consulta Pública: TR sobre estudos ambientais da gestão dos rejeitos na UHE Candonga e Estudos Conceituais da Samarco disponíveis para contribuições"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-04-05T02:59:59Z",
+        "inventory": "2026-04-05T02:59:59Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "closed",
+        "inventory": "closed",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/consulta-publica-tr-sobre-estudos-ambientais-da-gestao-dos-rejeitos-na-uhe-candonga-e-estudos-conceituais-da-samarco-disponiveis-para-contribuicoes",
+      "deadline": "2026-04-04T23:59:59-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/consulta-publica-tr-sobre-estudos-ambientais-da-gestao-dos-rejeitos-na-uhe-candonga-e-estudos-conceituais-da-samarco-disponiveis-para-contribuicoes/20260514_SEI_27086360_Termo_de_Referencia.pdf",
+        "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/consulta-publica-tr-sobre-estudos-ambientais-da-gestao-dos-rejeitos-na-uhe-candonga-e-estudos-conceituais-da-samarco-disponiveis-para-contribuicoes/20260515_SEI_27097402_Nota_Tecnica_4.pdf"
+      ],
+      "evidence": {
+        "captured_via": "independent-direct-requests",
+        "detail_content_area": true,
+        "disposition_note": null,
+        "gt_note": "deadline 2026-04-04 passed; suspensao de prazos is court mechanism not call status",
+        "http": {
+          "content_type": "text/html;charset=utf-8",
+          "fetched_at_utc_end": "2026-09-14T22:05:22.455802Z",
+          "final_url": "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/consulta-publica-tr-sobre-estudos-ambientais-da-gestao-dos-rejeitos-na-uhe-candonga-e-estudos-conceituais-da-samarco-disponiveis-para-contribuicoes",
+          "status": 200
+        },
+        "listing_kind": "notas_rss",
+        "listing_url": "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/RSS",
+        "proposal_opens_at": null,
+        "raw_status": "closed",
+        "source_updated_at": "2026-05-15T17:33:00-03:00"
+      },
+      "published_at": "2026-02-04T19:43:00-03:00",
+      "reason_code": null,
+      "source_key": "ibama",
+      "source_record_id": "slug-consulta-publica-tr-sobre-estudos-ambientais-da-gestao-dos-rejeitos-na-uhe-candonga-e-estudos-conceituais-da-samarco-disponiveis-para-contribuicoes",
+      "status": "closed",
+      "title": "Consulta Pública: TR sobre estudos ambientais da gestão dos rejeitos na UHE Candonga e Estudos Conceituais da Samarco disponíveis para contribuições"
+    },
+    "match_key": "('ibama', 'slug-consulta-publica-tr-sobre-estudos-ambientais-da-gestao-dos-rejeitos-na-uhe-candonga-e-estudos-conceituais-da-samarco-disponiveis-para-contribuicoes')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-abre-consulta-publica-para-criacao-de-fichas-tecnicas-de-enquadramento-para-o-ctf-app",
+      "deadline": "2026-06-03T23:59:59-03:00",
+      "document_hashes": [],
+      "document_urls": [],
+      "published_at": "2026-05-04T09:19:00-03:00",
+      "source_key": "ibama",
+      "source_record_id": "slug-ibama-abre-consulta-publica-para-criacao-de-fichas-tecnicas-de-enquadramento-para-o-ctf-app",
+      "status": "closed",
+      "title": "Ibama abre Consulta Pública para criação de Fichas Técnicas de Enquadramento para o CTF/APP"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-06-04T02:59:59Z",
+        "inventory": "2026-06-04T02:59:59Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "closed",
+        "inventory": "closed",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-abre-consulta-publica-para-criacao-de-fichas-tecnicas-de-enquadramento-para-o-ctf-app",
+      "deadline": "2026-06-03T23:59:59-03:00",
+      "document_hashes": [],
+      "document_urls": [],
+      "evidence": {
+        "captured_via": "independent-direct-requests",
+        "detail_content_area": true,
+        "disposition_note": null,
+        "http": {
+          "content_type": "text/html;charset=utf-8",
+          "fetched_at_utc_end": "2026-09-14T22:05:25.885855Z",
+          "final_url": "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-abre-consulta-publica-para-criacao-de-fichas-tecnicas-de-enquadramento-para-o-ctf-app",
+          "status": 200
+        },
+        "listing_kind": "notas_rss",
+        "listing_url": "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/RSS",
+        "proposal_opens_at": null,
+        "raw_status": "closed",
+        "source_updated_at": "2026-05-04T11:37:00-03:00"
+      },
+      "published_at": "2026-05-04T09:19:00-03:00",
+      "reason_code": null,
+      "source_key": "ibama",
+      "source_record_id": "slug-ibama-abre-consulta-publica-para-criacao-de-fichas-tecnicas-de-enquadramento-para-o-ctf-app",
+      "status": "closed",
+      "title": "Ibama abre Consulta Pública para criação de Fichas Técnicas de Enquadramento para o CTF/APP"
+    },
+    "match_key": "('ibama', 'slug-ibama-abre-consulta-publica-para-criacao-de-fichas-tecnicas-de-enquadramento-para-o-ctf-app')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-abre-consulta-publica-sobre-alteracoes-em-formularios-do-rapp",
+      "deadline": "2026-09-02T23:59:59-03:00",
+      "document_hashes": [],
+      "document_urls": [],
+      "published_at": "2026-08-03T15:32:00-03:00",
+      "source_key": "ibama",
+      "source_record_id": "slug-ibama-abre-consulta-publica-sobre-alteracoes-em-formularios-do-rapp",
+      "status": "closed",
+      "title": "Ibama abre consulta pública sobre alterações em formulários do RAPP"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-09-03T02:59:59Z",
+        "inventory": "2026-09-03T02:59:59Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "closed",
+        "inventory": "closed",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-abre-consulta-publica-sobre-alteracoes-em-formularios-do-rapp",
+      "deadline": "2026-09-02T23:59:59-03:00",
+      "document_hashes": [],
+      "document_urls": [],
+      "evidence": {
+        "captured_via": "independent-direct-requests",
+        "detail_content_area": true,
+        "disposition_note": null,
+        "http": {
+          "content_type": "text/html;charset=utf-8",
+          "fetched_at_utc_end": "2026-09-14T22:05:11.231342Z",
+          "final_url": "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-abre-consulta-publica-sobre-alteracoes-em-formularios-do-rapp",
+          "status": 200
+        },
+        "listing_kind": "notas2026",
+        "listing_url": "https://www.gov.br/ibama/pt-br/assuntos/notas/2026/",
+        "proposal_opens_at": "2026-08-03T00:00:00-03:00",
+        "raw_status": "closed",
+        "source_updated_at": null
+      },
+      "published_at": "2026-08-03T15:32:00-03:00",
+      "reason_code": null,
+      "source_key": "ibama",
+      "source_record_id": "slug-ibama-abre-consulta-publica-sobre-alteracoes-em-formularios-do-rapp",
+      "status": "closed",
+      "title": "Ibama abre consulta pública sobre alterações em formulários do RAPP"
+    },
+    "match_key": "('ibama', 'slug-ibama-abre-consulta-publica-sobre-alteracoes-em-formularios-do-rapp')",
+    "match_method": "stable_id"
+  }
+]

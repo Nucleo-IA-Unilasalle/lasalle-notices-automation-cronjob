@@ -1,0 +1,19 @@
+{
+  "captured_at_utc": "2026-09-14T22:05:29.683461Z",
+  "listings_ok": 3,
+  "feeds_ok": 2,
+  "parse_failures": 0,
+  "seeds": 47,
+  "details_fetched": 47,
+  "detail_errors": 0,
+  "cap_reached": false,
+  "counts": {
+    "open": 2,
+    "closed": 7,
+    "upcoming": 0,
+    "excluded": 34,
+    "unknown": 2,
+    "cancelled": 2
+  },
+  "records": 47
+}

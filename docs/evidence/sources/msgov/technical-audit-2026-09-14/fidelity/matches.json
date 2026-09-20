@@ -1,0 +1,1887 @@
+[
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/980/655/original/Edital_03-2026_EVENTO_DE_EXTENSAO_290126_-_DO.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/LWUGqczDwaLobYf0Vqr5hJLbL3xUj5bSpcQzDtlmj-DmB3Sttcz4iCziuF9fuBxC/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/980/655/original/Edital_03-2026_EVENTO_DE_EXTENSAO_290126_-_DO.pdf"
+      ],
+      "published_at": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/980/655/original/Edital_03-2026_EVENTO_DE_EXTENSAO_290126_-_DO.pdf",
+      "status": "open",
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "2026-12-10T20:30:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/980/655/original/Edital_03-2026_EVENTO_DE_EXTENSAO_290126_-_DO.pdf",
+      "content_type_validated": null,
+      "deadline": "2026-12-10T17:30:00.000-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/980/655/original/Edital_03-2026_EVENTO_DE_EXTENSAO_290126_-_DO.pdf"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14T20:51:10Z",
+        "captured_via": "prosas-third-party-api+playwright-detail",
+        "detail_url": "https://editaisms.prosas.com.br/edital.html?id=18391",
+        "edital_id": "18391",
+        "listing_url": "https://editaisms.prosas.com.br",
+        "signed_pdf_path_only": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/kZITz7sfjgsgKW8jHbi0TwFloGFHA9bTqh-rV-5GeZ5DXYTC1_9ksp_GP_UyanYm/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/980/655/original/Edital_03-2026_EVENTO_DE_EXTENSAO_290126_-_DO.pdf"
+      },
+      "hash_validated": null,
+      "published_at": "2026-07-20T08:30:22.000-03:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/980/655/original/Edital_03-2026_EVENTO_DE_EXTENSAO_290126_-_DO.pdf",
+      "status": "open",
+      "title": "EDITAL Nº 003/2026 - RELATÓRIOS/EVENTOS-DEX/PROEC/UEMS"
+    },
+    "match_key": "('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/980/655/original/Edital_03-2026_EVENTO_DE_EXTENSAO_290126_-_DO.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/981/959/original/Fluxograma_Evento_de_Extensao.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/e4CO1nqCDQ9qQHBvuVvqDPlkuLiqCMC7CCJ8IHGTQtM_odc7JnhAp8JWdTdf3UEN/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/981/959/original/Fluxograma_Evento_de_Extensao.pdf"
+      ],
+      "published_at": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/981/959/original/Fluxograma_Evento_de_Extensao.pdf",
+      "status": "open",
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "2026-12-10T20:30:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/981/959/original/Fluxograma_Evento_de_Extensao.pdf",
+      "content_type_validated": null,
+      "deadline": "2026-12-10T17:30:00.000-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/981/959/original/Fluxograma_Evento_de_Extensao.pdf"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14T20:51:10Z",
+        "captured_via": "prosas-third-party-api+playwright-detail",
+        "detail_url": "https://editaisms.prosas.com.br/edital.html?id=18391",
+        "edital_id": "18391",
+        "listing_url": "https://editaisms.prosas.com.br",
+        "signed_pdf_path_only": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/KChSmIHnME5PTQa56sHEG7QsTuFcN1vn1aJsW2qpUzIsTSq6Ddg_80kVPZMRfMKS/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/981/959/original/Fluxograma_Evento_de_Extensao.pdf"
+      },
+      "hash_validated": null,
+      "published_at": "2026-07-20T08:30:22.000-03:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/981/959/original/Fluxograma_Evento_de_Extensao.pdf",
+      "status": "open",
+      "title": "EDITAL Nº 003/2026 - RELATÓRIOS/EVENTOS-DEX/PROEC/UEMS"
+    },
+    "match_key": "('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/981/959/original/Fluxograma_Evento_de_Extensao.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/327/original/Edital_34.2026_-_PIBICin_2026.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/JVlATIL2BE3p43XdoE5dwIDfuNBYD-MdQZ_SP8-qBHKeG_oLK6AnckUe6U76aqau/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/327/original/Edital_34.2026_-_PIBICin_2026.pdf"
+      ],
+      "published_at": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/327/original/Edital_34.2026_-_PIBICin_2026.pdf",
+      "status": "open",
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "2026-10-02T21:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/327/original/Edital_34.2026_-_PIBICin_2026.pdf",
+      "content_type_validated": null,
+      "deadline": "2026-10-02T18:00:00.000-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/327/original/Edital_34.2026_-_PIBICin_2026.pdf"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14T20:51:10Z",
+        "captured_via": "prosas-third-party-api+playwright-detail",
+        "detail_url": "https://editaisms.prosas.com.br/edital.html?id=18615",
+        "edital_id": "18615",
+        "listing_url": "https://editaisms.prosas.com.br",
+        "signed_pdf_path_only": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/PvFEXx8rU-gFcoynd72YLsa_CwEBpbQoEtDwZAr5RwCdRl632PQtdeqBzY1OCfho/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/327/original/Edital_34.2026_-_PIBICin_2026.pdf"
+      },
+      "hash_validated": null,
+      "published_at": "2026-08-10T09:00:58.000-03:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/327/original/Edital_34.2026_-_PIBICin_2026.pdf",
+      "status": "open",
+      "title": "EDITAL CONJUNTO Nº 34/2026 – DRI-PROPPI/UEMS - SELEÇÃO DE PROPOSTAS PARA BOLSAS DE INICIAÇÃO CIENTÍFICA INTERNACIONAL(PIBICin) E AUXÍLIO MOBILIDADE INTERNACIONAL"
+    },
+    "match_key": "('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/327/original/Edital_34.2026_-_PIBICin_2026.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/345/original/Edital_35.2026_-_PIBICIN-AAF.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/wGvIqScwRnRtZB8NCRZi_USIyUOWwe_KnALFBpiPUTD_IshYwrcUe_H7A-43bpgm/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/345/original/Edital_35.2026_-_PIBICIN-AAF.pdf"
+      ],
+      "published_at": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/345/original/Edital_35.2026_-_PIBICIN-AAF.pdf",
+      "status": "open",
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "2026-10-02T21:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/345/original/Edital_35.2026_-_PIBICIN-AAF.pdf",
+      "content_type_validated": null,
+      "deadline": "2026-10-02T18:00:00.000-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/345/original/Edital_35.2026_-_PIBICIN-AAF.pdf"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14T20:51:10Z",
+        "captured_via": "prosas-third-party-api+playwright-detail",
+        "detail_url": "https://editaisms.prosas.com.br/edital.html?id=18616",
+        "edital_id": "18616",
+        "listing_url": "https://editaisms.prosas.com.br",
+        "signed_pdf_path_only": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/0H_5RPgwr_tpoyMmUuN14AFV-_L7iHORkjygUk6f7Gv8xAf8ita8F8siam5SwEVg/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/345/original/Edital_35.2026_-_PIBICIN-AAF.pdf"
+      },
+      "hash_validated": null,
+      "published_at": "2026-08-10T09:00:28.000-03:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/345/original/Edital_35.2026_-_PIBICIN-AAF.pdf",
+      "status": "open",
+      "title": "EDITAL CONJUNTO Nº 35/2026-DRI/PROPPI/UEMS - SELEÇÃO DE PROPOSTAS PARA BOLSAS DE INICIAÇÃO CIENTÍFICA INTERNACIONAL AÇÕES AFIRMATIVAS (PIBICin-AAF) E AUXÍLIO MOBILIDADE INTERNACIONAL"
+    },
+    "match_key": "('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/345/original/Edital_35.2026_-_PIBICIN-AAF.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/376/original/Edital_36.2026_-_Pibexin.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/Yl-Skm8r5kuw3V9mYDosi35KmEDeTko_CoQVfvCjx-DsUbg0Kz2Eg9JXplA5FwPM/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/376/original/Edital_36.2026_-_Pibexin.pdf"
+      ],
+      "published_at": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/376/original/Edital_36.2026_-_Pibexin.pdf",
+      "status": "open",
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "2026-10-02T21:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/376/original/Edital_36.2026_-_Pibexin.pdf",
+      "content_type_validated": null,
+      "deadline": "2026-10-02T18:00:00.000-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/376/original/Edital_36.2026_-_Pibexin.pdf"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14T20:51:10Z",
+        "captured_via": "prosas-third-party-api+playwright-detail",
+        "detail_url": "https://editaisms.prosas.com.br/edital.html?id=18617",
+        "edital_id": "18617",
+        "listing_url": "https://editaisms.prosas.com.br",
+        "signed_pdf_path_only": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/RQwp8PsBTS_9Y-SxraDS6iQ1UPqlkTJQLKWI_ULMc2R8gzLH8sFnRlzgZibFrM0_/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/376/original/Edital_36.2026_-_Pibexin.pdf"
+      },
+      "hash_validated": null,
+      "published_at": "2026-08-10T09:00:52.000-03:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/376/original/Edital_36.2026_-_Pibexin.pdf",
+      "status": "open",
+      "title": "EDITAL CONJUNTO Nº 36/2026-DRI/PROEC/UEMS - SELEÇÃO DE PROPOSTAS PARA BOLSA DE EXTENSÃO INTERNACIONAL (PIBEXin) E AUXÍLIO MOBILIDADE INTERNACIONAL"
+    },
+    "match_key": "('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/376/original/Edital_36.2026_-_Pibexin.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/401/original/Edital_37-2026_PIBIDin.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/5Kq_fatQ2EgnsrUl_u1B5zF50LY-X4g5PRbe4iLI83Uo9I6ZhQaO7h4ZtqsefpgX/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/401/original/Edital_37-2026_PIBIDin.pdf"
+      ],
+      "published_at": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/401/original/Edital_37-2026_PIBIDin.pdf",
+      "status": "open",
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "2026-10-02T21:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/401/original/Edital_37-2026_PIBIDin.pdf",
+      "content_type_validated": null,
+      "deadline": "2026-10-02T18:00:00.000-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/401/original/Edital_37-2026_PIBIDin.pdf"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14T20:51:10Z",
+        "captured_via": "prosas-third-party-api+playwright-detail",
+        "detail_url": "https://editaisms.prosas.com.br/edital.html?id=18618",
+        "edital_id": "18618",
+        "listing_url": "https://editaisms.prosas.com.br",
+        "signed_pdf_path_only": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/Qn3S9IJ1HZwm8aj_XWnOCmqhtzL69keVmmMjqDd0QqxRsYFN5_ELuMIYl9N5AlpR/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/401/original/Edital_37-2026_PIBIDin.pdf"
+      },
+      "hash_validated": null,
+      "published_at": "2026-08-10T09:00:33.000-03:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/401/original/Edital_37-2026_PIBIDin.pdf",
+      "status": "open",
+      "title": " EDITAL CONJUNTO Nº 37/2026-DRI/PROE/UEMS - SELEÇÃO DE PROPOSTAS PARA BOLSAS DE INICIAÇÃO À DOCÊNCIA INTERNACIONAL(PIBIDin) E AUXÍLIO MOBILIDADE INTERNACIONAL"
+    },
+    "match_key": "('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/401/original/Edital_37-2026_PIBIDin.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/450/original/Edital_39-2026_-pos-graducao.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/_LygssMz60SHInQ3an7Cj8aMhcH_fU6VAwP3NdMuWqx9kAS7T21L0Pz7222Rx5sD/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/450/original/Edital_39-2026_-pos-graducao.pdf"
+      ],
+      "published_at": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/450/original/Edital_39-2026_-pos-graducao.pdf",
+      "status": "open",
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "2026-10-16T21:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/450/original/Edital_39-2026_-pos-graducao.pdf",
+      "content_type_validated": null,
+      "deadline": "2026-10-16T18:00:00.000-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/450/original/Edital_39-2026_-pos-graducao.pdf"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14T20:51:10Z",
+        "captured_via": "prosas-third-party-api+playwright-detail",
+        "detail_url": "https://editaisms.prosas.com.br/edital.html?id=18620",
+        "edital_id": "18620",
+        "listing_url": "https://editaisms.prosas.com.br",
+        "signed_pdf_path_only": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/Yp7EQ52eGo3iqfxPjIVFSI5rCFmwib8JsrEixWIhcGcjzKTaEGzo2qLx-NArccNp/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/450/original/Edital_39-2026_-pos-graducao.pdf"
+      },
+      "hash_validated": null,
+      "published_at": "2026-08-10T09:00:24.000-03:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/450/original/Edital_39-2026_-pos-graducao.pdf",
+      "status": "open",
+      "title": "EDITAL Nº 39/2026 DRI/UEMS - SELEÇÃO DE PROPOSTAS PARA AUXÍLIO MOBILIDADE INTERNACIONAL PARA ALUNOS DE PÓS-GRADUAÇÃO."
+    },
+    "match_key": "('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/450/original/Edital_39-2026_-pos-graducao.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/472/original/Edital_40-2026_Servidores.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/oZ02drp-DVda00JA-lZVrjw1P0xx8LJoC_97vu_MHmiy50a25a69q7d53IRNWyLe/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/472/original/Edital_40-2026_Servidores.pdf"
+      ],
+      "published_at": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/472/original/Edital_40-2026_Servidores.pdf",
+      "status": "open",
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "2026-10-16T21:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/472/original/Edital_40-2026_Servidores.pdf",
+      "content_type_validated": null,
+      "deadline": "2026-10-16T18:00:00.000-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/472/original/Edital_40-2026_Servidores.pdf"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14T20:51:10Z",
+        "captured_via": "prosas-third-party-api+playwright-detail",
+        "detail_url": "https://editaisms.prosas.com.br/edital.html?id=18621",
+        "edital_id": "18621",
+        "listing_url": "https://editaisms.prosas.com.br",
+        "signed_pdf_path_only": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/lKFH_mplQ3hwsb9PXjAO35oD2S0M63wpW_ZpCp1M9NFvVua848l4j9SUMfxSH3aM/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/472/original/Edital_40-2026_Servidores.pdf"
+      },
+      "hash_validated": null,
+      "published_at": "2026-08-10T09:00:02.000-03:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/472/original/Edital_40-2026_Servidores.pdf",
+      "status": "open",
+      "title": "EDITAL Nº 40/2026 DRI-UEMS - SELEÇÃO DE PROPOSTAS PARA AUXÍLIO MOBILIDADE INTERNACIONAL PARA SERVIDORES"
+    },
+    "match_key": "('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/472/original/Edital_40-2026_Servidores.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/493/original/Edital_41-2026-PQ_e_Rede.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/cNd5On8IEePOVqHyBNdU6d1e_f4jfrgeORYwTYkJ1882nyxVXzHaUaJhYEUupw6N/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/493/original/Edital_41-2026-PQ_e_Rede.pdf"
+      ],
+      "published_at": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/493/original/Edital_41-2026-PQ_e_Rede.pdf",
+      "status": "open",
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "2026-10-16T21:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/493/original/Edital_41-2026-PQ_e_Rede.pdf",
+      "content_type_validated": null,
+      "deadline": "2026-10-16T18:00:00.000-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/493/original/Edital_41-2026-PQ_e_Rede.pdf"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14T20:51:10Z",
+        "captured_via": "prosas-third-party-api+playwright-detail",
+        "detail_url": "https://editaisms.prosas.com.br/edital.html?id=18622",
+        "edital_id": "18622",
+        "listing_url": "https://editaisms.prosas.com.br",
+        "signed_pdf_path_only": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/pBBUqB5s8nc0zQcavEcNAbgrnw9G9vYOh40lpQH29WMPE09vqFQxwJnOZHuKepmj/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/493/original/Edital_41-2026-PQ_e_Rede.pdf"
+      },
+      "hash_validated": null,
+      "published_at": "2026-08-10T09:00:26.000-03:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/493/original/Edital_41-2026-PQ_e_Rede.pdf",
+      "status": "open",
+      "title": "EDITAL Nº 41/2026 DRI-UEMS - SELEÇÃO DE PROPOSTAS PARA AUXÍLIO MOBILIDADE INTERNACIONAL PARA DOCENTES PESQUISADORES PQ E PESQUISADORES DE REDES INTERNACIONAIS DE PESQUISA"
+    },
+    "match_key": "('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/985/493/original/Edital_41-2026-PQ_e_Rede.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/993/072/original/Edital_38-2026_Alunos_concluintes.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/8wt8iYqJSpUkncL1kOXuwQEolTnhbP9syYx4H1I77hEqaQjfaEvh-_zlyst_zuQg/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/993/072/original/Edital_38-2026_Alunos_concluintes.pdf"
+      ],
+      "published_at": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/993/072/original/Edital_38-2026_Alunos_concluintes.pdf",
+      "status": "open",
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "2026-10-02T21:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/993/072/original/Edital_38-2026_Alunos_concluintes.pdf",
+      "content_type_validated": null,
+      "deadline": "2026-10-02T18:00:00.000-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/993/072/original/Edital_38-2026_Alunos_concluintes.pdf"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14T20:51:10Z",
+        "captured_via": "prosas-third-party-api+playwright-detail",
+        "detail_url": "https://editaisms.prosas.com.br/edital.html?id=18619",
+        "edital_id": "18619",
+        "listing_url": "https://editaisms.prosas.com.br",
+        "signed_pdf_path_only": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/0vsfS1oXXR60Dg9OqDtwmlnKzHd0yseqRuxUCNT3bJzL5yv9_qK1UZgUIGHu4fvv/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/993/072/original/Edital_38-2026_Alunos_concluintes.pdf"
+      },
+      "hash_validated": null,
+      "published_at": "2026-08-10T09:00:59.000-03:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/993/072/original/Edital_38-2026_Alunos_concluintes.pdf",
+      "status": "open",
+      "title": " EDITAL Nº 38/2026 DRI/UEMS - SELEÇÃO DE PROPOSTAS PARA AUXÍLIO MOBILIDADE INTERNACIONAL PARA ALUNOS DO PENÚLTIMO E ÚLTIMO ANOS DA GRADUAÇÃO"
+    },
+    "match_key": "('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/004/993/072/original/Edital_38-2026_Alunos_concluintes.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/016/831/original/Publicacao_Edital.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/QvB3dH4LT36KLAjhG-7d0uAjM0AWX1bJQmrvjCdd98rdyF0FgwRIwVsPY8PXOxfl/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/016/831/original/Publicacao_Edital.pdf"
+      ],
+      "published_at": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/016/831/original/Publicacao_Edital.pdf",
+      "status": "open",
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "2026-09-29T21:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/016/831/original/Publicacao_Edital.pdf",
+      "content_type_validated": null,
+      "deadline": "2026-09-29T18:00:00.000-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/016/831/original/Publicacao_Edital.pdf"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14T20:51:10Z",
+        "captured_via": "prosas-third-party-api+playwright-detail",
+        "detail_url": "https://editaisms.prosas.com.br/edital.html?id=18959",
+        "edital_id": "18959",
+        "listing_url": "https://editaisms.prosas.com.br",
+        "signed_pdf_path_only": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/2W8kduoBQxMl2zh1IbxPJrRKlQc6p6RP7ONKuoVqySJNgGr9TYOhJoNVvktnJfSz/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/016/831/original/Publicacao_Edital.pdf"
+      },
+      "hash_validated": null,
+      "published_at": "2026-08-31T09:00:00.000-03:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/016/831/original/Publicacao_Edital.pdf",
+      "status": "open",
+      "title": "EDITAL DE CHAMAMENTO PÚBLICO Nº 024/2026/FCMS "
+    },
+    "match_key": "('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/016/831/original/Publicacao_Edital.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/022/265/original/Edital_CAPES-Global_-_UEMS__MESTRADO__corrigido.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/ETykbnf5TFHgfg1-ao4xzVJrccD1K_7phwSyzeMKB7Os7NTNdob5J9v3jY2Sp3mT/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/022/265/original/Edital_CAPES-Global_-_UEMS__MESTRADO__corrigido.pdf"
+      ],
+      "published_at": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/022/265/original/Edital_CAPES-Global_-_UEMS__MESTRADO__corrigido.pdf",
+      "status": "open",
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "2026-09-15T22:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/022/265/original/Edital_CAPES-Global_-_UEMS__MESTRADO__corrigido.pdf",
+      "content_type_validated": null,
+      "deadline": "2026-09-15T19:00:00.000-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/022/265/original/Edital_CAPES-Global_-_UEMS__MESTRADO__corrigido.pdf"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14T20:51:10Z",
+        "captured_via": "prosas-third-party-api+playwright-detail",
+        "detail_url": "https://editaisms.prosas.com.br/edital.html?id=18863",
+        "edital_id": "18863",
+        "listing_url": "https://editaisms.prosas.com.br",
+        "signed_pdf_path_only": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/R_n1kqIfR3BM9_gYy2XcSU7IbD3sJNP-Qs-1Z0SQwK7UNPqJmfnwYyj2frJdIG6I/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/022/265/original/Edital_CAPES-Global_-_UEMS__MESTRADO__corrigido.pdf"
+      },
+      "hash_validated": null,
+      "published_at": "2026-08-21T18:00:05.000-03:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/022/265/original/Edital_CAPES-Global_-_UEMS__MESTRADO__corrigido.pdf",
+      "status": "open",
+      "title": "Edital de seleção para Bolsas de Capacitação no Exterior em nível de Mestrado (CAP)  2026-2027_REDE CONECTA MUNDI/UEMS "
+    },
+    "match_key": "('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/022/265/original/Edital_CAPES-Global_-_UEMS__MESTRADO__corrigido.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/038/542/original/EDITAL_25_PRESERVACAO_DO12272_04_09_2026.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/1ys3nGQmcbU-86kHSaXk7B8q0iN0P-uFEAjIqPP6du_pMVe0UMGuELrSJ9Q3BqQX/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/038/542/original/EDITAL_25_PRESERVACAO_DO12272_04_09_2026.pdf"
+      ],
+      "published_at": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/038/542/original/EDITAL_25_PRESERVACAO_DO12272_04_09_2026.pdf",
+      "status": "open",
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "2026-11-04T21:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/038/542/original/EDITAL_25_PRESERVACAO_DO12272_04_09_2026.pdf",
+      "content_type_validated": null,
+      "deadline": "2026-11-04T18:00:00.000-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/038/542/original/EDITAL_25_PRESERVACAO_DO12272_04_09_2026.pdf"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14T20:51:10Z",
+        "captured_via": "prosas-third-party-api+playwright-detail",
+        "detail_url": "https://editaisms.prosas.com.br/edital.html?id=19047",
+        "edital_id": "19047",
+        "listing_url": "https://editaisms.prosas.com.br",
+        "signed_pdf_path_only": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/uP79w5PmN5miRx6iTQcmxXfi145iFOr0hLVE3x15ihsb2soJ3xG1Qf-x0EnkPhAK/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/038/542/original/EDITAL_25_PRESERVACAO_DO12272_04_09_2026.pdf"
+      },
+      "hash_validated": null,
+      "published_at": "2026-09-04T09:00:56.000-03:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/038/542/original/EDITAL_25_PRESERVACAO_DO12272_04_09_2026.pdf",
+      "status": "open",
+      "title": "EDITAL DE CHAMAMENTO PÚBLICO Nº 025/2026 SELEÇÃO DE PROJETO PARA FIRMAR TERMO DE EXECUÇÃO CULTURAL MEMÓRIA E PRESERVAÇÃO AUDIOVISUAL DO MUSEU DA IMAGEM E DO SOM DE MATO GROSSO DO SUL – MIS-MS MinC/FSA/BRDE/ARRANJOS REGIONAIS – 2026"
+    },
+    "match_key": "('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/038/542/original/EDITAL_25_PRESERVACAO_DO12272_04_09_2026.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/038/545/original/EDITAL_26_PRODUCAO_DE_CURTAS_DO12272_04_09_2026.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/g52RFwU353LykQ5GKFgJVzxqqRR-OKKyB-Y8ZaXnZy1ZVnhrdLqNkqrenYDsfUNz/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/038/545/original/EDITAL_26_PRODUCAO_DE_CURTAS_DO12272_04_09_2026.pdf"
+      ],
+      "published_at": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/038/545/original/EDITAL_26_PRODUCAO_DE_CURTAS_DO12272_04_09_2026.pdf",
+      "status": "open",
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "2026-11-04T21:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/038/545/original/EDITAL_26_PRODUCAO_DE_CURTAS_DO12272_04_09_2026.pdf",
+      "content_type_validated": null,
+      "deadline": "2026-11-04T18:00:00.000-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/038/545/original/EDITAL_26_PRODUCAO_DE_CURTAS_DO12272_04_09_2026.pdf"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14T20:51:10Z",
+        "captured_via": "prosas-third-party-api+playwright-detail",
+        "detail_url": "https://editaisms.prosas.com.br/edital.html?id=19048",
+        "edital_id": "19048",
+        "listing_url": "https://editaisms.prosas.com.br",
+        "signed_pdf_path_only": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/YVfdslQNgkgu0zpTvW8hAbRGYP4kZKu__ENueyU6uT2GTPfoTY0m0NQdkNzuOOD1/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/038/545/original/EDITAL_26_PRODUCAO_DE_CURTAS_DO12272_04_09_2026.pdf"
+      },
+      "hash_validated": null,
+      "published_at": "2026-09-04T09:00:04.000-03:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/038/545/original/EDITAL_26_PRODUCAO_DE_CURTAS_DO12272_04_09_2026.pdf",
+      "status": "open",
+      "title": "EDITAL DE CHAMAMENTO PÚBLICO Nº 26/2026 SELEÇÃO DE PROJETOS PARA FIRMAR TERMO DE EXECUÇÃO CULTURAL PARA PRODUÇÃO AUDIOVISUAL - MATO GROSSO DO SUL - 2026 – MinC/FSA/BRDE/ARRANJOS REGIONAIS"
+    },
+    "match_key": "('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/038/545/original/EDITAL_26_PRODUCAO_DE_CURTAS_DO12272_04_09_2026.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/046/166/original/Edital_xx-2026_-_Edital_CAP_2026-2027.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/Cjy2XiTsxGv-NAhxlG2hTVdOc-e3LbWieJhUPYtg17aVjnEnC6DZhtUdd91g6OqU/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/046/166/original/Edital_xx-2026_-_Edital_CAP_2026-2027.pdf"
+      ],
+      "published_at": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/046/166/original/Edital_xx-2026_-_Edital_CAP_2026-2027.pdf",
+      "status": "open",
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "2026-09-15T22:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/046/166/original/Edital_xx-2026_-_Edital_CAP_2026-2027.pdf",
+      "content_type_validated": null,
+      "deadline": "2026-09-15T19:00:00.000-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/046/166/original/Edital_xx-2026_-_Edital_CAP_2026-2027.pdf"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14T20:51:10Z",
+        "captured_via": "prosas-third-party-api+playwright-detail",
+        "detail_url": "https://editaisms.prosas.com.br/edital.html?id=18863",
+        "edital_id": "18863",
+        "listing_url": "https://editaisms.prosas.com.br",
+        "signed_pdf_path_only": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/RK4twGr46qLQaupaCz-n_xqvqp0oT1J4lsWVg7071LqTMWEr6VYKZ9-ynjnWGzsl/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/046/166/original/Edital_xx-2026_-_Edital_CAP_2026-2027.pdf"
+      },
+      "hash_validated": null,
+      "published_at": "2026-08-21T18:00:05.000-03:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/046/166/original/Edital_xx-2026_-_Edital_CAP_2026-2027.pdf",
+      "status": "open",
+      "title": "Edital de seleção para Bolsas de Capacitação no Exterior em nível de Mestrado (CAP)  2026-2027_REDE CONECTA MUNDI/UEMS "
+    },
+    "match_key": "('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/046/166/original/Edital_xx-2026_-_Edital_CAP_2026-2027.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/050/384/original/DO12110_26_03_2026.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/iyr5P0WMqdIXsBU5tb4vC-n2ZckrbtvGBGqrzSnQq1Wgsuy0TdNqEJWzHo8JHEug/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/050/384/original/DO12110_26_03_2026.pdf"
+      ],
+      "published_at": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/050/384/original/DO12110_26_03_2026.pdf",
+      "status": "open",
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "3000-12-31T00:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/050/384/original/DO12110_26_03_2026.pdf",
+      "content_type_validated": null,
+      "deadline": "3000-12-30T21:00:00.000-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/050/384/original/DO12110_26_03_2026.pdf"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14T20:51:10Z",
+        "captured_via": "prosas-third-party-api+playwright-detail",
+        "detail_url": "https://editaisms.prosas.com.br/edital.html?id=17087",
+        "edital_id": "17087",
+        "listing_url": "https://editaisms.prosas.com.br",
+        "signed_pdf_path_only": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/p/cEiYXQTtgWrR9QSi3M-60vPnXCZrIa72lqs6s39vvLrMKK1JJ0JLjw26S8P49Zg7/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/050/384/original/DO12110_26_03_2026.pdf"
+      },
+      "hash_validated": null,
+      "published_at": "2026-01-15T12:57:02.000-03:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "msgov",
+      "source_record_id": "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/050/384/original/DO12110_26_03_2026.pdf",
+      "status": "open",
+      "title": "Edital nº 18/2026 Ligas Acadêmicas (LA) fluxo Contínuo -DEX/PROEC/UEMS"
+    },
+    "match_key": "('msgov', 'https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/gr1ojmmb7tst/b/prosas-prod/o/arquivos/arquivos/005/050/384/original/DO12110_26_03_2026.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/583/612/original/Edital_03-2026-fluxo_continuo_acao_internacionalizacao.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/583/612/original/Edital_03-2026-fluxo_continuo_acao_internacionalizacao.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=%5BREDACTED%5D&X-Amz-Date=20260914T213844Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=%5BREDACTED%5D"
+      ],
+      "published_at": null,
+      "source_key": "msgov",
+      "source_record_id": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/583/612/original/Edital_03-2026-fluxo_continuo_acao_internacionalizacao.pdf",
+      "status": "open",
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "2026-12-04T21:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/583/612/original/Edital_03-2026-fluxo_continuo_acao_internacionalizacao.pdf",
+      "content_type_validated": null,
+      "deadline": "2026-12-04T18:00:00.000-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/583/612/original/Edital_03-2026-fluxo_continuo_acao_internacionalizacao.pdf"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14T20:51:10Z",
+        "captured_via": "prosas-third-party-api+playwright-detail",
+        "detail_url": "https://editaisms.prosas.com.br/edital.html?id=17019",
+        "edital_id": "17019",
+        "listing_url": "https://editaisms.prosas.com.br",
+        "signed_pdf_path_only": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/583/612/original/Edital_03-2026-fluxo_continuo_acao_internacionalizacao.pdf"
+      },
+      "hash_validated": null,
+      "published_at": "2026-01-14T13:00:31.000-03:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "msgov",
+      "source_record_id": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/583/612/original/Edital_03-2026-fluxo_continuo_acao_internacionalizacao.pdf",
+      "status": "open",
+      "title": "Edital 03/2026-DRI/UEMS. Edital de fluxo contínuo para propostas de ações de internacionalização, sem ônus para a UEMS."
+    },
+    "match_key": "('msgov', 'https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/583/612/original/Edital_03-2026-fluxo_continuo_acao_internacionalizacao.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/590/762/original/EDITAL_002_2026_-_p%C3%A1gina.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/590/762/original/EDITAL_002_2026_-_p%C3%A1gina.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=%5BREDACTED%5D&X-Amz-Date=20260914T213841Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=%5BREDACTED%5D"
+      ],
+      "published_at": null,
+      "source_key": "msgov",
+      "source_record_id": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/590/762/original/EDITAL_002_2026_-_p%C3%A1gina.pdf",
+      "status": "open",
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "2026-12-01T22:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/590/762/original/EDITAL_002_2026_-_p%C3%A1gina.pdf",
+      "content_type_validated": null,
+      "deadline": "2026-12-01T19:00:00.000-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/590/762/original/EDITAL_002_2026_-_p%C3%A1gina.pdf"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14T20:51:10Z",
+        "captured_via": "prosas-third-party-api+playwright-detail",
+        "detail_url": "https://editaisms.prosas.com.br/edital.html?id=16582",
+        "edital_id": "16582",
+        "listing_url": "https://editaisms.prosas.com.br",
+        "signed_pdf_path_only": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/590/762/original/EDITAL_002_2026_-_p%C3%A1gina.pdf"
+      },
+      "hash_validated": null,
+      "published_at": "2026-02-02T09:00:00.000-03:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "msgov",
+      "source_record_id": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/590/762/original/EDITAL_002_2026_-_p%C3%A1gina.pdf",
+      "status": "open",
+      "title": "Edital de Fluxo Contínuo Nº 02/2026 DEX/PROEC/UEMS (Programas, Projetos e Cursos) "
+    },
+    "match_key": "('msgov', 'https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/590/762/original/EDITAL_002_2026_-_p%C3%A1gina.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/590/791/original/Tutorial_Prosas.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/590/791/original/Tutorial_Prosas.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=%5BREDACTED%5D&X-Amz-Date=20260914T213841Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=%5BREDACTED%5D"
+      ],
+      "published_at": null,
+      "source_key": "msgov",
+      "source_record_id": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/590/791/original/Tutorial_Prosas.pdf",
+      "status": "open",
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "2026-12-01T22:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/590/791/original/Tutorial_Prosas.pdf",
+      "content_type_validated": null,
+      "deadline": "2026-12-01T19:00:00.000-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/590/791/original/Tutorial_Prosas.pdf"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14T20:51:10Z",
+        "captured_via": "prosas-third-party-api+playwright-detail",
+        "detail_url": "https://editaisms.prosas.com.br/edital.html?id=16582",
+        "edital_id": "16582",
+        "listing_url": "https://editaisms.prosas.com.br",
+        "signed_pdf_path_only": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/590/791/original/Tutorial_Prosas.pdf"
+      },
+      "hash_validated": null,
+      "published_at": "2026-02-02T09:00:00.000-03:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "msgov",
+      "source_record_id": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/590/791/original/Tutorial_Prosas.pdf",
+      "status": "open",
+      "title": "Edital de Fluxo Contínuo Nº 02/2026 DEX/PROEC/UEMS (Programas, Projetos e Cursos) "
+    },
+    "match_key": "('msgov', 'https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/590/791/original/Tutorial_Prosas.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/601/309/original/Edital_05_2026_Pesquisa.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/601/309/original/Edital_05_2026_Pesquisa.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=%5BREDACTED%5D&X-Amz-Date=20260914T213850Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=%5BREDACTED%5D"
+      ],
+      "published_at": null,
+      "source_key": "msgov",
+      "source_record_id": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/601/309/original/Edital_05_2026_Pesquisa.pdf",
+      "status": "open",
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "3000-12-31T00:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/601/309/original/Edital_05_2026_Pesquisa.pdf",
+      "content_type_validated": null,
+      "deadline": "3000-12-30T21:00:00.000-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/601/309/original/Edital_05_2026_Pesquisa.pdf"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14T20:51:10Z",
+        "captured_via": "prosas-third-party-api+playwright-detail",
+        "detail_url": "https://editaisms.prosas.com.br/edital.html?id=16862",
+        "edital_id": "16862",
+        "listing_url": "https://editaisms.prosas.com.br",
+        "signed_pdf_path_only": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/601/309/original/Edital_05_2026_Pesquisa.pdf"
+      },
+      "hash_validated": null,
+      "published_at": "2026-02-05T09:00:03.000-03:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "msgov",
+      "source_record_id": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/601/309/original/Edital_05_2026_Pesquisa.pdf",
+      "status": "open",
+      "title": "EDITAL UEMS N° 05/2026–PROPPI/UEMS PROJETOS DE PESQUISA APROVADOS POR ÓRGÃO EXTERNO"
+    },
+    "match_key": "('msgov', 'https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/601/309/original/Edital_05_2026_Pesquisa.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/601/331/original/Edital_04_2026_Pesquisa.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/601/331/original/Edital_04_2026_Pesquisa.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=%5BREDACTED%5D&X-Amz-Date=20260914T213848Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=%5BREDACTED%5D"
+      ],
+      "published_at": null,
+      "source_key": "msgov",
+      "source_record_id": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/601/331/original/Edital_04_2026_Pesquisa.pdf",
+      "status": "open",
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "3000-12-31T00:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/601/331/original/Edital_04_2026_Pesquisa.pdf",
+      "content_type_validated": null,
+      "deadline": "3000-12-30T21:00:00.000-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/601/331/original/Edital_04_2026_Pesquisa.pdf"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14T20:51:10Z",
+        "captured_via": "prosas-third-party-api+playwright-detail",
+        "detail_url": "https://editaisms.prosas.com.br/edital.html?id=16859",
+        "edital_id": "16859",
+        "listing_url": "https://editaisms.prosas.com.br",
+        "signed_pdf_path_only": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/601/331/original/Edital_04_2026_Pesquisa.pdf"
+      },
+      "hash_validated": null,
+      "published_at": "2026-02-05T09:00:45.000-03:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "msgov",
+      "source_record_id": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/601/331/original/Edital_04_2026_Pesquisa.pdf",
+      "status": "open",
+      "title": "EDITAL UEMS N° 04/2026–PROPPI/UEMS PROJETOS DE PESQUISA FLUXO CONTÍNUO"
+    },
+    "match_key": "('msgov', 'https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/601/331/original/Edital_04_2026_Pesquisa.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/603/918/original/Tutorial_Prosas.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/603/918/original/Tutorial_Prosas.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=%5BREDACTED%5D&X-Amz-Date=20260914T213842Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=%5BREDACTED%5D"
+      ],
+      "published_at": null,
+      "source_key": "msgov",
+      "source_record_id": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/603/918/original/Tutorial_Prosas.pdf",
+      "status": "open",
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "2026-12-01T22:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/603/918/original/Tutorial_Prosas.pdf",
+      "content_type_validated": null,
+      "deadline": "2026-12-01T19:00:00.000-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/603/918/original/Tutorial_Prosas.pdf"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14T20:51:10Z",
+        "captured_via": "prosas-third-party-api+playwright-detail",
+        "detail_url": "https://editaisms.prosas.com.br/edital.html?id=16597",
+        "edital_id": "16597",
+        "listing_url": "https://editaisms.prosas.com.br",
+        "signed_pdf_path_only": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/603/918/original/Tutorial_Prosas.pdf"
+      },
+      "hash_validated": null,
+      "published_at": "2026-02-23T09:00:35.000-03:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "msgov",
+      "source_record_id": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/603/918/original/Tutorial_Prosas.pdf",
+      "status": "open",
+      "title": "EDITAL Nº03/2026-EVENTOS DEX/PROEC/UEMS"
+    },
+    "match_key": "('msgov', 'https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/603/918/original/Tutorial_Prosas.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/668/536/original/Edital_03-2026_EVENTO_DE_EXTENS%C3%83O_290126_-_DO.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/668/536/original/Edital_03-2026_EVENTO_DE_EXTENS%C3%83O_290126_-_DO.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=%5BREDACTED%5D&X-Amz-Date=20260914T213843Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=%5BREDACTED%5D"
+      ],
+      "published_at": null,
+      "source_key": "msgov",
+      "source_record_id": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/668/536/original/Edital_03-2026_EVENTO_DE_EXTENS%C3%83O_290126_-_DO.pdf",
+      "status": "open",
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "2026-12-01T22:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/668/536/original/Edital_03-2026_EVENTO_DE_EXTENS%C3%83O_290126_-_DO.pdf",
+      "content_type_validated": null,
+      "deadline": "2026-12-01T19:00:00.000-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/668/536/original/Edital_03-2026_EVENTO_DE_EXTENS%C3%83O_290126_-_DO.pdf"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14T20:51:10Z",
+        "captured_via": "prosas-third-party-api+playwright-detail",
+        "detail_url": "https://editaisms.prosas.com.br/edital.html?id=16597",
+        "edital_id": "16597",
+        "listing_url": "https://editaisms.prosas.com.br",
+        "signed_pdf_path_only": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/668/536/original/Edital_03-2026_EVENTO_DE_EXTENS%C3%83O_290126_-_DO.pdf"
+      },
+      "hash_validated": null,
+      "published_at": "2026-02-23T09:00:35.000-03:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "msgov",
+      "source_record_id": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/668/536/original/Edital_03-2026_EVENTO_DE_EXTENS%C3%83O_290126_-_DO.pdf",
+      "status": "open",
+      "title": "EDITAL Nº03/2026-EVENTOS DEX/PROEC/UEMS"
+    },
+    "match_key": "('msgov', 'https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/668/536/original/Edital_03-2026_EVENTO_DE_EXTENS%C3%83O_290126_-_DO.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/669/262/original/_Fluxograma_-__LA_2026.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/669/262/original/_Fluxograma_-__LA_2026.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=%5BREDACTED%5D&X-Amz-Date=20260914T213852Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=%5BREDACTED%5D"
+      ],
+      "published_at": null,
+      "source_key": "msgov",
+      "source_record_id": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/669/262/original/_Fluxograma_-__LA_2026.pdf",
+      "status": "open",
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "3000-12-31T00:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/669/262/original/_Fluxograma_-__LA_2026.pdf",
+      "content_type_validated": null,
+      "deadline": "3000-12-30T21:00:00.000-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/669/262/original/_Fluxograma_-__LA_2026.pdf"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14T20:51:10Z",
+        "captured_via": "prosas-third-party-api+playwright-detail",
+        "detail_url": "https://editaisms.prosas.com.br/edital.html?id=17087",
+        "edital_id": "17087",
+        "listing_url": "https://editaisms.prosas.com.br",
+        "signed_pdf_path_only": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/669/262/original/_Fluxograma_-__LA_2026.pdf"
+      },
+      "hash_validated": null,
+      "published_at": "2026-01-15T12:57:02.000-03:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "msgov",
+      "source_record_id": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/669/262/original/_Fluxograma_-__LA_2026.pdf",
+      "status": "open",
+      "title": "Edital nº 18/2026 Ligas Acadêmicas (LA) fluxo Contínuo -DEX/PROEC/UEMS"
+    },
+    "match_key": "('msgov', 'https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/669/262/original/_Fluxograma_-__LA_2026.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/680/724/original/Edital_n%C2%BA_20.2026_DCULT_PROEC_UEMS.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/680/724/original/Edital_n%C2%BA_20.2026_DCULT_PROEC_UEMS.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=%5BREDACTED%5D&X-Amz-Date=20260914T213837Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=%5BREDACTED%5D"
+      ],
+      "published_at": null,
+      "source_key": "msgov",
+      "source_record_id": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/680/724/original/Edital_n%C2%BA_20.2026_DCULT_PROEC_UEMS.pdf",
+      "status": "open",
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "2026-12-01T21:30:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/680/724/original/Edital_n%C2%BA_20.2026_DCULT_PROEC_UEMS.pdf",
+      "content_type_validated": null,
+      "deadline": "2026-12-01T18:30:00.000-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/680/724/original/Edital_n%C2%BA_20.2026_DCULT_PROEC_UEMS.pdf"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14T20:51:10Z",
+        "captured_via": "prosas-third-party-api+playwright-detail",
+        "detail_url": "https://editaisms.prosas.com.br/edital.html?id=16593",
+        "edital_id": "16593",
+        "listing_url": "https://editaisms.prosas.com.br",
+        "signed_pdf_path_only": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/680/724/original/Edital_n%C2%BA_20.2026_DCULT_PROEC_UEMS.pdf"
+      },
+      "hash_validated": null,
+      "published_at": "2026-03-03T08:30:51.000-03:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "msgov",
+      "source_record_id": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/680/724/original/Edital_n%C2%BA_20.2026_DCULT_PROEC_UEMS.pdf",
+      "status": "open",
+      "title": "EDITAL Nº 020/2026 – DCULT/PROEC/UEMS EDITAL DE FLUXO CONTÍNUO DAS AÇÕES DE CULTURA SEM ÔNUS PARA A UNIVERSIDADE ESTADUAL DE MATO GROSSO DO SUL"
+    },
+    "match_key": "('msgov', 'https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/680/724/original/Edital_n%C2%BA_20.2026_DCULT_PROEC_UEMS.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/681/082/original/Edital_n%C2%BA_21.2026_DCULT_PROEC_UEMS.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/681/082/original/Edital_n%C2%BA_21.2026_DCULT_PROEC_UEMS.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=%5BREDACTED%5D&X-Amz-Date=20260914T213839Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=%5BREDACTED%5D"
+      ],
+      "published_at": null,
+      "source_key": "msgov",
+      "source_record_id": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/681/082/original/Edital_n%C2%BA_21.2026_DCULT_PROEC_UEMS.pdf",
+      "status": "open",
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "2026-12-01T21:30:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/681/082/original/Edital_n%C2%BA_21.2026_DCULT_PROEC_UEMS.pdf",
+      "content_type_validated": null,
+      "deadline": "2026-12-01T18:30:00.000-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/681/082/original/Edital_n%C2%BA_21.2026_DCULT_PROEC_UEMS.pdf"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14T20:51:10Z",
+        "captured_via": "prosas-third-party-api+playwright-detail",
+        "detail_url": "https://editaisms.prosas.com.br/edital.html?id=17329",
+        "edital_id": "17329",
+        "listing_url": "https://editaisms.prosas.com.br",
+        "signed_pdf_path_only": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/681/082/original/Edital_n%C2%BA_21.2026_DCULT_PROEC_UEMS.pdf"
+      },
+      "hash_validated": null,
+      "published_at": "2026-03-03T08:30:56.000-03:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "msgov",
+      "source_record_id": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/681/082/original/Edital_n%C2%BA_21.2026_DCULT_PROEC_UEMS.pdf",
+      "status": "open",
+      "title": "EDITAL Nº 021/2026 – DCULT/PROEC/UEMS EDITAL DE FLUXO CONTÍNUO DOS EVENTOS DE CULTURA SEM ÔNUS PARA A UNIVERSIDADE  ESTADUAL DE MATO GROSSO DO SUL"
+    },
+    "match_key": "('msgov', 'https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/681/082/original/Edital_n%C2%BA_21.2026_DCULT_PROEC_UEMS.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/703/327/original/Edital_009-2026_Fluxo_Continuo_Ejs_DO.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/703/327/original/Edital_009-2026_Fluxo_Continuo_Ejs_DO.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=%5BREDACTED%5D&X-Amz-Date=20260914T213834Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=%5BREDACTED%5D"
+      ],
+      "published_at": null,
+      "source_key": "msgov",
+      "source_record_id": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/703/327/original/Edital_009-2026_Fluxo_Continuo_Ejs_DO.pdf",
+      "status": "open",
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "2026-12-01T21:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/703/327/original/Edital_009-2026_Fluxo_Continuo_Ejs_DO.pdf",
+      "content_type_validated": null,
+      "deadline": "2026-12-01T18:00:00.000-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/703/327/original/Edital_009-2026_Fluxo_Continuo_Ejs_DO.pdf"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14T20:51:10Z",
+        "captured_via": "prosas-third-party-api+playwright-detail",
+        "detail_url": "https://editaisms.prosas.com.br/edital.html?id=17307",
+        "edital_id": "17307",
+        "listing_url": "https://editaisms.prosas.com.br",
+        "signed_pdf_path_only": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/703/327/original/Edital_009-2026_Fluxo_Continuo_Ejs_DO.pdf"
+      },
+      "hash_validated": null,
+      "published_at": "2026-03-11T14:00:11.000-03:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "msgov",
+      "source_record_id": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/703/327/original/Edital_009-2026_Fluxo_Continuo_Ejs_DO.pdf",
+      "status": "open",
+      "title": "EDITAL Nº009/2026-EJs/DEX/PROEC/ UEMS EDITAL DE FLUXO CONTÍNUO PARA PROJETOS DE EXTENSÃO VINCULADOS À CRIAÇÃO DE EMPRESAS JUNIORES NO ÂMBITO DA UNIVERSIDADE ESTADUAL DE MATO GROSSO DO SUL – EJs/DEX/PROEC/UEMS"
+    },
+    "match_key": "('msgov', 'https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/703/327/original/Edital_009-2026_Fluxo_Continuo_Ejs_DO.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/703/334/original/Tutorial_para_Cadastro_no_Prosas.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/703/334/original/Tutorial_para_Cadastro_no_Prosas.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=%5BREDACTED%5D&X-Amz-Date=20260914T213834Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=%5BREDACTED%5D"
+      ],
+      "published_at": null,
+      "source_key": "msgov",
+      "source_record_id": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/703/334/original/Tutorial_para_Cadastro_no_Prosas.pdf",
+      "status": "open",
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "2026-12-01T21:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/703/334/original/Tutorial_para_Cadastro_no_Prosas.pdf",
+      "content_type_validated": null,
+      "deadline": "2026-12-01T18:00:00.000-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/703/334/original/Tutorial_para_Cadastro_no_Prosas.pdf"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14T20:51:10Z",
+        "captured_via": "prosas-third-party-api+playwright-detail",
+        "detail_url": "https://editaisms.prosas.com.br/edital.html?id=17307",
+        "edital_id": "17307",
+        "listing_url": "https://editaisms.prosas.com.br",
+        "signed_pdf_path_only": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/703/334/original/Tutorial_para_Cadastro_no_Prosas.pdf"
+      },
+      "hash_validated": null,
+      "published_at": "2026-03-11T14:00:11.000-03:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "msgov",
+      "source_record_id": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/703/334/original/Tutorial_para_Cadastro_no_Prosas.pdf",
+      "status": "open",
+      "title": "EDITAL Nº009/2026-EJs/DEX/PROEC/ UEMS EDITAL DE FLUXO CONTÍNUO PARA PROJETOS DE EXTENSÃO VINCULADOS À CRIAÇÃO DE EMPRESAS JUNIORES NO ÂMBITO DA UNIVERSIDADE ESTADUAL DE MATO GROSSO DO SUL – EJs/DEX/PROEC/UEMS"
+    },
+    "match_key": "('msgov', 'https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/703/334/original/Tutorial_para_Cadastro_no_Prosas.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/958/249/original/Edital_007_DO12228_21_07_2026.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/958/249/original/Edital_007_DO12228_21_07_2026.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=%5BREDACTED%5D&X-Amz-Date=20260914T213835Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=%5BREDACTED%5D"
+      ],
+      "published_at": null,
+      "source_key": "msgov",
+      "source_record_id": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/958/249/original/Edital_007_DO12228_21_07_2026.pdf",
+      "status": "open",
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "2026-12-01T21:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/958/249/original/Edital_007_DO12228_21_07_2026.pdf",
+      "content_type_validated": null,
+      "deadline": "2026-12-01T18:00:00.000-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/958/249/original/Edital_007_DO12228_21_07_2026.pdf"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14T20:51:10Z",
+        "captured_via": "prosas-third-party-api+playwright-detail",
+        "detail_url": "https://editaisms.prosas.com.br/edital.html?id=18459",
+        "edital_id": "18459",
+        "listing_url": "https://editaisms.prosas.com.br",
+        "signed_pdf_path_only": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/958/249/original/Edital_007_DO12228_21_07_2026.pdf"
+      },
+      "hash_validated": null,
+      "published_at": "2026-07-21T08:30:54.000-03:00",
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "msgov",
+      "source_record_id": "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/958/249/original/Edital_007_DO12228_21_07_2026.pdf",
+      "status": "open",
+      "title": "Edital Conjunto 007/2026 PROPPI-DEX/PROEC-UEMS de Fluxo Contínuo Incubadora Fênix "
+    },
+    "match_key": "('msgov', 'https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos/arquivos/004/958/249/original/Edital_007_DO12228_21_07_2026.pdf')",
+    "match_method": "stable_id"
+  }
+]

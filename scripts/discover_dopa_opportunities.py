@@ -145,8 +145,10 @@ _DETAIL_POST_ACT_RE = re.compile(
     r"\bjustificativa\s+(?:de\s+)?(?:ausencia|inexigibilidade|inex)\b|"
     r"\bcadastramento\s+de\s+logradouro\b|"
     r"\b(?:instauracao|anulacao)\s+(?:de\s+)?reurb\b|"
-    r"\bgabaritos?\s+oficiais?\b|"
-    r"\bresultado\s+(?:provisorio|final|das?\s+provas?|das?\s+avaliac)\w*\b",
+    r"\bgabaritos?\s+(?:oficiais?|definitivos?)\b|"
+    r"\bresultado\s+(?:provisorio|preliminar|final|das?\s+provas?|das?\s+avaliac)\w*\b|"
+    r"\bnotas?\s+preliminares?\b|"
+    r"\brespostas?\s+a[os]?\s+recurso",
     re.IGNORECASE,
 )
 
@@ -192,6 +194,8 @@ _SUBSTANTIVE_OPPORTUNITY_RE = re.compile(
     r"\bconcurso(?:s)?\s+publico\b|"
     r"\bcredenciamento\b|"
     r"\binscric(?:ao|oes)\s+(?:estao\s+)?abert\w*\b|"
+    r"\babertas?\s+as\s+inscric(?:ao|oes)\b|"
+    r"\bedital\s+(?:de\s+abertura|das?\s+vagas)\b|"
     r"\b(?:recebimento|apresentacao)\s+de\s+propostas?\b",
     re.IGNORECASE,
 )
@@ -371,8 +375,9 @@ def _extract_date_after_keyword(
     cues = list(
         re.finditer(
             r"\b(?:ate|encerramento|inscric(?:ao|oes)|propostas?|candidaturas?|"
+            r"do\s+dia|ao\s+dia|"
             r"prazo\s+(?:final|para|de\s+(?:inscric(?:ao|oes)|envio|"
-            r"apresentacao|submissao|propostas?|candidaturas?)))\b.{0,180}",
+            r"apresentacao|submissao|propostas?|candidaturas?)))\b.{0,220}",
             folded,
         )
     )
@@ -470,7 +475,10 @@ def _status_from_text(text: str, *, deadline: str | None, now: datetime) -> str:
         return "closed"
     if re.search(
         r"\b(inscric(?:ao|oes)|propostas?|candidaturas?|participac(?:ao|oes))"
-        r"\s+(?:estao\s+)?abert|\bprorrogad\w*\b",
+        r"\s+(?:estao\s+)?abert|\bprorrogad\w*\b|"
+        r"\babertas?\s+as\s+inscric(?:ao|oes)\b|"
+        r"\bpermanec\w+\s+aberto\b|\best[aá]\w*\s+aberto\b|"
+        r"\bedital\s+(?:de\s+abertura|das?\s+vagas)\b",
         folded,
     ):
         return "open"

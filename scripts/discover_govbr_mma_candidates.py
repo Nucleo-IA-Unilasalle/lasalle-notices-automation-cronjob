@@ -144,6 +144,14 @@ def extract_govbr_mma_detail_urls(soup: BeautifulSoup, page_url: str) -> list[st
             continue
         if not canonical.startswith(f"{listing_prefix}/"):
             continue
+        # Plone UID stubs (``resolveuid/<sha>``) are not stable detail pages:
+        # live MMA listings still carry e.g. "PLANO ANUAL DE CONTRATAÇÕES
+        # 2020" as a resolveuid link that HTTP 404s, which the shared
+        # transport counts as a run-failing discovery error (partial
+        # inventory). Real edital sections are always linked by canonical
+        # path on this listing, so UID stubs are skipped at extraction.
+        if "/resolveuid/" in canonical:
+            continue
         if canonical in seen:
             continue
 

@@ -1,0 +1,30 @@
+[
+  {
+    "application_deadline": null,
+    "authoritative_status": "unknown",
+    "canonical_url": "https://sistemas.canoas.rs.gov.br/domc/api/publication-file/140919",
+    "description": "Publicacao EDITAL N\u00b0319/2026. Diario Oficial de Canoas, 2026-09-14.",
+    "documents": [
+      {
+        "document_kind": "pdf",
+        "filename": "domc-publication-140919.pdf",
+        "is_principal": true,
+        "is_renderable": false,
+        "mime_type": "application/pdf",
+        "source_document_id": "domc:140919",
+        "url": "https://sistemas.canoas.rs.gov.br/domc/api/publication-file/140919"
+      }
+    ],
+    "opportunity_type": "other",
+    "proposal_opens_at": null,
+    "source_content_hash": "",
+    "source_key": "canoas",
+    "source_kind": "api",
+    "source_markdown": "# EDITAL N\u00b0319/2026\n\n## Fonte oficial\n\nhttps://sistemas.canoas.rs.gov.br/domc/api/publication-file/140919\n\n## Publicacao\n\n2026-09-14T00:00:00-03:00\n\n## Diario\n\nEdi\u00e7\u00e3o Complementar 1 - 3930\n\n## Paginas\n\n1-1\n\n## Situacao\n\nunknown\n\n## Conteudo\n\nPublicacao EDITAL N\u00b0319/2026. Diario Oficial de Canoas, 2026-09-14.\n\n## Documentos\n\n- domc-publication-140919.pdf: https://sistemas.canoas.rs.gov.br/domc/api/publication-file/140919",
+    "source_published_at": "2026-09-14T00:00:00-03:00",
+    "source_record_id": "140919",
+    "source_snapshot_at": "2026-09-14T20:22:21.897416+00:00",
+    "source_updated_at": null,
+    "title": "EDITAL N\u00b0319/2026"
+  }
+]

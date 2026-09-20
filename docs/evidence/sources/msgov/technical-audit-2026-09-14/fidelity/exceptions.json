@@ -1,0 +1,292 @@
+[
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "deadline",
+      "inventory": "2026-09-15T22:00:00Z",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "deadline",
+      "inventory": "2026-09-15T22:00:00Z",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "deadline",
+      "inventory": "2026-09-29T21:00:00Z",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "deadline",
+      "inventory": "2026-10-02T21:00:00Z",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "deadline",
+      "inventory": "2026-10-02T21:00:00Z",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "deadline",
+      "inventory": "2026-10-02T21:00:00Z",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "deadline",
+      "inventory": "2026-10-02T21:00:00Z",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "deadline",
+      "inventory": "2026-10-02T21:00:00Z",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "deadline",
+      "inventory": "2026-10-16T21:00:00Z",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "deadline",
+      "inventory": "2026-10-16T21:00:00Z",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "deadline",
+      "inventory": "2026-10-16T21:00:00Z",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "deadline",
+      "inventory": "2026-11-04T21:00:00Z",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "deadline",
+      "inventory": "2026-11-04T21:00:00Z",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "deadline",
+      "inventory": "2026-12-01T21:00:00Z",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "deadline",
+      "inventory": "2026-12-01T21:00:00Z",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "deadline",
+      "inventory": "2026-12-01T21:00:00Z",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "deadline",
+      "inventory": "2026-12-01T21:30:00Z",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "deadline",
+      "inventory": "2026-12-01T21:30:00Z",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "deadline",
+      "inventory": "2026-12-01T22:00:00Z",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "deadline",
+      "inventory": "2026-12-01T22:00:00Z",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "deadline",
+      "inventory": "2026-12-01T22:00:00Z",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "deadline",
+      "inventory": "2026-12-01T22:00:00Z",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "deadline",
+      "inventory": "2026-12-04T21:00:00Z",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "deadline",
+      "inventory": "2026-12-10T20:30:00Z",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "deadline",
+      "inventory": "2026-12-10T20:30:00Z",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "deadline",
+      "inventory": "3000-12-31T00:00:00Z",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "deadline",
+      "inventory": "3000-12-31T00:00:00Z",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "deadline",
+      "inventory": "3000-12-31T00:00:00Z",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  },
+  {
+    "evidence": {
+      "discovery": null,
+      "field": "deadline",
+      "inventory": "3000-12-31T00:00:00Z",
+      "origin": "discovery"
+    },
+    "reason_code": "missing_optional_metadata",
+    "severity": "non_blocking"
+  }
+]

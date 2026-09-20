@@ -13,9 +13,12 @@ The FAO source uses two paths:
 1. **Primary BS4 path** — ``extract_fao_pdf_urls`` scans the listing
    at ``https://www.fao.org/plant-treaty/areas-of-work/funding/`` for
    ``.pdf`` anchors on the ``fao.org`` host whose href / path / text /
-   title / aria-label carries one of the FAO signal tokens
+   title / aria-label carries one of the FAO open-call signal tokens
    (``call for proposals``, ``request for proposals``, ``expression of
-   interest``, ``procurement``, ``funding strategy``, ``resolution``).
+   interest``, ``procurement``). Strategy-policy and resolution PDFs
+   (for example the Funding Strategy document itself) are intentionally
+   excluded: they are governance materials, not open funding
+   opportunities.
 
 2. **Playwright fallback** — only triggered when the BS4 path yields
    no PDF candidates. The Playwright path queries all ``<a>``
@@ -58,13 +61,18 @@ FAO_FETCH_TIMEOUT_SECONDS = int(os.environ.get("FAO_FETCH_TIMEOUT_SECONDS", "30"
 def extract_fao_pdf_urls(listing_doc: BeautifulSoup | str, listing_url: str) -> list[str]:
     """Discover PDF URLs from the FAO listing HTML.
 
-    Verbatim port of ``extract_fao_pdf_urls`` from the FastAPI repo.
-    The extractor keeps only ``.pdf`` anchors on the ``fao.org`` host
-    (and subdomains) that carry one of the FAO signal tokens
+    Keep only ``.pdf`` anchors on the ``fao.org`` host (and subdomains)
+    that carry one of the FAO open-call signal tokens
     (``call for proposals``, ``request for proposals``,
-    ``expression of interest``, ``procurement``, ``funding strategy``,
-    ``resolution``). URL fragments are stripped before the URL is
-    canonicalised.
+    ``expression of interest``, ``procurement``). URL fragments are
+    stripped before the URL is canonicalised.
+
+    The former ``funding strategy`` and ``resolution`` tokens were
+    dropped after the 2026-09-14 technical audit: the official funding
+    listing page is the Funding Strategy policy page, and those tokens
+    matched governance PDFs (``nb780en``, ``no028en``, ``cc3636en``)
+    that are never open opportunities, producing false-positive
+    discovery candidates.
     """
     if isinstance(listing_doc, BeautifulSoup):
         soup = listing_doc
@@ -73,7 +81,7 @@ def extract_fao_pdf_urls(listing_doc: BeautifulSoup | str, listing_url: str) -> 
     discovered: list[str] = []
     seen: set[str] = set()
     signal_pattern = re.compile(
-        r"(call[\s_-]*for[\s_-]*proposals?|request[\s_-]*for[\s_-]*proposals?|expression[\s_-]*of[\s_-]*interest|\beoi\b|procurement|funding[\s_-]*strategy|resolution)",
+        r"(call[\s_-]*for[\s_-]*proposals?|request[\s_-]*for[\s_-]*proposals?|expression[\s_-]*of[\s_-]*interest|\beoi\b|procurement)",
         re.IGNORECASE,
     )
 

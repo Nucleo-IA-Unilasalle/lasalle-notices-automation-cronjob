@@ -1,0 +1,519 @@
+# Source Fidelity Report
+
+## Quantitative Gates
+
+- Inventory accounting: 100.0% (2/2)
+- Candidate traceability: 100.0% (8/8)
+
+### Blocking exception counts
+- authoritative_deadline_mismatch: 0
+- authoritative_status_mismatch: 0
+- duplicate_identity: 0
+- extra_submission: 0
+- identity_mismatch: 0
+- missing_open: 0
+- parser_failure: 0
+- renderability_mismatch: 0
+
+Total blocking exceptions: 0
+
+## Matches
+
+- key=('ibama', 'edital-20-2026') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-10-16T02:59:59Z discovery=2026-10-16T02:59:59Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('ibama', 'edital-22-2026') method=stable_id
+  - status: inv=closed discovery=closed dashboard=unknown match=True
+  - deadline: inv=2026-09-09T02:59:59Z discovery=2026-09-09T02:59:59Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('ibama', 'edital-26-2026') method=stable_id
+  - status: inv=closed discovery=closed dashboard=unknown match=True
+  - deadline: inv=2026-08-14T02:59:59Z discovery=2026-08-14T02:59:59Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('ibama', 'edital-4-2026') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-12-01T02:59:59Z discovery=2026-12-01T02:59:59Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('ibama', 'slug-consulta-publica-sobre-alteracoes-nos-formularios-de-efluentes-liquidos-e-uso-do-patrimonio-genetico-do-rapp-termina-em-2-de-setembro') method=stable_id
+  - status: inv=closed discovery=closed dashboard=unknown match=True
+  - deadline: inv=2026-09-03T02:59:59Z discovery=2026-09-03T02:59:59Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('ibama', 'slug-consulta-publica-tr-sobre-estudos-ambientais-da-gestao-dos-rejeitos-na-uhe-candonga-e-estudos-conceituais-da-samarco-disponiveis-para-contribuicoes') method=stable_id
+  - status: inv=closed discovery=closed dashboard=unknown match=True
+  - deadline: inv=2026-04-05T02:59:59Z discovery=2026-04-05T02:59:59Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('ibama', 'slug-ibama-abre-consulta-publica-para-criacao-de-fichas-tecnicas-de-enquadramento-para-o-ctf-app') method=stable_id
+  - status: inv=closed discovery=closed dashboard=unknown match=True
+  - deadline: inv=2026-06-04T02:59:59Z discovery=2026-06-04T02:59:59Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('ibama', 'slug-ibama-abre-consulta-publica-sobre-alteracoes-em-formularios-do-rapp') method=stable_id
+  - status: inv=closed discovery=closed dashboard=unknown match=True
+  - deadline: inv=2026-09-03T02:59:59Z discovery=2026-09-03T02:59:59Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+
+## Exceptions
+
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: administrative
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:40.934965Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/prevfogo-ibama-abre-chamamento-publico-para-contratacao-de-brigadistas-florestais-de-logistica'}
+  - listing_kind: chamamentos
+  - listing_url: https://www.gov.br/ibama/pt-br/acesso-a-informacao/editais-e-convites/chamamentos-publicos/chamamentos-publicos
+  - origin: inventory
+  - original_record_id: slug-prevfogo-ibama-abre-chamamento-publico-para-contratacao-de-brigadistas-florestais-de-logistica
+  - proposal_opens_at: None
+  - raw_status: unknown
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-d34dd757d088c94e', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/prevfogo-ibama-abre-chamamento-publico-para-contratacao-de-brigadistas-florestais-de-logistica', 'title': 'Prevfogo/Ibama abre Chamamento Público para contratação de brigadistas florestais de logística', 'status': 'excluded', 'published_at': '2026-06-29T10:42:00-03:00', 'deadline': None, 'document_urls': ['https://www.gov.br/ibama/pt-br/assuntos/notas/2026/prevfogo-ibama-abre-chamamento-publico-para-contratacao-de-brigadistas-florestais-de-logistica/20260629_Chamamento_Publicao_logistica_Prevfogo.pdf'], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/acesso-a-informacao/editais-e-convites/chamamentos-publicos/chamamentos-publicos', 'listing_kind': 'chamamentos', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:40.934965Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/prevfogo-ibama-abre-chamamento-publico-para-contratacao-de-brigadistas-florestais-de-logistica'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': None, 'raw_status': 'unknown', 'disposition_note': 'administrative', 'original_record_id': 'slug-prevfogo-ibama-abre-chamamento-publico-para-contratacao-de-brigadistas-florestais-de-logistica'}}
+  - source_updated_at: None
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: administrative
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:42.736163Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-abre-chamamento-publico-para-doacao-de-bens-inserviveis-em-minas-gerais'}
+  - listing_kind: chamamentos
+  - listing_url: https://www.gov.br/ibama/pt-br/acesso-a-informacao/editais-e-convites/chamamentos-publicos/chamamentos-publicos
+  - origin: inventory
+  - original_record_id: slug-ibama-abre-chamamento-publico-para-doacao-de-bens-inserviveis-em-minas-gerais
+  - proposal_opens_at: None
+  - raw_status: unknown
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-0dd88f4fec586e1c', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-abre-chamamento-publico-para-doacao-de-bens-inserviveis-em-minas-gerais', 'title': 'Ibama abre Chamamento Público para doação de bens inservíveis em Minas Gerais', 'status': 'excluded', 'published_at': '2026-06-03T14:54:00-03:00', 'deadline': None, 'document_urls': ['https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-abre-chamamento-publico-para-doacao-de-bens-inserviveis-em-minas-gerais/20260603_SEI_Ibama_27380451_Aviso.pdf', 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-abre-chamamento-publico-para-doacao-de-bens-inserviveis-em-minas-gerais/20260603_SEI_Ibama_27380451_Aviso.pdf'], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/acesso-a-informacao/editais-e-convites/chamamentos-publicos/chamamentos-publicos', 'listing_kind': 'chamamentos', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:42.736163Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-abre-chamamento-publico-para-doacao-de-bens-inserviveis-em-minas-gerais'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': None, 'raw_status': 'unknown', 'disposition_note': 'administrative', 'original_record_id': 'slug-ibama-abre-chamamento-publico-para-doacao-de-bens-inserviveis-em-minas-gerais'}}
+  - source_updated_at: None
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: administrative
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:44.337303Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-republica-edital-para-locacao-de-imovel-em-aracaju-se'}
+  - listing_kind: chamamentos
+  - listing_url: https://www.gov.br/ibama/pt-br/acesso-a-informacao/editais-e-convites/chamamentos-publicos/chamamentos-publicos
+  - origin: inventory
+  - original_record_id: edital-8-2026
+  - proposal_opens_at: None
+  - raw_status: closed
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-08ad8669c7480298', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-republica-edital-para-locacao-de-imovel-em-aracaju-se', 'title': 'Ibama republica edital para locação de imóvel em Aracaju/SE', 'status': 'excluded', 'published_at': '2026-03-23T18:37:00-03:00', 'deadline': '2026-04-10T23:59:59-03:00', 'document_urls': [], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/acesso-a-informacao/editais-e-convites/chamamentos-publicos/chamamentos-publicos', 'listing_kind': 'chamamentos', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:44.337303Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-republica-edital-para-locacao-de-imovel-em-aracaju-se'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': '2026-03-23T18:40:00-03:00', 'raw_status': 'closed', 'disposition_note': 'administrative', 'original_record_id': 'edital-8-2026'}}
+  - source_updated_at: 2026-03-23T18:40:00-03:00
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: administrative
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:46.101317Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/edital-de-chamamento-publico-do-ibama-para-prospeccao-de-imovel-apto-a-locacao-em-aracaju-se'}
+  - listing_kind: chamamentos
+  - listing_url: https://www.gov.br/ibama/pt-br/acesso-a-informacao/editais-e-convites/chamamentos-publicos/chamamentos-publicos
+  - origin: inventory
+  - original_record_id: edital-1-2026
+  - proposal_opens_at: None
+  - raw_status: closed
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-0040d7c60994733c', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/edital-de-chamamento-publico-do-ibama-para-prospeccao-de-imovel-apto-a-locacao-em-aracaju-se', 'title': 'Edital de Chamamento Público do Ibama para prospecção de imóvel apto à locação em Aracaju (SE)', 'status': 'excluded', 'published_at': '2026-02-24T11:59:00-03:00', 'deadline': '2026-03-13T23:59:59-03:00', 'document_urls': ['https://www.gov.br/ibama/pt-br/assuntos/notas/2026/edital-de-chamamento-publico-do-ibama-para-prospeccao-de-imovel-apto-a-locacao-em-aracaju-se/20260224_Edital_1931260000012026.pdf', 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/edital-de-chamamento-publico-do-ibama-para-prospeccao-de-imovel-apto-a-locacao-em-aracaju-se/20260224_Minuta_Contrato_193126_000001_2026_LocacaodeImovel_Ibama_SubesSE.pdf', 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/edital-de-chamamento-publico-do-ibama-para-prospeccao-de-imovel-apto-a-locacao-em-aracaju-se/20260224_TR_1931260000022026.pdf', 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/edital-de-chamamento-publico-do-ibama-para-prospeccao-de-imovel-apto-a-locacao-em-aracaju-se/20260224EstudoTcnicoPreliminareAnexos.zip'], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/acesso-a-informacao/editais-e-convites/chamamentos-publicos/chamamentos-publicos', 'listing_kind': 'chamamentos', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:46.101317Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/edital-de-chamamento-publico-do-ibama-para-prospeccao-de-imovel-apto-a-locacao-em-aracaju-se'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': '2026-02-24T16:33:00-03:00', 'raw_status': 'closed', 'disposition_note': 'administrative', 'original_record_id': 'edital-1-2026'}}
+  - source_updated_at: 2026-02-24T16:33:00-03:00
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: administrative
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:53.074745Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-abre-contratacao-de-conteineres-modulares-em-centros-de-triagem-de-animais-silvestres'}
+  - listing_kind: editais
+  - listing_url: https://www.gov.br/ibama/pt-br/acesso-a-informacao/editais-e-convites/editais-e-convites
+  - origin: inventory
+  - original_record_id: slug-ibama-abre-contratacao-de-conteineres-modulares-em-centros-de-triagem-de-animais-silvestres
+  - proposal_opens_at: None
+  - raw_status: open
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-9bb648f62056921f', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-abre-contratacao-de-conteineres-modulares-em-centros-de-triagem-de-animais-silvestres', 'title': 'Ibama abre contratação de contêineres modulares em Centros de Triagem de Animais Silvestres', 'status': 'excluded', 'published_at': '2026-06-26T17:09:00-03:00', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/acesso-a-informacao/editais-e-convites/editais-e-convites', 'listing_kind': 'editais', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:53.074745Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-abre-contratacao-de-conteineres-modulares-em-centros-de-triagem-de-animais-silvestres'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': '2026-06-26T17:13:00-03:00', 'raw_status': 'open', 'disposition_note': 'administrative', 'original_record_id': 'slug-ibama-abre-contratacao-de-conteineres-modulares-em-centros-de-triagem-de-animais-silvestres'}}
+  - source_updated_at: 2026-06-26T17:13:00-03:00
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: administrative
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:58.197276Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-divulga-resultados-das-metas-institucionais-intermediarias-ciclo-2025-2026'}
+  - listing_kind: notas2026
+  - listing_url: https://www.gov.br/ibama/pt-br/assuntos/notas/2026/
+  - origin: inventory
+  - original_record_id: slug-ibama-divulga-resultados-das-metas-institucionais-intermediarias-ciclo-2025-2026
+  - proposal_opens_at: 2026-08-21T00:00:00-03:00
+  - raw_status: closed
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-34c5210340c01b73', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-divulga-resultados-das-metas-institucionais-intermediarias-ciclo-2025-2026', 'title': 'Ibama divulga resultados das Metas Institucionais Intermediárias ciclo 2025-2026', 'status': 'excluded', 'published_at': '2026-08-21T10:41:00-03:00', 'deadline': '2026-05-31T23:59:59-03:00', 'document_urls': [], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/', 'listing_kind': 'notas2026', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:58.197276Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-divulga-resultados-das-metas-institucionais-intermediarias-ciclo-2025-2026'}, 'detail_content_area': True, 'proposal_opens_at': '2026-08-21T00:00:00-03:00', 'source_updated_at': None, 'raw_status': 'closed', 'disposition_note': 'administrative', 'original_record_id': 'slug-ibama-divulga-resultados-das-metas-institucionais-intermediarias-ciclo-2025-2026'}}
+  - source_updated_at: None
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: administrative
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:01.957317Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-divulga-balanco-geral-de-emissoes-corporativas-2013-proconve-l8-ano-base-2025'}
+  - listing_kind: notas2026
+  - listing_url: https://www.gov.br/ibama/pt-br/assuntos/notas/2026/
+  - origin: inventory
+  - original_record_id: slug-ibama-divulga-balanco-geral-de-emissoes-corporativas-2013-proconve-l8-ano-base-2025
+  - proposal_opens_at: None
+  - raw_status: open
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-32a9079abda28e8f', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-divulga-balanco-geral-de-emissoes-corporativas-2013-proconve-l8-ano-base-2025', 'title': 'Ibama divulga Balanço Geral de Emissões Corporativas – Proconve L8, ano-base 2025', 'status': 'excluded', 'published_at': '2026-08-18T09:19:00-03:00', 'deadline': '2026-09-30T23:59:59-03:00', 'document_urls': [], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/', 'listing_kind': 'notas2026', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:01.957317Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-divulga-balanco-geral-de-emissoes-corporativas-2013-proconve-l8-ano-base-2025'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': None, 'raw_status': 'open', 'disposition_note': 'administrative', 'original_record_id': 'slug-ibama-divulga-balanco-geral-de-emissoes-corporativas-2013-proconve-l8-ano-base-2025'}}
+  - source_updated_at: None
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: administrative
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:09.365719Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-realiza-audiencia-publica-para-contratacao-de-internet-satelital-leo'}
+  - listing_kind: notas2026
+  - listing_url: https://www.gov.br/ibama/pt-br/assuntos/notas/2026/
+  - origin: inventory
+  - original_record_id: slug-ibama-realiza-audiencia-publica-para-contratacao-de-internet-satelital-leo
+  - proposal_opens_at: None
+  - raw_status: unknown
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-6888bd62ccb0bb0a', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-realiza-audiencia-publica-para-contratacao-de-internet-satelital-leo', 'title': 'Ibama realiza audiência pública para contratação de internet satelital LEO', 'status': 'excluded', 'published_at': '2026-08-04T17:12:00-03:00', 'deadline': None, 'document_urls': ['https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-realiza-audiencia-publica-para-contratacao-de-internet-satelital-leo/20260804AvisodeAudienciaPublica28233090.pdf', 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-realiza-audiencia-publica-para-contratacao-de-internet-satelital-leo/20260804TermodeReferencia932026.pdf', 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-realiza-audiencia-publica-para-contratacao-de-internet-satelital-leo/20260804EstudoTecnicoPreliminar102025.pdf', 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-realiza-audiencia-publica-para-contratacao-de-internet-satelital-leo/20260804FormulariodeEsclarecimentoseContribuicoes.pdf', 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-realiza-audiencia-publica-para-contratacao-de-internet-satelital-leo/20260825_Ata_de_Reuniao_Audiencia_Publica_28479815.pdf', 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-realiza-audiencia-publica-para-contratacao-de-internet-satelital-leo/20260825_Lista_de_Presenca_Audiencia_Publica.pdf', 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-realiza-audiencia-publica-para-contratacao-de-internet-satelital-leo/20260825_Ata_de_Reuniao_Audiencia_Publica_28479815.pdf', 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-realiza-audiencia-publica-para-contratacao-de-internet-satelital-leo/20260825_Lista_de_Presenca_Audiencia_Publica.pdf'], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/', 'listing_kind': 'notas2026', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:09.365719Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-realiza-audiencia-publica-para-contratacao-de-internet-satelital-leo'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': '2026-08-25T12:00:00-03:00', 'raw_status': 'unknown', 'disposition_note': 'administrative', 'original_record_id': 'slug-ibama-realiza-audiencia-publica-para-contratacao-de-internet-satelital-leo'}}
+  - source_updated_at: 2026-08-25T12:00:00-03:00
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: administrative
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:15.122481Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/edital-de-notificacao-estabelece-diretrizes-a-propriedades-rurais-em-areas-criticas-de-incendios-em-4-estados-ba-ma-pi-e-to'}
+  - listing_kind: notas2026
+  - listing_url: https://www.gov.br/ibama/pt-br/assuntos/notas/2026/
+  - origin: inventory
+  - original_record_id: edital-44-2026
+  - proposal_opens_at: None
+  - raw_status: open
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-00dcc04f7913135b', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/edital-de-notificacao-estabelece-diretrizes-a-propriedades-rurais-em-areas-criticas-de-incendios-em-4-estados-ba-ma-pi-e-to', 'title': 'Edital de notificação estabelece diretrizes a propriedades rurais em áreas críticas de incêndios em 4 estados: BA, MA, PI e TO', 'status': 'excluded', 'published_at': '2026-07-28T09:30:00-03:00', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/', 'listing_kind': 'notas2026', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:15.122481Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/edital-de-notificacao-estabelece-diretrizes-a-propriedades-rurais-em-areas-criticas-de-incendios-em-4-estados-ba-ma-pi-e-to'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': None, 'raw_status': 'open', 'disposition_note': 'administrative', 'original_record_id': 'edital-44-2026'}}
+  - source_updated_at: None
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: administrative
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:15.285399Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/nota-de-pesar-pelo-falecimento-do-brigadista-indigena-marquinhos-kayabi'}
+  - listing_kind: notas2026
+  - listing_url: https://www.gov.br/ibama/pt-br/assuntos/notas/2026/
+  - origin: inventory
+  - original_record_id: slug-nota-de-pesar-pelo-falecimento-do-brigadista-indigena-marquinhos-kayabi
+  - proposal_opens_at: None
+  - raw_status: unknown
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-0502d476f912891e', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/nota-de-pesar-pelo-falecimento-do-brigadista-indigena-marquinhos-kayabi', 'title': 'Nota de pesar pelo falecimento do brigadista indígena Marquinhos Kayabi', 'status': 'excluded', 'published_at': '2026-07-17T17:42:00-03:00', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/', 'listing_kind': 'notas2026', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:15.285399Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/nota-de-pesar-pelo-falecimento-do-brigadista-indigena-marquinhos-kayabi'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': None, 'raw_status': 'unknown', 'disposition_note': 'administrative', 'original_record_id': 'slug-nota-de-pesar-pelo-falecimento-do-brigadista-indigena-marquinhos-kayabi'}}
+  - source_updated_at: None
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: administrative
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:18.949923Z', 'final_url': 'https://www.gov.br/ibama/pt-br/acesso-a-informacao/editais-e-convites/chamamentos-publicos/chamamentos-publicos'}
+  - listing_kind: chamamentos_rss
+  - listing_url: https://www.gov.br/ibama/pt-br/acesso-a-informacao/editais-e-convites/chamamentos-publicos/RSS
+  - origin: inventory
+  - original_record_id: edital-22-2026
+  - proposal_opens_at: None
+  - raw_status: unknown
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-5749ac499f51697d', 'canonical_url': 'https://www.gov.br/ibama/pt-br/acesso-a-informacao/editais-e-convites/chamamentos-publicos/chamamentos-publicos', 'title': 'Chamamentos Públicos', 'status': 'excluded', 'published_at': '2022-09-30T10:48:00-03:00', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/acesso-a-informacao/editais-e-convites/chamamentos-publicos/RSS', 'listing_kind': 'chamamentos_rss', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:18.949923Z', 'final_url': 'https://www.gov.br/ibama/pt-br/acesso-a-informacao/editais-e-convites/chamamentos-publicos/chamamentos-publicos'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': '2026-07-10T08:57:00-03:00', 'raw_status': 'unknown', 'disposition_note': 'administrative', 'original_record_id': 'edital-22-2026'}}
+  - source_updated_at: 2026-07-10T08:57:00-03:00
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: administrative
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:29.548489Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/fornecimento-emergencial-de-agua-potavel-na-volta-grande-do-xingu-2013-uhe-belo-monte'}
+  - listing_kind: notas_rss
+  - listing_url: https://www.gov.br/ibama/pt-br/assuntos/notas/2026/RSS
+  - origin: inventory
+  - original_record_id: slug-fornecimento-emergencial-de-agua-potavel-na-volta-grande-do-xingu-2013-uhe-belo-monte
+  - proposal_opens_at: None
+  - raw_status: unknown
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-d2723259b63d432e', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/fornecimento-emergencial-de-agua-potavel-na-volta-grande-do-xingu-2013-uhe-belo-monte', 'title': 'Fornecimento emergencial de água potável na Volta Grande do Xingu – UHE Belo Monte', 'status': 'excluded', 'published_at': '2026-03-06T12:35:00-03:00', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/RSS', 'listing_kind': 'notas_rss', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:29.548489Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/fornecimento-emergencial-de-agua-potavel-na-volta-grande-do-xingu-2013-uhe-belo-monte'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': None, 'raw_status': 'unknown', 'disposition_note': 'administrative', 'original_record_id': 'slug-fornecimento-emergencial-de-agua-potavel-na-volta-grande-do-xingu-2013-uhe-belo-monte'}}
+  - source_updated_at: None
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: news_without_call
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:51.417532Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/copy_of_notas/ibama-realiza-o-seminario-restauracao-ecologica-em-santa-catarina-como-participar-do-chamamento-do-ibama'}
+  - listing_kind: chamamentos
+  - listing_url: https://www.gov.br/ibama/pt-br/acesso-a-informacao/editais-e-convites/chamamentos-publicos/chamamentos-publicos
+  - origin: inventory
+  - original_record_id: edital-02-2018
+  - proposal_opens_at: None
+  - raw_status: closed
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-ba678b8e20989e6c', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/copy_of_notas/ibama-realiza-o-seminario-restauracao-ecologica-em-santa-catarina-como-participar-do-chamamento-do-ibama', 'title': 'Ibama realiza o seminário “Restauração Ecológica em Santa Catarina: como participar do Chamamento do Ibama?”', 'status': 'excluded', 'published_at': '2019-08-30T15:23:00-03:00', 'deadline': '2019-11-16T23:59:59-03:00', 'document_urls': [], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/acesso-a-informacao/editais-e-convites/chamamentos-publicos/chamamentos-publicos', 'listing_kind': 'chamamentos', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:51.417532Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/copy_of_notas/ibama-realiza-o-seminario-restauracao-ecologica-em-santa-catarina-como-participar-do-chamamento-do-ibama'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': '2019-10-15T19:48:00-03:00', 'raw_status': 'closed', 'disposition_note': 'news_without_call', 'original_record_id': 'edital-02-2018'}}
+  - source_updated_at: 2019-10-15T19:48:00-03:00
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: news_without_call
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:00.138886Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/webinario-tira-duvidas-sobre-edital-para-credenciar-projetos-de-recuperacao-da-vegetacao-nativa'}
+  - listing_kind: notas2026
+  - listing_url: https://www.gov.br/ibama/pt-br/assuntos/notas/2026/
+  - origin: inventory
+  - original_record_id: edital-22-2026
+  - proposal_opens_at: None
+  - raw_status: unknown
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-23237a1d83c6393c', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/webinario-tira-duvidas-sobre-edital-para-credenciar-projetos-de-recuperacao-da-vegetacao-nativa', 'title': 'Webinário tira dúvidas sobre edital para credenciar projetos de recuperação da vegetação nativa', 'status': 'excluded', 'published_at': '2026-08-18T14:53:00-03:00', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/', 'listing_kind': 'notas2026', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:00.138886Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/webinario-tira-duvidas-sobre-edital-para-credenciar-projetos-de-recuperacao-da-vegetacao-nativa'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': '2026-08-19T18:55:00-03:00', 'raw_status': 'unknown', 'disposition_note': 'news_without_call', 'original_record_id': 'edital-22-2026'}}
+  - source_updated_at: 2026-08-19T18:55:00-03:00
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: no_call_signal
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:53.381211Z', 'final_url': 'https://www.gov.br/ibama/acl_users/credentials_cookie_auth/require_login?came_from=https%3A%2F%2Fwww.gov.br%2Fibama%2Fpt-br%2Fassuntos%2Feventos%2F2026%2Fibama-realiza-em-maio-leilao-virtual-de-gado-apreendido-em-area-embargada-no-para'}
+  - listing_kind: editais
+  - listing_url: https://www.gov.br/ibama/pt-br/acesso-a-informacao/editais-e-convites/editais-e-convites
+  - origin: inventory
+  - original_record_id: slug-ibama-realiza-em-maio-leilao-virtual-de-gado-apreendido-em-area-embargada-no-para
+  - proposal_opens_at: None
+  - raw_status: open
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-852f88b4224790cc', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/eventos/2026/ibama-realiza-em-maio-leilao-virtual-de-gado-apreendido-em-area-embargada-no-para', 'title': 'Conteúdo Restrito', 'status': 'excluded', 'published_at': None, 'deadline': None, 'document_urls': [], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/acesso-a-informacao/editais-e-convites/editais-e-convites', 'listing_kind': 'editais', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:53.381211Z', 'final_url': 'https://www.gov.br/ibama/acl_users/credentials_cookie_auth/require_login?came_from=https%3A%2F%2Fwww.gov.br%2Fibama%2Fpt-br%2Fassuntos%2Feventos%2F2026%2Fibama-realiza-em-maio-leilao-virtual-de-gado-apreendido-em-area-embargada-no-para'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': None, 'raw_status': 'open', 'disposition_note': 'no_call_signal', 'original_record_id': 'slug-ibama-realiza-em-maio-leilao-virtual-de-gado-apreendido-em-area-embargada-no-para'}}
+  - source_updated_at: None
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: no_call_signal
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:53.492771Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-no-acre-suspende-expediente-presencial-para-higienizacao-do-reservatorio-de-agua'}
+  - listing_kind: notas2026
+  - listing_url: https://www.gov.br/ibama/pt-br/assuntos/notas/2026/
+  - origin: inventory
+  - original_record_id: slug-ibama-no-acre-suspende-expediente-presencial-para-higienizacao-do-reservatorio-de-agua
+  - proposal_opens_at: None
+  - raw_status: cancelled
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-31f9eb4abe4a584d', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-no-acre-suspende-expediente-presencial-para-higienizacao-do-reservatorio-de-agua', 'title': 'Ibama no Acre suspende expediente presencial para higienização do reservatório de água', 'status': 'excluded', 'published_at': '2026-09-11T15:28:00-03:00', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/', 'listing_kind': 'notas2026', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:53.492771Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-no-acre-suspende-expediente-presencial-para-higienizacao-do-reservatorio-de-agua'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': None, 'raw_status': 'cancelled', 'disposition_note': 'no_call_signal', 'original_record_id': 'slug-ibama-no-acre-suspende-expediente-presencial-para-higienizacao-do-reservatorio-de-agua'}}
+  - source_updated_at: None
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: no_call_signal
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:53.647353Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/supes-am-suspensao-do-atendimento-presencial-em-11-de-setembro'}
+  - listing_kind: notas2026
+  - listing_url: https://www.gov.br/ibama/pt-br/assuntos/notas/2026/
+  - origin: inventory
+  - original_record_id: slug-supes-am-suspensao-do-atendimento-presencial-em-11-de-setembro
+  - proposal_opens_at: None
+  - raw_status: cancelled
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-7ac74730456b6fa7', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/supes-am-suspensao-do-atendimento-presencial-em-11-de-setembro', 'title': 'Supes/AM: suspensão do atendimento presencial em 11 de setembro', 'status': 'excluded', 'published_at': '2026-09-09T15:08:00-03:00', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/', 'listing_kind': 'notas2026', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:53.647353Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/supes-am-suspensao-do-atendimento-presencial-em-11-de-setembro'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': None, 'raw_status': 'cancelled', 'disposition_note': 'no_call_signal', 'original_record_id': 'slug-supes-am-suspensao-do-atendimento-presencial-em-11-de-setembro'}}
+  - source_updated_at: None
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: no_call_signal
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:54.007683Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/superintendencia-do-ibama-no-espirito-santo-suspende-atendimento-presencial-na-sexta-feira-4'}
+  - listing_kind: notas2026
+  - listing_url: https://www.gov.br/ibama/pt-br/assuntos/notas/2026/
+  - origin: inventory
+  - original_record_id: slug-superintendencia-do-ibama-no-espirito-santo-suspende-atendimento-presencial-na-sexta-feira-4
+  - proposal_opens_at: None
+  - raw_status: cancelled
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-c302ce3853c23ec3', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/superintendencia-do-ibama-no-espirito-santo-suspende-atendimento-presencial-na-sexta-feira-4', 'title': 'Superintendência do Ibama no Espírito Santo suspende atendimento presencial na sexta-feira (4)', 'status': 'excluded', 'published_at': '2026-09-03T15:31:00-03:00', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/', 'listing_kind': 'notas2026', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:54.007683Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/superintendencia-do-ibama-no-espirito-santo-suspende-atendimento-presencial-na-sexta-feira-4'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': '2026-09-03T16:37:00-03:00', 'raw_status': 'cancelled', 'disposition_note': 'no_call_signal', 'original_record_id': 'slug-superintendencia-do-ibama-no-espirito-santo-suspende-atendimento-presencial-na-sexta-feira-4'}}
+  - source_updated_at: 2026-09-03T16:37:00-03:00
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: no_call_signal
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:55.707592Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/unidade-tecnica-do-ibama-em-barra-do-garcas-mt-tem-atendimento-suspenso-na-proxima-sexta-feira-4'}
+  - listing_kind: notas2026
+  - listing_url: https://www.gov.br/ibama/pt-br/assuntos/notas/2026/
+  - origin: inventory
+  - original_record_id: slug-unidade-tecnica-do-ibama-em-barra-do-garcas-mt-tem-atendimento-suspenso-na-proxima-sexta-feira-4
+  - proposal_opens_at: None
+  - raw_status: cancelled
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-28ba220a7e5ae17b', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/unidade-tecnica-do-ibama-em-barra-do-garcas-mt-tem-atendimento-suspenso-na-proxima-sexta-feira-4', 'title': 'Unidade Técnica do Ibama em Barra do Garças/MT tem atendimento suspenso na próxima sexta-feira (4)', 'status': 'excluded', 'published_at': '2026-09-03T13:57:00-03:00', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/', 'listing_kind': 'notas2026', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:55.707592Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/unidade-tecnica-do-ibama-em-barra-do-garcas-mt-tem-atendimento-suspenso-na-proxima-sexta-feira-4'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': None, 'raw_status': 'cancelled', 'disposition_note': 'no_call_signal', 'original_record_id': 'slug-unidade-tecnica-do-ibama-em-barra-do-garcas-mt-tem-atendimento-suspenso-na-proxima-sexta-feira-4'}}
+  - source_updated_at: None
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: no_call_signal
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:55.881600Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-suspende-expediente-presencial-na-unidade-tecnica-de-santos-para-dedetizacao-nesta-sexta-feira-4'}
+  - listing_kind: notas2026
+  - listing_url: https://www.gov.br/ibama/pt-br/assuntos/notas/2026/
+  - origin: inventory
+  - original_record_id: slug-ibama-suspende-expediente-presencial-na-unidade-tecnica-de-santos-para-dedetizacao-nesta-sexta-feira-4
+  - proposal_opens_at: None
+  - raw_status: cancelled
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-cac5b00068e578fc', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-suspende-expediente-presencial-na-unidade-tecnica-de-santos-para-dedetizacao-nesta-sexta-feira-4', 'title': 'Ibama suspende expediente presencial na Unidade Técnica de Santos para dedetização nesta sexta-feira (4)', 'status': 'excluded', 'published_at': '2026-09-02T16:01:00-03:00', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/', 'listing_kind': 'notas2026', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:55.881600Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-suspende-expediente-presencial-na-unidade-tecnica-de-santos-para-dedetizacao-nesta-sexta-feira-4'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': None, 'raw_status': 'cancelled', 'disposition_note': 'no_call_signal', 'original_record_id': 'slug-ibama-suspende-expediente-presencial-na-unidade-tecnica-de-santos-para-dedetizacao-nesta-sexta-feira-4'}}
+  - source_updated_at: None
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: no_call_signal
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:56.206770Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-na-paraiba-suspende-expediente-presencial-para-dedetizacao-nesta-sexta-feira-28-08'}
+  - listing_kind: notas2026
+  - listing_url: https://www.gov.br/ibama/pt-br/assuntos/notas/2026/
+  - origin: inventory
+  - original_record_id: slug-ibama-na-paraiba-suspende-expediente-presencial-para-dedetizacao-nesta-sexta-feira-28-08
+  - proposal_opens_at: None
+  - raw_status: cancelled
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-ac19240dfe61ef6b', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-na-paraiba-suspende-expediente-presencial-para-dedetizacao-nesta-sexta-feira-28-08', 'title': 'Ibama na Paraíba suspende expediente presencial para dedetização nesta sexta-feira (28/08)', 'status': 'excluded', 'published_at': '2026-08-27T12:23:00-03:00', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/', 'listing_kind': 'notas2026', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:56.206770Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-na-paraiba-suspende-expediente-presencial-para-dedetizacao-nesta-sexta-feira-28-08'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': None, 'raw_status': 'cancelled', 'disposition_note': 'no_call_signal', 'original_record_id': 'slug-ibama-na-paraiba-suspende-expediente-presencial-para-dedetizacao-nesta-sexta-feira-28-08'}}
+  - source_updated_at: None
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: no_call_signal
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:56.516615Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/nota-de-pesar-pelo-falecimento-da-primeira-diretora-de-controle-e-fiscalizacao-do-ibama'}
+  - listing_kind: notas2026
+  - listing_url: https://www.gov.br/ibama/pt-br/assuntos/notas/2026/
+  - origin: inventory
+  - original_record_id: slug-nota-de-pesar-pelo-falecimento-da-primeira-diretora-de-controle-e-fiscalizacao-do-ibama
+  - proposal_opens_at: None
+  - raw_status: unknown
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-a0b2c73249168dd1', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/nota-de-pesar-pelo-falecimento-da-primeira-diretora-de-controle-e-fiscalizacao-do-ibama', 'title': 'Nota de pesar pelo falecimento da primeira diretora de Controle e Fiscalização do Ibama', 'status': 'excluded', 'published_at': '2026-08-22T19:42:00-03:00', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/', 'listing_kind': 'notas2026', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:56.516615Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/nota-de-pesar-pelo-falecimento-da-primeira-diretora-de-controle-e-fiscalizacao-do-ibama'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': None, 'raw_status': 'unknown', 'disposition_note': 'no_call_signal', 'original_record_id': 'slug-nota-de-pesar-pelo-falecimento-da-primeira-diretora-de-controle-e-fiscalizacao-do-ibama'}}
+  - source_updated_at: None
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: no_call_signal
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:58.444455Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/expediente-da-superintendencia-do-ibama-em-mt-fica-suspenso-nesta-sexta-feira-21-08'}
+  - listing_kind: notas2026
+  - listing_url: https://www.gov.br/ibama/pt-br/assuntos/notas/2026/
+  - origin: inventory
+  - original_record_id: slug-expediente-da-superintendencia-do-ibama-em-mt-fica-suspenso-nesta-sexta-feira-21-08
+  - proposal_opens_at: None
+  - raw_status: cancelled
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-1e0a1e198fb3d5e6', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/expediente-da-superintendencia-do-ibama-em-mt-fica-suspenso-nesta-sexta-feira-21-08', 'title': 'Expediente da Superintendência do Ibama em MT fica suspenso nesta sexta-feira (21/08)', 'status': 'excluded', 'published_at': '2026-08-20T09:23:00-03:00', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/', 'listing_kind': 'notas2026', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:58.444455Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/expediente-da-superintendencia-do-ibama-em-mt-fica-suspenso-nesta-sexta-feira-21-08'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': None, 'raw_status': 'cancelled', 'disposition_note': 'no_call_signal', 'original_record_id': 'slug-expediente-da-superintendencia-do-ibama-em-mt-fica-suspenso-nesta-sexta-feira-21-08'}}
+  - source_updated_at: None
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: no_call_signal
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:02.151002Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/nota-de-esclarecimento-invasor-de-terra-indigena-nao-possui-direito-a-permanencia-na-area'}
+  - listing_kind: notas2026
+  - listing_url: https://www.gov.br/ibama/pt-br/assuntos/notas/2026/
+  - origin: inventory
+  - original_record_id: slug-nota-de-esclarecimento-invasor-de-terra-indigena-nao-possui-direito-a-permanencia-na-area
+  - proposal_opens_at: None
+  - raw_status: unknown
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-d3ebdfd88a5dfa13', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/nota-de-esclarecimento-invasor-de-terra-indigena-nao-possui-direito-a-permanencia-na-area', 'title': 'Nota de esclarecimento: invasor de Terra Indígena não possui direito à permanência na área', 'status': 'excluded', 'published_at': '2026-08-17T17:19:00-03:00', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/', 'listing_kind': 'notas2026', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:02.151002Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/nota-de-esclarecimento-invasor-de-terra-indigena-nao-possui-direito-a-permanencia-na-area'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': None, 'raw_status': 'unknown', 'disposition_note': 'no_call_signal', 'original_record_id': 'slug-nota-de-esclarecimento-invasor-de-terra-indigena-nao-possui-direito-a-permanencia-na-area'}}
+  - source_updated_at: None
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: no_call_signal
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:04.104731Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/nota-de-esclarecimento-serraria-desativada-pelo-ibama-em-ro-descumpria-bloqueio-de-atividades-de-forma-recorrente'}
+  - listing_kind: notas2026
+  - listing_url: https://www.gov.br/ibama/pt-br/assuntos/notas/2026/
+  - origin: inventory
+  - original_record_id: slug-nota-de-esclarecimento-serraria-desativada-pelo-ibama-em-ro-descumpria-bloqueio-de-atividades-de-forma-recorrente
+  - proposal_opens_at: None
+  - raw_status: unknown
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-4fb0f0da54ad3435', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/nota-de-esclarecimento-serraria-desativada-pelo-ibama-em-ro-descumpria-bloqueio-de-atividades-de-forma-recorrente', 'title': 'Nota de esclarecimento: serraria desativada pelo Ibama em RO descumpria bloqueio de atividades de forma recorrente', 'status': 'excluded', 'published_at': '2026-08-14T20:59:00-03:00', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/', 'listing_kind': 'notas2026', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:04.104731Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/nota-de-esclarecimento-serraria-desativada-pelo-ibama-em-ro-descumpria-bloqueio-de-atividades-de-forma-recorrente'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': None, 'raw_status': 'unknown', 'disposition_note': 'no_call_signal', 'original_record_id': 'slug-nota-de-esclarecimento-serraria-desativada-pelo-ibama-em-ro-descumpria-bloqueio-de-atividades-de-forma-recorrente'}}
+  - source_updated_at: None
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: no_call_signal
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:04.289331Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/modulo-de-ficha-de-caracterizacao-da-atividade-fca-do-licenciamento-ambiental-entra-em-operacao-na-plataforma-sapucaia'}
+  - listing_kind: notas2026
+  - listing_url: https://www.gov.br/ibama/pt-br/assuntos/notas/2026/
+  - origin: inventory
+  - original_record_id: slug-modulo-de-ficha-de-caracterizacao-da-atividade-fca-do-licenciamento-ambiental-entra-em-operacao-na-plataforma-sapucaia
+  - proposal_opens_at: None
+  - raw_status: unknown
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-3b6d6bed9148fa8e', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/modulo-de-ficha-de-caracterizacao-da-atividade-fca-do-licenciamento-ambiental-entra-em-operacao-na-plataforma-sapucaia', 'title': 'Módulo de Ficha de Caracterização da Atividade (FCA), do licenciamento ambiental, entra em operação na Plataforma Sapucaia', 'status': 'excluded', 'published_at': '2026-08-14T15:54:00-03:00', 'deadline': None, 'document_urls': ['https://www.gov.br/ibama/pt-br/assuntos/notas/2026/modulo-de-ficha-de-caracterizacao-da-atividade-fca-do-licenciamento-ambiental-entra-em-operacao-na-plataforma-sapucaia/20260814_SAPUCAIA_Manual_Usuario.pdf', 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/modulo-de-ficha-de-caracterizacao-da-atividade-fca-do-licenciamento-ambiental-entra-em-operacao-na-plataforma-sapucaia/20260814_SAPUCAIA_FAQ_GEO.pdf'], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/', 'listing_kind': 'notas2026', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:04.289331Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/modulo-de-ficha-de-caracterizacao-da-atividade-fca-do-licenciamento-ambiental-entra-em-operacao-na-plataforma-sapucaia'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': '2026-08-14T15:57:00-03:00', 'raw_status': 'unknown', 'disposition_note': 'no_call_signal', 'original_record_id': 'slug-modulo-de-ficha-de-caracterizacao-da-atividade-fca-do-licenciamento-ambiental-entra-em-operacao-na-plataforma-sapucaia'}}
+  - source_updated_at: 2026-08-14T15:57:00-03:00
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: no_call_signal
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:07.596255Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/in-conjunta-do-ibama-e-do-icmbio-estabelece-diretrizes-sobre-manejo-florestal-sustentavel-comunitario'}
+  - listing_kind: notas2026
+  - listing_url: https://www.gov.br/ibama/pt-br/assuntos/notas/2026/
+  - origin: inventory
+  - original_record_id: slug-in-conjunta-do-ibama-e-do-icmbio-estabelece-diretrizes-sobre-manejo-florestal-sustentavel-comunitario
+  - proposal_opens_at: None
+  - raw_status: unknown
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-405bc474ed649cbc', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/in-conjunta-do-ibama-e-do-icmbio-estabelece-diretrizes-sobre-manejo-florestal-sustentavel-comunitario', 'title': 'IN Conjunta do Ibama e do ICMBio estabelece diretrizes sobre Manejo Florestal Sustentável Comunitário', 'status': 'excluded', 'published_at': '2026-08-12T11:15:00-03:00', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/', 'listing_kind': 'notas2026', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:07.596255Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/in-conjunta-do-ibama-e-do-icmbio-estabelece-diretrizes-sobre-manejo-florestal-sustentavel-comunitario'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': None, 'raw_status': 'unknown', 'disposition_note': 'no_call_signal', 'original_record_id': 'slug-in-conjunta-do-ibama-e-do-icmbio-estabelece-diretrizes-sobre-manejo-florestal-sustentavel-comunitario'}}
+  - source_updated_at: None
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: no_call_signal
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:12.968889Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-publica-boletim-com-dados-de-consumo-energetico-na-industria-e-mineracao'}
+  - listing_kind: notas2026
+  - listing_url: https://www.gov.br/ibama/pt-br/assuntos/notas/2026/
+  - origin: inventory
+  - original_record_id: slug-ibama-publica-boletim-com-dados-de-consumo-energetico-na-industria-e-mineracao
+  - proposal_opens_at: None
+  - raw_status: unknown
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-67d44f59aa491233', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-publica-boletim-com-dados-de-consumo-energetico-na-industria-e-mineracao', 'title': 'Ibama publica boletim com dados de consumo energético na indústria e mineração', 'status': 'excluded', 'published_at': '2026-07-31T17:55:00-03:00', 'deadline': None, 'document_urls': ['https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-publica-boletim-com-dados-de-consumo-energetico-na-industria-e-mineracao/20260731_Boletim_Fontes_Energeticas.pdf'], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/', 'listing_kind': 'notas2026', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:12.968889Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-publica-boletim-com-dados-de-consumo-energetico-na-industria-e-mineracao'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': None, 'raw_status': 'unknown', 'disposition_note': 'no_call_signal', 'original_record_id': 'slug-ibama-publica-boletim-com-dados-de-consumo-energetico-na-industria-e-mineracao'}}
+  - source_updated_at: None
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: no_call_signal
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:14.743076Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/informe-defeso-dos-grandes-peixes-recifais-em-1o-de-agosto'}
+  - listing_kind: notas2026
+  - listing_url: https://www.gov.br/ibama/pt-br/assuntos/notas/2026/
+  - origin: inventory
+  - original_record_id: slug-informe-defeso-dos-grandes-peixes-recifais-em-1o-de-agosto
+  - proposal_opens_at: None
+  - raw_status: closed
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-3b6bd06583eff0ec', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/informe-defeso-dos-grandes-peixes-recifais-em-1o-de-agosto', 'title': 'Informe: Defeso dos grandes peixes recifais em 1º de agosto', 'status': 'excluded', 'published_at': '2026-07-31T17:24:00-03:00', 'deadline': '2026-08-10T23:59:59-03:00', 'document_urls': [], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/', 'listing_kind': 'notas2026', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:14.743076Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/informe-defeso-dos-grandes-peixes-recifais-em-1o-de-agosto'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': '2026-07-31T17:56:00-03:00', 'raw_status': 'closed', 'disposition_note': 'no_call_signal', 'original_record_id': 'slug-informe-defeso-dos-grandes-peixes-recifais-em-1o-de-agosto'}}
+  - source_updated_at: 2026-07-31T17:56:00-03:00
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: no_call_signal
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:14.943652Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/supes-pb-suspende-expediente-presencial-para-dedetizacao-nesta-sexta-feira-31'}
+  - listing_kind: notas2026
+  - listing_url: https://www.gov.br/ibama/pt-br/assuntos/notas/2026/
+  - origin: inventory
+  - original_record_id: slug-supes-pb-suspende-expediente-presencial-para-dedetizacao-nesta-sexta-feira-31
+  - proposal_opens_at: None
+  - raw_status: cancelled
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-c13575195e09539a', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/supes-pb-suspende-expediente-presencial-para-dedetizacao-nesta-sexta-feira-31', 'title': 'Supes/PB suspende expediente presencial para dedetização nesta sexta-feira (31)', 'status': 'excluded', 'published_at': '2026-07-28T16:00:00-03:00', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/', 'listing_kind': 'notas2026', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:14.943652Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/supes-pb-suspende-expediente-presencial-para-dedetizacao-nesta-sexta-feira-31'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': None, 'raw_status': 'cancelled', 'disposition_note': 'no_call_signal', 'original_record_id': 'slug-supes-pb-suspende-expediente-presencial-para-dedetizacao-nesta-sexta-feira-31'}}
+  - source_updated_at: None
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: no_call_signal
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:18.758389Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/nota-informativa-sobre-manchas-de-oleo-no-litoral-do-rio-de-janeiro'}
+  - listing_kind: notas2026
+  - listing_url: https://www.gov.br/ibama/pt-br/assuntos/notas/2026/
+  - origin: inventory
+  - original_record_id: slug-nota-informativa-sobre-manchas-de-oleo-no-litoral-do-rio-de-janeiro
+  - proposal_opens_at: None
+  - raw_status: unknown
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-b198b63e87caeb88', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/nota-informativa-sobre-manchas-de-oleo-no-litoral-do-rio-de-janeiro', 'title': 'Nota informativa sobre manchas de óleo no litoral do Rio de Janeiro', 'status': 'excluded', 'published_at': '2026-07-10T17:41:00-03:00', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/', 'listing_kind': 'notas2026', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:18.758389Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/nota-informativa-sobre-manchas-de-oleo-no-litoral-do-rio-de-janeiro'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': None, 'raw_status': 'unknown', 'disposition_note': 'no_call_signal', 'original_record_id': 'slug-nota-informativa-sobre-manchas-de-oleo-no-litoral-do-rio-de-janeiro'}}
+  - source_updated_at: None
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: no_call_signal
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:20.758644Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/gerex-sinop-nao-tera-atendimento-presencial-na-manha-desta-quinta-feira-9'}
+  - listing_kind: notas_rss
+  - listing_url: https://www.gov.br/ibama/pt-br/assuntos/notas/2026/RSS
+  - origin: inventory
+  - original_record_id: slug-gerex-sinop-nao-tera-atendimento-presencial-na-manha-desta-quinta-feira-9
+  - proposal_opens_at: None
+  - raw_status: unknown
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-9422640dbfdaedaa', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/gerex-sinop-nao-tera-atendimento-presencial-na-manha-desta-quinta-feira-9', 'title': 'Gerex/Sinop não terá atendimento presencial na manhã desta quinta-feira (9)', 'status': 'excluded', 'published_at': '2026-07-09T10:34:00-03:00', 'deadline': None, 'document_urls': [], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/RSS', 'listing_kind': 'notas_rss', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:20.758644Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/gerex-sinop-nao-tera-atendimento-presencial-na-manha-desta-quinta-feira-9'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': None, 'raw_status': 'unknown', 'disposition_note': 'no_call_signal', 'original_record_id': 'slug-gerex-sinop-nao-tera-atendimento-presencial-na-manha-desta-quinta-feira-9'}}
+  - source_updated_at: None
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: no_call_signal
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:24.239933Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-corrige-indisponibilidade-no-sistema-de-entrega-do-rapp-para-quatro-atividades-do-ctf-app'}
+  - listing_kind: notas_rss
+  - listing_url: https://www.gov.br/ibama/pt-br/assuntos/notas/2026/RSS
+  - origin: inventory
+  - original_record_id: slug-ibama-corrige-indisponibilidade-no-sistema-de-entrega-do-rapp-para-quatro-atividades-do-ctf-app
+  - proposal_opens_at: None
+  - raw_status: open
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-0bcdb4cf3616625f', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-corrige-indisponibilidade-no-sistema-de-entrega-do-rapp-para-quatro-atividades-do-ctf-app', 'title': 'Ibama corrige indisponibilidade no sistema de entrega do Rapp para quatro atividades do CTF/APP', 'status': 'excluded', 'published_at': '2026-03-30T19:04:00-03:00', 'deadline': '2026-12-31T23:59:59-03:00', 'document_urls': ['https://www.gov.br/ibama/pt-br/servicos/arquivos/relatorios/atividades_poluidoras/2023/2023-05-18_guia_rapp.pdf'], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/RSS', 'listing_kind': 'notas_rss', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:24.239933Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/ibama-corrige-indisponibilidade-no-sistema-de-entrega-do-rapp-para-quatro-atividades-do-ctf-app'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': None, 'raw_status': 'open', 'disposition_note': 'no_call_signal', 'original_record_id': 'slug-ibama-corrige-indisponibilidade-no-sistema-de-entrega-do-rapp-para-quatro-atividades-do-ctf-app'}}
+  - source_updated_at: None
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: no_call_signal
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:27.752580Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/relatorio-de-2025-do-plano-de-integridade-do-ibama-e-disponibilizado-no-site'}
+  - listing_kind: notas_rss
+  - listing_url: https://www.gov.br/ibama/pt-br/assuntos/notas/2026/RSS
+  - origin: inventory
+  - original_record_id: slug-relatorio-de-2025-do-plano-de-integridade-do-ibama-e-disponibilizado-no-site
+  - proposal_opens_at: None
+  - raw_status: unknown
+  - record: {'source_key': 'ibama', 'source_record_id': 'excluded-eab45b5abaab619f', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/relatorio-de-2025-do-plano-de-integridade-do-ibama-e-disponibilizado-no-site', 'title': 'Relatório de 2025 do Plano de Integridade do Ibama é disponibilizado no site', 'status': 'excluded', 'published_at': '2026-03-03T15:04:00-03:00', 'deadline': None, 'document_urls': ['https://www.gov.br/ibama/pt-br/acesso-a-informacao/acoes-e-programas/arquivos/20260303_Relatorio_Anual_do_Plano_de_Integridade_2025.pdf'], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/RSS', 'listing_kind': 'notas_rss', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:05:27.752580Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/2026/relatorio-de-2025-do-plano-de-integridade-do-ibama-e-disponibilizado-no-site'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': None, 'raw_status': 'unknown', 'disposition_note': 'no_call_signal', 'original_record_id': 'slug-relatorio-de-2025-do-plano-de-integridade-do-ibama-e-disponibilizado-no-site'}}
+  - source_updated_at: None
+- [non_blocking] out_of_scope
+  - captured_via: independent-direct-requests
+  - detail_content_area: True
+  - disposition_note: None
+  - gt_note: historical 2020 audiencia; publication 2020-03-06 precedes min_year 2026; not an open opportunity
+  - http: {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:47.851047Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/copy_of_notas/audiencia-publica-apresenta-relatorio-de-impacto-ambiental-da-linha-de-transmissao-lt-500-kv-terminal-rio-lagos-lt-500-kv-lagos-campos-2-e-lt-500-kv-campos-2-mutum-subestacao-se-500-kv-campos-2-e-ampliacao-da-se-500-kv-lagos'}
+  - listing_kind: chamamentos
+  - listing_url: https://www.gov.br/ibama/pt-br/acesso-a-informacao/editais-e-convites/chamamentos-publicos/chamamentos-publicos
+  - origin: inventory
+  - proposal_opens_at: None
+  - raw_status: closed
+  - record: {'source_key': 'ibama', 'source_record_id': 'processo-02001-006930-2019-19', 'canonical_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/copy_of_notas/audiencia-publica-apresenta-relatorio-de-impacto-ambiental-da-linha-de-transmissao-lt-500-kv-terminal-rio-lagos-lt-500-kv-lagos-campos-2-e-lt-500-kv-campos-2-mutum-subestacao-se-500-kv-campos-2-e-ampliacao-da-se-500-kv-lagos', 'title': 'Audiência Pública apresenta Relatório de Impacto Ambiental da Linha de Transmissão (LT) 500 kV Terminal Rio - Lagos; LT 500 kV Lagos - Campos 2; e LT 500 kV Campos 2 - Mutum; Subestação (SE) 500 kV Campos 2; e ampliação da SE 500 kV Lagos', 'status': 'excluded', 'published_at': '2020-03-06T22:45:00-03:00', 'deadline': None, 'document_urls': ['http://licenciamento.ibama.gov.br/LinhadeTransmissao/LT%20500%20kV%20Terminal%20Rio%20-%20SE%20Mutum/RIMA_Lotes_2_e_3_Rev1%20(1).pdf'], 'document_hashes': [], 'reason_code': 'out_of_scope', 'evidence': {'captured_via': 'independent-direct-requests', 'listing_url': 'https://www.gov.br/ibama/pt-br/acesso-a-informacao/editais-e-convites/chamamentos-publicos/chamamentos-publicos', 'listing_kind': 'chamamentos', 'http': {'status': 200, 'content_type': 'text/html;charset=utf-8', 'fetched_at_utc_end': '2026-09-14T22:04:47.851047Z', 'final_url': 'https://www.gov.br/ibama/pt-br/assuntos/notas/copy_of_notas/audiencia-publica-apresenta-relatorio-de-impacto-ambiental-da-linha-de-transmissao-lt-500-kv-terminal-rio-lagos-lt-500-kv-lagos-campos-2-e-lt-500-kv-campos-2-mutum-subestacao-se-500-kv-campos-2-e-ampliacao-da-se-500-kv-lagos'}, 'detail_content_area': True, 'proposal_opens_at': None, 'source_updated_at': '2020-03-06T23:25:00-03:00', 'raw_status': 'closed', 'disposition_note': None, 'gt_note': 'historical 2020 audiencia; publication 2020-03-06 precedes min_year 2026; not an open opportunity'}}
+  - source_updated_at: 2020-03-06T23:25:00-03:00

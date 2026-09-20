@@ -1,0 +1,261 @@
+[
+  {
+    "source_key": "kfw",
+    "source_record_id": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FC-Guidelines-for-Procurement-2023.pdf",
+    "canonical_url": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FC-Guidelines-for-Procurement-2023.pdf",
+    "title": "FC Procurement Guidelines 2023 (English) - standing regulation document, section Guidelines > FC Procurement Guidelines",
+    "status": "unknown",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FC-Guidelines-for-Procurement-2023.pdf"
+    ],
+    "document_hashes": [],
+    "evidence": {
+      "captured_via": "Direct HTTP GET of https://www.kfw-entwicklungsbank.de/Service/Procurement-Regulations/ (2026-09-14T20:47:21Z, HTTP 200, text/html; charset=utf-8, 96417 bytes) plus independent Playwright chromium render (2026-09-14T20:49Z, HTTP 200, 114 anchors, identical 15-PDF set)",
+      "lifecycle_rationale": "Standing procurement-regulations guideline document currently linked on the official KfW listing. Signal token 'Procurement' appears in the path, so the adapter's signal-token contract intentionally targets it. The official page states no open/closed/upcoming lifecycle and no application deadline for any listed document, so authoritative lifecycle is unknown (not a time-bound call).",
+      "pdf_check": "HEAD 200 application/pdf (2026-09-14T20:50Z)",
+      "principal_document": true
+    }
+  },
+  {
+    "source_key": "kfw",
+    "source_record_id": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FC-Guidelines-for-the-Procurement-2021.pdf",
+    "canonical_url": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FC-Guidelines-for-the-Procurement-2021.pdf",
+    "title": "FC Procurement Guidelines 2021 (English) - standing regulation document, section Guidelines > FC Procurement Guidelines",
+    "status": "unknown",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FC-Guidelines-for-the-Procurement-2021.pdf"
+    ],
+    "document_hashes": [],
+    "evidence": {
+      "captured_via": "Direct HTTP GET of the official listing (2026-09-14T20:47:21Z, HTTP 200) plus Playwright render (2026-09-14T20:49Z, identical PDF set)",
+      "lifecycle_rationale": "Earlier English edition still linked alongside the 2023 edition on the official listing. Signal token 'Procurement' in the path; adapter contract intentionally targets it. No lifecycle or deadline stated on the page; authoritative lifecycle is unknown (standing document, not a time-bound call).",
+      "pdf_check": "HEAD 200 application/pdf (2026-09-14T20:50Z)",
+      "principal_document": true
+    }
+  },
+  {
+    "source_key": "kfw",
+    "source_record_id": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FZ-Vergaberichtlinien-V-2021-EN.pdf",
+    "canonical_url": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FZ-Vergaberichtlinien-V-2021-EN.pdf",
+    "title": "FZ Vergaberichtlinien 2021 (English) - standing regulation document, section Guidelines",
+    "status": "excluded",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FZ-Vergaberichtlinien-V-2021-EN.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": "out_of_scope",
+    "evidence": {
+      "rationale": "Standing guideline PDF without any adapter signal token (call/request for proposals, expression of interest, eoi, procurement) in href, path, link text, title or aria-label; outside the adapter's signal-token contract. HEAD 200 application/pdf (2026-09-14T20:50Z)."
+    }
+  },
+  {
+    "source_key": "kfw",
+    "source_record_id": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FZ-Vergaberichtlinien-V-2021-FR.pdf",
+    "canonical_url": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FZ-Vergaberichtlinien-V-2021-FR.pdf",
+    "title": "FZ Vergaberichtlinien 2021 (French) - standing regulation document, section Guidelines",
+    "status": "excluded",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FZ-Vergaberichtlinien-V-2021-FR.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": "out_of_scope",
+    "evidence": {
+      "rationale": "Standing guideline PDF without any adapter signal token; outside the adapter's signal-token contract. HEAD 200 application/pdf (2026-09-14T20:50Z)."
+    }
+  },
+  {
+    "source_key": "kfw",
+    "source_record_id": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FZ-Vergaberichtlinien-V-2021-ES.pdf",
+    "canonical_url": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FZ-Vergaberichtlinien-V-2021-ES.pdf",
+    "title": "FZ Vergaberichtlinien 2021 (Spanish) - standing regulation document, section Guidelines",
+    "status": "excluded",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FZ-Vergaberichtlinien-V-2021-ES.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": "out_of_scope",
+    "evidence": {
+      "rationale": "Standing guideline PDF without any adapter signal token; outside the adapter's signal-token contract. HEAD 200 application/pdf (2026-09-14T20:50Z)."
+    }
+  },
+  {
+    "source_key": "kfw",
+    "source_record_id": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FZ-Vergaberichtlinien-V-2021-PT.pdf",
+    "canonical_url": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FZ-Vergaberichtlinien-V-2021-PT.pdf",
+    "title": "FZ Vergaberichtlinien 2021 (Portuguese) - standing regulation document, section Guidelines",
+    "status": "excluded",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FZ-Vergaberichtlinien-V-2021-PT.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": "out_of_scope",
+    "evidence": {
+      "rationale": "Standing guideline PDF without any adapter signal token; outside the adapter's signal-token contract. HEAD 200 application/pdf (2026-09-14T20:50Z)."
+    }
+  },
+  {
+    "source_key": "kfw",
+    "source_record_id": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/CF-Directives-pour-la-Passation-de-Marchés-2023-FR.pdf",
+    "canonical_url": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/CF-Directives-pour-la-Passation-de-Marchés-2023-FR.pdf",
+    "title": "CF Directives pour la Passation de Marchés 2023 (French) - standing regulation document, section Guidelines > FC Procurement Guidelines",
+    "status": "excluded",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/CF-Directives-pour-la-Passation-de-Marchés-2023-FR.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": "out_of_scope",
+    "evidence": {
+      "rationale": "French-language edition of the FC Procurement Guidelines; no English signal token in href, path, link text, title or aria-label; outside the adapter's signal-token contract. HEAD 200 application/pdf (2026-09-14T20:52Z, percent-encoded path)."
+    }
+  },
+  {
+    "source_key": "kfw",
+    "source_record_id": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/CF-Directrices-para-la-Contratación-2023-ES.pdf",
+    "canonical_url": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/CF-Directrices-para-la-Contratación-2023-ES.pdf",
+    "title": "CF Directrices para la Contratación 2023 (Spanish) - standing regulation document, section Guidelines > FC Procurement Guidelines",
+    "status": "excluded",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/CF-Directrices-para-la-Contratación-2023-ES.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": "out_of_scope",
+    "evidence": {
+      "rationale": "Spanish-language edition of the FC Procurement Guidelines; no English signal token; outside the adapter's signal-token contract. HEAD 200 application/pdf (2026-09-14T20:52Z, percent-encoded path)."
+    }
+  },
+  {
+    "source_key": "kfw",
+    "source_record_id": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/CF-Diretrizes-para-Contratação-2023-PT.pdf",
+    "canonical_url": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/CF-Diretrizes-para-Contratação-2023-PT.pdf",
+    "title": "CF Diretrizes para Contratação 2023 (Portuguese) - standing regulation document, section Guidelines > FC Procurement Guidelines",
+    "status": "excluded",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/CF-Diretrizes-para-Contratação-2023-PT.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": "out_of_scope",
+    "evidence": {
+      "rationale": "Portuguese-language edition of the FC Procurement Guidelines; no English signal token; outside the adapter's signal-token contract. HEAD 200 application/pdf (2026-09-14T20:52Z, percent-encoded path)."
+    }
+  },
+  {
+    "source_key": "kfw",
+    "source_record_id": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/CF-Directives-pour-la-Passation-de-Marchés-2021.pdf",
+    "canonical_url": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/CF-Directives-pour-la-Passation-de-Marchés-2021.pdf",
+    "title": "CF Directives pour la Passation de Marchés 2021 (French) - standing regulation document, section Guidelines > FC Procurement Guidelines",
+    "status": "excluded",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/CF-Directives-pour-la-Passation-de-Marchés-2021.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": "out_of_scope",
+    "evidence": {
+      "rationale": "French-language 2021 edition of the FC Procurement Guidelines; no English signal token; outside the adapter's signal-token contract. HEAD 200 application/pdf (2026-09-14T20:50Z)."
+    }
+  },
+  {
+    "source_key": "kfw",
+    "source_record_id": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/CF-Directrices-para-la-Contratación-2021.pdf",
+    "canonical_url": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/CF-Directrices-para-la-Contratación-2021.pdf",
+    "title": "CF Directrices para la Contratación 2021 (Spanish) - standing regulation document, section Guidelines > FC Procurement Guidelines",
+    "status": "excluded",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/CF-Directrices-para-la-Contratación-2021.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": "out_of_scope",
+    "evidence": {
+      "rationale": "Spanish-language 2021 edition of the FC Procurement Guidelines; no English signal token; outside the adapter's signal-token contract. HEAD 200 application/pdf (2026-09-14T20:52Z, percent-encoded path)."
+    }
+  },
+  {
+    "source_key": "kfw",
+    "source_record_id": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/CF-Diretrizes-para-Contratação-2021.pdf",
+    "canonical_url": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/CF-Diretrizes-para-Contratação-2021.pdf",
+    "title": "CF Diretrizes para Contratação 2021 (Portuguese) - standing regulation document, section Guidelines > FC Procurement Guidelines",
+    "status": "excluded",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/CF-Diretrizes-para-Contratação-2021.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": "out_of_scope",
+    "evidence": {
+      "rationale": "Portuguese-language 2021 edition of the FC Procurement Guidelines; no English signal token; outside the adapter's signal-token contract. HEAD 200 application/pdf (2026-09-14T20:52Z, percent-encoded path)."
+    }
+  },
+  {
+    "source_key": "kfw",
+    "source_record_id": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/Nachhaltigkeitsrichtlinie_EN.pdf",
+    "canonical_url": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/Nachhaltigkeitsrichtlinie_EN.pdf",
+    "title": "Sustainability Guideline 2024 (English) - standing regulation document, section Guidelines > Sustainability Guideline",
+    "status": "excluded",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/Nachhaltigkeitsrichtlinie_EN.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": "out_of_scope",
+    "evidence": {
+      "rationale": "Sustainability guideline, not a procurement-calls document; no signal token in href, path, link text, title or aria-label; outside the adapter's signal-token contract. HEAD 200 application/pdf (2026-09-14T20:50Z)."
+    }
+  },
+  {
+    "source_key": "kfw",
+    "source_record_id": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/Nachhaltigkeitsrichtlinie_FR.pdf",
+    "canonical_url": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/Nachhaltigkeitsrichtlinie_FR.pdf",
+    "title": "Directive Développement Durable 2024 (French) - standing regulation document, section Guidelines > Sustainability Guideline",
+    "status": "excluded",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/Nachhaltigkeitsrichtlinie_FR.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": "out_of_scope",
+    "evidence": {
+      "rationale": "Sustainability guideline, not a procurement-calls document; no signal token; outside the adapter's signal-token contract. HEAD 200 application/pdf (2026-09-14T20:50Z)."
+    }
+  },
+  {
+    "source_key": "kfw",
+    "source_record_id": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/Nachhaltigkeitsrichtlinie_ES.pdf",
+    "canonical_url": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/Nachhaltigkeitsrichtlinie_ES.pdf",
+    "title": "Directriz sobre sostenibilidad 2024 (Spanish) - standing regulation document, section Guidelines > Sustainability Guideline",
+    "status": "excluded",
+    "published_at": null,
+    "deadline": null,
+    "document_urls": [
+      "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/Nachhaltigkeitsrichtlinie_ES.pdf"
+    ],
+    "document_hashes": [],
+    "reason_code": "out_of_scope",
+    "evidence": {
+      "rationale": "Sustainability guideline, not a procurement-calls document; no signal token; outside the adapter's signal-token contract. HEAD 200 application/pdf (2026-09-14T20:50Z)."
+    }
+  }
+]

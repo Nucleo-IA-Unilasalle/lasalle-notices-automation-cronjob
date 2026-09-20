@@ -1,0 +1,62 @@
+[
+  {
+    "kind": "pdf",
+    "metadata": {
+      "detail_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/chamamento-publico-locacao-de-imovel",
+      "discovered_at": "2026-09-14T20:34:56.058373+00:00",
+      "extracted_year": null,
+      "listing_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais",
+      "origin": "detail_page",
+      "source": "govbr_mma"
+    },
+    "url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/edital-de-chamamento-publico-locacao-imovel-02.pdf"
+  },
+  {
+    "kind": "pdf",
+    "metadata": {
+      "detail_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/chamamento-publico-locacao-de-imovel",
+      "discovered_at": "2026-09-14T20:34:56.058569+00:00",
+      "extracted_year": null,
+      "listing_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais",
+      "origin": "detail_page",
+      "source": "govbr_mma"
+    },
+    "url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-jornal-brasilia.pdf"
+  },
+  {
+    "kind": "pdf",
+    "metadata": {
+      "detail_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/chamamento-publico-locacao-de-imovel",
+      "discovered_at": "2026-09-14T20:34:56.058623+00:00",
+      "extracted_year": null,
+      "listing_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais",
+      "origin": "detail_page",
+      "source": "govbr_mma"
+    },
+    "url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-correio.pdf"
+  },
+  {
+    "kind": "pdf",
+    "metadata": {
+      "detail_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/chamamento-publico-locacao-de-imovel",
+      "discovered_at": "2026-09-14T20:34:56.058676+00:00",
+      "extracted_year": null,
+      "listing_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais",
+      "origin": "detail_page",
+      "source": "govbr_mma"
+    },
+    "url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-dou.pdf"
+  },
+  {
+    "kind": "pdf",
+    "metadata": {
+      "detail_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/chamamento-publico-locacao-de-imovel",
+      "discovered_at": "2026-09-14T20:34:56.058781+00:00",
+      "extracted_year": null,
+      "listing_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais",
+      "origin": "detail_page",
+      "source": "govbr_mma"
+    },
+    "url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso.pdf"
+  }
+]

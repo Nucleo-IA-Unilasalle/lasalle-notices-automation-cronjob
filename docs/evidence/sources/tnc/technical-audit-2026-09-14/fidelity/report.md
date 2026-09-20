@@ -1,0 +1,270 @@
+# Source Fidelity Report
+
+## Quantitative Gates
+
+- Inventory accounting: 100.0% (1/1)
+- Candidate traceability: 100.0% (49/49)
+
+### Blocking exception counts
+- authoritative_deadline_mismatch: 0
+- authoritative_status_mismatch: 0
+- duplicate_identity: 0
+- extra_submission: 0
+- identity_mismatch: 0
+- missing_open: 0
+- parser_failure: 0
+- renderability_mismatch: 0
+
+Total blocking exceptions: 0
+
+## Matches
+
+- key=('tnc', 'consultancy:0120cea7166d40cd97cf110d0c7881ee923ea804e03622007b74ae619833bfd7') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2025-09-15T02:59:00Z discovery=2025-09-15T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'consultancy:456ab54dc6c0d9c8cd20dc049ce070055673bfcae8d39bff1fce752d7a7b5f92') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2025-08-28T02:59:00Z discovery=2025-08-28T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/TDR-PROGRAMA-PRO-MANANCIAIS.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2025-10-31T02:59:00Z discovery=2025-10-31T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr//tdr-consultoria-smartsheet.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2026-02-14T02:59:00Z discovery=2026-02-14T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr//tdr-diagnostico-areas-guarani-kaiowa.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2025-09-15T02:59:00Z discovery=2025-09-15T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TDR-ConsultoriadeTreinamentosdosNAPs.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2026-06-11T02:59:00Z discovery=2026-06-11T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TDR-Regulariza%C3%A7%C3%A3o-Ambiental-no-Para.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2026-09-05T02:59:00Z discovery=2026-09-05T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TDR-Requalifica%C3%A7%C3%A3oComercialnoPara.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2026-09-05T02:59:00Z discovery=2026-09-05T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TERMO_DE_REFERENCIA_ATER_VERSAO_010825.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2025-08-25T02:59:00Z discovery=2025-08-25T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdR-gestao-de-projetos-PSA-em-territorios-coletivos-PA.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2026-06-13T02:59:00Z discovery=2026-06-13T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdRConsultoriajur%C3%ADdica_Carbono_Cerrado_v2.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2025-12-27T02:59:00Z discovery=2025-12-27T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdR_Analise_Geoespacial_Sul_Sudeste_Para.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2026-08-11T02:59:00Z discovery=2026-08-11T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdR_Consultoria_Arquitetura_Financiamento_PPTI.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2026-08-01T02:59:00Z discovery=2026-08-01T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdR_Rastreabilidade_PA.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2026-07-24T02:59:00Z discovery=2026-07-24T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdR_Sist_Mon_RVN_backend_VF.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2026-09-04T02:59:00Z discovery=2026-09-04T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/TdR_Sist_Mon_RVN_front-end_VF.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2026-09-14T02:59:00Z discovery=2026-09-14T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-PD-Mantiqueira.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2026-06-19T02:59:00Z discovery=2026-06-19T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-consultor-tecnico-sema-am.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2025-08-27T02:59:00Z discovery=2025-08-27T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-consultoria-de-construcao.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2026-05-26T02:59:00Z discovery=2026-05-26T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-consultoria-juridico-tributaria.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2026-08-01T02:59:00Z discovery=2026-08-01T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-consultoria-tbc.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2025-10-01T02:59:00Z discovery=2025-10-01T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-desenvolvimento-maturidade-institucional.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2025-10-20T02:59:00Z discovery=2025-10-20T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-diagnostico-reservas-spi.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2025-09-15T02:59:00Z discovery=2025-09-15T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-diagnostico-socioambiental-fundiario-geoprocessamento-areas-guarani-kaiowa.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2025-09-15T02:59:00Z discovery=2025-09-15T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-estudo-mecanismo-financeiro-rastreabilidade-tocantins.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2026-01-17T02:59:00Z discovery=2026-01-17T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-estudocusto.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2025-11-18T02:59:00Z discovery=2025-11-18T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-estudoseplanos-altoaraguaia.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2026-01-10T02:59:00Z discovery=2026-01-10T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-facilitacao-grafica.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2025-12-06T02:59:00Z discovery=2025-12-06T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-facilitador-ami.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2026-03-23T02:59:00Z discovery=2026-03-23T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-fundiario-gabinete-guarani-kaiowa.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2025-09-15T02:59:00Z discovery=2025-09-15T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-gestao-governanca.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2025-10-01T02:59:00Z discovery=2025-10-01T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-gravacaoaudiovideo.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2025-12-06T02:59:00Z discovery=2025-12-06T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-instalacao-treinamento.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2025-12-21T02:59:00Z discovery=2025-12-21T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-inventario-mantiqueira.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2026-06-13T02:59:00Z discovery=2026-06-13T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-metodologiapsa-para.pdf') method=stable_id
+  - status: inv=open discovery=open dashboard=unknown match=True
+  - deadline: inv=2026-09-26T02:59:00Z discovery=2026-09-26T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=True discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-monitoramento-avaliacao.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2025-10-04T02:59:00Z discovery=2025-10-04T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-plataforma-redes-coiab.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2025-11-04T02:59:00Z discovery=2025-11-04T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-produtoraCLPI.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2026-01-09T02:59:00Z discovery=2026-01-09T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-prog-ucs_f.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2026-04-20T02:59:00Z discovery=2026-04-20T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-redes-governanca.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2025-08-25T02:59:00Z discovery=2025-08-25T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-relatoria.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2025-12-06T02:59:00Z discovery=2025-12-06T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-restaura-biomas-pps.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2026-07-19T21:00:00Z discovery=2026-07-19T21:00:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-salvaguardas-omecs-jun26.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2026-07-18T02:59:00Z discovery=2026-07-18T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-secretaria-executiva-conaveg.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2026-02-20T02:59:00Z discovery=2026-02-20T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-secretaria-executiva-pepsa.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2025-09-27T02:59:00Z discovery=2025-09-27T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-treinamento-comunicacao-riomanicore.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2025-11-15T02:59:00Z discovery=2025-11-15T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-treinamento-gestao-financeira.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2025-10-01T02:59:00Z discovery=2025-10-01T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr-viabilidade-financeira.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2026-01-16T02:59:00Z discovery=2026-01-16T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+- key=('tnc', 'https://www.tnc.org.br/content/dam/tnc/nature/en/documents/brasil/tdr/tdr_consultoria_governanca_dados.pdf') method=stable_id
+  - status: inv=expired discovery=expired dashboard=unknown match=True
+  - deadline: inv=2026-03-28T02:59:00Z discovery=2026-03-28T02:59:00Z dashboard=unknown match=True
+  - renderable: inv=unknown discovery=unknown dashboard=unknown match=True
+  - suggestion: title matches between inventory and discovery; human review suggested (not used for identity)
+
+## Exceptions
+
+_No exceptions._

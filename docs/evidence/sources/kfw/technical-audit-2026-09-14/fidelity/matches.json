@@ -1,0 +1,120 @@
+[
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FC-Guidelines-for-Procurement-2023.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FC-Guidelines-for-Procurement-2023.pdf"
+      ],
+      "published_at": null,
+      "source_key": "kfw",
+      "source_record_id": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FC-Guidelines-for-Procurement-2023.pdf",
+      "status": null,
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FC-Guidelines-for-Procurement-2023.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FC-Guidelines-for-Procurement-2023.pdf"
+      ],
+      "evidence": {
+        "captured_via": "Direct HTTP GET of https://www.kfw-entwicklungsbank.de/Service/Procurement-Regulations/ (2026-09-14T20:47:21Z, HTTP 200, text/html; charset=utf-8, 96417 bytes) plus independent Playwright chromium render (2026-09-14T20:49Z, HTTP 200, 114 anchors, identical 15-PDF set)",
+        "lifecycle_rationale": "Standing procurement-regulations guideline document currently linked on the official KfW listing. Signal token 'Procurement' appears in the path, so the adapter's signal-token contract intentionally targets it. The official page states no open/closed/upcoming lifecycle and no application deadline for any listed document, so authoritative lifecycle is unknown (not a time-bound call).",
+        "pdf_check": "HEAD 200 application/pdf (2026-09-14T20:50Z)",
+        "principal_document": true
+      },
+      "published_at": null,
+      "source_key": "kfw",
+      "source_record_id": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FC-Guidelines-for-Procurement-2023.pdf",
+      "status": "unknown",
+      "title": "FC Procurement Guidelines 2023 (English) - standing regulation document, section Guidelines > FC Procurement Guidelines"
+    },
+    "match_key": "('kfw', 'https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FC-Guidelines-for-Procurement-2023.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FC-Guidelines-for-the-Procurement-2021.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FC-Guidelines-for-the-Procurement-2021.pdf"
+      ],
+      "published_at": null,
+      "source_key": "kfw",
+      "source_record_id": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FC-Guidelines-for-the-Procurement-2021.pdf",
+      "status": null,
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FC-Guidelines-for-the-Procurement-2021.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FC-Guidelines-for-the-Procurement-2021.pdf"
+      ],
+      "evidence": {
+        "captured_via": "Direct HTTP GET of the official listing (2026-09-14T20:47:21Z, HTTP 200) plus Playwright render (2026-09-14T20:49Z, identical PDF set)",
+        "lifecycle_rationale": "Earlier English edition still linked alongside the 2023 edition on the official listing. Signal token 'Procurement' in the path; adapter contract intentionally targets it. No lifecycle or deadline stated on the page; authoritative lifecycle is unknown (standing document, not a time-bound call).",
+        "pdf_check": "HEAD 200 application/pdf (2026-09-14T20:50Z)",
+        "principal_document": true
+      },
+      "published_at": null,
+      "source_key": "kfw",
+      "source_record_id": "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FC-Guidelines-for-the-Procurement-2021.pdf",
+      "status": "unknown",
+      "title": "FC Procurement Guidelines 2021 (English) - standing regulation document, section Guidelines > FC Procurement Guidelines"
+    },
+    "match_key": "('kfw', 'https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/FC-Guidelines-for-the-Procurement-2021.pdf')",
+    "match_method": "stable_id"
+  }
+]

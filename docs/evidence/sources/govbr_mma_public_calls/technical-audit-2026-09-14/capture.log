@@ -1,0 +1,29 @@
+2026-09-14T20:30:31.663644+00:00 independent capture start 2026-09-14T20:30:31.663634+00:00
+2026-09-14T20:30:31.663662+00:00 GET https://www.gov.br/mma/pt-br/acesso-a-informacao/participacao-social/3-5-editais-de-chamamento-publico/3-5-editais-de-chamamento-publico
+2026-09-14T20:30:33.989183+00:00   status=200 final=https://www.gov.br/mma/pt-br/acesso-a-informacao/participacao-social/3-5-editais-de-chamamento-publico/3-5-editais-de-chamamento-publico content_type=text/html;charset=utf-8 bytes=194141
+2026-09-14T20:30:34.042108+00:00   content roots found: 1
+2026-09-14T20:30:34.042309+00:00   year marker -> 2026
+2026-09-14T20:30:34.042424+00:00   year marker -> 2026
+2026-09-14T20:30:34.042729+00:00   link kind=detail year=2026 related=False url=https://www.gov.br/mma/pt-br/noticias/edital-do-mma-abre-inscricoes-para-a-comissao-nacional-de-seguranca-quimica-no-bienio-202620132028
+2026-09-14T20:30:34.042781+00:00   link kind=detail year=2026 related=True url=https://www.gov.br/mma/pt-br/acesso-a-informacao/participacao-social/3-5-editais-de-chamamento-publico/resultado-do-edital-gm-mma-no-1-2026
+2026-09-14T20:30:34.042790+00:00   year marker -> 2025
+2026-09-14T20:30:34.042799+00:00   year marker -> 2025
+2026-09-14T20:30:34.042858+00:00   link kind=detail year=2025 related=False url=https://www.gov.br/mma/pt-br/noticias/governo-publica-edital-para-selecionar-representantes-da-sociedade-que-integrarao-camara-do-cim
+2026-09-14T20:30:34.042914+00:00   link kind=detail year=2025 related=False url=https://www.gov.br/mma/pt-br/noticias/mma-publica-edital-de-apoio-a-projetos-para-a-melhoria-da-gestao-de-residuos-solidos-em-minas-gerais
+2026-09-14T20:30:34.042985+00:00   link kind=detail year=2025 related=False url=https://www.gov.br/mma/pt-br/assuntos/noticias/floresta-amazonia-lanca-edital-para-fortalecer-capacidade-produtiva-de-organizacoes-comunitarias
+2026-09-14T20:30:34.043021+00:00   link kind=detail year=2025 related=False url=https://www.gov.br/mma/pt-br/noticias/mma-lanca-edital-periferias-verdes-resilientes
+2026-09-14T20:30:34.043071+00:00   link kind=detail year=2025 related=False url=https://www.gov.br/mma/pt-br/noticias/mma-e-icmbio-lancam-edital-para-apoiar-criacao-e-ampliacao-de-ucs-em-estados-e-municipios-na-amazonia
+2026-09-14T20:30:34.043120+00:00   link kind=detail year=2025 related=False url=https://www.gov.br/mma/pt-br/noticias/mma-anuncia-editais-com-r-34-5-milhoes-para-financiar-acoes-de-prevencao-e-combate-a-incendios-florestais
+2026-09-14T20:30:34.043180+00:00   link kind=detail year=2025 related=False url=https://www.gov.br/mma/pt-br/noticias/mma-abre-chamada-publica-para-apoiar-praticas-produtivas-sustentaveis-em-ucs-da-caatinga-pampa-e-pantanal
+2026-09-14T20:30:34.043223+00:00   link kind=detail year=2025 related=False url=https://www.gov.br/mma/pt-br/noticias/mma-participa-da-construcao-de-edital-que-apoiara-projetos-de-combate-a-desertificacao-na-caatinga
+2026-09-14T20:30:34.043269+00:00   link kind=detail year=2025 related=False url=https://www.gov.br/mma/pt-br/noticias/fnma-abre-processo-seletivo-para-composicao-de-conselho-deliberativo
+2026-09-14T20:30:34.043365+00:00   link kind=detail year=2025 related=False url=https://www.gov.br/mma/pt-br/noticias/mma-investe-em-pesquisas-sobre-biodiversidade-no-ambito-do-programa-sinbiose
+2026-09-14T20:30:34.043449+00:00   link kind=detail year=2025 related=False url=https://www.gov.br/mma/pt-br/noticias/mma-abre-processo-eleitoral-para-novos-representantes-no-comite-nacional-de-zonas-umidas
+2026-09-14T20:30:34.043502+00:00   link kind=detail year=2025 related=False url=https://www.gov.br/mma/pt-br/noticias/mma-kfw-e-fas-lancam-edital-de-r-70-2-milhoes-para-criacao-de-nucleos-de-sociobioeconomia-na-amazonia
+2026-09-14T20:30:34.043549+00:00   link kind=detail year=2025 related=False url=https://www.gov.br/mma/pt-br/noticias/lancado-edital-que-disponibiliza-1-milhao-de-libras-para-ampliar-governanca-do-plano-clima
+2026-09-14T20:30:34.043593+00:00   link kind=detail year=2025 related=False url=https://www.gov.br/mma/pt-br/noticias/mma-lanca-edital-de-2-5-milhoes-para-a-2a-edicao-do-premio-guardias-da-sociobiodiversidade
+2026-09-14T20:30:34.043600+00:00 total listing entries: 16
+2026-09-14T20:30:34.043606+00:00 GET https://www.gov.br/mma/pt-br/noticias/edital-do-mma-abre-inscricoes-para-a-comissao-nacional-de-seguranca-quimica-no-bienio-202620132028
+2026-09-14T20:30:34.930928+00:00   status=200 final=https://www.gov.br/mma/acl_users/credentials_cookie_auth/require_login?came_from=https%3A//www.gov.br/mma/pt-br/noticias/edital-do-mma-abre-inscricoes-para-a-comissao-nacional-de-seguranca-quimica-no-bienio-202620132028 content_type=text/html;charset=utf-8 bytes=56767
+2026-09-14T20:30:34.952587+00:00   detail PDFs: 0 for https://www.gov.br/mma/pt-br/noticias/edital-do-mma-abre-inscricoes-para-a-comissao-nacional-de-seguranca-quimica-no-bienio-202620132028
+2026-09-14T20:30:34.972603+00:00   metadata: {'status': 'unknown', 'deadline': None, 'published_at': None}

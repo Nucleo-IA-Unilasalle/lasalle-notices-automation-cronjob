@@ -372,3 +372,45 @@ class TestSubmitHandoff:
                 },
             ):
                 assert dpc.main() == 0
+
+class TestPagination404EndOfList:
+    """Regression: page>1 HTTP 404 ends pagination without a partial error."""
+
+    def test_page2_404_is_not_an_error(self) -> None:
+        import discover_iis_rio_candidates as dpc
+
+        listing_html = _read_fixture(LISTING_FIXTURE)
+        empty_detail = "<html><body></body></html>"
+        responses = {
+            LISTING_URL: make_response(listing_html),
+            f"{LISTING_URL}?tipo-de-noticia=noticia&paged=2": make_response(
+                "", status_code=404,
+            ),
+            # The fixture listing yields two detail URLs; mock them so
+            # the page-2 404 is the only pagination outcome under test.
+            "https://www.iis-rio.org/noticias/3a-chamada-para-selecao-de-bolsistas-para-o-projeto-gef-areas-privadas-tdr-gef-iis-002-2020": make_response(
+                empty_detail,
+            ),
+            "https://www.iis-rio.org/noticias/servico-de-consultoria-para-aplicacao-de-questionarios-com-produtoresas-de-soja": make_response(
+                empty_detail,
+            ),
+        }
+        with patch_request_with_safe_redirects(responses):
+            stats, candidates = dpc.discover_candidates()
+
+        assert stats["errors"] == 0
+        assert stats["listings_fetched"] == 1
+        assert stats["details_fetched"] == 2
+        assert isinstance(candidates, list)
+
+    def test_page1_404_still_errors(self) -> None:
+        import discover_iis_rio_candidates as dpc
+
+        responses = {
+            LISTING_URL: make_response("", status_code=404),
+        }
+        with patch_request_with_safe_redirects(responses):
+            stats, candidates = dpc.discover_candidates()
+
+        assert stats["errors"] >= 1
+        assert candidates == []

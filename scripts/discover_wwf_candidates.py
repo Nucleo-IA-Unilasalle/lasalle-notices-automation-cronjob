@@ -295,6 +295,20 @@ def _extract_detail_id(url: str) -> str | None:
     return current_match.group(1) if current_match else None
 
 
+def _document_source_record_id(row_source_record_id: str, pdf_url: str) -> str:
+    """Build a per-document candidate identity under an edital row.
+
+    One edital row can expose several PDFs (carta convite, retificação,
+    divulgação, …). Candidate-contract audit artifacts are written one
+    record per candidate PDF, so every candidate must carry a unique
+    ``source_record_id`` or fidelity reports ``duplicate_identity``.
+    The row's process number stays on ``metadata.row_source_record_id``
+    for grouping and operator audit.
+    """
+    filename = urlsplit(pdf_url).path.rsplit("/", 1)[-1] or pdf_url
+    return f"{row_source_record_id}::{filename}"
+
+
 def _extract_published_at(text: str) -> str | None:
     numeric_match = _PUBLISHED_AT_PATTERN.search(text)
     if numeric_match is not None:
@@ -612,7 +626,10 @@ def _discover_candidates_and_inventory(
             else:
                 stats["prefilter_rejected"] += 1
             continue
-        candidate["metadata"]["source_record_id"] = row["source_record_id"]
+        candidate["metadata"]["source_record_id"] = _document_source_record_id(
+            row["source_record_id"], pdf_url,
+        )
+        candidate["metadata"]["row_source_record_id"] = row["source_record_id"]
         candidate["metadata"]["status"] = row["status"]
         candidate["metadata"]["title"] = row["title"]
         candidate["metadata"]["published_at"] = row["published_at"]
@@ -657,7 +674,10 @@ def _write_audit_artifacts(
     discovery_by_id: dict[str, dict[str, Any]] = {}
     for candidate in candidates:
         metadata = candidate.get("metadata", {})
-        record_id = metadata.get("source_record_id")
+        # Candidates carry a per-document source_record_id; group audit
+        # discovery records by the parent edital row id so one inventory
+        # record owns every document URL discovered under that row.
+        record_id = metadata.get("row_source_record_id") or metadata.get("source_record_id")
         inventory_record = records_by_id.get(record_id)
         if not isinstance(record_id, str) or inventory_record is None:
             continue

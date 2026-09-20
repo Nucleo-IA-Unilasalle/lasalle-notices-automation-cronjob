@@ -36,7 +36,7 @@ import sys
 from datetime import datetime, timezone
 from typing import Any
 import unicodedata
-from urllib.parse import parse_qs, unquote, urljoin, urlsplit, urlunsplit
+from urllib.parse import parse_qsl, parse_qs, unquote, urlencode, urljoin, urlsplit, urlunsplit
 
 
 from bs4 import BeautifulSoup, Tag
@@ -162,6 +162,56 @@ def _passes_year_guard(url: str, *, min_year: int) -> bool:
     return year >= min_year
 
 
+# Liferay cache-buster query parameters that change between fetches and
+# must not participate in candidate identity or fidelity matching.
+_STRIPPED_QUERY_PARAMS = frozenset({"cvid"})
+
+# Page-level phrases that mark a fundo urile route as a fully closed call
+# (verified against live pages 2026-09-14: Corais, Sertão, Bioinsumos).
+_CLOSED_PAGE_PHRASES = re.compile(
+    r"foi encerrada em|resultado final do edital|segundo ciclo encerrado"
+    r"|divulgado o resultado da fase classificat[oó]ria final",
+    re.IGNORECASE,
+)
+
+# Page-level phrases that mark a page as still carrying an open call
+# (verified against the live Periferias route: open 6º ciclo deadline).
+_OPEN_CALL_PHRASES = re.compile(
+    r"at[eé]\s+[àa]s\s+\d{1,2}h(?:[:.]\d{2})?\s+de\s+\d{2}[./-]\d{2}[./-]20\d{2}"
+    r"|ciclo para recebimento de propostas",
+    re.IGNORECASE,
+)
+
+
+def _strip_tracking_params(url: str) -> str:
+    """Drop cache-buster query params (e.g. ``CVID``) for stable identity."""
+    parts = urlsplit(url)
+    if not parts.query:
+        return url
+    pairs = [
+        (key, value)
+        for key, value in parse_qsl(parts.query, keep_blank_values=True)
+        if key.lower() not in _STRIPPED_QUERY_PARAMS
+    ]
+    if not pairs:
+        return urlunsplit((parts.scheme, parts.netloc, parts.path, "", ""))
+    return urlunsplit(
+        (parts.scheme, parts.netloc, parts.path, urlencode(pairs), "")
+    )
+
+
+def _page_is_fully_closed(page_html: str) -> bool:
+    """Whether a fetched fundo urile route carries only closed-call content.
+
+    Mixed pages (closed sections plus an open deadline) return ``False`` so
+    the normal prefilter pipeline keeps deciding which PDFs to emit.
+    """
+    text = BeautifulSoup(page_html, "html.parser").get_text(" ", strip=True)
+    if not _CLOSED_PAGE_PHRASES.search(text):
+        return False
+    return not _OPEN_CALL_PHRASES.search(text)
+
+
 # ---------------------------------------------------------------------------
 # Verbatim port of FastAPI ``extract_bndes_detail_and_pdf_urls``.
 # ---------------------------------------------------------------------------
@@ -252,6 +302,7 @@ def extract_bndes_detail_and_pdf_urls(listing_html: str, listing_url: str) -> li
 
         if looks_like_pdf_url(resolved):
             canonical = urlunsplit((normalized.scheme, normalized.netloc, path, normalized.query, ""))
+            canonical = _strip_tracking_params(canonical)
         elif allow_query_route:
             canonical_query = _canonical_query_route(query_values)
             if not canonical_query:
@@ -312,6 +363,7 @@ def build_candidate(
     origin: str | None = None,
 ) -> dict[str, Any] | None:
     """Build a ``kind="pdf"`` candidate or return ``None`` if filtered out."""
+    url = _strip_tracking_params(url)
     if not _passes_year_guard(url, min_year=min_year):
         return None
     if not _candidate_passes_edital_prefilter(url, filter_policy=filter_policy):
@@ -354,6 +406,7 @@ def discover_candidates(
         "candidates": 0,
         "prefilter_rejected": 0,
         "year_rejected": 0,
+        "lifecycle_rejected": 0,
         "errors": 0,
         "candidate_cap_reached": 0,
     }
@@ -416,6 +469,19 @@ def discover_candidates(
                 )
                 break
             try:
+                detail_html = _fetch_listing_html(detail_url)
+            except Exception as exc:
+                log_source_failure(
+                    "Failed to fetch BNDE detail %s: %s", detail_url, exc, exc=exc,
+                )
+                stats["errors"] = stats.get("errors", 0) + 1
+                continue
+            details_fetched += 1
+            stats["details_fetched"] += 1
+            if _page_is_fully_closed(detail_html):
+                stats["lifecycle_rejected"] = stats.get("lifecycle_rejected", 0) + 1
+                continue
+            try:
                 detail_pdfs = discover_pdf_urls_on_page(detail_url, stats=stats)
             except Exception as exc:
                 log_source_failure(
@@ -423,8 +489,6 @@ def discover_candidates(
                 )
                 stats["errors"] = stats.get("errors", 0) + 1
                 continue
-            details_fetched += 1
-            stats["details_fetched"] += 1
             for pdf_url in detail_pdfs:
                 if pdf_url in seen_urls:
                     continue

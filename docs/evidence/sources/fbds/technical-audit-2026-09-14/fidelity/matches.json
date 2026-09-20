@@ -1,0 +1,284 @@
+[
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://restaura-amazonia.fbds.org.br/Apoio-a-Restauracao-Ecologica-e-ao-Fortalecimento-da-Cadeia-Produtiva-da-Restauracao-em-municipios-do-Mato-Grosso-e-24",
+      "deadline": "2025-11-10T18:00:00-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://restaura-amazonia.fbds.org.br/IMG/zip/restaura_amazonia_mr2_-_edital_004-2025_e_docs_de_apoio.zip"
+      ],
+      "published_at": null,
+      "source_key": "fbds",
+      "source_record_id": "24",
+      "status": "closed",
+      "title": "Apoio à Restauração Ecológica e ao Fortalecimento da Cadeia Produtiva da Restauração em municípios do Mato Grosso e Tocantins"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2025-11-10T21:00:00Z",
+        "inventory": "2025-11-10T21:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "closed",
+        "inventory": "closed",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://restaura-amazonia.fbds.org.br/Apoio-a-Restauracao-Ecologica-e-ao-Fortalecimento-da-Cadeia-Produtiva-da-Restauracao-em-municipios-do-Mato-Grosso-e-24",
+      "content_type_validated": null,
+      "deadline": "2025-11-10T18:00:00-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://restaura-amazonia.fbds.org.br/IMG/zip/restaura_amazonia_mr2_-_edital_004-2025_e_docs_de_apoio.zip"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14",
+        "captured_via": "webfetch-direct-official-page",
+        "content_type": "text/html; charset=utf-8",
+        "deadline_quote": "Submissão das propostas até as 18:00 (horário de Brasília) do dia 10/11/2025",
+        "http_status": 200,
+        "lifecycle_quote": "Edital 004/2025 - Unidades de Conservação Concluído",
+        "listing_url": "https://restaura-amazonia.fbds.org.br/Editais",
+        "note": "Listing places this row under the 'Editais Concluídos' section; detail badge is Concluído.",
+        "principal_document_label": "Edital completo e documentos de apoio (ZIP #Download)"
+      },
+      "hash_validated": null,
+      "published_at": null,
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "fbds",
+      "source_record_id": "24",
+      "status": "closed",
+      "title": "Apoio à Restauração Ecológica e ao Fortalecimento da Cadeia Produtiva da Restauração em municípios do Mato Grosso e Tocantins"
+    },
+    "match_key": "('fbds', '24')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://restaura-amazonia.fbds.org.br/Apoio-a-Restauracao-Ecologica-e-ao-Fortalecimento-da-Cadeia-Produtiva-da-Restauracao-em-municipios-do-Mato-Grosso-e",
+      "deadline": "2025-08-18T18:00:00-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://restaura-amazonia.fbds.org.br/IMG/zip/restaura_amazonia_mr2_-_edital_003-2025_e_docs_de_apoio.zip"
+      ],
+      "published_at": null,
+      "source_key": "fbds",
+      "source_record_id": "apoio-a-restauracao-ecologica-e-ao-fortalecimento-da-cadeia-produtiva-da-restauracao-em-municipios-do-mato-grosso-e",
+      "status": "closed",
+      "title": "Apoio à Restauração Ecológica e ao Fortalecimento da Cadeia Produtiva da Restauração em municípios do Mato Grosso e Tocantins"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2025-08-18T21:00:00Z",
+        "inventory": "2025-08-18T21:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "closed",
+        "inventory": "closed",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://restaura-amazonia.fbds.org.br/Apoio-a-Restauracao-Ecologica-e-ao-Fortalecimento-da-Cadeia-Produtiva-da-Restauracao-em-municipios-do-Mato-Grosso-e",
+      "content_type_validated": null,
+      "deadline": "2025-08-18T18:00:00-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://restaura-amazonia.fbds.org.br/IMG/zip/restaura_amazonia_mr2_-_edital_003-2025_e_docs_de_apoio.zip"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14",
+        "captured_via": "webfetch-direct-official-page",
+        "content_type": "text/html; charset=utf-8",
+        "deadline_quote": "Submissão das propostas até as 18:00 (horário de Brasília) do dia 18/08/2025",
+        "http_status": 200,
+        "lifecycle_quote": "Edital 003/2025 - Terras Indígenas Concluído",
+        "listing_url": "https://restaura-amazonia.fbds.org.br/Editais",
+        "principal_document_label": "Edital completo e documentos de apoio (ZIP #Download)"
+      },
+      "hash_validated": null,
+      "published_at": null,
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "fbds",
+      "source_record_id": "apoio-a-restauracao-ecologica-e-ao-fortalecimento-da-cadeia-produtiva-da-restauracao-em-municipios-do-mato-grosso-e",
+      "status": "closed",
+      "title": "Apoio à Restauração Ecológica e ao Fortalecimento da Cadeia Produtiva da Restauração em municípios do Mato Grosso e Tocantins"
+    },
+    "match_key": "('fbds', 'apoio-a-restauracao-ecologica-e-ao-fortalecimento-da-cadeia-produtiva-da-restauracao-em-municipios-do-mato-grosso-e')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://restaura-amazonia.fbds.org.br/Apoio-a-Restauracao-Ecologica-e-Fortalecimento-da-Cadeia-Produtiva-da-Restauracao-em-municipios-do-Mato-Grosso",
+      "deadline": "2025-02-28T18:00:00-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://restaura-amazonia.fbds.org.br/IMG/zip/restaura_amazonia_mr2_-_edital_001-2024.zip"
+      ],
+      "published_at": null,
+      "source_key": "fbds",
+      "source_record_id": "apoio-a-restauracao-ecologica-e-fortalecimento-da-cadeia-produtiva-da-restauracao-em-municipios-do-mato-grosso",
+      "status": "closed",
+      "title": "Apoio à Restauração Ecológica e Fortalecimento da Cadeia Produtiva da Restauração em municípios do Mato Grosso"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2025-02-28T21:00:00Z",
+        "inventory": "2025-02-28T21:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "closed",
+        "inventory": "closed",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://restaura-amazonia.fbds.org.br/Apoio-a-Restauracao-Ecologica-e-Fortalecimento-da-Cadeia-Produtiva-da-Restauracao-em-municipios-do-Mato-Grosso",
+      "content_type_validated": null,
+      "deadline": "2025-02-28T18:00:00-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://restaura-amazonia.fbds.org.br/IMG/zip/restaura_amazonia_mr2_-_edital_001-2024.zip"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14",
+        "captured_via": "webfetch-direct-official-page",
+        "content_type": "text/html; charset=utf-8",
+        "deadline_quote": "Submissão das propostas até as 18:00 (horário de Brasília) do dia 28/02/2025",
+        "http_status": 200,
+        "lifecycle_quote": "Edital 001/2024 - Unidades de Conservação Concluído",
+        "listing_url": "https://restaura-amazonia.fbds.org.br/Editais",
+        "principal_document_label": "Baixe o edital completo (ZIP #Download)"
+      },
+      "hash_validated": null,
+      "published_at": null,
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "fbds",
+      "source_record_id": "apoio-a-restauracao-ecologica-e-fortalecimento-da-cadeia-produtiva-da-restauracao-em-municipios-do-mato-grosso",
+      "status": "closed",
+      "title": "Apoio à Restauração Ecológica e Fortalecimento da Cadeia Produtiva da Restauração em municípios do Mato Grosso"
+    },
+    "match_key": "('fbds', 'apoio-a-restauracao-ecologica-e-fortalecimento-da-cadeia-produtiva-da-restauracao-em-municipios-do-mato-grosso')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://restaura-amazonia.fbds.org.br/Apoio-a-Restauracao-Ecologica-e-Fortalecimento-da-Cadeia-Produtiva-da-Restauracao-em-municipios-do-Mato-Grosso-e",
+      "deadline": "2025-07-07T18:00:00-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://restaura-amazonia.fbds.org.br/IMG/zip/restaura_amazonia_mr2_-_edital_002-2025_e_docs_de_apoio.zip"
+      ],
+      "published_at": null,
+      "source_key": "fbds",
+      "source_record_id": "apoio-a-restauracao-ecologica-e-fortalecimento-da-cadeia-produtiva-da-restauracao-em-municipios-do-mato-grosso-e",
+      "status": "closed",
+      "title": "Apoio à Restauração Ecológica e Fortalecimento da Cadeia Produtiva da Restauração em municípios do Mato Grosso e Tocantins"
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2025-07-07T21:00:00Z",
+        "inventory": "2025-07-07T21:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "closed",
+        "inventory": "closed",
+        "match": true
+      },
+      "title_suggestions": [
+        "title matches between inventory and discovery; human review suggested (not used for identity)"
+      ]
+    },
+    "inventory": {
+      "canonical_url": "https://restaura-amazonia.fbds.org.br/Apoio-a-Restauracao-Ecologica-e-Fortalecimento-da-Cadeia-Produtiva-da-Restauracao-em-municipios-do-Mato-Grosso-e",
+      "content_type_validated": null,
+      "deadline": "2025-07-07T18:00:00-03:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://restaura-amazonia.fbds.org.br/IMG/zip/restaura_amazonia_mr2_-_edital_002-2025_e_docs_de_apoio.zip"
+      ],
+      "evidence": {
+        "captured_at_utc": "2026-09-14",
+        "captured_via": "webfetch-direct-official-page",
+        "content_type": "text/html; charset=utf-8",
+        "deadline_quote": "Submissão das propostas até as 18:00 (horário de Brasília) do dia 07/07/2025",
+        "http_status": 200,
+        "lifecycle_quote": "Edital 002/2025 - Assentamentos da Reforma Agrária Concluído",
+        "listing_url": "https://restaura-amazonia.fbds.org.br/Editais",
+        "note": "Detail body FAQ mentions another edital as 'aberto'; the Concluído badge on this page is authoritative for this record.",
+        "principal_document_label": "Edital completo e documentos de apoio (ZIP #Download)"
+      },
+      "hash_validated": null,
+      "published_at": null,
+      "reason_code": null,
+      "renderable": null,
+      "source_key": "fbds",
+      "source_record_id": "apoio-a-restauracao-ecologica-e-fortalecimento-da-cadeia-produtiva-da-restauracao-em-municipios-do-mato-grosso-e",
+      "status": "closed",
+      "title": "Apoio à Restauração Ecológica e Fortalecimento da Cadeia Produtiva da Restauração em municípios do Mato Grosso e Tocantins"
+    },
+    "match_key": "('fbds', 'apoio-a-restauracao-ecologica-e-fortalecimento-da-cadeia-produtiva-da-restauracao-em-municipios-do-mato-grosso-e')",
+    "match_method": "stable_id"
+  }
+]

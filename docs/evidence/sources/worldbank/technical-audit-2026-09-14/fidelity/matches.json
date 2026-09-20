@@ -1,0 +1,61 @@
+[
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://thedocs.worldbank.org/en/doc/15fc51eee03c29f8e5ed847b76ed9d55-0090052026/original/SIEF-Call-8-EdTech-040926.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://thedocs.worldbank.org/en/doc/15fc51eee03c29f8e5ed847b76ed9d55-0090052026/original/SIEF-Call-8-EdTech-040926.pdf"
+      ],
+      "published_at": null,
+      "source_key": "worldbank",
+      "source_record_id": "https://thedocs.worldbank.org/en/doc/15fc51eee03c29f8e5ed847b76ed9d55-0090052026/original/SIEF-Call-8-EdTech-040926.pdf",
+      "status": null,
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "2026-05-19T00:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "closed",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://thedocs.worldbank.org/en/doc/15fc51eee03c29f8e5ed847b76ed9d55-0090052026/original/SIEF-Call-8-EdTech-040926.pdf",
+      "deadline": "2026-05-19T00:00:00+00:00",
+      "document_hashes": [],
+      "document_urls": [
+        "https://thedocs.worldbank.org/en/doc/15fc51eee03c29f8e5ed847b76ed9d55-0090052026/original/SIEF-Call-8-EdTech-040926.pdf"
+      ],
+      "evidence": {
+        "captured_via": "Direct HTTP GET of https://www.worldbank.org/en/programs/sief-trust-fund/brief/sief-call-for-proposals-8-edtech-for-foundational-learning (2026-09-14T21:47:10Z, HTTP 200, text/html;charset=utf-8, 40793 bytes)",
+        "lifecycle_rationale": "Page published April 8, 2026; main application form Due May 19, 2026 and quick assessment form Due April 22, 2026. Both deadlines are in the past as of the 2026-09-14T21:47Z capture, so authoritative lifecycle is closed (page remains publicly listed).",
+        "pdf_check": "HEAD 200 application/pdf 430260 bytes (2026-09-14T21:47:56Z)",
+        "principal_document": true
+      },
+      "published_at": "2026-04-08T00:00:00+00:00",
+      "source_key": "worldbank",
+      "source_record_id": "https://thedocs.worldbank.org/en/doc/15fc51eee03c29f8e5ed847b76ed9d55-0090052026/original/SIEF-Call-8-EdTech-040926.pdf",
+      "status": "closed",
+      "title": "SIEF Call for Proposals 8: EdTech for Foundational Learning - principal call PDF"
+    },
+    "match_key": "('worldbank', 'https://thedocs.worldbank.org/en/doc/15fc51eee03c29f8e5ed847b76ed9d55-0090052026/original/SIEF-Call-8-EdTech-040926.pdf')",
+    "match_method": "stable_id"
+  }
+]

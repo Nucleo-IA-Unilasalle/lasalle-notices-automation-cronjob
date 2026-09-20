@@ -58,3 +58,51 @@ def test_empty_or_malformed_api_is_a_visible_audit_failure():
     )
     assert opportunities == []
     assert stats["inventory_parse_failed"] == 1
+
+
+def test_lifecycle_status_is_normalized_to_open_closed_contract():
+    open_record = _page()["items"][0]
+    closed_record = _page()["items"][2]
+    opportunity = finep.record_to_opportunity(
+        open_record, snapshot_at=datetime(2026, 7, 23, tzinfo=timezone.utc)
+    )
+    assert opportunity["authoritative_status"] == "open"
+    inventory = finep.record_to_inventory(open_record)
+    assert inventory["status"] == "open"
+    closed_inventory = finep.record_to_inventory(closed_record)
+    assert closed_inventory["status"] == "closed"
+    assert finep._lifecycle_status("aberta") == "open"
+    assert finep._lifecycle_status({"key": "encerrada", "name": "Encerrada"}) == "closed"
+    assert finep._lifecycle_status(None) == "unknown"
+
+
+def test_duplicate_page_boundary_records_are_deduped():
+    page = _page()
+    duplicate = dict(page["items"][0])
+    first_page = {
+        "items": [page["items"][0], page["items"][1], page["items"][2]],
+        "lastPage": 2,
+    }
+    second_page = {
+        "items": [duplicate, page["items"][1]],
+        "lastPage": 2,
+    }
+    pages = {1: first_page, 2: second_page}
+
+    def fetch_json(url: str):
+        return pages[int(url.rsplit("page=", 1)[1])]
+
+    monkeypatch_pages = fetch_json
+    stats, opportunities = finep.discover_opportunities(
+        fetch_json=monkeypatch_pages,
+        snapshot_at=datetime(2026, 7, 23, tzinfo=timezone.utc),
+        min_year=None,
+    )
+    assert stats["records"] == 3
+    assert stats["duplicate_records_skipped"] == 2
+    assert [item["source_record_id"] for item in opportunities] == [
+        "991625",
+        "991626",
+    ]
+    ids = [item["source_record_id"] for item in opportunities]
+    assert len(ids) == len(set(ids))

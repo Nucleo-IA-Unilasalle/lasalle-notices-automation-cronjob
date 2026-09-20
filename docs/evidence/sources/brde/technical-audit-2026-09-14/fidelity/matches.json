@@ -1,0 +1,108 @@
+[
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-PORTUGAL-2026.pdf",
+      "deadline": "2026-09-25",
+      "document_hashes": [],
+      "document_urls": [
+        "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-PORTUGAL-2026.pdf"
+      ],
+      "published_at": null,
+      "source_key": "brde",
+      "source_record_id": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-PORTUGAL-2026.pdf",
+      "status": "open",
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-09-25T00:00:00Z",
+        "inventory": "2026-09-25T00:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-PORTUGAL-2026.pdf",
+      "deadline": "2026-09-25",
+      "document_hashes": [],
+      "document_urls": [
+        "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-PORTUGAL-2026.pdf"
+      ],
+      "published_at": null,
+      "source_key": "brde",
+      "source_record_id": "https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-PORTUGAL-2026.pdf",
+      "status": "open",
+      "title": "Chamada Pública BRDE/FSA - COPRODUÇÃO BRASIL-PORTUGAL 2026"
+    },
+    "match_key": "('brde', 'https://brde.com.br/wp-content/uploads/2026/05/1-CHAMADA-PUBLICA-COPRODUCAO-BRASIL-PORTUGAL-2026.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://brde.com.br/wp-content/uploads/2026/06/0-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-TV-VOD-PRODUTORAS-2026.pdf",
+      "deadline": "2026-09-25",
+      "document_hashes": [],
+      "document_urls": [
+        "https://brde.com.br/wp-content/uploads/2026/06/0-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-TV-VOD-PRODUTORAS-2026.pdf"
+      ],
+      "published_at": null,
+      "source_key": "brde",
+      "source_record_id": "https://brde.com.br/wp-content/uploads/2026/06/0-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-TV-VOD-PRODUTORAS-2026.pdf",
+      "status": "open",
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "2026-09-25T00:00:00Z",
+        "inventory": "2026-09-25T00:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "open",
+        "inventory": "open",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://brde.com.br/wp-content/uploads/2026/06/0-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-TV-VOD-PRODUTORAS-2026.pdf",
+      "deadline": "2026-09-25",
+      "document_hashes": [],
+      "document_urls": [
+        "https://brde.com.br/wp-content/uploads/2026/06/0-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-TV-VOD-PRODUTORAS-2026.pdf"
+      ],
+      "published_at": null,
+      "source_key": "brde",
+      "source_record_id": "https://brde.com.br/wp-content/uploads/2026/06/0-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-TV-VOD-PRODUTORAS-2026.pdf",
+      "status": "open",
+      "title": "Chamada Pública BRDE/FSA - TV E VOD: DESEMPENHO COMERCIAL DE PRODUTORAS 2026"
+    },
+    "match_key": "('brde', 'https://brde.com.br/wp-content/uploads/2026/06/0-CHAMADA-PUBLICA-DESEMPENHO-COMERCIAL-TV-VOD-PRODUTORAS-2026.pdf')",
+    "match_method": "stable_id"
+  }
+]

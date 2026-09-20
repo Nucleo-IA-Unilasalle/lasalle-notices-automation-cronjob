@@ -45,6 +45,7 @@ import sys
 from datetime import datetime, timezone
 from typing import Any
 from urllib.parse import urljoin, urlsplit, urlunsplit
+from zoneinfo import ZoneInfo
 
 from bs4 import BeautifulSoup, Tag
 
@@ -73,6 +74,10 @@ FUNBIO_FETCH_MAX_ATTEMPTS = int(os.environ.get("FUNBIO_FETCH_MAX_ATTEMPTS", "3")
 FUNBIO_FETCH_BACKOFF_SECONDS = float(os.environ.get("FUNBIO_FETCH_BACKOFF_SECONDS", "2"))
 FUNBIO_FETCH_TIMEOUT_SECONDS = int(os.environ.get("FUNBIO_FETCH_TIMEOUT_SECONDS", "30"))
 FUNBIO_NEWS_ENABLED = os.environ.get("FUNBIO_NEWS_ENABLED", "false").lower() == "true"
+
+# FUNBIO publishes application deadlines as 23h59 horário de Brasília
+# (see e.g. fortalecimentoconselhosgestoresg7: "23h59 (horário de Brasília)").
+FUNBIO_TZ = ZoneInfo("America/Sao_Paulo")
 
 
 # Matches a 4-digit year token bounded by non-digit boundaries. The
@@ -159,7 +164,14 @@ def extract_funbio_detail_urls(listing_html: str, listing_url: str) -> list[str]
                 str(link.get("aria-label") or ""),
             ]
         )
-        if not re.search(r"\b(chamada|projeto|edital|floresta|selecao)\b", signal_text, re.IGNORECASE):
+        # "Manifestação de Interesse" cards on the open panel do not carry
+        # the original five tokens; without them three open calls were
+        # silently dropped from discovery (2026-09-14 audit).
+        if not re.search(
+            r"\b(chamada|projeto|edital|floresta|selecao|interesse|manifesta[çc][ãa]o)\b",
+            signal_text,
+            re.IGNORECASE,
+        ):
             continue
 
         canonical = urlunsplit((normalized.scheme, normalized.netloc, path, "", ""))
@@ -395,9 +407,12 @@ def parse_funbio_opportunity(
         re.I,
     )
     if deadline_match:
+        # Detail pages state "Inscrições até DD/MM/YYYY" with the call text
+        # clarifying 23h59 Brasília; stamp the deadline in FUNBIO_TZ then
+        # normalize to UTC for the opportunity contract.
         deadline = datetime.strptime(deadline_match.group(1), "%d/%m/%Y").replace(
-            hour=23, minute=59, tzinfo=timezone.utc
-        )
+            hour=23, minute=59, tzinfo=FUNBIO_TZ
+        ).astimezone(timezone.utc)
     now = datetime.now(timezone.utc)
     status = "open" if deadline and deadline >= now else ("closed" if deadline else "unknown")
     documents = []
@@ -410,8 +425,10 @@ def parse_funbio_opportunity(
                 "url": url,
                 "filename": urlsplit(url).path.rsplit("/", 1)[-1] or "regulamento.pdf",
                 "mime_type": "application/pdf",
-                "is_principal": False,
-                "is_renderable": False,
+                # The FUNBIO regulamento download is the principal edital
+                # document for each call; later PDFs are annexes.
+                "is_principal": index == 1,
+                "is_renderable": index == 1,
             }
         )
     canonical = urlunsplit((*urlsplit(detail_url)[:3], "", ""))

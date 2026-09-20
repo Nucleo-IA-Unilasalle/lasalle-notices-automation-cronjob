@@ -1,0 +1,16 @@
+{
+  "attachment_rejected": 1,
+  "candidate_cap_reached": 0,
+  "detail_cap_reached": 0,
+  "detail_failures": 0,
+  "detail_parse_failures": 0,
+  "details_fetched": 10,
+  "duplicate_records": 0,
+  "errors": 0,
+  "opportunities": 5,
+  "policy_rejected": 140,
+  "records": 145,
+  "search_failures": 0,
+  "search_result_cap_reached": 0,
+  "year_rejected": 0
+}

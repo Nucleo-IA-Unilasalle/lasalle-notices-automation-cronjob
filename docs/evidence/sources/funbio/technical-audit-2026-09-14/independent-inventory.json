@@ -1,0 +1,370 @@
+[
+  {
+    "canonical_url": "https://chamadas.funbio.org.br/planodemanejo-rppn",
+    "content_type_validated": true,
+    "deadline": "2026-09-26T02:59:00Z",
+    "document_hashes": [
+      "a2fe129db80b862a997a11038f8e93a0778a1973c5c18eeddb79d27961e3a0f0"
+    ],
+    "document_urls": [
+      "https://chamadas.funbio.org.br/planodemanejo-rppn/download/regulamento?id=54174f4d-9302-431b-9e8f-a4ce3f789d31"
+    ],
+    "evidence": {
+      "all_regulamento_urls": [
+        "https://chamadas.funbio.org.br/planodemanejo-rppn/download/regulamento?id=54174f4d-9302-431b-9e8f-a4ce3f789d31"
+      ],
+      "captured_at_utc": "2026-09-14T20:31:50Z",
+      "captured_via": "direct-http-urllib-official-portal",
+      "content_type": "text/html; charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo 23:59",
+      "detail_deadline_text": "Inscrições até 25/09/2026",
+      "http_status": 200,
+      "lifecycle_assessment": "Card appears on the official home listing Seleções Abertas panel with a future (or same-day not-yet-past) Inscrições até deadline; counted as open.",
+      "listing_deadline": "25/09/2026",
+      "listing_panel": "Seleções Abertas",
+      "pdf_bytes": 4282180,
+      "pdf_embedded_base64": true,
+      "pdf_sha256": "a2fe129db80b862a997a11038f8e93a0778a1973c5c18eeddb79d27961e3a0f0",
+      "pdf_validation_error": null,
+      "principal_content_type": "text/html; charset=utf-8",
+      "principal_document": "https://chamadas.funbio.org.br/planodemanejo-rppn/download/regulamento?id=54174f4d-9302-431b-9e8f-a4ce3f789d31",
+      "principal_filename": "Chamada.07.26_Plano.Manejo_RPPNs.pdf",
+      "principal_http_status": 200
+    },
+    "hash_validated": true,
+    "published_at": null,
+    "reason_code": null,
+    "renderable": true,
+    "source_key": "funbio",
+    "source_record_id": "planodemanejo-rppn",
+    "status": "open",
+    "title": "Chamada de Projetos 07/2026 Apoio à Consolidação de RPPNs no litoral do Paraná - Implementação de Planos de Manejo"
+  },
+  {
+    "canonical_url": "https://chamadas.funbio.org.br/usopublico-rppn",
+    "content_type_validated": true,
+    "deadline": "2026-10-10T02:59:00Z",
+    "document_hashes": [
+      "ff0e84da7a1e08c2c56b5f1dd99cffbd5a917ee030c0ee737c94375df0f4bd68"
+    ],
+    "document_urls": [
+      "https://chamadas.funbio.org.br/usopublico-rppn/download/regulamento?id=c7e2398c-fff7-44b6-afec-262c7f2188d7"
+    ],
+    "evidence": {
+      "all_regulamento_urls": [
+        "https://chamadas.funbio.org.br/usopublico-rppn/download/regulamento?id=c7e2398c-fff7-44b6-afec-262c7f2188d7"
+      ],
+      "captured_at_utc": "2026-09-14T20:31:54Z",
+      "captured_via": "direct-http-urllib-official-portal",
+      "content_type": "text/html; charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo 23:59",
+      "detail_deadline_text": "Inscrições até 09/10/2026",
+      "http_status": 200,
+      "lifecycle_assessment": "Card appears on the official home listing Seleções Abertas panel with a future (or same-day not-yet-past) Inscrições até deadline; counted as open.",
+      "listing_deadline": "09/10/2026",
+      "listing_panel": "Seleções Abertas",
+      "pdf_bytes": 4330659,
+      "pdf_embedded_base64": true,
+      "pdf_sha256": "ff0e84da7a1e08c2c56b5f1dd99cffbd5a917ee030c0ee737c94375df0f4bd68",
+      "pdf_validation_error": null,
+      "principal_content_type": "text/html; charset=utf-8",
+      "principal_document": "https://chamadas.funbio.org.br/usopublico-rppn/download/regulamento?id=c7e2398c-fff7-44b6-afec-262c7f2188d7",
+      "principal_filename": "Chamada.08.2026_Uso.Público_RPPN_10.07.final.pdf",
+      "principal_http_status": 200
+    },
+    "hash_validated": true,
+    "published_at": null,
+    "reason_code": null,
+    "renderable": true,
+    "source_key": "funbio",
+    "source_record_id": "usopublico-rppn",
+    "status": "open",
+    "title": "Chamada de Projetos 08/2026 - Uso público e negócios voltados ao apoio às RPPNs"
+  },
+  {
+    "canonical_url": "https://chamadas.funbio.org.br/raisfortalecimento1",
+    "content_type_validated": true,
+    "deadline": "2026-10-08T02:59:00Z",
+    "document_hashes": [
+      "c3dd4a4e59be72f8778488de6a74e265172b9be84f93700232c0bdfa23dc5bb9"
+    ],
+    "document_urls": [
+      "https://chamadas.funbio.org.br/raisfortalecimento1/download/regulamento?id=0387f216-6514-4407-adda-388fdfb9bf2a"
+    ],
+    "evidence": {
+      "all_regulamento_urls": [
+        "https://chamadas.funbio.org.br/raisfortalecimento1/download/regulamento?id=0387f216-6514-4407-adda-388fdfb9bf2a"
+      ],
+      "captured_at_utc": "2026-09-14T20:31:56Z",
+      "captured_via": "direct-http-urllib-official-portal",
+      "content_type": "text/html; charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo 23:59",
+      "detail_deadline_text": "Inscrições até 07/10/2026",
+      "http_status": 200,
+      "lifecycle_assessment": "Card appears on the official home listing Seleções Abertas panel with a future (or same-day not-yet-past) Inscrições até deadline; counted as open.",
+      "listing_deadline": "07/10/2026",
+      "listing_panel": "Seleções Abertas",
+      "pdf_bytes": 588047,
+      "pdf_embedded_base64": true,
+      "pdf_sha256": "c3dd4a4e59be72f8778488de6a74e265172b9be84f93700232c0bdfa23dc5bb9",
+      "pdf_validation_error": null,
+      "principal_content_type": "text/html; charset=utf-8",
+      "principal_document": "https://chamadas.funbio.org.br/raisfortalecimento1/download/regulamento?id=0387f216-6514-4407-adda-388fdfb9bf2a",
+      "principal_filename": "Chamada de Projetos - RAISfortalecimento1.pdf",
+      "principal_http_status": 200
+    },
+    "hash_validated": true,
+    "published_at": null,
+    "reason_code": null,
+    "renderable": true,
+    "source_key": "funbio",
+    "source_record_id": "raisfortalecimento1",
+    "status": "open",
+    "title": "Participe da 1ª Chamada do Projeto RAÍS -\"Fortalecimento de Organizações Comunitárias em Barcarena e Abaetetuba-PA\""
+  },
+  {
+    "canonical_url": "https://chamadas.funbio.org.br/tcsa-porto-sul",
+    "content_type_validated": true,
+    "deadline": "2026-11-10T02:59:00Z",
+    "document_hashes": [
+      "8ed4c85556ce1cd75c40d7c03ff906fe536d910545f8a1386bc42a38eb3ca3b2"
+    ],
+    "document_urls": [
+      "https://chamadas.funbio.org.br/tcsa-porto-sul/download/regulamento?id=e3470446-d6f8-4352-be3b-ca1d1cb72afe"
+    ],
+    "evidence": {
+      "all_regulamento_urls": [
+        "https://chamadas.funbio.org.br/tcsa-porto-sul/download/regulamento?id=e3470446-d6f8-4352-be3b-ca1d1cb72afe"
+      ],
+      "captured_at_utc": "2026-09-14T20:31:57Z",
+      "captured_via": "direct-http-urllib-official-portal",
+      "content_type": "text/html; charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo 23:59",
+      "detail_deadline_text": "Inscrições até 09/11/2026",
+      "http_status": 200,
+      "lifecycle_assessment": "Card appears on the official home listing Seleções Abertas panel with a future (or same-day not-yet-past) Inscrições até deadline; counted as open.",
+      "listing_deadline": "09/11/2026",
+      "listing_panel": "Seleções Abertas",
+      "pdf_bytes": 738131,
+      "pdf_embedded_base64": true,
+      "pdf_sha256": "8ed4c85556ce1cd75c40d7c03ff906fe536d910545f8a1386bc42a38eb3ca3b2",
+      "pdf_validation_error": null,
+      "principal_content_type": "text/html; charset=utf-8",
+      "principal_document": "https://chamadas.funbio.org.br/tcsa-porto-sul/download/regulamento?id=e3470446-d6f8-4352-be3b-ca1d1cb72afe",
+      "principal_filename": "Chamada de Projetos TCSA Porto Sul - 10_2026.pdf",
+      "principal_http_status": 200
+    },
+    "hash_validated": true,
+    "published_at": null,
+    "reason_code": null,
+    "renderable": true,
+    "source_key": "funbio",
+    "source_record_id": "tcsa-porto-sul",
+    "status": "open",
+    "title": "TCSA Porto Sul - Chamada 10/2026"
+  },
+  {
+    "canonical_url": "https://chamadas.funbio.org.br/fortalecimentoconselhosgestoresg7",
+    "content_type_validated": false,
+    "deadline": "2026-09-15T02:59:00Z",
+    "document_hashes": [],
+    "document_urls": [
+      "https://chamadas.funbio.org.br/fortalecimentoconselhosgestoresg7/download/regulamento?id=a9c1ffa8-48f6-4b0b-97a7-31764e2d52c3"
+    ],
+    "evidence": {
+      "all_regulamento_urls": [
+        "https://chamadas.funbio.org.br/fortalecimentoconselhosgestoresg7/download/regulamento?id=a9c1ffa8-48f6-4b0b-97a7-31764e2d52c3"
+      ],
+      "captured_at_utc": "2026-09-14T20:33:29Z",
+      "captured_via": "direct-http-urllib-official-portal",
+      "content_type": "text/html; charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo 23:59",
+      "detail_deadline_text": "Inscrições até 14/09/2026",
+      "http_status": 200,
+      "lifecycle_assessment": "Card appears on the official home listing Seleções Abertas panel with a future (or same-day not-yet-past) Inscrições até deadline; counted as open.",
+      "listing_deadline": "14/09/2026",
+      "listing_panel": "Seleções Abertas",
+      "pdf_bytes": null,
+      "pdf_embedded_base64": true,
+      "pdf_sha256": null,
+      "pdf_validation_error": "HTTP 524 Cloudflare timeout / read timeout on download wrapper; PDF base64 not retrieved",
+      "principal_content_type": null,
+      "principal_document": "https://chamadas.funbio.org.br/fortalecimentoconselhosgestoresg7/download/regulamento?id=a9c1ffa8-48f6-4b0b-97a7-31764e2d52c3",
+      "principal_filename": null,
+      "principal_http_status": 524,
+      "renderable_assessment": "unknown — document URL is the official regulamento anchor; binary validation incomplete due to origin timeout. Discovery still matches by URL/stable_id."
+    },
+    "hash_validated": false,
+    "published_at": null,
+    "reason_code": null,
+    "renderable": null,
+    "source_key": "funbio",
+    "source_record_id": "fortalecimentoconselhosgestoresg7",
+    "status": "open",
+    "title": "Fortalecimento de Conselhos Gestores das UCs apoiadas pelo projeto G7"
+  },
+  {
+    "canonical_url": "https://chamadas.funbio.org.br/selecao-de-ucs-estaduais-fundo-marinho",
+    "content_type_validated": true,
+    "deadline": "2026-09-17T02:59:00Z",
+    "document_hashes": [
+      "8ce422bbc04c11ed82677845961d863d59a1b89bef60876472224d136b441032"
+    ],
+    "document_urls": [
+      "https://chamadas.funbio.org.br/selecao-de-ucs-estaduais-fundo-marinho/download/regulamento?id=f59cff6e-7488-4caf-b868-3178965ea565"
+    ],
+    "evidence": {
+      "all_regulamento_urls": [
+        "https://chamadas.funbio.org.br/selecao-de-ucs-estaduais-fundo-marinho/download/regulamento?id=f59cff6e-7488-4caf-b868-3178965ea565"
+      ],
+      "captured_at_utc": "2026-09-14T20:33:36Z",
+      "captured_via": "direct-http-urllib-official-portal",
+      "content_type": "text/html; charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo 23:59",
+      "detail_deadline_text": "Inscrições até 16/09/2026",
+      "http_status": 200,
+      "lifecycle_assessment": "Card appears on the official home listing Seleções Abertas panel with a future (or same-day not-yet-past) Inscrições até deadline; counted as open.",
+      "listing_deadline": "16/09/2026",
+      "listing_panel": "Seleções Abertas",
+      "pdf_bytes": 534016,
+      "pdf_embedded_base64": true,
+      "pdf_sha256": "8ce422bbc04c11ed82677845961d863d59a1b89bef60876472224d136b441032",
+      "pdf_validation_error": null,
+      "principal_content_type": "text/html; charset=utf-8",
+      "principal_document": "https://chamadas.funbio.org.br/selecao-de-ucs-estaduais-fundo-marinho/download/regulamento?id=f59cff6e-7488-4caf-b868-3178965ea565",
+      "principal_filename": "FM_Manifestaçao interesse_UCs Estaduais.pdf",
+      "principal_http_status": 200
+    },
+    "hash_validated": true,
+    "published_at": null,
+    "reason_code": null,
+    "renderable": true,
+    "source_key": "funbio",
+    "source_record_id": "selecao-de-ucs-estaduais-fundo-marinho",
+    "status": "open",
+    "title": "Seleção de Unidades de Conservação Costeiras e Marinhas Estaduais do Brasil para Inclusão ao Fundo Marinho"
+  },
+  {
+    "canonical_url": "https://chamadas.funbio.org.br/conselho-ucs-municipais-estaduais",
+    "content_type_validated": true,
+    "deadline": "2026-09-26T02:59:00Z",
+    "document_hashes": [
+      "f6b46d45a38460edb47b843557df2c8998102560d2b50797720749fa6356ce93"
+    ],
+    "document_urls": [
+      "https://chamadas.funbio.org.br/conselho-ucs-municipais-estaduais/download/regulamento?id=da4c4c91-54a7-4caa-9736-0ee40ddffdf4"
+    ],
+    "evidence": {
+      "all_regulamento_urls": [
+        "https://chamadas.funbio.org.br/conselho-ucs-municipais-estaduais/download/regulamento?id=da4c4c91-54a7-4caa-9736-0ee40ddffdf4"
+      ],
+      "captured_at_utc": "2026-09-14T20:33:38Z",
+      "captured_via": "direct-http-urllib-official-portal",
+      "content_type": "text/html; charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo 23:59",
+      "detail_deadline_text": "Inscrições até 25/09/2026",
+      "http_status": 200,
+      "lifecycle_assessment": "Card appears on the official home listing Seleções Abertas panel with a future (or same-day not-yet-past) Inscrições até deadline; counted as open.",
+      "listing_deadline": "25/09/2026",
+      "listing_panel": "Seleções Abertas",
+      "pdf_bytes": 415645,
+      "pdf_embedded_base64": true,
+      "pdf_sha256": "f6b46d45a38460edb47b843557df2c8998102560d2b50797720749fa6356ce93",
+      "pdf_validation_error": null,
+      "principal_content_type": "text/html; charset=utf-8",
+      "principal_document": "https://chamadas.funbio.org.br/conselho-ucs-municipais-estaduais/download/regulamento?id=da4c4c91-54a7-4caa-9736-0ee40ddffdf4",
+      "principal_filename": "MI 03.26_UCs_Conselho_Gestor..pdf",
+      "principal_http_status": 200
+    },
+    "hash_validated": true,
+    "published_at": null,
+    "reason_code": null,
+    "renderable": true,
+    "source_key": "funbio",
+    "source_record_id": "conselho-ucs-municipais-estaduais",
+    "status": "open",
+    "title": "Manifestação de Interesse 03/2026 - Apoio às Unidades de Conservação Estaduais e Municipais do Litoral do Paraná"
+  },
+  {
+    "canonical_url": "https://chamadas.funbio.org.br/planodemanejo-sinalizacao-estadual-municipal",
+    "content_type_validated": true,
+    "deadline": "2026-09-26T02:59:00Z",
+    "document_hashes": [
+      "ee64859efa97b5c31506726e7e9a220bd3152d1f551d77bfa8f3234ef2513bac"
+    ],
+    "document_urls": [
+      "https://chamadas.funbio.org.br/planodemanejo-sinalizacao-estadual-municipal/download/regulamento?id=8e000ca5-043f-41fe-b029-6dfc5de50cb3"
+    ],
+    "evidence": {
+      "all_regulamento_urls": [
+        "https://chamadas.funbio.org.br/planodemanejo-sinalizacao-estadual-municipal/download/regulamento?id=8e000ca5-043f-41fe-b029-6dfc5de50cb3"
+      ],
+      "captured_at_utc": "2026-09-14T20:33:40Z",
+      "captured_via": "direct-http-urllib-official-portal",
+      "content_type": "text/html; charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo 23:59",
+      "detail_deadline_text": "Inscrições até 25/09/2026",
+      "http_status": 200,
+      "lifecycle_assessment": "Card appears on the official home listing Seleções Abertas panel with a future (or same-day not-yet-past) Inscrições até deadline; counted as open.",
+      "listing_deadline": "25/09/2026",
+      "listing_panel": "Seleções Abertas",
+      "pdf_bytes": 448084,
+      "pdf_embedded_base64": true,
+      "pdf_sha256": "ee64859efa97b5c31506726e7e9a220bd3152d1f551d77bfa8f3234ef2513bac",
+      "pdf_validation_error": null,
+      "principal_content_type": "text/html; charset=utf-8",
+      "principal_document": "https://chamadas.funbio.org.br/planodemanejo-sinalizacao-estadual-municipal/download/regulamento?id=8e000ca5-043f-41fe-b029-6dfc5de50cb3",
+      "principal_filename": "MI04.26_UCs_Plano_manejo-sinalização.pdf",
+      "principal_http_status": 200
+    },
+    "hash_validated": true,
+    "published_at": null,
+    "reason_code": null,
+    "renderable": true,
+    "source_key": "funbio",
+    "source_record_id": "planodemanejo-sinalizacao-estadual-municipal",
+    "status": "open",
+    "title": "Manifestação de Interesse 04/2026 - Elaboração de Planos de Manejo e sinalização de UCs estaduais e municipais"
+  },
+  {
+    "canonical_url": "https://chamadas.funbio.org.br/usopublico-ucs",
+    "content_type_validated": true,
+    "deadline": "2026-09-26T02:59:00Z",
+    "document_hashes": [
+      "2e0ffcd9fe7335709ceedcd806d925a0c317a30b8b254ce8425efa83f4e6bae6"
+    ],
+    "document_urls": [
+      "https://chamadas.funbio.org.br/usopublico-ucs/download/regulamento?id=5c327238-a354-4aa1-8384-4841cfe59a6b"
+    ],
+    "evidence": {
+      "all_regulamento_urls": [
+        "https://chamadas.funbio.org.br/usopublico-ucs/download/regulamento?id=5c327238-a354-4aa1-8384-4841cfe59a6b"
+      ],
+      "captured_at_utc": "2026-09-14T20:33:41Z",
+      "captured_via": "direct-http-urllib-official-portal",
+      "content_type": "text/html; charset=utf-8",
+      "deadline_timezone": "America/Sao_Paulo 23:59",
+      "detail_deadline_text": "Inscrições até 25/09/2026",
+      "http_status": 200,
+      "lifecycle_assessment": "Card appears on the official home listing Seleções Abertas panel with a future (or same-day not-yet-past) Inscrições até deadline; counted as open.",
+      "listing_deadline": "25/09/2026",
+      "listing_panel": "Seleções Abertas",
+      "pdf_bytes": 455487,
+      "pdf_embedded_base64": true,
+      "pdf_sha256": "2e0ffcd9fe7335709ceedcd806d925a0c317a30b8b254ce8425efa83f4e6bae6",
+      "pdf_validation_error": null,
+      "principal_content_type": "text/html; charset=utf-8",
+      "principal_document": "https://chamadas.funbio.org.br/usopublico-ucs/download/regulamento?id=5c327238-a354-4aa1-8384-4841cfe59a6b",
+      "principal_filename": "MI 05.26_ Uso.Publico_UCs.pdf",
+      "principal_http_status": 200
+    },
+    "hash_validated": true,
+    "published_at": null,
+    "reason_code": null,
+    "renderable": true,
+    "source_key": "funbio",
+    "source_record_id": "usopublico-ucs",
+    "status": "open",
+    "title": "Manifestação de Interesse 05/2026 - Uso público e negócios de UCs estaduais e municipais"
+  }
+]

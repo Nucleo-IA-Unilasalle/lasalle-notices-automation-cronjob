@@ -78,13 +78,18 @@ FAPERGS_FETCH_TIMEOUT_SECONDS = int(os.environ.get("FAPERGS_FETCH_TIMEOUT_SECOND
 
 # Matches a 4-digit year token bounded by non-digit boundaries.
 _YEAR_PATTERN = re.compile(r"(?<!\d)(19|20)\d{2}(?!\d)")
+# FAPERGS upload folders use YYYYMM (e.g. ``/upload/arquivos/202109/``);
+# the bare year pattern cannot match inside a 6-digit folder token.
+# Capture the full year so group(1) is e.g. ``2021``, not just ``20``.
+_UPLOAD_MONTH_PATTERN = re.compile(r"/((?:19|20)\d{2})(0[1-9]|1[0-2])/")
 
 
 def _extract_year_from_url(url: str) -> int | None:
     """Return the first 4-digit year found in the URL, or ``None``.
 
     Searches the URL path and query string for any year in the 1900-2099
-    range. Returns the most recent year if multiple are present.
+    range, including FAPERGS ``YYYYMM`` upload-folder segments. Returns
+    the most recent year if multiple are present.
     """
     parsed = urlsplit(url)
     haystack = f"{parsed.path} {parsed.query}"
@@ -93,6 +98,8 @@ def _extract_year_from_url(url: str) -> int | None:
         year = int(match.group(0))
         if 1900 <= year <= 2099:
             candidates.append(year)
+    for match in _UPLOAD_MONTH_PATTERN.finditer(parsed.path):
+        candidates.append(int(match.group(1)))
     if not candidates:
         return None
     return max(candidates)
@@ -166,6 +173,26 @@ def _candidate_passes_edital_prefilter(
     parsed = urlsplit(url)
     filename = parsed.path.rsplit("/", 1)[-1]
     return is_likely_edital(filename, url, filter_policy=filter_policy)
+
+
+_RELATED_DOC_PATTERN = re.compile(
+    r"(aditivo|consolidad|retifica|errata|regulamento|resultad)", re.IGNORECASE
+)
+
+
+def _select_principal_pdf(pdf_urls: list[str]) -> str | None:
+    """Pick one principal edital PDF from a detail page.
+
+    FAPERGS detail pages list the principal edital plus aditivos,
+    consolidated versions, and related support PDFs. Emitting each as a
+    separate candidate over-submits; the principal is the primary
+    ``edital`` PDF that is not a related document.
+    """
+    usable = [u for u in pdf_urls if not _RELATED_DOC_PATTERN.search(urlsplit(u).path)]
+    if not usable:
+        return None
+    editais = [u for u in usable if re.search(r"\bedital", urlsplit(u).path, re.IGNORECASE)]
+    return (editais or usable)[0]
 
 
 def build_candidate(
@@ -314,33 +341,38 @@ def discover_candidates(
             continue
         details_fetched += 1
         stats["details_fetched"] += 1
-        for pdf_url in detail_pdfs:
-            if pdf_url in seen_pdfs:
-                continue
-            seen_pdfs.add(pdf_url)
-            candidate = build_candidate(
-                pdf_url,
-                listing_url=FAPERGS_LISTING_URL,
-                detail_url=detail_url,
-                filter_policy=filter_policy,
-                min_year=min_year,
-                origin="detail_page",
+        principal_pdf = _select_principal_pdf(detail_pdfs)
+        if principal_pdf is None:
+            continue
+        if principal_pdf in seen_pdfs:
+            continue
+        seen_pdfs.add(principal_pdf)
+        candidate = build_candidate(
+            principal_pdf,
+            listing_url=FAPERGS_LISTING_URL,
+            detail_url=detail_url,
+            filter_policy=filter_policy,
+            min_year=min_year,
+            origin="detail_page",
+        )
+        if candidate is None:
+            if not _passes_year_guard(principal_pdf, min_year=min_year):
+                stats["year_rejected"] += 1
+            else:
+                stats["prefilter_rejected"] += 1
+            continue
+        related = [u for u in detail_pdfs if u != principal_pdf]
+        if related:
+            candidate["metadata"]["related_document_urls"] = related
+        candidates.append(candidate)
+        if len(candidates) >= FAPERGS_MAX_CANDIDATES_PER_RUN:
+            stats["candidate_cap_reached"] = 1
+            print(
+                f"Stopping after candidate cap {FAPERGS_MAX_CANDIDATES_PER_RUN}",
+                file=sys.stderr,
             )
-            if candidate is None:
-                if not _passes_year_guard(pdf_url, min_year=min_year):
-                    stats["year_rejected"] += 1
-                else:
-                    stats["prefilter_rejected"] += 1
-                continue
-            candidates.append(candidate)
-            if len(candidates) >= FAPERGS_MAX_CANDIDATES_PER_RUN:
-                stats["candidate_cap_reached"] = 1
-                print(
-                    f"Stopping after candidate cap {FAPERGS_MAX_CANDIDATES_PER_RUN}",
-                    file=sys.stderr,
-                )
-                stats["candidates"] = len(candidates)
-                return stats, candidates
+            stats["candidates"] = len(candidates)
+            return stats, candidates
 
     stats["candidates"] = len(candidates)
     return stats, candidates

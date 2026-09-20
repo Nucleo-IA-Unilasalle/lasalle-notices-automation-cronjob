@@ -43,6 +43,7 @@ from __future__ import annotations
 
 import asyncio
 import os
+import re
 import sys
 from datetime import datetime, timezone
 from typing import Any
@@ -61,6 +62,54 @@ MSGOV_MAX_CANDIDATES_PER_RUN = int(
 MSGOV_MAX_DETAILS_PER_RUN = int(
     os.environ.get("MSGOV_MAX_DETAILS_PER_RUN", "40"),
 )
+# Registry ``page_limit`` for msgov is 5; the Prosas listing web component
+# renders 20 editais per page and the open set can exceed one page.
+MSGOV_MAX_LISTING_PAGES = int(
+    os.environ.get("MSGOV_MAX_LISTING_PAGES", "5"),
+)
+
+
+def _stable_pdf_identity(url: str) -> str:
+    """Normalize a Prosas PDF href to a stable cross-request identity.
+
+    Detail-page anchors carry Oracle Cloud preauthenticated ``/p/<token>/``
+    path segments and signed query strings that change on every page load.
+    Strip the token segment and the query so discovery metadata
+    (``canonical_url`` / ``source_record_id``) stays comparable across the
+    independent inventory and discovery runs. The original signed URL is
+    still used for download via ``candidate["url"]``.
+    """
+    try:
+        parts = urlsplit(url)
+    except ValueError:
+        return url
+    path = parts.path or ""
+    host = (parts.hostname or "").lower()
+    if "objectstorage" in host:
+        path = re.sub(r"^/p/[^/]+", "", path)
+    return urlunsplit((parts.scheme.lower(), host, path, "", ""))
+
+
+# Office/archive annexes ride the same Prosas S3/objectstorage hosts as
+# PDFs. The historical ``or "amazonaws.com" in href`` catch-all admitted
+# them as candidates (later rejected by magic-byte validation), which
+# both polluted the candidate set and pushed real PDFs past the run cap
+# once a detail page exposed many annexes. Keep extensionless S3 objects
+# but drop explicit non-PDF suffixes at discovery time.
+_NON_PDF_SUFFIX_RE = re.compile(
+    r"\.(?:doc|docx|xls|xlsx|ppt|pptx|zip|rar|7z|csv|txt|odt|ods|odp|rtf)"
+    r"($|[?#])",
+    re.IGNORECASE,
+)
+
+
+def _is_pdf_candidate_href(href: str) -> bool:
+    """Whether a detail-page href should be emitted as a PDF candidate."""
+    if not href:
+        return False
+    if _NON_PDF_SUFFIX_RE.search(href):
+        return False
+    return looks_like_pdf_url(href) or "amazonaws.com" in href or "objectstorage" in href
 
 
 _COLLECT_LISTING_HREFS_SCRIPT = """
@@ -101,6 +150,46 @@ _COLLECT_LISTING_HREFS_SCRIPT = """
   }
 
   return hrefs;
+})()
+""".strip()
+
+
+_CLICK_NEXT_PAGE_SCRIPT = """
+(() => {
+  const host = document.querySelector('prosas-listagem-editais');
+  if (!host || !host.shadowRoot) return 'no-host';
+
+  // Pagination row is a div with exactly four button children:
+  // [first, prev, next, last]. Click "next" when enabled.
+  const groups = [];
+  const walk = (node) => {
+    if (!node) return;
+    if (node instanceof Element) {
+      if (node.tagName === 'DIV') {
+        const btns = Array.from(node.children || []).filter(
+          (c) => c.tagName === 'BUTTON',
+        );
+        if (btns.length === 4) groups.push(btns);
+      }
+      if (node.shadowRoot) walk(node.shadowRoot);
+      for (const child of Array.from(node.children || [])) walk(child);
+      return;
+    }
+    if (node instanceof ShadowRoot || node instanceof DocumentFragment) {
+      for (const child of Array.from(node.children || [])) walk(child);
+    }
+  };
+  walk(host.shadowRoot);
+  if (!groups.length) return 'no-pagination';
+  const btns = groups[groups.length - 1];
+  const next = btns[2];
+  if (!next || next.disabled) return 'next-disabled';
+  try {
+    next.click();
+  } catch (e) {
+    return 'click-failed';
+  }
+  return 'clicked-next';
 })()
 """.strip()
 
@@ -269,7 +358,7 @@ async def _collect_detail_pdfs(page: Any, detail_url: str) -> list[str]:
             light_hrefs.append(href)
 
     for href in [*light_hrefs, *deep_hrefs]:
-        if not (looks_like_pdf_url(href) or "amazonaws.com" in href):
+        if not _is_pdf_candidate_href(href):
             continue
         pdf_candidates.append(urljoin(detail_url, href))
 
@@ -285,7 +374,9 @@ async def _scrape_msgov(stats: dict[str, int]) -> tuple[list[str], list[dict[str
     from playwright.async_api import async_playwright  # type: ignore[import-not-found]
 
     detail_urls: list[str] = []
-    pdf_candidates: list[str] = []
+    # Each entry is (pdf_url, detail_url) so candidate identity can carry
+    # the owning detail page.
+    pdf_candidates: list[tuple[str, str]] = []
 
     async with async_playwright() as pw:
         browser = await pw.chromium.launch()
@@ -321,8 +412,37 @@ async def _scrape_msgov(stats: dict[str, int]) -> tuple[list[str], list[dict[str
                 pass
             await page.wait_for_timeout(2000)
 
-            detail_urls = await _collect_listing_detail_urls(page, MSGOV_LISTING_URL)
-            stats["listings_fetched"] = stats.get("listings_fetched", 0) + 1
+            # Paginate the open listing. The Prosas web component renders
+            # 20 editais per page; without walking the next-page control
+            # the open set beyond the first page is silently dropped.
+            seen_detail_urls: set[str] = set()
+            for page_index in range(MSGOV_MAX_LISTING_PAGES):
+                page_urls = await _collect_listing_detail_urls(page, MSGOV_LISTING_URL)
+                if page_index == 0:
+                    stats["listings_fetched"] = stats.get("listings_fetched", 0) + 1
+                new_urls = [u for u in page_urls if u not in seen_detail_urls]
+                if not new_urls and page_index > 0:
+                    break
+                for url in new_urls:
+                    seen_detail_urls.add(url)
+                    detail_urls.append(url)
+                if page_index >= MSGOV_MAX_LISTING_PAGES - 1:
+                    break
+                try:
+                    click_result = await page.evaluate(_CLICK_NEXT_PAGE_SCRIPT)
+                except Exception as exc:
+                    print(
+                        f"warning: MSGOV listing next-page click failed: {exc}",
+                        file=sys.stderr,
+                    )
+                    break
+                if click_result != "clicked-next":
+                    break
+                await page.wait_for_timeout(2000)
+                try:
+                    await page.wait_for_load_state("networkidle", timeout=3000)
+                except Exception:
+                    pass
 
             for detail_url in detail_urls[:MSGOV_MAX_DETAILS_PER_RUN]:
                 try:
@@ -338,16 +458,20 @@ async def _scrape_msgov(stats: dict[str, int]) -> tuple[list[str], list[dict[str
                     continue
                 detail_pdfs = await _collect_detail_pdfs(page, detail_url)
                 stats["details_fetched"] = stats.get("details_fetched", 0) + 1
-                pdf_candidates.extend(detail_pdfs)
+                for pdf_url in detail_pdfs:
+                    pdf_candidates.append((pdf_url, detail_url))
         finally:
             await browser.close()
 
     return detail_urls, pdf_candidates
 
 
-def _run_playwright_discovery(stats: dict[str, int]) -> tuple[list[str], list[str]]:
+def _run_playwright_discovery(
+    stats: dict[str, int],
+) -> tuple[list[str], list[tuple[str, str]]]:
     """Run the Playwright discovery flow synchronously via
-    ``asyncio.run``. Returns ``(detail_urls, pdf_candidates)``.
+    ``asyncio.run``. Returns ``(detail_urls, pdf_candidates)`` where
+    each pdf candidate is ``(pdf_url, detail_url)``.
     """
     try:
         return asyncio.run(_scrape_msgov(stats))
@@ -375,12 +499,23 @@ def build_candidate(
     listing_url: str,
     detail_url: str | None = None,
 ) -> dict[str, Any]:
-    """Build a ``kind="pdf"`` candidate for the MSGOV source."""
+    """Build a ``kind="pdf"`` candidate for the MSGOV source.
+
+    ``metadata.canonical_url`` / ``metadata.source_record_id`` carry the
+    stable (token-stripped) PDF identity so audit artifacts remain
+    comparable across runs; ``candidate["url"]`` keeps the original
+    signed href for download.
+    """
+    stable = _stable_pdf_identity(url)
     metadata: dict[str, Any] = {
         "source": "msgov",
         "listing_url": listing_url,
         "discovered_at": datetime.now(timezone.utc).isoformat(),
         "origin": "playwright_listing",
+        "canonical_url": stable,
+        "source_record_id": stable,
+        # The listing only enumerates the open (inscrições abertas) tab.
+        "status": "open",
     }
     if detail_url is not None:
         metadata["detail_url"] = detail_url
@@ -407,15 +542,16 @@ def discover_candidates() -> tuple[dict[str, int], list[dict[str, Any]]]:
     candidates: list[dict[str, Any]] = []
     seen_pdfs: set[str] = set()
 
-    detail_urls, pdf_urls = _run_playwright_discovery(stats)
+    detail_urls, pdf_entries = _run_playwright_discovery(stats)
 
-    for pdf_url in pdf_urls:
+    for pdf_url, detail_url in pdf_entries:
         if pdf_url in seen_pdfs:
             continue
         seen_pdfs.add(pdf_url)
         candidate = build_candidate(
             pdf_url,
             listing_url=MSGOV_LISTING_URL,
+            detail_url=detail_url,
         )
         candidates.append(candidate)
         if len(candidates) >= MSGOV_MAX_CANDIDATES_PER_RUN:

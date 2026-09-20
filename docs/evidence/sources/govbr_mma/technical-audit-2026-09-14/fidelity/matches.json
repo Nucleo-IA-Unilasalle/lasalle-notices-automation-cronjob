@@ -1,0 +1,267 @@
+[
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-correio.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-correio.pdf"
+      ],
+      "published_at": null,
+      "source_key": "govbr_mma",
+      "source_record_id": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-correio.pdf",
+      "status": null,
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "closed",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-correio.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-correio.pdf"
+      ],
+      "published_at": null,
+      "source_key": "govbr_mma",
+      "source_record_id": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-correio.pdf",
+      "status": "closed",
+      "title": "Aviso de Chamamento Público - Locação de Imóvel - Correio (publication notice of closed 2017 chamamento)"
+    },
+    "match_key": "('govbr_mma', 'https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-correio.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-dou.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-dou.pdf"
+      ],
+      "published_at": null,
+      "source_key": "govbr_mma",
+      "source_record_id": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-dou.pdf",
+      "status": null,
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "closed",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-dou.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-dou.pdf"
+      ],
+      "published_at": null,
+      "source_key": "govbr_mma",
+      "source_record_id": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-dou.pdf",
+      "status": "closed",
+      "title": "Aviso de Chamamento Público - Locação de Imóvel - DOU (publication notice of closed 2017 chamamento)"
+    },
+    "match_key": "('govbr_mma', 'https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-dou.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-jornal-brasilia.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-jornal-brasilia.pdf"
+      ],
+      "published_at": null,
+      "source_key": "govbr_mma",
+      "source_record_id": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-jornal-brasilia.pdf",
+      "status": null,
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "closed",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-jornal-brasilia.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-jornal-brasilia.pdf"
+      ],
+      "published_at": null,
+      "source_key": "govbr_mma",
+      "source_record_id": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-jornal-brasilia.pdf",
+      "status": "closed",
+      "title": "Aviso de Chamamento Público - Locação de Imóvel - Jornal de Brasília (publication notice of closed 2017 chamamento)"
+    },
+    "match_key": "('govbr_mma', 'https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso-chamamento-publico-locacao-jornal-brasilia.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso.pdf"
+      ],
+      "published_at": null,
+      "source_key": "govbr_mma",
+      "source_record_id": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso.pdf",
+      "status": null,
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "closed",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso.pdf"
+      ],
+      "published_at": null,
+      "source_key": "govbr_mma",
+      "source_record_id": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso.pdf",
+      "status": "closed",
+      "title": "Aviso - Chamamento Público Locação de Imóvel (companion notice of closed 2017 chamamento)"
+    },
+    "match_key": "('govbr_mma', 'https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/aviso.pdf')",
+    "match_method": "stable_id"
+  },
+  {
+    "dashboard": null,
+    "dashboard_match_method": null,
+    "discovery": {
+      "canonical_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/edital-de-chamamento-publico-locacao-imovel-02.pdf",
+      "deadline": null,
+      "document_hashes": [],
+      "document_urls": [
+        "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/edital-de-chamamento-publico-locacao-imovel-02.pdf"
+      ],
+      "published_at": null,
+      "source_key": "govbr_mma",
+      "source_record_id": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/edital-de-chamamento-publico-locacao-imovel-02.pdf",
+      "status": null,
+      "title": null
+    },
+    "discovery_match_method": "stable_id",
+    "field_comparison": {
+      "deadline": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "2017-01-20T00:00:00Z",
+        "match": true
+      },
+      "renderable": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "unknown",
+        "match": true
+      },
+      "status": {
+        "dashboard": "unknown",
+        "discovery": "unknown",
+        "inventory": "closed",
+        "match": true
+      }
+    },
+    "inventory": {
+      "canonical_url": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/edital-de-chamamento-publico-locacao-imovel-02.pdf",
+      "deadline": "2017-01-20",
+      "document_hashes": [],
+      "document_urls": [
+        "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/edital-de-chamamento-publico-locacao-imovel-02.pdf"
+      ],
+      "published_at": null,
+      "source_key": "govbr_mma",
+      "source_record_id": "https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/edital-de-chamamento-publico-locacao-imovel-02.pdf",
+      "status": "closed",
+      "title": "Edital de Chamamento Público - Locação de Imóvel (MMA; propostas até 20/01/2017; closed)"
+    },
+    "match_key": "('govbr_mma', 'https://www.gov.br/mma/pt-br/acesso-a-informacao/licitacoes-e-contratos/editais/chamamento-publico-locacao-de-imovel/edital-de-chamamento-publico-locacao-imovel-02.pdf')",
+    "match_method": "stable_id"
+  }
+]
