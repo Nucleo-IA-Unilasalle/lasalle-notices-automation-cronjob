@@ -119,6 +119,12 @@ adds the fingerprint/scope/purpose columns in ordered migrations.
   process tree on deadline or renewal uncertainty. The application budget is
   `min(1080 s, job_minutes*60 - setup_elapsed - 120 s cleanup reserve)`; the
   child receives source/contract/PDF cap/filter policy from the registry.
+  Before the initial claim, the client wakes a sleeping Render instance with
+  up to four redirect-disabled `GET /health` probes (5 s connect/20 s read,
+  exponential 2/4/8 s backoff). The mutating claim POST is still sent exactly
+  once: an HTTP read timeout has an ambiguous server outcome and must not be
+  retried automatically. The live catalog gate can safely retry its idempotent
+  GET on connection/read timeouts and HTTP 408/425/429/5xx transient failures.
   Outcomes are `complete` (collection marker present), `failed`, or `noop`
   (audit). Registry `paused`/`audit` entries reject ingestion; audit runs must
   set `DISCOVERY_AUDIT_ONLY=true`.
