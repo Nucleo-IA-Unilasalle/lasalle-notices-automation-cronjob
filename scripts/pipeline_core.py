@@ -493,6 +493,10 @@ def submit_candidates(
     return summary
 
 
+class AttachmentSizeLimitExceeded(ValueError):
+    """An otherwise valid attachment exceeds the worker's safe size budget."""
+
+
 def _download_attachment(url: str, *, max_bytes: int) -> bytes:
     """Download an attachment through the shared redirect and SSRF guard."""
     response = request_with_safe_redirects(
@@ -505,7 +509,9 @@ def _download_attachment(url: str, *, max_bytes: int) -> bytes:
     content_length = response.headers.get("Content-Length")
     if content_length and int(content_length) > max_bytes:
         response.close()
-        raise ValueError("attachment exceeds configured compressed-size limit")
+        raise AttachmentSizeLimitExceeded(
+            "attachment exceeds configured compressed-size limit"
+        )
     chunks: list[bytes] = []
     total = 0
     try:
@@ -514,7 +520,9 @@ def _download_attachment(url: str, *, max_bytes: int) -> bytes:
                 continue
             total += len(chunk)
             if total > max_bytes:
-                raise ValueError("attachment exceeds configured compressed-size limit")
+                raise AttachmentSizeLimitExceeded(
+                    "attachment exceeds configured compressed-size limit"
+                )
             chunks.append(chunk)
     finally:
         response.close()
@@ -616,6 +624,18 @@ def process_opportunity(
                 )
             else:
                 document.update(is_renderable=False)
+        except AttachmentSizeLimitExceeded:
+            # The official opportunity remains usable through its canonical
+            # content even when an attachment is intentionally not downloaded.
+            # Preserve the link without misreporting a source/validation fault.
+            document.update(
+                is_principal=False,
+                is_renderable=False,
+                validation_outcome="attachment_size_cap_exceeded",
+            )
+            stats["attachment_size_cap_reached"] = (
+                stats.get("attachment_size_cap_reached", 0) + 1
+            )
         except Exception as exc:
             if stage in {"download", "ocr"}:
                 key = "ocr_failures" if stage == "ocr" else "download_failures"
