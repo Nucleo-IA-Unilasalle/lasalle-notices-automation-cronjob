@@ -178,7 +178,7 @@ def test_instrumented_entrypoints_use_default_off_repository_telemetry_flag() ->
         assert _env_values(document, "SOURCE_RUN_REPORTING_ENABLED") == [expected], name
 
 
-def test_closed_beta_source_admission_fences_every_discovery_entrypoint() -> None:
+def test_source_admission_mode_fences_every_discovery_entrypoint() -> None:
     discovery_workflows = {
         "pipeline-all-discovery.yml",
         "pipeline-pncp-discovery.yml",
@@ -186,14 +186,16 @@ def test_closed_beta_source_admission_fences_every_discovery_entrypoint() -> Non
         *MANUAL_SOURCE_FALLBACKS,
     }
     expected = "${{ vars.CLOSED_BETA_SOURCE_ALLOWLIST || '' }}"
+    expected_mode = "${{ vars.SOURCE_ADMISSION_MODE || 'closed_beta' }}"
     for name in discovery_workflows:
         document = _load(WORKFLOW_DIR / name)
         assert _env_values(document, "CLOSED_BETA_SOURCE_ALLOWLIST") == [expected], name
+        assert _env_values(document, "SOURCE_ADMISSION_MODE") == [expected_mode], name
         workflow = (WORKFLOW_DIR / name).read_text(encoding="utf-8")
         assert "scripts/run_managed_source.py" in workflow, name
 
 
-def test_closed_beta_schedules_only_the_selected_source_matrix() -> None:
+def test_group_schedules_use_mode_aware_fail_closed_source_matrices() -> None:
     registry = _load(WORKFLOW_DIR.parents[1] / "config" / "source_schedule.json")
     owners = {}
     for entry in registry["sources"]:
@@ -207,15 +209,17 @@ def test_closed_beta_schedules_only_the_selected_source_matrix() -> None:
         assert build_step["env"]["CLOSED_BETA_SOURCE_ALLOWLIST"] == (
             "${{ vars.CLOSED_BETA_SOURCE_ALLOWLIST || '' }}"
         )
+        assert build_step["env"]["SOURCE_ADMISSION_MODE"] == (
+            "${{ vars.SOURCE_ADMISSION_MODE || 'closed_beta' }}"
+        )
         assert "admitted == 'true'" in workflow["jobs"]["discover"]["if"]
         assert "__closed_beta_denied__" in build_step["run"]
         assert "admitted=false" in build_step["run"]
-        assert build_step["run"].index('[ -z "$CLOSED_BETA_SOURCE_ALLOWLIST" ]') < (
-            build_step["run"].index("python scripts/build_source_matrix.py")
-        )
+        assert "python scripts/build_source_matrix.py" in build_step["run"]
         assert workflow["jobs"]["discover"]["strategy"]["max-parallel"] == 3
     pncp = _load(WORKFLOW_DIR / "pipeline-pncp-discovery.yml")
     assert "CLOSED_BETA_SOURCE_ALLOWLIST == 'pncp'" in pncp["jobs"]["discover-pncp"]["if"]
+    assert "SOURCE_ADMISSION_MODE == 'legacy'" in pncp["jobs"]["discover-pncp"]["if"]
 
 
 def test_legacy_writer_routes_stop_before_their_unfenced_api_calls() -> None:
@@ -232,6 +236,9 @@ def test_legacy_writer_routes_stop_before_their_unfenced_api_calls() -> None:
         ]
         assert gates == [1], name
         assert steps[gates[0]].get("continue-on-error") is not True, name
+        assert steps[gates[0]]["env"]["SOURCE_ADMISSION_MODE"] == (
+            "${{ vars.SOURCE_ADMISSION_MODE || 'closed_beta' }}"
+        ), name
 
 
 def test_pdf_workflows_declare_the_per_run_safety_cap() -> None:

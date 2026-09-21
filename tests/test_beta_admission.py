@@ -11,8 +11,11 @@ import beta_admission
 import run_managed_source as managed
 
 
-def _env(value: str | None) -> dict[str, str]:
-    return {} if value is None else {beta_admission.ALLOWLIST_ENV: value}
+def _env(value: str | None, *, mode: str = "closed_beta") -> dict[str, str]:
+    environment = {beta_admission.MODE_ENV: mode}
+    if value is not None:
+        environment[beta_admission.ALLOWLIST_ENV] = value
+    return environment
 
 
 @pytest.mark.parametrize("value", [None, "", " bndes", "bndes ", "bndes,brde", "unknown"])
@@ -45,14 +48,41 @@ def test_allowlist_rejects_a_selected_structured_source_for_the_first_wave(monke
 
 
 def test_allowlist_rejects_a_selected_source_held_outside_ingestion() -> None:
-    with pytest.raises(beta_admission.BetaAdmissionDenied, match="held outside"):
-        beta_admission.admitted_source("canoas", environ=_env("canoas"))
+    registry = beta_admission.load_registry()
+    registry["sources"][0]["rollout_mode"] = "audit"
+    source = registry["sources"][0]["source_key"]
+    with pytest.MonkeyPatch.context() as monkeypatch:
+        monkeypatch.setattr(beta_admission, "load_registry", lambda: registry)
+        with pytest.raises(beta_admission.BetaAdmissionDenied, match="held outside"):
+            beta_admission.admitted_source(source, environ=_env(source))
 
 
 @pytest.mark.parametrize("source", ["pncp", "bndes"])
 def test_legacy_routes_are_blocked_even_when_their_source_is_selected(monkeypatch, source: str) -> None:
     monkeypatch.setenv(beta_admission.ALLOWLIST_ENV, source)
     assert beta_admission.main(["--source", source, "--legacy-route"]) == 2
+
+
+@pytest.mark.parametrize("source", ["pncp", "finep", "brde"])
+def test_legacy_mode_admits_every_ingest_contract_without_beta_allowlist(source: str) -> None:
+    assert beta_admission.admitted_source(
+        source,
+        environ={beta_admission.MODE_ENV: "legacy"},
+    ) == source
+
+
+def test_legacy_routes_are_allowed_in_legacy_mode(monkeypatch) -> None:
+    monkeypatch.setenv(beta_admission.MODE_ENV, "legacy")
+    monkeypatch.delenv(beta_admission.ALLOWLIST_ENV, raising=False)
+    assert beta_admission.main(["--source", "pncp", "--legacy-route"]) == 0
+
+
+@pytest.mark.parametrize("mode", ["", "all", "LEGACY", " legacy"])
+def test_unknown_admission_mode_fails_closed(mode: str) -> None:
+    with pytest.raises(beta_admission.BetaAdmissionDenied, match="SOURCE_ADMISSION_MODE"):
+        beta_admission.admitted_source(
+            "bndes", environ={beta_admission.MODE_ENV: mode}
+        )
 
 
 def test_managed_worker_does_not_construct_a_claim_client_when_unselected(monkeypatch) -> None:

@@ -38,8 +38,9 @@ def test_registry_has_schedule_owner_filter_and_limits():
     by_key = {s["source_key"]: s for s in registry["sources"]}
     assert by_key["tnc"]["submission_contract"] == "opportunity"
     assert by_key["funbio"]["submission_contract"] == "opportunity"
-    assert by_key["tnc"]["rollout_mode"] == "audit"
-    assert by_key["funbio"]["rollout_mode"] == "audit"
+    assert by_key["tnc"]["rollout_mode"] == "ingest"
+    assert by_key["funbio"]["rollout_mode"] == "ingest"
+    assert {entry["rollout_mode"] for entry in registry["sources"]} == {"ingest"}
 
 
 def test_registry_rejects_bad_schedule_owner():

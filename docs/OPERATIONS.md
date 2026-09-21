@@ -28,16 +28,16 @@ workflows build a strict per-source matrix from that registry with
 `scripts/build_source_matrix.py` and run each source through the reusable
 single-source job in `pipeline-discovery-source.yml`, which serializes on a
 per-source concurrency lock (`discovery-<source>`) shared with the manual
-fallback workflows. Sources with `rollout_mode: paused` stay visible in the
-registry but are omitted from scheduled execution; `audit` sources run
-discovery and fidelity verification without ingestion.
+fallback workflows. All 23 reviewed sources currently use
+`rollout_mode: ingest`; future `paused` entries remain visible but are omitted
+from scheduled execution.
 
 | Workflow | Schedule | Notes |
 |----------|----------|-------|
 | `pipeline-pncp-discovery.yml` | `05 * * * *` UTC + manual | Dedicated PNCP discover/download/OCR/submit pipeline; own `discovery-pncp` lock |
-| `pipeline-discovery-group-a.yml` | `07 * * * *` UTC + manual | bndes, brde, fao, fapergs, govbr_mma_fnma, iis_rio (canoas paused) |
-| `pipeline-discovery-group-b.yml` | `17 * * * *` UTC + manual | funbio, fundacao_grupo_boticario, govbr_mma, govbr_mma_public_calls, sema_rs, tnc (dopa paused) |
-| `pipeline-discovery-group-c.yml` | `27 * * * *` UTC + manual | kfw, msgov, unep, worldbank, wwf (fbds, finep, ibama paused) |
+| `pipeline-discovery-group-a.yml` | `07 * * * *` UTC + manual | bndes, brde, fao, fapergs, govbr_mma_fnma, iis_rio, canoas |
+| `pipeline-discovery-group-b.yml` | `17 * * * *` UTC + manual | funbio, fundacao_grupo_boticario, govbr_mma, govbr_mma_public_calls, sema_rs, tnc, dopa |
+| `pipeline-discovery-group-c.yml` | `27 * * * *` UTC + manual | kfw, msgov, unep, worldbank, wwf, fbds, finep, ibama |
 | `pipeline-all-discovery.yml` | Manual only | Manual multi-source audit/recovery; no scheduled ownership |
 | `pipeline-ai.yml` | `16 * * * *` UTC + after PNCP discovery + manual | Pacific daytime gate (08:00–19:00 year-round) |
 | `pipeline-backfill.yml` | `23 11 * * 6` UTC + manual | Legacy Render backfill rollback path |
@@ -242,10 +242,9 @@ adds the fingerprint/scope/purpose columns in ordered migrations.
   worker suite, and reset the 14-day age clock on the commit that lands it.
   The pin is a reviewed bootstrap-manifest export, not live evidence.
 
-## Staging and evidence scaffolding (NOT STARTED)
+## Staging and evidence scaffolding
 
-Placeholders only; no staging run, audit, soak, or live traffic is claimed.
-RR-01 through RR-05 remain OPEN and paused/audit holds are preserved. See
+Use the retained scaffolding for future source changes and incident replay. See
 [staging runbook](STAGING-RUNBOOK.md) for the ordered checklist,
 [evidence index](evidence/README.md) for per-source TODO slots,
 [snapshot validation](evidence/SNAPSHOT-VALIDATION.md) plus
@@ -444,7 +443,9 @@ manual tuning remains an explicit repository change:
 | `RENDER_SUBMIT_MAX_PAYLOAD_CHARS` | `9500000` | Worker aggregate submission cap below Repo A's 10M request cap |
 | `PNCP_OPPORTUNITY_V2_ENABLED` | `false` | Manual opt-in for PNCP parent/document normalization |
 | `PNCP_OPPORTUNITY_V2_SHADOW` | `true` | Keep PNCP v2 artifact-only until reconciliation passes |
-| `OPPORTUNITY_SOURCES` | empty | Structured sources explicitly enabled after audit gates |
+| `SOURCE_ADMISSION_MODE` | `closed_beta` | `closed_beta` admits one candidate source; reviewed post-beta `legacy` admits every registry source marked `ingest` |
+| `CLOSED_BETA_SOURCE_ALLOWLIST` | empty | Exact one-source selector used only in `closed_beta` mode |
+| `OPPORTUNITY_SOURCES` | `finep,fbds,dopa,canoas,ibama,tnc,funbio` | Structured sources enabled for the opportunity contract |
 
 ### PNCP filter configuration
 
@@ -487,10 +488,9 @@ is required. The workflow caches `/home/runner/.paddlex`; its older PaddleOCR
 a callable `discover_opportunities()` before selecting the legacy PDF path.
 Structured sources can return a stable opportunity with `documents: []` or
 source Markdown, so a documentless opportunity is valid and is not represented
-by a fabricated PDF. `finep` and `fbds` always use the structured path when
-selected; other sources require an explicitly enabled `OPPORTUNITY_SOURCES`
-key or an audit-only run. Otherwise the scheduled legacy candidate path
-remains the default.
+by a fabricated PDF. The canonical schedule passes each registry-declared
+`submission_contract`; all seven structured keys are also retained in
+`OPPORTUNITY_SOURCES` as an explicit operational allowlist.
 
 On the canonical group schedules, `DISCOVERY_AUDIT_ONLY`
 is derived from the registry `rollout_mode` (`audit=true`, `ingest=false`).
@@ -639,12 +639,9 @@ python scripts/discover_govbr_mma_fnma_candidates.py --audit-dir artifacts/mma-f
 ```
 
 Both directories contain `source_inventory.json`, `discovery.json`,
-`candidates.json`, and `stats.json`. Keep both MMA keys out of the scheduled
-default until the public-calls audit passes first, then enable FNMA in a later
-production run.
-
-Enable `govbr_mma_public_calls` first, then `govbr_mma_fnma`; do not enable
-both in the same first production run (see the MMA discovery section above).
+`candidates.json`, and `stats.json`. Both MMA adapters passed the consolidated
+technical audit and are now scheduled; retain these commands for regression
+audits and roll back either key independently on a production failure.
 
 ## Structured opportunity rollout
 
@@ -653,16 +650,19 @@ both in the same first production run (see the MMA discovery section above).
 keeps ZIP/DOCX/ODS attachments non-renderable, OCRs safe PDF members from ZIPs
 in memory, and submits source Markdown even when attachment validation fails.
 
-Run one source at a time with `DISCOVERY_AUDIT_DIR=artifacts/source-audits`.
-Upload the workflow artifact, run `audit_source_fidelity.py` against the
-source's inventory/discovery files, and require two consecutive passing live
-runs before adding the source to the scheduled default. Roll back by removing
-only that key from `SOURCES`.
+All seven passed the consolidated technical audit and were promoted to the
+canonical production schedule by operator decision on 2026-09-21. Roll back a
+source by changing only its registry `rollout_mode` to `paused`; do not disable
+an entire owner group for a single-source incident.
+
+For a future source or material adapter change, run one source at a time with
+`DISCOVERY_AUDIT_DIR=artifacts/source-audits`, upload the artifact, and run
+`audit_source_fidelity.py` against its inventory/discovery files before
+promotion.
 
 Manual runs of `pipeline-all-discovery.yml` default to
-`DISCOVERY_AUDIT_ONLY=true`, which skips OCR and all Render submissions. After
-two reviewed passing runs, add the source key to the `OPPORTUNITY_SOURCES`
-repository variable to opt it into the structured submission contract.
+`DISCOVERY_AUDIT_ONLY=true`, which skips OCR and all Render submissions. The
+production `OPPORTUNITY_SOURCES` variable contains all seven structured keys.
 
 Audit-only orchestration verifies the emitted inventory/discovery artifacts
 in-process before reporting terminal source-run telemetry. Fidelity blockers
@@ -679,18 +679,13 @@ call slug. `FUNBIO_NEWS_ENABLED` defaults off. When enabled, news is resolved
 only by exact canonical URL/slug/source ID and unresolved likely calls are not
 submitted.
 
-DOPA is registered in the unified orchestrator but remains audit-only unless
-an operator explicitly includes it in `OPPORTUNITY_SOURCES`; it is absent from
-the scheduled source list. Keep that opt-in disabled until two consecutive
-fidelity runs pass. Its deterministic policy rejects
+DOPA runs through the structured production schedule. Its deterministic policy rejects
 post-publication acts (`resultado`, `ata`, `homologacao`, `errata`, and similar)
 and ordinary procurement terms covered by PNCP (`pregao`, `licitacao`,
 `registro de precos`, and similar). The API's whole-edition PDF is never used;
 only the per-content exported PDF and source-listed PDF annexes are retained.
 
-Canoas is also registered in the unified orchestrator but remains audit-only
-until an operator explicitly includes `canoas` in `OPPORTUNITY_SOURCES`; it is
-absent from the scheduled source list. Its DOMC publication id is the stable
+Canoas also runs through the structured production schedule. Its DOMC publication id is the stable
 identity. The discoverer first inventories `diary-by-day`, then searches the
 official WordPress `licitacoes` REST API. A match requires equal number/year,
 a publication date within seven days, compatible semantic signals, and a
@@ -714,9 +709,8 @@ into the principal opportunity and never emitted as independent opportunities.
 Results, notifications, embargos, brigadistas, patrimonial donations and
 ordinary PNCP procurement are rejected deterministically. A detail/feed error,
 inventory parse error, or cap reached sets `inventory_parse_failed` and must
-fail the audit run rather than advancing an incomplete inventory. IBAMA remains
-out of the scheduled `SOURCES` default and requires `OPPORTUNITY_SOURCES=ibama`
-for non-audit submission.
+fail the run rather than advancing an incomplete inventory. IBAMA is included
+in both the canonical group C schedule and `OPPORTUNITY_SOURCES`.
 
 ## PNCP opportunity normalization
 
@@ -742,8 +736,8 @@ Durable processing reports actual download/OCR and acknowledged submission
 outcomes independently of spool completion. Ambiguous submission acknowledgments
 remain failures/retries, not accepted counts. The freshness report separates
 recent but failing/warning/checking/unknown sources into `unhealthy`; recent run
-timestamps alone do not pass monitoring. These fixes do not close RR-01 through
-RR-05 or change any paused/audit rollout holds.
+timestamps alone do not pass monitoring. Production health is established by
+observed scheduled runs, not by the rollout configuration alone.
 
 The all-source workflow passes its run number as `SOURCE_ROTATION_OFFSET`.
 The orchestrator rotates the configured priority list without increasing the
