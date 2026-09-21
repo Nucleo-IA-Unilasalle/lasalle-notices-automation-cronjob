@@ -54,11 +54,15 @@ def main() -> int:
     headers = {"Authorization": f"Bearer {secret}", "Content-Type": "application/json"}
     checked_at = datetime.now(timezone.utc).isoformat()
     try:
-        resp = requests.get(f"{backend}/api/sources/summary", headers=headers, timeout=20)
+        resp = requests.get(f"{backend}/api/pipeline/source-monitor", headers=headers, timeout=20)
         resp.raise_for_status()
-        summary = resp.json()
+        payload = resp.json()
+        summary = payload["summary"]
+        items = payload["items"]
+        if not isinstance(summary, dict) or not isinstance(items, list):
+            raise ValueError("source monitor response has an invalid shape")
     except Exception as exc:
-        print(f"monitoring incident: cannot read catalog summary: {exc}", file=sys.stderr)
+        print(f"monitoring incident: cannot read source monitor projection: {exc}", file=sys.stderr)
         report = {
             "checked_at": checked_at,
             "stale_threshold_minutes": args.stale_minutes,
@@ -69,16 +73,6 @@ def main() -> int:
             "healthy": [],
         }
         Path(args.output).write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
-        return 1
-
-    # Summary is aggregate-only; per-source detail requires the public list.
-    # Missing samples are unknown, never compliant by default.
-    try:
-        detail = requests.get(f"{backend}/api/sources?limit=100", headers=headers, timeout=20)
-        detail.raise_for_status()
-        items = detail.json().get("items", [])
-    except Exception as exc:
-        print(f"monitoring incident: cannot read source list: {exc}", file=sys.stderr)
         return 1
 
     by_key = {i.get("source_key"): i for i in items if isinstance(i, dict)}

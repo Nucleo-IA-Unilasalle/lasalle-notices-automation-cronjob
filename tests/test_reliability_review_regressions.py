@@ -153,8 +153,11 @@ def test_recent_failed_sources_are_not_monitor_healthy(monkeypatch, tmp_path, he
     expected = [s["source_key"] for s in json.loads(monitor.REGISTRY_PATH.read_text())["sources"]
                 if s["rollout_mode"] != "paused"]
     response = Mock()
-    response.json.return_value = {"items": [{"source_key": key, "health_status": health,
-        "last_checked_at": datetime.now(timezone.utc).isoformat()} for key in expected]}
+    response.json.return_value = {
+        "summary": {"active_sources_count": len(expected)},
+        "items": [{"source_key": key, "health_status": health,
+            "last_checked_at": datetime.now(timezone.utc).isoformat()} for key in expected],
+    }
     monkeypatch.setattr(monitor.requests, "get", lambda *a, **kw: response)
     assert monitor.main() == int(health != "healthy")
     report = json.loads(output.read_text())
