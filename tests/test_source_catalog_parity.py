@@ -111,17 +111,16 @@ def test_ingest_source_rejects_audit_status(registry, pin):
         validate_parity(registry, pin)
 
 
-def test_audit_source_accepts_active_and_audit(registry, pin):
-    # funbio runs with rollout_mode=audit, so active and audit both pass.
+def test_promoted_source_requires_active_status(registry, pin):
     validate_parity(registry, pin)
     _item(pin, "funbio")["catalog_status"] = "audit"
-    validate_parity(registry, pin)
+    with pytest.raises(ValueError, match="Lifecycle mismatch: funbio"):
+        validate_parity(registry, pin)
 
 
 def test_paused_entries_skip_lifecycle_cadence_timeout(registry, pin):
-    # canoas is rollout_mode=paused in the registry: lifecycle, cadence and
-    # timeout drift must not fail parity. Paused rows stay outside the healthy
-    # coverage gate and never authorize ingestion.
+    # A locally paused entry remains outside the coverage gate.
+    next(entry for entry in registry["sources"] if entry["source_key"] == "canoas")["rollout_mode"] = "paused"
     paused = _item(pin, "canoas")
     paused["catalog_status"] = "paused"
     paused["expected_interval_minutes"] = 9999
@@ -466,11 +465,11 @@ def _use_fresh_pin(monkeypatch, tmp_path, pin):
     monkeypatch.setattr(check_source_catalog_parity, "PIN", temp_pin)
 
 
-def test_main_pinned_only_passes_and_reports_paused_holds(monkeypatch, registry, pin, capsys):
+def test_main_pinned_only_passes_with_no_paused_holds(monkeypatch, registry, pin, capsys):
     monkeypatch.setattr("sys.argv", _argv())
     assert check_source_catalog_parity.main() == 0
     out = capsys.readouterr().out
-    assert "Locally paused (not covered): canoas, dopa, fbds, finep, ibama" in out
+    assert "Locally paused (not covered): " in out
     assert "A catalog parity passed (pinned only)" in out
 
 

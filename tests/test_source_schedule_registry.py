@@ -85,14 +85,29 @@ def test_builder_matrices_emit_only_the_selected_closed_beta_source(
     registry = _registry()
     executable: set[str] = set()
     for group_id in ("a", "b", "c"):
-        matrix = builder.build_matrix(registry, group_id, admitted_source=selected)
+        matrix = builder.build_matrix(registry, group_id, admitted_sources={selected})
         keys = [entry["source"] for entry in matrix["includes"]]
         assert len(keys) == len(set(keys))
         executable |= set(keys)
         assert bool(keys) is (group_id == selected_group)
     assert executable == {selected}
-    paused = {s["source_key"] for s in registry["sources"] if s["rollout_mode"] == "paused"}
-    assert paused == {"canoas", "dopa", "fbds", "finep", "ibama"}
+    assert {s["rollout_mode"] for s in registry["sources"]} == {"ingest"}
+
+
+def test_legacy_builder_emits_every_ingest_source() -> None:
+    registry = _registry()
+    admitted = builder.admitted_source_keys(
+        registry, environ={builder.ADMISSION_MODE_ENV: "legacy"}
+    )
+    assert admitted == {entry["source_key"] for entry in registry["sources"]}
+    executable = {
+        entry["source"]
+        for group_id in ("a", "b", "c")
+        for entry in builder.build_matrix(
+            registry, group_id, admitted_sources=admitted
+        )["includes"]
+    }
+    assert executable == admitted - {"pncp"}
 
 
 @pytest.mark.parametrize("value", [None, "", " bndes", "bndes,brde", "unknown", "funbio"])
@@ -112,21 +127,21 @@ def test_builder_fails_closed_on_duplicate_key(tmp_path) -> None:
     registry = _registry()
     registry["sources"].append(dict(registry["sources"][0]))
     with pytest.raises(SystemExit):
-        builder.build_matrix(registry, "a", admitted_source="bndes")
+        builder.build_matrix(registry, "a", admitted_sources={"bndes"})
 
 
 def test_builder_fails_closed_on_unknown_key() -> None:
     registry = _registry()
     registry["sources"][0]["source_key"] = "not_a_real_source"
     with pytest.raises(SystemExit):
-        builder.build_matrix(registry, "a", admitted_source="bndes")
+        builder.build_matrix(registry, "a", admitted_sources={"bndes"})
 
 
 def test_builder_fails_closed_on_invalid_rollout_mode() -> None:
     registry = _registry()
     registry["sources"][0]["rollout_mode"] = "silent_ingest"
     with pytest.raises(SystemExit):
-        builder.build_matrix(registry, "a", admitted_source="bndes")
+        builder.build_matrix(registry, "a", admitted_sources={"bndes"})
 
 
 def test_builder_cli_emits_github_format(tmp_path) -> None:
@@ -139,3 +154,18 @@ def test_builder_cli_emits_github_format(tmp_path) -> None:
     includes = json.loads(result.stdout.strip())
     assert {e["source"] for e in includes} == {"bndes"}
     assert {e["rollout_mode"] for e in includes} == {"ingest"}
+
+
+def test_builder_cli_emits_full_group_in_legacy_mode() -> None:
+    result = subprocess.run(
+        [sys.executable, str(PROJECT_ROOT / "scripts" / "build_source_matrix.py"), "--group", "a", "--format", "github"],
+        capture_output=True,
+        text=True,
+        cwd=PROJECT_ROOT,
+        env={**os.environ, builder.ADMISSION_MODE_ENV: "legacy", builder.ADMISSION_ENV: ""},
+    )
+    assert result.returncode == 0, result.stderr
+    includes = json.loads(result.stdout.strip())
+    assert {entry["source"] for entry in includes} == {
+        "bndes", "brde", "fao", "fapergs", "govbr_mma_fnma", "iis_rio", "canoas"
+    }

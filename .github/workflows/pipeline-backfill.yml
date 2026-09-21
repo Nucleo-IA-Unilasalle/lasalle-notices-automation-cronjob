@@ -29,6 +29,7 @@ jobs:
       - name: Block unfenced legacy backfill in closed beta
         run: python scripts/beta_admission.py --source pncp --legacy-route
         env:
+          SOURCE_ADMISSION_MODE: ${{ vars.SOURCE_ADMISSION_MODE || 'closed_beta' }}
           CLOSED_BETA_SOURCE_ALLOWLIST: ${{ vars.CLOSED_BETA_SOURCE_ALLOWLIST || '' }}
 
       - name: Trigger pipeline step

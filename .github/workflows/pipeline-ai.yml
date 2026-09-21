@@ -39,6 +39,7 @@ jobs:
       - name: Block unfenced legacy AI trigger in closed beta
         run: python scripts/beta_admission.py --source pncp --legacy-route
         env:
+          SOURCE_ADMISSION_MODE: ${{ vars.SOURCE_ADMISSION_MODE || 'closed_beta' }}
           CLOSED_BETA_SOURCE_ALLOWLIST: ${{ vars.CLOSED_BETA_SOURCE_ALLOWLIST || '' }}
 
       - name: Check Pacific daytime window and trigger

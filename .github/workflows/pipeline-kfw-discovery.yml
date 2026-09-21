@@ -41,6 +41,7 @@ jobs:
           FILTER_POLICY: "default"
           RENDER_APP_URL: ${{ secrets.RENDER_APP_URL }}
           PIPELINE_SECRET: ${{ secrets.PIPELINE_SECRET }}
+          SOURCE_ADMISSION_MODE: ${{ vars.SOURCE_ADMISSION_MODE || 'closed_beta' }}
           CLOSED_BETA_SOURCE_ALLOWLIST: ${{ vars.CLOSED_BETA_SOURCE_ALLOWLIST || '' }}
           KFW_MAX_CANDIDATES_PER_RUN: "50"
           KFW_FETCH_MAX_ATTEMPTS: "3"
