@@ -673,15 +673,19 @@ def _has_renderable_pdf(opportunity: dict[str, Any]) -> bool:
 
 
 def _read_documentless_capability(payload: Any) -> bool:
-    """Parse only Repo A's exact capabilities response contract."""
+    """Parse Repo A's required capability fields.
+
+    The capabilities endpoint is additive: unrelated admission fields may be
+    introduced without invalidating the documentless-opportunity contract.
+    """
     expected_keys = {
         "status",
         "documentless_opportunities_enabled",
         "documentless_opportunity_rollout",
     }
-    if not isinstance(payload, dict) or set(payload) != expected_keys:
+    if not isinstance(payload, dict) or not expected_keys <= set(payload):
         raise CapabilityPreflightError(
-            "Repo A capabilities response does not match the exact contract"
+            "Repo A capabilities response is missing required fields"
         )
     if payload["status"] != "ok":
         raise CapabilityPreflightError(

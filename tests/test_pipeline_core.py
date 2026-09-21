@@ -647,6 +647,13 @@ class TestDocumentlessCapability:
                 "status": "ok",
                 "documentless_opportunities_enabled": enabled,
                 "documentless_opportunity_rollout": rollout,
+                "source_claim_enforcement": "strict",
+                "source_admission_mode": "legacy",
+                "source_admission_ready": True,
+                "admitted_source": None,
+                "admitted_contract": None,
+                "source_admission_reason": None,
+                "legacy_pipeline_triggers_enabled": True,
             }
         ) is enabled
 
@@ -658,12 +665,6 @@ class TestDocumentlessCapability:
                 "status": "ok",
                 "documentless_opportunities": True,
                 "documentless_opportunity_rollout": "enabled",
-            },
-            {
-                "status": "ok",
-                "documentless_opportunities_enabled": True,
-                "documentless_opportunity_rollout": "enabled",
-                "capabilities": {},
             },
             {
                 "status": "ready",
