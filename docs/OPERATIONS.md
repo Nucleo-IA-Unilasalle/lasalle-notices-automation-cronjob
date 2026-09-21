@@ -28,8 +28,9 @@ workflows build a strict per-source matrix from that registry with
 `scripts/build_source_matrix.py` and run each source through the reusable
 single-source job in `pipeline-discovery-source.yml`, which serializes on a
 per-source concurrency lock (`discovery-<source>`) shared with the manual
-fallback workflows. All 23 reviewed sources currently use
-`rollout_mode: ingest`; future `paused` entries remain visible but are omitted
+fallback workflows. Twenty-two reviewed sources currently use
+`rollout_mode: ingest`; WWF is held in `paused` after a confirmed live-origin
+HTTP 403 on 2026-09-21. `paused` entries remain visible but are omitted
 from scheduled execution.
 
 | Workflow | Schedule | Notes |
