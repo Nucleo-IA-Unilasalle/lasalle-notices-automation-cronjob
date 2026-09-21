@@ -416,19 +416,24 @@ def parse_funbio_opportunity(
     now = datetime.now(timezone.utc)
     status = "open" if deadline and deadline >= now else ("closed" if deadline else "unknown")
     documents = []
+    principal_pdf_seen = False
     for index, href in enumerate(extract_funbio_pdf_urls(BeautifulSoup(detail_html, "html.parser"), detail_url), start=1):
         url = urljoin(detail_url, href)
+        is_pdf = looks_like_pdf_url(url)
+        is_principal = is_pdf and not principal_pdf_seen
+        principal_pdf_seen = principal_pdf_seen or is_pdf
         documents.append(
             {
                 "source_document_id": str(index),
-                "document_kind": "pdf",
+                # FUNBIO's /download/regulamento route currently returns an
+                # HTML application page, not PDF bytes. Preserve it as a
+                # source attachment without sending it through PDF validation.
+                "document_kind": "pdf" if is_pdf else "other",
                 "url": url,
                 "filename": urlsplit(url).path.rsplit("/", 1)[-1] or "regulamento.pdf",
-                "mime_type": "application/pdf",
-                # The FUNBIO regulamento download is the principal edital
-                # document for each call; later PDFs are annexes.
-                "is_principal": index == 1,
-                "is_renderable": index == 1,
+                "mime_type": "application/pdf" if is_pdf else "text/html",
+                "is_principal": is_principal,
+                "is_renderable": is_principal,
             }
         )
     canonical = urlunsplit((*urlsplit(detail_url)[:3], "", ""))
