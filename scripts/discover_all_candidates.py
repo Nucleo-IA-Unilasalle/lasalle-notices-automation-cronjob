@@ -922,7 +922,12 @@ def main() -> int:
                     if submit_result.get("submitted", 0) == 0:
                         reporter.complete(status="failed")
 
-        except Exception:
+        except Exception as exc:
+            print(
+                f"error: source execution failed for {source!r}: "
+                f"{type(exc).__name__}: {exc}",
+                file=sys.stderr,
+            )
             reporter.record_error("scraping_failed")
             reporter.complete(status="failed")
             exit_code = 1
