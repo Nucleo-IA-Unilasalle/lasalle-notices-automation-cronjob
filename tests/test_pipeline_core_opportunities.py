@@ -107,6 +107,37 @@ def test_zip_members_are_skipped_once_the_pdf_cap_is_reached(monkeypatch) -> Non
     extractor.extract.assert_not_called()
 
 
+def test_oversized_attachment_preserves_documentless_opportunity(monkeypatch) -> None:
+    def _oversized(*_args, **_kwargs):
+        raise pipeline_core.AttachmentSizeLimitExceeded("too large")
+
+    monkeypatch.setattr(pipeline_core, "_download_attachment", _oversized)
+    stats: dict[str, int] = {}
+    processed = pipeline_core.process_opportunity(
+        {
+            "source_key": "fbds",
+            "source_record_id": "large-archive",
+            "source_markdown": "# Official call",
+            "documents": [
+                {
+                    "document_kind": "zip",
+                    "url": "https://example.org/large.zip",
+                    "is_principal": False,
+                    "is_renderable": False,
+                }
+            ],
+        },
+        extractor=object(),
+        stats=stats,
+    )
+
+    assert stats["attachment_size_cap_reached"] == 1
+    assert processed["documents"][0]["validation_outcome"] == (
+        "attachment_size_cap_exceeded"
+    )
+    assert processed["documents"][0]["is_renderable"] is False
+
+
 def test_process_opportunity_promotes_first_validated_pdf_to_principal(
     monkeypatch,
 ) -> None:

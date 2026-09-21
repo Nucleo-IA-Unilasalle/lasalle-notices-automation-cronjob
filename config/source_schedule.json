@@ -283,7 +283,7 @@
       "submission_contract": "candidate",
       "group": "c",
       "browser_required": false,
-      "rollout_mode": "ingest",
+      "rollout_mode": "paused",
       "schedule_owner": "pipeline-discovery-group-c.yml",
       "interval_minutes": 60,
       "filter_policy": "default",

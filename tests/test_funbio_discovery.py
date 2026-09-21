@@ -352,7 +352,7 @@ class TestParseFunbioOpportunity:
         # 25/09/2026 23:59 America/Sao_Paulo == 26/09/2026 02:59 UTC
         assert record["application_deadline"] == "2026-09-26T02:59:00+00:00"
 
-    def test_regulamento_is_principal_document(self) -> None:
+    def test_html_regulamento_route_is_not_claimed_as_pdf(self) -> None:
         from datetime import datetime, timezone
 
         from discover_funbio_candidates import parse_funbio_opportunity
@@ -364,11 +364,31 @@ class TestParseFunbioOpportunity:
         assert record is not None
         docs = record["documents"]
         assert len(docs) == 1
-        assert docs[0]["is_principal"] is True
-        assert docs[0]["is_renderable"] is True
+        assert docs[0]["document_kind"] == "other"
+        assert docs[0]["mime_type"] == "text/html"
+        assert docs[0]["is_principal"] is False
+        assert docs[0]["is_renderable"] is False
         assert docs[0]["url"].startswith(
             "https://chamadas.funbio.org.br/planodemanejo-rppn/download/regulamento",
         )
+
+    def test_direct_pdf_remains_the_principal_document(self) -> None:
+        from datetime import datetime, timezone
+
+        from discover_funbio_candidates import parse_funbio_opportunity
+
+        html = self.DETAIL_HTML.replace(
+            "planodemanejo-rppn/download/regulamento?id=abc",
+            "documentos/regulamento-2026.pdf",
+        )
+        record = parse_funbio_opportunity(
+            DETAIL_URL, html,
+            snapshot_at=datetime(2026, 9, 14, 12, 0, tzinfo=timezone.utc),
+        )
+        assert record is not None
+        assert record["documents"][0]["document_kind"] == "pdf"
+        assert record["documents"][0]["is_principal"] is True
+        assert record["documents"][0]["is_renderable"] is True
 
     def test_past_deadline_marks_closed(self) -> None:
         from datetime import datetime, timezone

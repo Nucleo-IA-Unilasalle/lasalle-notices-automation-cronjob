@@ -40,7 +40,10 @@ def test_registry_has_schedule_owner_filter_and_limits():
     assert by_key["funbio"]["submission_contract"] == "opportunity"
     assert by_key["tnc"]["rollout_mode"] == "ingest"
     assert by_key["funbio"]["rollout_mode"] == "ingest"
-    assert {entry["rollout_mode"] for entry in registry["sources"]} == {"ingest"}
+    assert by_key["wwf"]["rollout_mode"] == "paused"
+    assert sum(
+        entry["rollout_mode"] == "ingest" for entry in registry["sources"]
+    ) == 22
 
 
 def test_registry_rejects_bad_schedule_owner():

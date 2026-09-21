@@ -91,7 +91,11 @@ def test_builder_matrices_emit_only_the_selected_closed_beta_source(
         executable |= set(keys)
         assert bool(keys) is (group_id == selected_group)
     assert executable == {selected}
-    assert {s["rollout_mode"] for s in registry["sources"]} == {"ingest"}
+    assert {
+        entry["source_key"]
+        for entry in registry["sources"]
+        if entry["rollout_mode"] == "paused"
+    } == {"wwf"}
 
 
 def test_legacy_builder_emits_every_ingest_source() -> None:
@@ -99,7 +103,12 @@ def test_legacy_builder_emits_every_ingest_source() -> None:
     admitted = builder.admitted_source_keys(
         registry, environ={builder.ADMISSION_MODE_ENV: "legacy"}
     )
-    assert admitted == {entry["source_key"] for entry in registry["sources"]}
+    assert admitted == {
+        entry["source_key"]
+        for entry in registry["sources"]
+        if entry["rollout_mode"] == "ingest"
+    }
+    assert len(admitted) == 22
     executable = {
         entry["source"]
         for group_id in ("a", "b", "c")
