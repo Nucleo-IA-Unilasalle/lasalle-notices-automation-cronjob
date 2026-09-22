@@ -613,6 +613,52 @@ def test_partial_attachment_snapshot_is_never_submitted(monkeypatch):
                            "error_code": "attachment_validation_failed"}
 
 
+def test_rejected_opportunity_ack_logs_sanitized_failure_context(monkeypatch, capsys):
+    _drain_env(monkeypatch)
+    monkeypatch.setenv("PIPELINE_SECRET", "pipeline-secret-value")
+    monkeypatch.setenv("SOURCE_CLAIM_TOKEN", "claim-secret-value")
+    item = {"id": 34, "revision": 1, "contract": "opportunity",
+            "payload": {"source_key": "demo", "source_record_id": "record-12"}}
+    takes = [_take_batch([item]), _take_batch([])]
+    finishes = []
+
+    def _fake_work(action, **kwargs):
+        if action == "take":
+            return takes.pop(0)
+        finishes.append(kwargs)
+        return {"backlog": {}}
+
+    client = Mock()
+    client.work.side_effect = _fake_work
+    monkeypatch.setattr(durable, "SourceControl", lambda source: client)
+    monkeypatch.setattr(pipeline_core, "make_default_ocr_extractor",
+                        lambda: (object(), object()))
+    monkeypatch.setattr(pipeline_core, "process_opportunity",
+                        lambda opportunity, **kwargs: {"documents": [
+                            {"validation_outcome": "valid_pdf"}]})
+    monkeypatch.setattr(pipeline_core, "submit_opportunities", lambda opps: {
+        "submitted": 0,
+        "failed": 1,
+        "errors": ["Bearer pipeline-secret-value claim-secret-value"],
+        "access_token": "claim-secret-value",
+        "outcome_counts": {"invalid": 1},
+    })
+
+    reporter = _drain_reporter()
+    assert durable.drain("demo", reporter, {}) == 1
+
+    assert finishes[0]["error_code"] == "submission_failed"
+    error_output = capsys.readouterr().err
+    assert '"item_id": 34' in error_output
+    assert '"source_record_id": "record-12"' in error_output
+    assert '"error_code": "submission_failed"' in error_output
+    assert '"validation_outcomes": ["valid_pdf"]' in error_output
+    assert '"submitted": 0' in error_output
+    assert '"access_token": "[REDACTED]"' in error_output
+    assert "pipeline-secret-value" not in error_output
+    assert "claim-secret-value" not in error_output
+
+
 @pytest.mark.parametrize("outcome", [
     "pdf_validation_failed",          # PDF download or OCR failure
     "zip_validation_failed",          # archive download/inspection failure

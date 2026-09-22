@@ -24,7 +24,9 @@ from page 1 because new calls can shift publication order. The server
 additionally bounds ``records_registered`` against the spool row count, a
 coarse prefix guard, not per-identity proof.
 """
+import json
 import os
+import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -171,6 +173,60 @@ def _record_submission(reporter, result):
     })
 
 
+_SENSITIVE_LOG_KEY = re.compile(
+    r"(?:authorization|cookie|password|secret|token|api[_-]?key)", re.IGNORECASE)
+_BEARER_VALUE = re.compile(r"(?i)(bearer\s+)[^\s,;]+")
+_URL_CREDENTIALS = re.compile(r"(?i)(https?://)[^/@\s]+@")
+
+
+def _sanitize_log_value(value):
+    """Keep failure diagnostics useful without exposing worker credentials."""
+    if isinstance(value, dict):
+        return {
+            str(key): (
+                "[REDACTED]"
+                if _SENSITIVE_LOG_KEY.search(str(key))
+                else _sanitize_log_value(item)
+            )
+            for key, item in value.items()
+        }
+    if isinstance(value, (list, tuple)):
+        return [_sanitize_log_value(item) for item in value]
+    if isinstance(value, str):
+        sanitized = value
+        for env_name in ("PIPELINE_SECRET", "SOURCE_CLAIM_TOKEN"):
+            secret = os.environ.get(env_name)
+            if secret:
+                sanitized = sanitized.replace(secret, "[REDACTED]")
+        sanitized = _BEARER_VALUE.sub(r"\1[REDACTED]", sanitized)
+        return _URL_CREDENTIALS.sub(r"\1[REDACTED]@", sanitized)
+    if value is None or isinstance(value, (bool, int, float)):
+        return value
+    return str(value)
+
+
+def _log_opportunity_failure(item, error_code, *, processed=None, submit_result=None):
+    payload = item.get("payload") if isinstance(item.get("payload"), dict) else {}
+    documents = processed.get("documents", []) if isinstance(processed, dict) else []
+    validation_outcomes = [
+        document.get("validation_outcome")
+        for document in documents
+        if isinstance(document, dict)
+    ]
+    details = {
+        "item_id": item.get("id"),
+        "source_record_id": payload.get("source_record_id"),
+        "error_code": error_code,
+        "validation_outcomes": validation_outcomes,
+        "submission_result": _sanitize_log_value(submit_result),
+    }
+    print(
+        "warning: opportunity drain failed: "
+        + json.dumps(details, ensure_ascii=True, sort_keys=True),
+        file=sys.stderr,
+    )
+
+
 def _drain_candidate(client, source, item, extractor_pair, stats, reporter):
     _config, extractor = extractor_pair
     payload = item["payload"]
@@ -233,6 +289,7 @@ def _drain_opportunity(source, item, extractor_pair, stats, reporter):
             item["payload"], extractor=extractor, stats=stats)
     except Exception as exc:
         print(f"warning: opportunity processing failed for {source}: {exc}", file=sys.stderr)
+        _log_opportunity_failure(item, "processing_failed")
         return ("failed", "processing_failed")
     finally:
         delta = {key: stats.get(key, 0) - before[key] for key in keys}
@@ -249,15 +306,25 @@ def _drain_opportunity(source, item, extractor_pair, stats, reporter):
         # *_validation_failed attachment outcome — download, OCR, size-cap,
         # or archive-inspection failure — not just a download error, and it
         # must not be conflated with candidate-path download failures.
+        _log_opportunity_failure(
+            item, "attachment_validation_failed", processed=processed)
         return ("failed", "attachment_validation_failed")
     try:
         submit_result = pipeline_core.submit_opportunities([processed])
     except Exception as exc:
         print(f"warning: opportunity submission failed for {source}: {exc}", file=sys.stderr)
+        _log_opportunity_failure(
+            item, "submission_failed", processed=processed)
         return ("failed", "submission_failed")
     _record_submission(reporter, submit_result)
     if _submission_accepted(submit_result, 1):
         return ("accepted", None)
+    _log_opportunity_failure(
+        item,
+        "submission_failed",
+        processed=processed,
+        submit_result=submit_result,
+    )
     return ("failed", "submission_failed")
 
 
