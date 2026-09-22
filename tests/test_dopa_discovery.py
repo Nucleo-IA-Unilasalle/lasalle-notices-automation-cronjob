@@ -59,6 +59,7 @@ def test_detail_content_and_owned_attachments_are_normalized():
     assert opportunity is not None
     assert opportunity["source_key"] == "dopa"
     assert opportunity["source_record_id"] == "9001"
+    assert opportunity["opportunity_type"] == "other"
     assert opportunity["authoritative_status"] == "open"
     assert opportunity["application_deadline"] == "2026-10-01T02:59:59+00:00"
     assert opportunity["source_published_at"] == "2026-08-20T03:00:00+00:00"

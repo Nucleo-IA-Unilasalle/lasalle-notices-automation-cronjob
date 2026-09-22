@@ -867,7 +867,10 @@ def _parse_dopa_detail(
         "source_key": SOURCE_KEY,
         "source_record_id": record_id,
         "source_kind": "api",
-        "opportunity_type": "public_call",
+        # Repo A's structured contract has no public-call vocabulary. DOPA
+        # also mixes civic-adoption calls and public hiring notices, so the
+        # contract's neutral catch-all is the only accurate shared value.
+        "opportunity_type": "other",
         "canonical_url": detail_canonical,
         "title": title,
         "description": normalized_content or None,
