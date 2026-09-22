@@ -111,6 +111,22 @@ def main() -> int:
         "healthy": healthy,
         "unhealthy": unhealthy,
         "summary": summary,
+        "source_status": {
+            key: {
+                field: by_key[key].get(field)
+                for field in (
+                    "health_status",
+                    "last_checked_at",
+                    "last_run_inventory_seen",
+                    "last_run_inserted",
+                    "last_run_updated",
+                    "last_run_duplicates",
+                    "last_run_errors",
+                )
+            }
+            for key in expected
+            if key in by_key
+        },
     }
     Path(args.output).write_text(json.dumps(report, indent=2, default=str) + "\n", encoding="utf-8")
     print(f"freshness: {len(healthy)} healthy, {len(unhealthy)} unhealthy, {len(stale)} stale, {len(missing)} missing of {len(expected)} expected")

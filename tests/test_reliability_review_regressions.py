@@ -163,3 +163,9 @@ def test_recent_failed_sources_are_not_monitor_healthy(monkeypatch, tmp_path, he
     report = json.loads(output.read_text())
     assert report["healthy"] == (expected if health == "healthy" else [])
     assert report["unhealthy"] == ([] if health == "healthy" else expected)
+    assert report["source_status"][expected[0]]["health_status"] == health
+    assert set(report["source_status"][expected[0]]) == {
+        "health_status", "last_checked_at", "last_run_inventory_seen",
+        "last_run_inserted", "last_run_updated", "last_run_duplicates",
+        "last_run_errors",
+    }
