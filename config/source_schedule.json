@@ -4,16 +4,19 @@
   "groups": {
     "a": {
       "primary_cron": "7 * * * *",
+      "backup_collection_cron": "32 * * * *",
       "recovery_cron": "37 * * * *",
       "recovery_enabled": false
     },
     "b": {
       "primary_cron": "17 * * * *",
+      "backup_collection_cron": "42 * * * *",
       "recovery_cron": "47 * * * *",
       "recovery_enabled": false
     },
     "c": {
       "primary_cron": "27 * * * *",
+      "backup_collection_cron": "52 * * * *",
       "recovery_cron": "57 * * * *",
       "recovery_enabled": false
     }

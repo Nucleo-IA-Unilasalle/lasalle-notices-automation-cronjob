@@ -93,6 +93,9 @@ def validate_registry(registry: dict[str, Any]) -> list[dict[str, Any]]:
         primary = entry.get("primary_cron")
         if not isinstance(primary, str) or not primary.endswith("* * * *"):
             _fail(errors, f"group {group_id} primary_cron must be an hourly cron")
+        backup = entry.get("backup_collection_cron")
+        if not isinstance(backup, str) or not backup.endswith("* * * *") or backup == primary:
+            _fail(errors, f"group {group_id} backup_collection_cron must be a distinct hourly cron")
 
     for entry in sources:
         if not isinstance(entry, dict):

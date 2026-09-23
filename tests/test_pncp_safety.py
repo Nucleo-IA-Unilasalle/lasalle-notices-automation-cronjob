@@ -21,6 +21,5 @@ def test_invalid_pncp_safety_env_values_fall_back_to_safe_defaults(monkeypatch) 
     assert module.PNCP_PAGE_SIZE == 50
     assert module.PNCP_MAX_SUBMITTABLE_CANDIDATES_PER_RUN == 5
     assert module.PNCP_FETCH_MAX_ATTEMPTS == 3
-    assert module.PNCP_FETCH_TIMEOUT_SECONDS == 8
+    assert module.PNCP_FETCH_TIMEOUT_SECONDS == 20
     assert module.PNCP_FETCH_BACKOFF_SECONDS == 0.0
-

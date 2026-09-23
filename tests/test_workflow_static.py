@@ -14,14 +14,14 @@ WORKFLOWS = sorted(WORKFLOW_DIR.glob("*.yml"))
 SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 
 SCHEDULES = {
-    "pipeline-ai.yml": "16 * * * *",
-    "pipeline-backfill.yml": "23 11 * * 6",
-    "pipeline-discovery-group-a.yml": "7 * * * *",
-    "pipeline-discovery-group-b.yml": "17 * * * *",
-    "pipeline-discovery-group-c.yml": "27 * * * *",
-    "pipeline-pncp-discovery.yml": "05 * * * *",
-    "pipeline-source-monitor.yml": "*/15 * * * *",
-    "pipeline-sync.yml": "37 * * * *",
+    "pipeline-ai.yml": ["16 * * * *", "46 * * * *"],
+    "pipeline-backfill.yml": ["23 11 * * 6"],
+    "pipeline-discovery-group-a.yml": ["7 * * * *", "32 * * * *"],
+    "pipeline-discovery-group-b.yml": ["17 * * * *", "42 * * * *"],
+    "pipeline-discovery-group-c.yml": ["27 * * * *", "52 * * * *"],
+    "pipeline-pncp-discovery.yml": ["05 * * * *", "35 * * * *"],
+    "pipeline-source-monitor.yml": ["*/15 * * * *"],
+    "pipeline-sync.yml": ["37 * * * *"],
 }
 
 MANUAL_SOURCE_FALLBACKS = {
@@ -156,9 +156,18 @@ def test_canonical_schedule_has_no_duplicate_source_fallbacks() -> None:
         schedules = _trigger(_load(path)).get("schedule", [])
         crons = [entry.get("cron") for entry in schedules if isinstance(entry, dict)]
         if path.name in SCHEDULES:
-            assert crons == [SCHEDULES[path.name]], path.name
+            assert crons == SCHEDULES[path.name], path.name
         elif path.name in MANUAL_SOURCE_FALLBACKS:
             assert crons == [], path.name
+
+
+def test_group_collection_ticks_match_registry() -> None:
+    import json
+
+    registry = json.loads((WORKFLOW_DIR.parents[1] / "config" / "source_schedule.json").read_text(encoding="utf-8"))
+    for group, entry in registry["groups"].items():
+        workflow = f"pipeline-discovery-group-{group}.yml"
+        assert SCHEDULES[workflow] == [entry["primary_cron"], entry["backup_collection_cron"]]
 
 
 def test_instrumented_entrypoints_use_default_off_repository_telemetry_flag() -> None:
@@ -281,6 +290,14 @@ def test_sync_uses_dedicated_concurrency_and_waits_for_terminal_run_status() -> 
     assert "/api/pipeline/runs?job_name=${PIPELINE_STEP}" in workflow
     assert "run_id=$(jq -r '.run_id // empty' response.json)" in workflow
     assert "success|skipped" in workflow
+    assert "failed)" in workflow
+
+
+def test_ai_waits_for_terminal_run_status() -> None:
+    workflow = (WORKFLOW_DIR / "pipeline-ai.yml").read_text(encoding="utf-8")
+    assert "/api/pipeline/runs?job_name=ai" in workflow
+    assert "run_id=$(jq -r '.run_id // empty' response.json)" in workflow
+    assert 'poll_pipeline_run "$run_id"' in workflow
     assert "failed)" in workflow
 
 

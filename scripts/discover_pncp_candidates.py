@@ -88,7 +88,8 @@ try:
     )
 except (TypeError, ValueError):
     PNCP_FETCH_BACKOFF_SECONDS = 2.0
-PNCP_FETCH_TIMEOUT_SECONDS = _positive_env_int("PNCP_FETCH_TIMEOUT_SECONDS", 8)
+PNCP_FETCH_TIMEOUT_SECONDS = _positive_env_int("PNCP_FETCH_TIMEOUT_SECONDS", 20)
+PNCP_SEARCH_BUDGET_SECONDS = _positive_env_int("PNCP_SEARCH_BUDGET_SECONDS", 480)
 PNCP_OPPORTUNITY_V2_ENABLED = (
     os.environ.get("PNCP_OPPORTUNITY_V2_ENABLED", "false").lower() == "true"
 )
@@ -116,7 +117,7 @@ def fetch_json(url: str, *, timeout: int | None = None) -> Any:
                     continue
             response.raise_for_status()
             return response.json()
-        except (requests.Timeout, requests.ConnectionError):
+        except (requests.Timeout, requests.ConnectionError, ValueError):
             if attempt >= PNCP_FETCH_MAX_ATTEMPTS:
                 raise
             time.sleep(PNCP_FETCH_BACKOFF_SECONDS * attempt)
@@ -129,12 +130,16 @@ def fetch_pncp_search_pages(
     base_params: dict[str, str | int],
     *,
     stats: dict[str, int] | None = None,
+    search_deadline: float | None = None,
 ) -> list[dict[str, Any]]:
     records: list[dict[str, Any]] = []
     page = 1
     last_total_pages = 1
 
     while page <= PNCP_MAX_PAGES_PER_QUERY:
+        if search_deadline is not None and time.monotonic() >= search_deadline:
+            _mark_search_budget_exhausted(stats)
+            break
         params = {**base_params, "pagina": page, "tamanhoPagina": PNCP_PAGE_SIZE}
         url = f"{base_url}?{urlencode(params)}"
         if stats is not None:
@@ -149,11 +154,17 @@ def fetch_pncp_search_pages(
 
         if not isinstance(payload, dict):
             print(f"warning: PNCP search page {page} returned non-object payload", file=sys.stderr)
+            if stats is not None:
+                stats["search_failures"] = stats.get("search_failures", 0) + 1
             break
 
         page_records = payload.get("data", [])
-        if isinstance(page_records, list):
-            records.extend(record for record in page_records if isinstance(record, dict))
+        if not isinstance(page_records, list):
+            print(f"warning: PNCP search page {page} returned invalid data", file=sys.stderr)
+            if stats is not None:
+                stats["search_failures"] = stats.get("search_failures", 0) + 1
+            break
+        records.extend(record for record in page_records if isinstance(record, dict))
         if stats is not None:
             stats["pncp_pages_completed"] = int(stats.get("pncp_pages_completed", 0) or 0) + 1
 
@@ -181,6 +192,13 @@ BRASILIA_OFFSET = timezone(timedelta(hours=-3))
 _UPDATE_FORMAT = "%Y%m%d%H%M%S"
 _ATUALIZACAO_OVERLAP_DAYS = 1
 _ATUALIZACAO_INITIAL_LOOKBACK_DAYS = 2
+
+
+def _mark_search_budget_exhausted(stats: dict[str, int] | None) -> None:
+    if stats is not None and not stats.get("search_budget_exhausted"):
+        stats["search_budget_exhausted"] = 1
+        stats["search_failures"] = stats.get("search_failures", 0) + 1
+        print("warning: PNCP search budget exhausted; inventory is incomplete", file=sys.stderr)
 
 
 def parse_pncp_datetime(value: str | None) -> datetime | None:
@@ -339,47 +357,46 @@ def _scrape_three_endpoints(
     publication_start: str,
     overlap_start_str: str,
     stats: dict[str, int] | None,
+    search_deadline: float | None = None,
 ) -> list[dict[str, Any]]:
     """Hit /proposta, /publicacao (per modality), and /atualizacao (per modality) with the given params."""
     out: list[dict[str, Any]] = []
-    out.extend(
-        fetch_pncp_search_pages(
-            PNCP_PROPOSTA_URL,
-            {**base_params, "dataInicial": today_str, "dataFinal": proposal_end},
-            stats=stats,
-        )
-    )
+    queries = [
+        (PNCP_PROPOSTA_URL, {**base_params, "dataInicial": today_str, "dataFinal": proposal_end})
+    ]
     for modality_code in PNCP_DEFAULT_MODALITY_CODES:
-        out.extend(
-            fetch_pncp_search_pages(
-                PNCP_API_URL,
-                {
-                    **base_params,
-                    "dataInicial": publication_start,
-                    "dataFinal": today_str,
-                    "codigoModalidadeContratacao": modality_code,
-                },
-                stats=stats,
-            )
+        queries.append(
+            (PNCP_API_URL, {
+                **base_params,
+                "dataInicial": publication_start,
+                "dataFinal": today_str,
+                "codigoModalidadeContratacao": modality_code,
+            })
         )
-        out.extend(
-            fetch_pncp_search_pages(
-                PNCP_ATUALIZACAO_URL,
-                {
-                    **base_params,
-                    "dataInicial": overlap_start_str,
-                    "dataFinal": today_str,
-                    "codigoModalidadeContratacao": modality_code,
-                },
-                stats=stats,
-            )
+        queries.append(
+            (PNCP_ATUALIZACAO_URL, {
+                **base_params,
+                "dataInicial": overlap_start_str,
+                "dataFinal": today_str,
+                "codigoModalidadeContratacao": modality_code,
+            })
         )
+    for url, params in queries:
+        if search_deadline is not None and time.monotonic() >= search_deadline:
+            _mark_search_budget_exhausted(stats)
+            break
+        out.extend(fetch_pncp_search_pages(
+            url, params, stats=stats, search_deadline=search_deadline,
+        ))
+        if stats is not None and stats.get("search_budget_exhausted"):
+            break
     return out
 
 
 def fetch_pncp_records(
     stats: dict[str, int] | None = None,
 ) -> tuple[list[dict[str, Any]], datetime]:
+    run_stats = stats if stats is not None else {}
     uf_filter = UF_FILTER
     federal_cnpjs: list[str] = list(FEDERAL_CNPJS)
     drop_expired = DROP_EXPIRED
@@ -396,6 +413,7 @@ def fetch_pncp_records(
         base_params["uf"] = uf_filter
 
     raw_records: list[dict[str, Any]] = []
+    search_deadline = time.monotonic() + PNCP_SEARCH_BUDGET_SECONDS
 
     checkpoint = _load_update_checkpoint()
     if checkpoint is not None:
@@ -412,11 +430,14 @@ def fetch_pncp_records(
             proposal_end=proposal_end,
             publication_start=publication_start,
             overlap_start_str=overlap_start_str,
-            stats=stats,
+            stats=run_stats,
+            search_deadline=search_deadline,
         )
     )
 
     for cnpj in federal_cnpjs:
+        if run_stats.get("search_budget_exhausted"):
+            break
         raw_records.extend(
             _scrape_three_endpoints(
                 {"cnpj": cnpj},
@@ -424,7 +445,8 @@ def fetch_pncp_records(
                 proposal_end=proposal_end,
                 publication_start=publication_start,
                 overlap_start_str=overlap_start_str,
-                stats=stats,
+                stats=run_stats,
+                search_deadline=search_deadline,
             )
         )
 

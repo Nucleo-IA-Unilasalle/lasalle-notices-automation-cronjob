@@ -16,6 +16,13 @@ audit/recovery and never owns scheduled production traffic:
 6. **Submit** - sends candidates with metadata, markdown, and content hash to Render `/api/pipeline/candidates`
 
 The workflow fails instead of advancing the PNCP checkpoint when PNCP search fails and produces no candidates, when eligible candidates are discovered but all fail download/OCR, or when none are submitted to Render.
+The PNCP consultation routes and `data`/pagination response were rechecked live
+on 2026-09-23; the observed incident was intermittent timeouts, HTTP 503 and
+non-JSON responses, not a confirmed route migration. Search retries malformed
+JSON, uses a 15-second workflow timeout, and stops discovery after an 8-minute
+search budget. A budget stop or failed query leaves inventory partial and the
+checkpoint unadvanced; do not treat a handful of accepted PDFs as a complete
+pull.
 
 After successful discovery, Render AI processing is triggered via
 `pipeline-ai.yml` with a daytime Pacific gate.
@@ -35,12 +42,12 @@ from scheduled execution.
 
 | Workflow | Schedule | Notes |
 |----------|----------|-------|
-| `pipeline-pncp-discovery.yml` | `05 * * * *` UTC + manual | Dedicated PNCP discover/download/OCR/submit pipeline; own `discovery-pncp` lock |
-| `pipeline-discovery-group-a.yml` | `07 * * * *` UTC + manual | bndes, brde, fao, fapergs, govbr_mma_fnma, iis_rio, canoas |
-| `pipeline-discovery-group-b.yml` | `17 * * * *` UTC + manual | funbio, fundacao_grupo_boticario, govbr_mma, govbr_mma_public_calls, sema_rs, tnc, dopa |
-| `pipeline-discovery-group-c.yml` | `27 * * * *` UTC + manual | kfw, msgov, unep, worldbank, wwf, fbds, finep, ibama |
+| `pipeline-pncp-discovery.yml` | `05,35 * * * *` UTC + manual | Dedicated PNCP discover/download/OCR/submit pipeline; own `discovery-pncp` lock |
+| `pipeline-discovery-group-a.yml` | `07,32 * * * *` UTC + manual | bndes, brde, fao, fapergs, govbr_mma_fnma, iis_rio, canoas |
+| `pipeline-discovery-group-b.yml` | `17,42 * * * *` UTC + manual | funbio, fundacao_grupo_boticario, govbr_mma, govbr_mma_public_calls, sema_rs, tnc, dopa |
+| `pipeline-discovery-group-c.yml` | `27,52 * * * *` UTC + manual | kfw, msgov, unep, worldbank, wwf, fbds, finep, ibama |
 | `pipeline-all-discovery.yml` | Manual only | Manual multi-source audit/recovery; no scheduled ownership |
-| `pipeline-ai.yml` | `16 * * * *` UTC + after PNCP discovery + manual | Pacific daytime gate (08:00–19:00 year-round) |
+| `pipeline-ai.yml` | `16,46 * * * *` UTC + after PNCP discovery + manual | Pacific daytime gate (08:00–19:00 year-round); polls terminal backend status |
 | `pipeline-backfill.yml` | `23 11 * * 6` UTC + manual | Legacy Render backfill rollback path |
 | `pipeline-sync.yml` | `37 * * * *` UTC + manual | Render sync trigger |
 | `pipeline-*-discovery.yml` (22 per-source workflows) | Manual only | Instrumented per-source manual fallbacks on the same orchestrator path and per-source lock |
@@ -53,7 +60,14 @@ from scheduled execution.
 | `pipeline-scrape.yml` | Manual only | Legacy Render scrape rollback path |
 | `pipeline-run.yml` | Manual only | Legacy full-pipeline rollback path |
 
-Recovery ticks (`37`, `47`, `57` minutes) are declared in the registry with
+The second tick is a backup *collection* opportunity for GitHub schedule events
+that are delayed or dropped. Repo A's due-state and claim lock reject duplicate
+collection after a successful primary tick; a backup job may still consume
+runner setup time before it reaches the claim. GitHub scheduling remains
+best-effort, so this is not a freshness SLA or a substitute for an independent
+scheduler. PNCP's second tick uses the same server-side due fence.
+
+Drain-only recovery ticks (`37`, `47`, `57` minutes) are declared in the registry with
 `recovery_enabled: false`; enabling them waits for durable due-state/lease
 integration (Plan 03/R5) and a reviewed aggregate-concurrency proof. Group
 `max-parallel: 3` is per group, not a global cap; the effective global admission
