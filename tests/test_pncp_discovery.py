@@ -99,6 +99,40 @@ def _make_doc(
 # ---------------------------------------------------------------------------
 
 class TestPncpHttpFetch:
+    def test_fetch_json_retries_transient_non_json_response(self) -> None:
+        from discover_pncp_candidates import fetch_json
+
+        invalid = MagicMock(status_code=200)
+        invalid.json.side_effect = ValueError("invalid JSON")
+        valid = MagicMock(status_code=200)
+        valid.json.return_value = {"data": []}
+        with patch("discover_pncp_candidates.requests.get", side_effect=[invalid, valid]) as fetch:
+            with patch("discover_pncp_candidates.time.sleep"):
+                assert fetch_json("https://pncp.gov.br/api/test") == {"data": []}
+        assert fetch.call_count == 2
+
+    def test_malformed_search_data_is_reported_as_incomplete(self) -> None:
+        from discover_pncp_candidates import fetch_pncp_search_pages
+
+        stats: dict[str, int] = {}
+        with patch("discover_pncp_candidates.fetch_json", return_value={"data": {}}):
+            records = fetch_pncp_search_pages("https://pncp.gov.br/api/test", {}, stats=stats)
+
+        assert records == []
+        assert stats["search_failures"] == 1
+        assert stats.get("pncp_pages_completed", 0) == 0
+
+    def test_search_budget_stops_before_claiming_complete_inventory(self) -> None:
+        stats: dict[str, int] = {}
+        with patch("discover_pncp_candidates.time.monotonic", side_effect=[0, 999]):
+            with patch("discover_pncp_candidates.fetch_pncp_search_pages") as fetch:
+                records, _ = fetch_pncp_records(stats=stats)
+
+        assert records == []
+        fetch.assert_not_called()
+        assert stats["search_budget_exhausted"] == 1
+        assert stats["search_failures"] == 1
+
     def test_fetch_json_retries_transient_connection_timeout(self) -> None:
         import requests
         from discover_pncp_candidates import fetch_json

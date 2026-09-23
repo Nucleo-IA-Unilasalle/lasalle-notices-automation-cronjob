@@ -65,7 +65,10 @@ def test_group_workflow_crons_match_registry_primary_crons() -> None:
         path = PROJECT_ROOT / ".github" / "workflows" / f"pipeline-discovery-group-{group_id}.yml"
         document = yaml.safe_load(path.read_text(encoding="utf-8"))
         trigger = document.get("on", document.get(True, {}))
-        assert trigger["schedule"] == [{"cron": registry["groups"][group_id]["primary_cron"]}], path.name
+        assert trigger["schedule"] == [
+            {"cron": registry["groups"][group_id]["primary_cron"]},
+            {"cron": registry["groups"][group_id]["backup_collection_cron"]},
+        ], path.name
 
 
 def test_group_crons_are_distinct_and_off_peak() -> None:

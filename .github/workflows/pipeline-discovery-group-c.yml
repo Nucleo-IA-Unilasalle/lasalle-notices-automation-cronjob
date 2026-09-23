@@ -3,6 +3,7 @@ name: Discovery group C (kfw, msgov, unep, worldbank, wwf, fbds, finep, ibama)
 on:
   schedule:
     - cron: "27 * * * *"
+    - cron: "52 * * * *"
   workflow_dispatch:
 
 permissions:

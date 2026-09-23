@@ -3,6 +3,7 @@ name: PNCP discovery
 on:
   schedule:
     - cron: "05 * * * *"
+    - cron: "35 * * * *"
   workflow_dispatch:
     inputs:
       opportunity_v2:
@@ -68,7 +69,7 @@ jobs:
           PNCP_MAX_SUBMITTABLE_CANDIDATES_PER_RUN: "5"
           PNCP_FETCH_MAX_ATTEMPTS: "2"
           PNCP_FETCH_BACKOFF_SECONDS: "2"
-          PNCP_FETCH_TIMEOUT_SECONDS: "8"
+          PNCP_FETCH_TIMEOUT_SECONDS: "15"
           SCRAPE_MAX_PDF_BYTES: "15000000"
           SCRAPE_MAX_PDFS_PER_RUN: "5"
           KREUZBERG_PADDLE_LANGUAGE: "latin"

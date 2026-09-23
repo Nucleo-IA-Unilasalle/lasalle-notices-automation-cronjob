@@ -3,6 +3,7 @@ name: Discovery group B (funbio, fundacao_grupo_boticario, govbr_mma, govbr_mma_
 on:
   schedule:
     - cron: "17 * * * *"
+    - cron: "42 * * * *"
   workflow_dispatch:
 
 permissions:

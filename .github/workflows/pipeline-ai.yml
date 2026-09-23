@@ -6,6 +6,7 @@ on:
     types: [completed]
   schedule:
     - cron: '16 * * * *'
+    - cron: '46 * * * *'
   workflow_dispatch:
 
 permissions:
@@ -67,6 +68,39 @@ jobs:
           MAX_ATTEMPTS=4
           SLEEP_SECONDS=120
 
+          poll_pipeline_run() {
+            local run_id="$1"
+            for poll_attempt in $(seq 1 120); do
+              sleep 10
+              poll_http_code=$(curl -sS -o runs.json -w "%{http_code}" \
+                -H "Authorization: Bearer ${PIPELINE_SECRET}" \
+                --connect-timeout 30 --max-time 60 \
+                "${BASE_URL}/api/pipeline/runs?job_name=ai&limit=20" || true)
+              if [ "$poll_http_code" != "200" ]; then
+                echo "AI run poll ${poll_attempt}/120: HTTP ${poll_http_code}"
+                continue
+              fi
+              run=$(jq -c --arg run_id "$run_id" '.[] | select(.id == $run_id)' runs.json | head -n 1 || true)
+              if [ -z "$run" ]; then
+                echo "AI run ${run_id} not visible yet"
+                continue
+              fi
+              status=$(printf '%s' "$run" | jq -r '.status')
+              case "$status" in
+                success|skipped)
+                  printf '%s\n' "$run" | jq .
+                  return 0
+                  ;;
+                failed)
+                  printf '%s\n' "$run" | jq .
+                  return 1
+                  ;;
+              esac
+            done
+            echo "Timed out waiting for AI run ${run_id}"
+            return 1
+          }
+
           echo "Initiating AI trigger at Pacific time: ${PACIFIC_TIME}"
           echo "Endpoint: POST ${URL}"
 
@@ -84,9 +118,19 @@ jobs:
             cat response.json || true
             echo
 
-            if [ "$http_code" = "200" ] || [ "$http_code" = "202" ]; then
-              echo "Outcome: operational success (HTTP ${http_code})"
+            if [ "$http_code" = "200" ]; then
+              echo "Outcome: synchronous success (HTTP 200)"
               exit 0
+            fi
+
+            if [ "$http_code" = "202" ]; then
+              run_id=$(jq -r '.run_id // empty' response.json)
+              if [ -z "$run_id" ]; then
+                echo "Accepted response did not include run_id"
+                exit 1
+              fi
+              poll_pipeline_run "$run_id"
+              exit $?
             fi
 
             if [ "$http_code" = "401" ] || [ "$http_code" = "403" ] || [ "$http_code" = "404" ]; then
