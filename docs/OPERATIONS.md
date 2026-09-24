@@ -20,9 +20,10 @@ The PNCP consultation routes and `data`/pagination response were rechecked live
 on 2026-09-23; the observed incident was intermittent timeouts, HTTP 503 and
 non-JSON responses, not a confirmed route migration. Search retries malformed
 JSON, uses a 15-second workflow timeout, and stops discovery after an 8-minute
-search budget. A budget stop or failed query leaves inventory partial and the
-checkpoint unadvanced; do not treat a handful of accepted PDFs as a complete
-pull.
+search budget. A confirmed HTTP 429 stops the remaining search queries instead
+of continuing to hit the rate-limited origin. A budget stop or failed query
+leaves inventory partial and the checkpoint unadvanced; do not treat a handful
+of accepted PDFs as a complete pull.
 
 After successful discovery, Render AI processing is triggered via
 `pipeline-ai.yml` with a daytime Pacific gate.
@@ -399,7 +400,8 @@ gh variable set SOURCE_RUN_REPORTING_ENABLED --body false --repo Nucleo-IA-Unila
 | `PNCP_MAX_SUBMITTABLE_CANDIDATES_PER_RUN` | `5` | Maximum valid candidates prepared for submission in one Actions run |
 | `PNCP_FETCH_MAX_ATTEMPTS` | `2` | Maximum PNCP API attempts for transient connection failures in the scheduled workflow |
 | `PNCP_FETCH_BACKOFF_SECONDS` | `2` | Base sleep seconds between PNCP API retry attempts |
-| `PNCP_FETCH_TIMEOUT_SECONDS` | `8` | PNCP request timeout in seconds |
+| `PNCP_FETCH_TIMEOUT_SECONDS` | `15` | PNCP request timeout in seconds |
+| `PNCP_SEARCH_BUDGET_SECONDS` | `480` | Maximum time spent on PNCP search queries |
 | `PNCP_LOOKBACK_DAYS` | `30` | Update-feed lookback when the checkpoint is absent or reset |
 | `PNCP_PAGE_SIZE` | `50` | Records requested per PNCP page |
 | `PNCP_MAX_PAGES_PER_QUERY` | `20` | Maximum pages per PNCP query |
@@ -753,6 +755,9 @@ remain failures/retries, not accepted counts. The freshness report separates
 recent but failing/warning/checking/unknown sources into `unhealthy`; recent run
 timestamps alone do not pass monitoring. Production health is established by
 observed scheduled runs, not by the rollout configuration alone.
+The monitor probes `/health` with safe retries before its authenticated read,
+because the free Render backend can take longer than the projection timeout to
+start after sleeping. A readiness failure still produces a monitoring incident.
 
 The all-source workflow passes its run number as `SOURCE_ROTATION_OFFSET`.
 The orchestrator rotates the configured priority list without increasing the

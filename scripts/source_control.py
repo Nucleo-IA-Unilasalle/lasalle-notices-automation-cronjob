@@ -44,6 +44,35 @@ def lease_expired(exc):
     return isinstance(exc, AdmissionConflict) and exc.reason in LEASE_EXPIRED_REASONS
 
 
+def wait_for_backend_ready(url):
+    """Wake a sleeping Render instance with safe reads before API traffic."""
+    last_status = None
+    last_error = None
+    for attempt in range(RENDER_READY_ATTEMPTS):
+        try:
+            response = requests.get(
+                url.rstrip("/") + "/health",
+                timeout=RENDER_READY_TIMEOUT,
+                allow_redirects=False,
+            )
+        except (requests.ConnectionError, requests.Timeout) as exc:
+            last_error = exc
+        else:
+            last_status = response.status_code
+            if response.status_code == 200:
+                return
+            if response.status_code not in RETRYABLE_READY_STATUS_CODES:
+                raise RuntimeError(
+                    f"Backend readiness failed: HTTP {response.status_code}"
+                )
+        if attempt + 1 < RENDER_READY_ATTEMPTS:
+            time.sleep(RENDER_READY_BACKOFF_SECONDS * (2 ** attempt))
+
+    if last_status is not None:
+        raise RuntimeError(f"Backend readiness failed: HTTP {last_status}")
+    raise RuntimeError("Backend readiness failed: network unavailable") from last_error
+
+
 class SourceControl:
     def __init__(self, source, token=None):
         self.source = source
@@ -53,31 +82,7 @@ class SourceControl:
 
     def wait_until_ready(self):
         """Wake Render with safe reads before the first mutating claim."""
-        last_status = None
-        last_error = None
-        for attempt in range(RENDER_READY_ATTEMPTS):
-            try:
-                response = requests.get(
-                    self.url + "/health",
-                    timeout=RENDER_READY_TIMEOUT,
-                    allow_redirects=False,
-                )
-            except (requests.ConnectionError, requests.Timeout) as exc:
-                last_error = exc
-            else:
-                last_status = response.status_code
-                if response.status_code == 200:
-                    return
-                if response.status_code not in RETRYABLE_READY_STATUS_CODES:
-                    raise RuntimeError(
-                        f"Source control readiness failed: HTTP {response.status_code}"
-                    )
-            if attempt + 1 < RENDER_READY_ATTEMPTS:
-                time.sleep(RENDER_READY_BACKOFF_SECONDS * (2 ** attempt))
-
-        if last_status is not None:
-            raise RuntimeError(f"Source control readiness failed: HTTP {last_status}")
-        raise RuntimeError("Source control readiness failed: network unavailable") from last_error
+        wait_for_backend_ready(self.url)
 
     def post(self, path, payload):
         response = requests.post(self.url + "/api/pipeline/" + path, json=payload,

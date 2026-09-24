@@ -122,6 +122,29 @@ class TestPncpHttpFetch:
         assert stats["search_failures"] == 1
         assert stats.get("pncp_pages_completed", 0) == 0
 
+    def test_rate_limit_stops_remaining_search_queries(self) -> None:
+        import requests
+
+        response = requests.Response()
+        response.status_code = 429
+        error = requests.HTTPError("rate limited", response=response)
+        stats: dict[str, int] = {}
+        with patch("discover_pncp_candidates.fetch_json", side_effect=error):
+            from discover_pncp_candidates import fetch_pncp_search_pages
+            assert fetch_pncp_search_pages("https://pncp.gov.br/api/test", {}, stats=stats) == []
+        assert stats["search_failures"] == 1
+        assert stats["rate_limited"] == 1
+
+        stats = {}
+        def rate_limited_page(*args, **kwargs):
+            kwargs["stats"].update({"search_failures": 1, "rate_limited": 1})
+            return []
+
+        with patch("discover_pncp_candidates.fetch_pncp_search_pages") as fetch:
+            fetch.side_effect = rate_limited_page
+            fetch_pncp_records(stats=stats)
+        fetch.assert_called_once()
+
     def test_search_budget_stops_before_claiming_complete_inventory(self) -> None:
         stats: dict[str, int] = {}
         with patch("discover_pncp_candidates.time.monotonic", side_effect=[0, 999]):
