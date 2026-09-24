@@ -150,6 +150,10 @@ def fetch_pncp_search_pages(
             print(f"warning: skipping PNCP search page {page} from {base_url}: {exc}", file=sys.stderr)
             if stats is not None:
                 stats["search_failures"] = stats.get("search_failures", 0) + 1
+                if (isinstance(exc, requests.HTTPError)
+                        and exc.response is not None
+                        and exc.response.status_code == 429):
+                    stats["rate_limited"] = 1
             break
 
         if not isinstance(payload, dict):
@@ -388,7 +392,7 @@ def _scrape_three_endpoints(
         out.extend(fetch_pncp_search_pages(
             url, params, stats=stats, search_deadline=search_deadline,
         ))
-        if stats is not None and stats.get("search_budget_exhausted"):
+        if stats is not None and (stats.get("search_budget_exhausted") or stats.get("rate_limited")):
             break
     return out
 
@@ -436,7 +440,7 @@ def fetch_pncp_records(
     )
 
     for cnpj in federal_cnpjs:
-        if run_stats.get("search_budget_exhausted"):
+        if run_stats.get("search_budget_exhausted") or run_stats.get("rate_limited"):
             break
         raw_records.extend(
             _scrape_three_endpoints(

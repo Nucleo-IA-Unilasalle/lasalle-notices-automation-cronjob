@@ -23,6 +23,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import requests  # type: ignore
+from source_control import wait_for_backend_ready
 
 REGISTRY_PATH = Path(__file__).resolve().parents[1] / "config" / "source_schedule.json"
 STALE_MINUTES_DEFAULT = 120
@@ -54,7 +55,13 @@ def main() -> int:
     headers = {"Authorization": f"Bearer {secret}", "Content-Type": "application/json"}
     checked_at = datetime.now(timezone.utc).isoformat()
     try:
-        resp = requests.get(f"{backend}/api/pipeline/source-monitor", headers=headers, timeout=20)
+        wait_for_backend_ready(backend)
+        resp = requests.get(
+            f"{backend}/api/pipeline/source-monitor",
+            headers=headers,
+            timeout=(5, 20),
+            allow_redirects=False,
+        )
         resp.raise_for_status()
         payload = resp.json()
         summary = payload["summary"]

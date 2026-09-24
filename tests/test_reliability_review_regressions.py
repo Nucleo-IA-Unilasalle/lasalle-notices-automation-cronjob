@@ -159,6 +159,7 @@ def test_recent_failed_sources_are_not_monitor_healthy(monkeypatch, tmp_path, he
             "last_checked_at": datetime.now(timezone.utc).isoformat()} for key in expected],
     }
     monkeypatch.setattr(monitor.requests, "get", lambda *a, **kw: response)
+    monkeypatch.setattr(monitor, "wait_for_backend_ready", lambda backend: None)
     assert monitor.main() == int(health != "healthy")
     report = json.loads(output.read_text())
     assert report["healthy"] == (expected if health == "healthy" else [])
@@ -169,3 +170,31 @@ def test_recent_failed_sources_are_not_monitor_healthy(monkeypatch, tmp_path, he
         "last_run_inserted", "last_run_updated", "last_run_duplicates",
         "last_run_errors",
     }
+
+
+def test_monitor_wakes_backend_before_read_and_fails_closed_on_readiness_error(monkeypatch, tmp_path):
+    monkeypatch.setenv("RENDER_APP_URL", "https://example.com")
+    monkeypatch.setenv("PIPELINE_SECRET", "test")
+    output = tmp_path / "report.json"
+    monkeypatch.setattr("sys.argv", ["monitor", "--output", str(output)])
+    get = Mock()
+    monkeypatch.setattr(monitor.requests, "get", get)
+    monkeypatch.setattr(monitor, "wait_for_backend_ready", Mock(side_effect=RuntimeError("unavailable")))
+
+    assert monitor.main() == 1
+    monitor.wait_for_backend_ready.assert_called_once_with("https://example.com")
+    get.assert_not_called()
+    assert json.loads(output.read_text())["incident"] == "monitor_read_failed"
+
+
+def test_backend_readiness_retries_safe_gets(monkeypatch):
+    responses = [Mock(status_code=503), Mock(status_code=200)]
+    get = Mock(side_effect=responses)
+    monkeypatch.setattr(source_control.requests, "get", get)
+    monkeypatch.setattr(source_control.time, "sleep", lambda seconds: None)
+
+    source_control.wait_for_backend_ready("https://example.com/")
+
+    assert get.call_count == 2
+    assert all(call.args == ("https://example.com/health",) for call in get.call_args_list)
+    assert all(call.kwargs["allow_redirects"] is False for call in get.call_args_list)
