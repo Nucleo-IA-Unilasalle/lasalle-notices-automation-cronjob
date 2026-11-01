@@ -127,8 +127,15 @@ def _is_related_document(url: str, title: str = "") -> bool:
     ):
         return True
     filename = _fold_text(urlsplit(url).path.rsplit("/", 1)[-1])
+    # GOV.BR publishes related documents without a separator between the
+    # keyword and the rest of the filename (for example
+    # ``ResultadoDefinitivoEdital...pdf`` and ``RetificaodoEdital...pdf``).
+    # The prefix alone is the signal; requiring ``[-_.]`` after it left those
+    # files classified as *primary* editais, creating a phantom inventory
+    # identity. ``retifica`` also covers the common unaccented
+    # ``Retificaodo`` spelling.
     return bool(re.match(
-        r"^(?:resultado|retificacao|errata|historico|anexo)(?:[-_.]|$)", filename,
+        r"^(?:resultado|retifica|errata|historico|anexo)", filename,
     ))
 
 
@@ -628,6 +635,13 @@ def _discover_candidates_and_inventory(
             break
 
     stats["candidates"] = len(candidates)
+    # Report the real parsed inventory instead of letting the orchestrator
+    # alias ``inventory_seen``/``in_scope`` to the candidate count. Related
+    # documents attached to a principal are inventory, not opportunities, and
+    # the rejection split belongs in its own counter.
+    stats["inventory_seen"] = len(inventory)
+    stats["in_scope"] = len(candidates)
+    stats["policy_rejected"] = stats["prefilter_rejected"] + stats["year_rejected"]
     if stats["candidates"] == 0 and not inventory:
         stats["inventory_parse_failed"] = 1
         stats["errors"] = stats.get("errors", 0) + 1

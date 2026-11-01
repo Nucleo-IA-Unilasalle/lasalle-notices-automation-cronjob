@@ -156,6 +156,70 @@ class TestEditalPrefilter:
         url = "https://www.iis-rio.org/wp-content/uploads/2026/07/resultado-final.pdf"
         assert _candidate_passes_edital_prefilter(url, "no_prefilter") is True
 
+    def test_analista_tdr_is_kept_under_both_policies(self) -> None:
+        # "anaLISTA-DE" used to match the unanchored "lista de" exclusion, so a
+        # genuine 2026 TdR was dropped before it could become a candidate.
+        from discover_iis_rio_candidates import _candidate_passes_edital_prefilter
+
+        for url in (
+            "https://www.iis-rio.org/wp-content/uploads/2026/10/TDR-Analista-de-BI-2026.pdf",
+            "https://www.iis-rio.org/wp-content/uploads/2026/09/TDR-Analista-de-TI-Pleno-IIS.pdf",
+        ):
+            assert _candidate_passes_edital_prefilter(url, "include_tdr") is True
+            assert _candidate_passes_edital_prefilter(url, "default") is True
+
+    def test_privacy_policy_footer_pdf_is_rejected(self) -> None:
+        from discover_iis_rio_candidates import _candidate_passes_edital_prefilter
+
+        url = (
+            "https://www.iis-rio.org/wp-content/uploads/2024/07/"
+            "Politica-de-Privacidade-RGPD.pdf"
+        )
+        assert _candidate_passes_edital_prefilter(url, "include_tdr") is False
+
+
+class TestOutOfScopeVacancies:
+    def test_vacancy_posts_are_counted_but_not_admitted(self) -> None:
+        from discover_iis_rio_candidates import (
+            extract_iis_rio_detail_urls,
+            out_of_scope_vacancy_urls,
+        )
+
+        listing_html = """
+        <html><body>
+          <a href="/noticias/vaga-de-analista-de-bi">Vaga de Analista de BI</a>
+          <a href="/noticias/vaga-de-analista-de-ti-pleno">Vaga de Analista de T.I Pleno</a>
+          <a href="/noticias/chamada-publica-2026">Chamada pública 2026</a>
+          <a href="/noticias/institucional">Notícia institucional</a>
+        </body></html>
+        """
+
+        vacancies = out_of_scope_vacancy_urls(listing_html, LISTING_URL)
+        assert vacancies == {
+            "https://www.iis-rio.org/noticias/vaga-de-analista-de-bi",
+            "https://www.iis-rio.org/noticias/vaga-de-analista-de-ti-pleno",
+        }
+        # The scope decision is unchanged: vacancies never reach a detail fetch.
+        assert extract_iis_rio_detail_urls(listing_html, LISTING_URL) == [
+            "https://www.iis-rio.org/noticias/chamada-publica-2026",
+        ]
+
+    def test_zero_inventory_run_reports_the_out_of_scope_count(self) -> None:
+        from discover_iis_rio_candidates import discover_candidates
+
+        listing_html = """
+        <html><body>
+          <a href="/noticias/vaga-de-analista-de-bi">Vaga de Analista de BI</a>
+        </body></html>
+        """
+        responses = {LISTING_URL: make_response(listing_html)}
+
+        with patch_request_with_safe_redirects(responses):
+            stats, candidates = discover_candidates()
+
+        assert candidates == []
+        assert stats["tdr_out_of_scope"] == 1
+
 
 class TestBuildCandidate:
     def test_build_candidate_records_origin_and_year(self) -> None:

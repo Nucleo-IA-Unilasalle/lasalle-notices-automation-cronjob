@@ -16,14 +16,19 @@ The KfW source uses two paths:
    for ``.pdf`` anchors on the ``kfw.de`` / ``kfw-entwicklungsbank.de``
    hosts whose href / path / text / title / aria-label carries one of
    the KfW signal tokens (``call for proposals``, ``request for
-   proposals``, ``expression of interest``, ``procurement``). On
+   proposals``, ``expression of interest``, ``invitation to tender``,
+   ``call for tenders``, ``tender notice``) and whose filename / link
+   text is not a guideline, regulation or other reference document
+   (see ``_REFERENCE_DOCUMENT_PATTERN``). On
    ``kfw-entwicklungsbank.de`` only PDFs under the procurement
    subpaths (``/service/procurement-regulations/``,
    ``/document-center/``,
    ``/pdf/download-center/pdf-dokumente-richtlinien/``) are kept.
 
-2. **Playwright fallback** — only triggered when the BS4 path yields
-   no PDF candidates. The Playwright path queries all ``<a>``
+2. **Playwright fallback** — only triggered when the static listing
+   fetch itself failed (``listing_html is None``). A successfully
+   fetched page that simply has no matching PDF is a legitimate empty
+   inventory and never starts a browser. The Playwright path queries all ``<a>``
    elements on the listing page and rebuilds an HTML fragment to
    feed back into ``extract_kfw_pdf_urls``. Playwright is imported
    lazily so the cronjob can run the BS4 path on runners that do not
@@ -37,6 +42,7 @@ from __future__ import annotations
 
 import asyncio
 import os
+import posixpath
 import re
 import sys
 from datetime import datetime, timezone
@@ -51,6 +57,57 @@ from scraper_transport import log_source_failure, looks_like_pdf_url
 
 KFW_LISTING_URL = (
     "https://www.kfw-entwicklungsbank.de/Service/Procurement-Regulations/"
+)
+
+
+# Call-specific vocabulary only. The bare word ``procurement`` is
+# deliberately NOT a signal: it appears in the filename of every KfW
+# procurement guideline / regulation, which are standing reference
+# documents rather than open calls.
+_KFW_SIGNAL_PATTERN = re.compile(
+    r"(call[\s_-]*for[\s_-]*(?:proposals?|tenders?|bids?)"
+    r"|request[\s_-]*for[\s_-]*proposals?"
+    r"|expression[\s_-]*of[\s_-]*interest"
+    r"|\beoi\b"
+    r"|invitation[\s_-]*(?:to|for)[\s_-]*(?:tender|bid)s?"
+    r"|tender[\s_-]*notice)",
+    re.IGNORECASE,
+)
+
+# Reference / policy documents published in the same library as the
+# procurement regulations (guidelines, sustainability guideline,
+# standard bidding documents, templates, ...). Applied to the filename
+# and the link text / title / aria-label, never to the directory, so a
+# genuine call stored under ``pdf-dokumente-richtlinien`` still passes.
+#
+# The pattern matches reference-document *titles*, never bare subject
+# words: a real call such as "Call for proposals: sustainability project"
+# or "Request for Proposals - Contratacao de consultoria" must survive.
+# Hence ``sustainability`` / ``nachhaltigkeit`` count only when followed by
+# a guideline/policy word, ``regulations`` / ``handbook`` / ``manual`` only
+# when qualified (procurement, bidding, ...), ``template`` only as a
+# proposal/contract/... template, and ``contratacion`` / ``contratacao`` /
+# ``passation`` are not listed at all: the real titles ("Directrices para
+# la Contratacion", "Diretrizes para Contratacao", "Directives pour la
+# Passation") are already caught by the guideline words.
+_KFW_REFERENCE_DOCUMENT_PATTERN = re.compile(
+    r"(guidelines?|richtlinien?|vergaberichtlinien?"
+    r"|(?:procurement|bidding|tender|purchasing)[\s_-]*regulations?"
+    r"|regulamento[\s_-]*(?:de|para)[\s_-]*(?:aquisi|licita|contrata|compras)"
+    r"|directives[\s_-]*(?:pour|for|on|relatives)"
+    r"|directrices|diretrizes|lignes[\s_-]*directrices"
+    r"|nachhaltigkeits?[\s_-]*(?:richtlinien?|leitlinien?|politik|strategie)"
+    r"|sustainability[\s_-]*(?:guidelines?|polic(?:y|ies)|standards?"
+    r"|framework|directives?)"
+    r"|(?:procurement|bidding|tender|evaluation)[\s_-]*(?:handbook|manual)"
+    r"|standard[\s_-]*(?:bidding|tender|evaluation|contract|service)[\s_-]*"
+    r"(?:documents?|forms?|reports?|conditions|terms|agreements?|contracts?)"
+    r"|(?:proposal|bid|tender|contract|application|evaluation|reporting)"
+    r"[\s_-]*templates?"
+    r"|model[\s_-]*contract"
+    r"|(?:guides?|guidance)[\s_-]+(?:for|to|on)[\s_-]+"
+    r"(?:borrowers?|applicants?|bidders?|consultants?|proposers?|tenderers?))",
+    re.IGNORECASE,
 )
 
 
@@ -69,7 +126,10 @@ def extract_kfw_pdf_urls(listing_doc: BeautifulSoup | str, listing_url: str) -> 
     The extractor keeps only ``.pdf`` anchors on the ``kfw.de`` /
     ``kfw-entwicklungsbank.de`` hosts that carry one of the KfW
     signal tokens (``call for proposals``, ``request for proposals``,
-    ``expression of interest``, ``procurement``). On
+    ``expression of interest``, ``invitation to tender``, ``call for
+    tenders``, ``tender notice``) and whose filename / link text is not
+    a guideline, regulation or other reference document. The bare word
+    ``procurement`` is not a signal. On
     ``kfw-entwicklungsbank.de`` only PDFs under the procurement
     subpaths are kept. URL fragments are stripped before the URL is
     canonicalised.
@@ -80,11 +140,6 @@ def extract_kfw_pdf_urls(listing_doc: BeautifulSoup | str, listing_url: str) -> 
         soup = BeautifulSoup(listing_doc, "html.parser")
     discovered: list[str] = []
     seen: set[str] = set()
-    signal_pattern = re.compile(
-        r"(call[\s_-]*for[\s_-]*proposals?|request[\s_-]*for[\s_-]*proposals?|expression[\s_-]*of[\s_-]*interest|\beoi\b|procurement)",
-        re.IGNORECASE,
-    )
-
     for link in soup.find_all("a"):
         if not isinstance(link, Tag):
             continue
@@ -124,7 +179,18 @@ def extract_kfw_pdf_urls(listing_doc: BeautifulSoup | str, listing_url: str) -> 
                 str(link.get("aria-label") or ""),
             ]
         )
-        if not signal_pattern.search(signal_text):
+        if not _KFW_SIGNAL_PATTERN.search(signal_text):
+            continue
+
+        reference_text = " ".join(
+            [
+                posixpath.basename(normalized.path),
+                link.get_text(" ", strip=True),
+                str(link.get("title") or ""),
+                str(link.get("aria-label") or ""),
+            ]
+        )
+        if _KFW_REFERENCE_DOCUMENT_PATTERN.search(reference_text):
             continue
 
         canonical = urlunsplit(
@@ -238,8 +304,9 @@ def discover_candidates() -> tuple[dict[str, int], list[dict[str, Any]]]:
     """Discover KfW edital PDF candidates from the listing page.
 
     Returns ``(stats, candidates)``. The primary BS4 path is tried
-    first; if it yields no PDFs, the Playwright fallback runs only if
-    Playwright is importable in the current environment.
+    first. The Playwright fallback runs only when the static listing could
+    not be fetched, and only if Playwright is importable; a fetched page
+    with no matching PDF is an empty inventory and never starts a browser.
     """
     stats: dict[str, int] = {
         "listings_fetched": 0,
@@ -278,7 +345,7 @@ def discover_candidates() -> tuple[dict[str, int], list[dict[str, Any]]]:
         pdf_urls = extract_kfw_pdf_urls(listing_html, KFW_LISTING_URL)
         stats["details_fetched"] += 1
 
-    if not pdf_urls:
+    if listing_html is None:
         stats["playwright_fallback_used"] = 1
         pdf_urls = _run_playwright_fallback(KFW_LISTING_URL, stats=stats)
 

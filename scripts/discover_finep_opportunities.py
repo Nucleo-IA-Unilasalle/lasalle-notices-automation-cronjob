@@ -14,11 +14,21 @@ from scraper_transport import request_with_safe_redirects
 
 
 FINEP_API_URL = "https://www.finep.gov.br/o/c/chamadapublicas"
-FINEP_DETAIL_BASE_URL = "https://www.finep.gov.br/chamada-publica/222684"
+# The legacy ``/chamada-publica/222684/<id>`` form returns 404; the live detail
+# route (and the API's own links) is the versioned ``/e/`` form.
+FINEP_DETAIL_BASE_URL = "https://www.finep.gov.br/e/chamada-publica/222684"
 FINEP_PAGE_SIZE = int(os.environ.get("FINEP_PAGE_SIZE", "20"))
-FINEP_MAX_PAGES_PER_RUN = int(os.environ.get("FINEP_MAX_PAGES_PER_RUN", "5"))
+# The live catalogue is ~24 pages / ~479 records. A 5-page default truncated the
+# listing on every run, so the collection could never be reported complete and
+# `last_complete_collection_at` stayed NULL forever. Enumeration is cheap (JSON
+# pages), so the default now covers the whole catalogue; the per-run opportunity
+# cap below still bounds the expensive work.
+FINEP_MAX_PAGES_PER_RUN = int(os.environ.get("FINEP_MAX_PAGES_PER_RUN", "30"))
+# Must be able to hold every genuinely open call in one run (~7 today, 20 with
+# expired-but-still-"Aberta" records); a cap below that turned a healthy,
+# complete enumeration into a permanent `cap_reached` warning.
 FINEP_MAX_OPPORTUNITIES_PER_RUN = int(
-    os.environ.get("FINEP_MAX_OPPORTUNITIES_PER_RUN", "10")
+    os.environ.get("FINEP_MAX_OPPORTUNITIES_PER_RUN", "40")
 )
 FINEP_FETCH_TIMEOUT_SECONDS = int(
     os.environ.get("FINEP_FETCH_TIMEOUT_SECONDS", "30")
@@ -89,6 +99,14 @@ def _iso(value: Any) -> str | None:
     if parsed.tzinfo is None:
         parsed = parsed.replace(tzinfo=timezone.utc)
     return parsed.astimezone(timezone.utc).isoformat()
+
+
+def _parse_iso(value: Any) -> datetime | None:
+    """Timezone-aware datetime for a Finep ISO timestamp, else ``None``."""
+    normalized = _iso(value)
+    if normalized is None:
+        return None
+    return datetime.fromisoformat(normalized)
 
 
 def extract_record_documents(record: dict[str, Any]) -> list[dict[str, Any]]:
@@ -259,14 +277,17 @@ def discover_opportunities(
     fetch_json: Callable[[str], dict[str, Any]] | None = None,
     snapshot_at: datetime | None = None,
     min_year: int | None = None,
+    now: datetime | None = None,
 ) -> tuple[dict[str, int], list[dict[str, Any]]]:
     progress: dict[str, Any] = {}
     records = fetch_api_pages(fetch_json=fetch_json, progress=progress)
     if not records:
         return {"inventory_parse_failed": 1, "records": 0, "opportunities": 0}, []
 
+    current = now or snapshot_at or datetime.now(timezone.utc)
     opportunities: list[dict[str, Any]] = []
     rejected = 0
+    expired = 0
     capped = False
     for index, record in enumerate(records):
         if not record.get("id") or not str(record.get("titulo") or "").strip():
@@ -280,6 +301,13 @@ def discover_opportunities(
         if status != "open":
             rejected += 1
             continue
+        # Finep leaves expired calls flagged "Aberta". A past ``prazoProposto``
+        # is authoritative: emitting it creates an opportunity whose deadline
+        # has already passed.
+        deadline = _parse_iso(record.get("prazoProposto"))
+        if deadline is not None and deadline < current:
+            expired += 1
+            continue
         opportunities.append(
             record_to_opportunity(record, snapshot_at=snapshot_at)
         )
@@ -290,6 +318,7 @@ def discover_opportunities(
         "records": len(records),
         "opportunities": len(opportunities),
         "policy_rejected": rejected,
+        "expired_rejected": expired,
         "candidate_cap_reached": int(capped),
         "page_cap_reached": int(bool(progress.get("last_page")) and
                                 max(progress.get("pages_completed") or [0]) < progress["last_page"]),

@@ -12,11 +12,14 @@ year guard, ``is_likely_edital`` prefilter, and the
 from __future__ import annotations
 
 import importlib
+import json
+import logging
 import sys
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
+import requests
 
 from conftest import make_response, patch_request_with_safe_redirects
 
@@ -36,6 +39,33 @@ AJAX_URL = (
 
 def _read_fixture(path: Path) -> str:
     return path.read_text(encoding="utf-8")
+
+
+def _json_response(payload: object, *, status_code: int = 200) -> MagicMock:
+    """Build a JSON ``requests.Response`` mock for the AJAX endpoint."""
+    response = MagicMock(spec=requests.Response)
+    response.status_code = status_code
+    response.headers = {"Content-Type": "application/json"}
+    response.text = json.dumps(payload)
+    response.json.return_value = payload
+    response.raise_for_status = MagicMock()
+    if status_code >= 400:
+        response.raise_for_status.side_effect = requests.HTTPError(
+            f"HTTP {status_code}", response=response,
+        )
+    return response
+
+
+def _empty_ajax() -> MagicMock:
+    return _json_response({"body": "", "pagecount": 0})
+
+
+@pytest.fixture(autouse=True)
+def _no_retry_backoff(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Keep mocked retry ladders instant and deterministic."""
+    import discover_fapergs_candidates as dpc
+
+    monkeypatch.setattr(dpc, "FAPERGS_FETCH_BACKOFF_SECONDS", 0.0)
 
 
 class TestExtractFapergsDetailUrls:
@@ -231,6 +261,7 @@ class TestDiscoverCandidates:
 
         responses = {
             LISTING_URL: make_response(listing_html_2026),
+            AJAX_URL: _empty_ajax(),
             centelha_url: make_response(detail_html_2026),
             other_url: make_response("<html></html>"),
         }
@@ -264,10 +295,7 @@ class TestDiscoverCandidates:
         </html>
         """
         ajax_payload = {"body": ajax_body, "pagecount": 1}
-        ajax_response = MagicMock()
-        ajax_response.status_code = 200
-        ajax_response.raise_for_status = MagicMock()
-        ajax_response.json.return_value = ajax_payload
+        ajax_response = _json_response(ajax_payload)
 
         ajax_detail = make_response(
             "<html><body><a href='/upload/arquivos/ajax-edital.pdf'>PDF</a></body></html>",
@@ -284,6 +312,8 @@ class TestDiscoverCandidates:
 
         urls = [c["url"] for c in candidates]
         assert "https://fapergs.rs.gov.br/upload/arquivos/ajax-edital.pdf" in urls
+        assert stats["inventory_seen"] == 1
+        assert stats["errors"] == 0
 
     def test_year_filter_excludes_pre_2026_detail_urls(self) -> None:
         from discover_fapergs_candidates import discover_candidates
@@ -301,6 +331,7 @@ class TestDiscoverCandidates:
 
         responses = {
             LISTING_URL: make_response(listing_html),
+            AJAX_URL: _empty_ajax(),
             "https://fapergs.rs.gov.br/edital-2025": make_response(detail_html),
         }
 
@@ -309,16 +340,155 @@ class TestDiscoverCandidates:
 
         assert candidates == []
         assert stats["year_rejected"] == 1
+        assert stats["errors"] == 0
 
-    def test_listing_fetch_failure_is_logged(self) -> None:
-        import requests
+    def test_listing_fetch_failure_is_retried_and_counted(self) -> None:
+        from discover_fapergs_candidates import (
+            FAPERGS_FETCH_MAX_ATTEMPTS,
+            discover_candidates,
+        )
 
-        from discover_fapergs_candidates import discover_candidates
+        listing_attempts = 0
 
-        with patch_request_with_safe_redirects({LISTING_URL: requests.ConnectionError("down")}):
+        def fake_request(*, method: str, url: str, timeout: int, **_: object) -> object:
+            nonlocal listing_attempts
+            if url == AJAX_URL:
+                return _empty_ajax()
+            listing_attempts += 1
+            raise requests.ConnectionError("down")
+
+        with patch_request_with_safe_redirects(fake_request):
             stats, candidates = discover_candidates()
 
+        assert listing_attempts == FAPERGS_FETCH_MAX_ATTEMPTS
         assert stats["errors"] == 1
+        assert stats["listings_fetched"] == 0
+        assert candidates == []
+
+
+class TestAjaxFailureHandling:
+    """The AJAX channel lists open notices; its failures must never be silent."""
+
+    STATIC_EMPTY = "<html><body></body></html>"
+
+    def test_ajax_5xx_retries_then_counts_an_error(
+        self, caplog: pytest.LogCaptureFixture,
+    ) -> None:
+        from discover_fapergs_candidates import (
+            FAPERGS_FETCH_MAX_ATTEMPTS,
+            discover_candidates,
+        )
+
+        attempts = 0
+
+        def fake_request(*, method: str, url: str, timeout: int, **_: object) -> object:
+            nonlocal attempts
+            if url == AJAX_URL:
+                attempts += 1
+                return _json_response({"body": ""}, status_code=503)
+            return make_response(self.STATIC_EMPTY)
+
+        with caplog.at_level(logging.WARNING, logger="discover_fapergs_candidates"):
+            with patch_request_with_safe_redirects(fake_request):
+                stats, candidates = discover_candidates()
+
+        assert attempts == FAPERGS_FETCH_MAX_ATTEMPTS
+        assert stats["errors"] == 1
+        assert stats["inventory_seen"] == 0
+        assert candidates == []
+        assert any("AJAX" in record.getMessage() for record in caplog.records)
+
+    def test_ajax_connect_timeout_retries_then_counts_an_error(self) -> None:
+        from discover_fapergs_candidates import (
+            FAPERGS_FETCH_MAX_ATTEMPTS,
+            discover_candidates,
+        )
+
+        attempts = 0
+
+        def fake_request(*, method: str, url: str, timeout: int, **_: object) -> object:
+            nonlocal attempts
+            if url == AJAX_URL:
+                attempts += 1
+                raise requests.ConnectTimeout("connect timeout=30")
+            return make_response(self.STATIC_EMPTY)
+
+        with patch_request_with_safe_redirects(fake_request):
+            stats, candidates = discover_candidates()
+
+        assert attempts == FAPERGS_FETCH_MAX_ATTEMPTS
+        assert stats["errors"] == 1
+        assert stats["inventory_seen"] == 0
+        assert candidates == []
+
+    def test_ajax_html_challenge_is_counted_and_not_retried(self) -> None:
+        from discover_fapergs_candidates import discover_candidates
+
+        challenge = MagicMock(spec=requests.Response)
+        challenge.status_code = 200
+        challenge.headers = {"Content-Type": "text/html"}
+        challenge.text = "<html><script>bobcmn</script></html>"
+        challenge.raise_for_status = MagicMock()
+
+        attempts = 0
+
+        def fake_request(*, method: str, url: str, timeout: int, **_: object) -> object:
+            nonlocal attempts
+            if url == AJAX_URL:
+                attempts += 1
+                return challenge
+            return make_response(self.STATIC_EMPTY)
+
+        with patch_request_with_safe_redirects(fake_request):
+            stats, candidates = discover_candidates()
+
+        # A WAF challenge is not retried; it degrades to a warning upstream.
+        assert attempts == 1
+        assert stats["errors"] == 1
+        assert stats["inventory_seen"] == 0
+        assert candidates == []
+
+    def test_clean_zero_ajax_run_is_not_an_error(self) -> None:
+        from discover_fapergs_candidates import discover_candidates
+
+        responses = {
+            LISTING_URL: make_response(self.STATIC_EMPTY),
+            AJAX_URL: _empty_ajax(),
+        }
+
+        with patch_request_with_safe_redirects(responses):
+            stats, candidates = discover_candidates()
+
+        assert stats["errors"] == 0
+        assert stats["inventory_seen"] == 0
+        assert stats["listings_fetched"] == 1
+        assert candidates == []
+
+    def test_ajax_success_reports_open_notice_inventory(self) -> None:
+        from discover_fapergs_candidates import discover_candidates
+
+        ajax_body = """
+        <html><body>
+          <a href="/programa-horizon-europe-2026">Aberto</a>
+          <a href="/edital-aberto-2026">Aberto</a>
+        </body></html>
+        """
+        responses = {
+            LISTING_URL: make_response(self.STATIC_EMPTY),
+            AJAX_URL: _json_response({"body": ajax_body, "pagecount": 1}),
+            "https://fapergs.rs.gov.br/programa-horizon-europe-2026": make_response(
+                "<html></html>",
+            ),
+            "https://fapergs.rs.gov.br/edital-aberto-2026": make_response(
+                "<html></html>",
+            ),
+        }
+
+        with patch_request_with_safe_redirects(responses):
+            stats, candidates = discover_candidates()
+
+        assert stats["inventory_seen"] == 2
+        assert stats["errors"] == 0
         assert candidates == []
 
 

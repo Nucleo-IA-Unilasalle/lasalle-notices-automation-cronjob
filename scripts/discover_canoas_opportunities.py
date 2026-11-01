@@ -107,7 +107,12 @@ _POST_ACT_RE = re.compile(
     r"notificac(?:ao|oes)|apostila|termo\s+de\s+(?:contrato|homologac(?:ao|oes)|"
     r"adjudicac(?:ao|oes)|revogac(?:ao|oes)|rescis(?:ao|oes)|designacao)|"
     r"revogac(?:ao|oes)|cancelament(?:o|os)|"
-    r"suspens(?:ao|oes)|extrato\s+de\s+credenciamento)\b",
+    r"suspens(?:ao|oes)|extrato\s+de\s+credenciamento|"
+    # Post-act vocabulary that a 30-day sweep showed leaking through as
+    # opportunities: candidate convocations, appeal judgments, opening-date
+    # corrections, classified lists and appointment notices.
+    r"convocac(?:ao|oes)|julgament(?:o|os)|corre(?:c|ç)(?:ao|oes)|"
+    r"lista\s+de\s+classificados|nomeac(?:ao|oes))\b",
     re.IGNORECASE,
 )
 _PROCUREMENT_RE = re.compile(
@@ -909,8 +914,9 @@ def discover_opportunities(
             continue
         for record_index, record in enumerate(day_records):
             if len(records) >= max(0, CANOAS_MAX_PUBLICATIONS_PER_RUN):
+                # Throughput cap: the day range is complete up to the cap, so
+                # report cap-reached (warning) rather than a parse failure.
                 stats["publication_cap_reached"] = 1
-                stats["inventory_parse_failed"] = 1
                 break
             record_id = record["source_record_id"]
             if record_id in seen_ids:
@@ -924,7 +930,6 @@ def discover_opportunities(
                     or day_index + 1 < len(days)
                 ):
                     stats["publication_cap_reached"] = 1
-                    stats["inventory_parse_failed"] = 1
                 break
         if len(records) >= max(0, CANOAS_MAX_PUBLICATIONS_PER_RUN):
             break
@@ -988,8 +993,10 @@ def discover_opportunities(
                 stats["errors"] += 1
                 stats["inventory_parse_failed"] = 1
         else:
+            # A lookup cap is a throughput signal, not a parser failure: the
+            # orchestrator maps *_cap_reached to warning (cap-reached telemetry)
+            # while inventory_parse_failed escalates the whole run to failed.
             stats["wordpress_lookup_cap_reached"] = 1
-            stats["inventory_parse_failed"] = 1
         opportunity = parse_canoas_opportunity(
             record, wordpress=wordpress, snapshot_at=snapshot_at or current, now=current
         )
@@ -999,7 +1006,6 @@ def discover_opportunities(
         opportunities.append(opportunity)
         if len(opportunities) >= CANOAS_MAX_OPPORTUNITIES_PER_RUN:
             stats["candidate_cap_reached"] = 1
-            stats["inventory_parse_failed"] = 1
             break
     stats["opportunities"] = len(opportunities)
     return stats, opportunities

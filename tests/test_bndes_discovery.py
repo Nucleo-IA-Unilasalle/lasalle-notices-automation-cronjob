@@ -196,6 +196,63 @@ class TestExtractBndesDetailAndPdfUrls:
         """
         assert extract_bndes_detail_and_pdf_urls(listing_html, FUNDO_LISTING_URL) == []
 
+    def test_listing_self_link_is_not_emitted(self) -> None:
+        """The fundo page links back to itself; that used to cost a detail fetch."""
+        from discover_bndes_candidates import extract_bndes_detail_and_pdf_urls
+
+        listing_html = """
+        <html><body>
+          <a href="/wps/portal/site/home/financiamento/produto/bndes-fundo-socioambiental">Fundo Socioambiental</a>
+          <a href="/wps/portal/site/home/financiamento/produto/bndes-fundo-socioambiental/chamada-publica-periferias-2026">Periferias</a>
+        </body></html>
+        """
+        discovered = extract_bndes_detail_and_pdf_urls(listing_html, FUNDO_LISTING_URL)
+        assert discovered == [
+            (
+                "https://www.bndes.gov.br/wps/portal/site/home/"
+                "financiamento/produto/bndes-fundo-socioambiental/"
+                "chamada-publica-periferias-2026"
+            ),
+        ]
+
+
+class TestExternalInnovationCoverage:
+    """BNDES moved the CPSI calls to worldlabs.org; keep the gap observable."""
+
+    def test_external_cpsi_links_are_counted_but_never_admitted(self) -> None:
+        from discover_bndes_candidates import (
+            count_external_innovation_links,
+            extract_bndes_detail_and_pdf_urls,
+        )
+
+        listing_html = """
+        <html><body>
+          <a href="https://www.worldlabs.org/opportunity/inteligencia-dados-saude">CPSI 001/2026 — Inteligência de Dados em Saúde</a>
+          <a href="https://www.worldlabs.org/opportunity/desafio-bndes-ia-juridica">CPSI 003/2025 — IA Jurídica</a>
+          <a href="https://www.worldlabs.org/opportunity/desafio-bndes-score-inteligente-de-mei-e-micro">CPSI 002/2025 — Score Inteligente</a>
+          <a href="/wps/portal/site/home/transparencia/chamadas/chamada-inovacao-cpsi-corais">Chamada de inovação local</a>
+        </body></html>
+        """
+
+        assert count_external_innovation_links(listing_html, INOVACAO_LISTING_URL) == 3
+        # The host gate still refuses third-party routes as PDF candidates.
+        assert extract_bndes_detail_and_pdf_urls(listing_html, INOVACAO_LISTING_URL) == [
+            (
+                "https://www.bndes.gov.br/wps/portal/site/home/"
+                "transparencia/chamadas/chamada-inovacao-cpsi-corais"
+            ),
+        ]
+
+    def test_local_anchors_are_not_counted_as_external(self) -> None:
+        from discover_bndes_candidates import count_external_innovation_links
+
+        listing_html = """
+        <html><body>
+          <a href="/wps/portal/site/home/transparencia/chamadas/chamada-inovacao-cpsi-corais">CPSI local</a>
+        </body></html>
+        """
+        assert count_external_innovation_links(listing_html, INOVACAO_LISTING_URL) == 0
+
 
 # ---------------------------------------------------------------------------
 # Listing URLs (constant)

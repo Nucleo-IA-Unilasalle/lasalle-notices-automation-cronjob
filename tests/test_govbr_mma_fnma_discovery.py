@@ -589,6 +589,28 @@ class TestStaleOpenPastDeadline:
         assert meta["deadline"] == past
         assert meta["status"] == "closed"
 
+    def test_discovered_candidate_metadata_is_closed_after_deadline(self) -> None:
+        """The submitted candidate must never carry ``status="open"`` when its
+        deadline is already in the past, even if the page still uses
+        prorrogation wording."""
+        import discover_govbr_mma_fnma_candidates as fnma
+
+        listing = """
+        <html><body><div id="content">
+          <h2>2026</h2>
+          <p>EDITAL PRORROGADO — as propostas podem ser enviadas até 31/12/2025.</p>
+          <p><a href="./edital-fnma-1-de-2026.pdf">Edital FNMA 1/2026</a></p>
+        </div></body></html>
+        """
+        responses = {LISTING_URL: make_response(listing)}
+        with patch_request_with_safe_redirects(responses):
+            _stats, candidates = fnma.discover_candidates()
+
+        assert len(candidates) == 1
+        metadata = candidates[0]["metadata"]
+        assert metadata["deadline"] == "2025-12-31"
+        assert metadata["status"] == "closed"
+
     def test_future_deadline_stays_open(self) -> None:
         from datetime import datetime, timedelta, timezone
 
@@ -610,3 +632,104 @@ class TestStaleOpenPastDeadline:
         meta = fnma._extract_listing_metadata(root, year=2026)
         assert meta["deadline"] == future
         assert meta["status"] == "open"
+
+
+class TestRelatedDocumentPrefix:
+    """GOV.BR publishes related documents with the keyword glued to the rest of
+    the filename (``ResultadoDefinitivo...pdf``, ``RetificaodoEdital...pdf``).
+    They must be related metadata, never principal opportunities."""
+
+    def test_resultado_filename_without_separator_is_related(self) -> None:
+        import discover_govbr_mma_fnma_candidates as fnma
+
+        assert fnma._is_related_document(
+            "https://www.gov.br/mma/resultadoDefinitivoEditalArborizaCidades.pdf",
+            "\ufeffO Fundo Nacional do Meio Ambiente torna público o resultado "
+            "definitivo do Edital FNMA nº 1/2026",
+        ) is True
+
+    def test_unaccented_retificacao_filename_is_related(self) -> None:
+        import discover_govbr_mma_fnma_candidates as fnma
+
+        assert fnma._is_related_document(
+            "https://www.gov.br/mma/RetificaodoEditaln01de2026.pdf",
+            "Retificação",
+        ) is True
+
+    def test_principal_filename_is_not_related(self) -> None:
+        import discover_govbr_mma_fnma_candidates as fnma
+
+        assert fnma._is_related_document(
+            "https://www.gov.br/mma/edital-fnma-1-de-2026-iniciativa-arborizacidades.pdf",
+            "Edital FNMA 1/2026 – Iniciativa ArborizaCidades",
+        ) is False
+
+    def test_result_subject_title_is_not_related(self) -> None:
+        """A principal edital about payment-for-results keeps its candidate
+        status; the related-document title check stays anchored."""
+        import discover_govbr_mma_fnma_candidates as fnma
+
+        assert fnma._is_related_document(
+            "https://www.gov.br/mma/edital-fnma-2-de-2026.pdf",
+            "Edital para projetos de pagamentos por resultados ambientais",
+        ) is False
+
+    def test_live_shape_collapses_to_single_inventory_record(self) -> None:
+        import discover_govbr_mma_fnma_candidates as fnma
+
+        listing = """
+        <html><body><div id="content">
+          <div class="cover-richtext-tile">
+            <p>Edital 2026 - EDITAL PRORROGADO</p>
+            <p>As propostas podem ser enviadas até 13/07/2026.</p>
+            <p><a href="./edital-fnma-1-de-2026-iniciativa-arborizacidades.pdf">Edital FNMA 1/2026 – Iniciativa ArborizaCidades</a></p>
+            <p><a href="./RetificaodoEditaln01de2026IniciativaArborizaCidades.pdf">Retificação</a></p>
+            <p><a href="./ResultadoDefinitivoEditalArborizaCidades.pdf">﻿O Fundo Nacional do Meio Ambiente torna público em 16/10/2026, o resultado definitivo do Edital FNMA nº 1/2026</a></p>
+          </div>
+        </div></body></html>
+        """
+        responses = {LISTING_URL: make_response(listing)}
+        with patch_request_with_safe_redirects(responses):
+            stats, candidates = fnma.discover_candidates()
+
+        assert len(candidates) == 1
+        assert candidates[0]["metadata"]["source_record_id"] == (
+            "fnma-2026-edital-fnma-1-2026-iniciativa-arborizacidades"
+        )
+        # The result/retification PDFs are no longer principal candidates, so
+        # the only prefilter rejection disappears.
+        assert stats["prefilter_rejected"] == 0
+        assert stats["policy_rejected"] == 0
+        assert stats["inventory_seen"] == 1
+        assert stats["in_scope"] == 1
+
+        inventory, _ = fnma.build_inventory(listing_html=listing)
+        assert len(inventory) == 1
+        record = inventory[0]
+        assert record["source_record_id"] == (
+            "fnma-2026-edital-fnma-1-2026-iniciativa-arborizacidades"
+        )
+        documents = " ".join(record["document_urls"])
+        assert "edital-fnma-1-de-2026-iniciativa-arborizacidades.pdf" in documents
+        assert "RetificaodoEditaln01de2026IniciativaArborizaCidades.pdf" in documents
+        assert "ResultadoDefinitivoEditalArborizaCidades.pdf" in documents
+        assert record["status"] == "closed"
+        assert record["deadline"] == "2026-07-13"
+
+    def test_stats_report_inventory_and_rejection_split(self) -> None:
+        import discover_govbr_mma_fnma_candidates as fnma
+
+        responses = {LISTING_URL: make_response(_read_fixture(LISTING_FIXTURE))}
+        with patch_request_with_safe_redirects(responses):
+            stats, candidates = fnma.discover_candidates()
+
+        inventory, _ = fnma.build_inventory(
+            listing_html=_read_fixture(LISTING_FIXTURE),
+        )
+        assert stats["candidates"] == len(candidates) == 1
+        assert stats["inventory_seen"] == len(inventory) == 1
+        assert stats["in_scope"] == 1
+        assert stats["policy_rejected"] == (
+            stats["prefilter_rejected"] + stats["year_rejected"]
+        )
+        assert stats["policy_rejected"] == 1

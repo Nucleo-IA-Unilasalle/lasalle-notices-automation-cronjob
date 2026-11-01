@@ -30,6 +30,15 @@ Filter pipeline (per plan §9):
 
 Message shape matches the existing PNCP contract so the Render submit
 endpoint can ingest it unchanged.
+
+Scope decision (2026-10-31): IIS-Rio publishes two kinds of 2026
+content that carry a TdR PDF — institutional news, ``Vaga ...``
+employment vacancies, and procurement notices. Only procurement/
+funding notices are in scope, so the vacancy posts are deliberately
+excluded by the title gate and never fetched. They are counted in
+``stats["tdr_out_of_scope"]`` (``out_of_scope_vacancy_urls``) so that a
+busy listing delivering zero candidates stays explainable instead of
+looking like a silently broken scraper.
 """
 
 from __future__ import annotations
@@ -161,6 +170,57 @@ def extract_iis_rio_detail_urls(listing_html: str, listing_url: str) -> list[str
     return discovered
 
 
+_VACANCY_SIGNAL_PATTERN = re.compile(r"\bvaga(s)?\b", re.IGNORECASE)
+
+
+def out_of_scope_vacancy_urls(listing_html: str, listing_url: str) -> set[str]:
+    """Canonical IIS-Rio posts that are employment vacancies, not notices.
+
+    IIS-Rio publishes ``Vaga ...`` posts that each link a TdR PDF. They are
+    employment notices rather than procurement/funding opportunities, so they
+    are out of scope for this source and the title gate never fetches them.
+    Counting them keeps a zero-inventory run explainable: without the counter a
+    listing that contains only vacancies is indistinguishable from a source
+    that silently stopped working.
+    """
+    soup = BeautifulSoup(listing_html, "html.parser")
+    found: set[str] = set()
+
+    def _normalize_host(host: str) -> str:
+        normalized = host.lower()
+        return normalized[4:] if normalized.startswith("www.") else normalized
+
+    listing_parts = urlsplit(listing_url)
+    listing_host = _normalize_host(listing_parts.hostname or "")
+
+    for link in soup.find_all("a"):
+        if not isinstance(link, Tag):
+            continue
+        href = link.get("href")
+        if not isinstance(href, str) or not href:
+            continue
+        normalized = urlsplit(urljoin(listing_url, href))
+        if _normalize_host(normalized.hostname or "") != listing_host:
+            continue
+        path = normalized.path.rstrip("/")
+        if not re.fullmatch(r"/noticias/[^/]+", path):
+            continue
+        label = " ".join(
+            [
+                href,
+                path,
+                link.get_text(" ", strip=True),
+                str(link.get("title") or ""),
+                str(link.get("aria-label") or ""),
+            ]
+        )
+        if not _VACANCY_SIGNAL_PATTERN.search(label):
+            continue
+        found.add(urlunsplit((listing_parts.scheme, listing_parts.netloc, path, "", "")))
+
+    return found
+
+
 def _candidate_passes_edital_prefilter(
     url: str, filter_policy: FilterPolicy = "include_tdr",
 ) -> bool:
@@ -234,10 +294,12 @@ def discover_candidates(
         "year_rejected": 0,
         "errors": 0,
         "candidate_cap_reached": 0,
+        "tdr_out_of_scope": 0,
     }
     candidates: list[dict[str, Any]] = []
     seen_pdfs: set[str] = set()
     seen_details: set[str] = set()
+    out_of_scope_vacancies: set[str] = set()
     details_fetched = 0
 
     from scraper_transport import request_with_safe_redirects
@@ -271,6 +333,8 @@ def discover_candidates(
 
         stats["listings_fetched"] += 1
         page_detail_urls = extract_iis_rio_detail_urls(listing_html, page_url)
+        out_of_scope_vacancies |= out_of_scope_vacancy_urls(listing_html, page_url)
+        stats["tdr_out_of_scope"] = len(out_of_scope_vacancies)
 
         new_urls = [u for u in page_detail_urls if u not in seen_details]
         if not new_urls and page_num > 1:

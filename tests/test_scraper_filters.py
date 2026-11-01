@@ -113,6 +113,32 @@ class TestIsLikelyEdital:
             filter_policy="include_tdr",
         ) is True
 
+    def test_lista_de_exclusion_is_word_bounded(self) -> None:
+        # "anaLISTA-DE" must not read as "lista de": IIS-Rio publishes
+        # TDR-Analista-de-BI / TDR-Analista-de-TI-Pleno, which the unanchored
+        # pattern used to drop even under include_tdr.
+        for url in (
+            "https://www.iis-rio.org/wp-content/uploads/2026/10/TDR-Analista-de-BI-2026.pdf",
+            "https://www.iis-rio.org/wp-content/uploads/2026/09/TDR-Analista-de-TI-Pleno-IIS.pdf",
+        ):
+            assert scraper_filters.is_likely_edital(
+                url.rsplit("/", 1)[-1], url, filter_policy="include_tdr"
+            ) is True
+
+    def test_lista_de_exclusion_still_rejects_real_list_documents(self) -> None:
+        assert scraper_filters.is_likely_edital(
+            "lista-de-resultados-homologados.pdf",
+            "https://example.org/lista-de-resultados-homologados.pdf",
+        ) is False
+
+    def test_privacy_policy_chrome_is_never_a_notice_document(self) -> None:
+        # Several listings link the institutional privacy PDF from the footer.
+        assert scraper_filters.is_likely_edital(
+            "Politica-de-Privacidade-2024.pdf",
+            "https://www.iis-rio.org/wp-content/uploads/2024/07/Politica-de-Privacidade-RGPD.pdf",
+            filter_policy="include_tdr",
+        ) is False
+
     def test_handles_accented_and_encoded_exclusions(self) -> None:
         assert scraper_filters.is_likely_edital(
             "termo_de_referência.pdf",

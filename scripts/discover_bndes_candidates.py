@@ -276,6 +276,14 @@ def extract_bndes_detail_and_pdf_urls(listing_html: str, listing_url: str) -> li
 
         query_values = parse_qs(normalized.query)
         urile_values = query_values.get("urile", [])
+
+        # The fundo page links back to itself; without this guard the listing
+        # URL is emitted as an extra "detail" and fetched for nothing. A
+        # query-style route (``?urile=…``) shares the listing path but is a
+        # real detail page, so it must not be caught here.
+        if not urile_values and path == urlsplit(listing_url).path.rstrip("/"):
+            continue
+
         is_query_route = bool(urile_values)
         allow_query_route = any(
             _is_allowed_urile_route(urile_value)
@@ -318,6 +326,45 @@ def extract_bndes_detail_and_pdf_urls(listing_html: str, listing_url: str) -> li
         discovered.append(canonical)
 
     return discovered
+
+
+_EXTERNAL_CPSI_PATTERN = re.compile(r"\b(cpsi|chamada.?de.?inovacao|opportunity)\b", re.IGNORECASE)
+
+
+def count_external_innovation_links(listing_html: str, listing_url: str) -> int:
+    """Count BNDES innovation-call links that live on another host.
+
+    BNDES now publishes the ``Chamadas de Inovação`` (CPSI) calls only on
+    ``worldlabs.org`` (a JS SPA), with no ``bndes.gov.br`` document or detail
+    anchor left on the listing page. The host gate below correctly refuses to
+    treat a third-party SPA route as a PDF candidate, but that made the feed
+    structurally empty and invisible: the source reported a healthy run with the
+    innovation half silently contributing nothing. Counting the external links
+    keeps that gap observable until the structured-opportunity follow-up lands.
+    """
+    soup = BeautifulSoup(listing_html, "html.parser")
+    listing_host = (urlsplit(listing_url).hostname or "").lower()
+    if listing_host.startswith("www."):
+        listing_host = listing_host[4:]
+    found: set[str] = set()
+    for link in soup.find_all("a"):
+        if not isinstance(link, Tag):
+            continue
+        href = link.get("href")
+        if not isinstance(href, str) or not href:
+            continue
+        resolved = urlsplit(urljoin(listing_url, href))
+        host = (resolved.hostname or "").lower()
+        if host.startswith("www."):
+            host = host[4:]
+        if not host or host == listing_host:
+            continue
+        label = " ".join(
+            [href, resolved.path, link.get_text(" ", strip=True), str(link.get("title") or "")]
+        )
+        if _EXTERNAL_CPSI_PATTERN.search(label):
+            found.add(urlunsplit((resolved.scheme, resolved.netloc, resolved.path, "", "")))
+    return len(found)
 
 
 BNDES_NON_EDITAL_PATTERNS = re.compile(
@@ -409,6 +456,7 @@ def discover_candidates(
         "lifecycle_rejected": 0,
         "errors": 0,
         "candidate_cap_reached": 0,
+        "external_cpsi_links": 0,
     }
     candidates: list[dict[str, Any]] = []
     seen_urls: set[str] = set()
@@ -425,6 +473,7 @@ def discover_candidates(
             continue
 
         stats["listings_fetched"] += 1
+        stats["external_cpsi_links"] += count_external_innovation_links(listing_html, listing_url)
         discovered_urls = extract_bndes_detail_and_pdf_urls(listing_html, listing_url)
 
         direct_pdfs: list[str] = []

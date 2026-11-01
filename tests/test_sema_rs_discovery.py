@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import importlib
 import sys
+import time
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
@@ -36,9 +37,31 @@ EDITAL_URL_TEMPLATE = (
     "&form%5Bordem%5D=RECENTES"
 )
 
+# Verbatim shape of the F5 BIG-IP ASM interstitial the endpoint serves to
+# non-AJAX clients: a 200 text/html body with TSPD/bobcmn markers.
+CHALLENGE_HTML = (
+    "<!DOCTYPE html><html><head>"
+    '<script src="/TSPD/abc123"></script>'
+    '<script>window["bobcmn"]="abc";</script>'
+    "</head><body><noscript>Please enable JavaScript to view the page "
+    "content. Support ID: 9481454307244445030</noscript></body></html>"
+)
+
 
 def _read_fixture(path: Path) -> str:
     return path.read_text(encoding="utf-8")
+
+
+@pytest.fixture(autouse=True)
+def _fast_deterministic_tests(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Keep retry/backoff and inter-page pacing out of the test wall clock."""
+    import discover_sema_rs_candidates as module
+    import scraper_transport
+
+    monkeypatch.setattr(module, "SEMA_RS_LISTING_DELAY_SECONDS", 0.0)
+    # ``module.time`` and ``scraper_transport.time`` are the same module
+    # object, so one patch covers both the discoverer and the transport.
+    monkeypatch.setattr(scraper_transport.time, "sleep", lambda _seconds: None)
 
 
 def _make_json_listing_response(
@@ -51,6 +74,12 @@ def _make_json_listing_response(
     if pagecount is not None:
         payload["pagecount"] = pagecount
     response.json.return_value = payload
+    return response
+
+
+def _make_challenge_response() -> MagicMock:
+    response = make_response(CHALLENGE_HTML)
+    response.headers = {"Content-Type": "text/html"}
     return response
 
 
@@ -475,6 +504,219 @@ class TestPaginationContinuation:
         assert yielded is False
         assert out == []
         assert stats["errors"] == 0
+
+
+class TestJsonTransportAdoption:
+    """The listing endpoint must be called the way its own datatable calls it."""
+
+    def test_listing_fetch_uses_transport_json_mode(self) -> None:
+        from discover_sema_rs_candidates import _fetch_keyword_listing_html
+
+        calls: list[dict[str, object]] = []
+
+        def fake_request(**kwargs: object) -> MagicMock:
+            calls.append(kwargs)
+            return _make_json_listing_response("", pagecount=1)
+
+        stats = {"errors": 0}
+        with patch(
+            "scraper_transport.request_with_safe_redirects",
+            side_effect=fake_request,
+        ):
+            body, pagecount = _fetch_keyword_listing_html(
+                "edital", 1, stats=stats,
+            )
+
+        assert (body, pagecount) == ("", 1)
+        assert stats["errors"] == 0
+        assert len(calls) == 1
+        assert calls[0]["request_mode"] == "json"
+        assert calls[0]["extra_headers"]["Referer"] == (
+            "https://www.sema.rs.gov.br/busca"
+        )
+
+    def test_outgoing_request_carries_xhr_and_json_accept(self) -> None:
+        from discover_sema_rs_candidates import _fetch_keyword_listing_html
+
+        response = make_response('{"body": "", "pagecount": 1}')
+        response.headers = {"Content-Type": "application/json"}
+        response.json = MagicMock(return_value={"body": "", "pagecount": 1})
+        captured: dict[str, object] = {}
+
+        def fake_requests_request(**kwargs: object) -> MagicMock:
+            captured.update(kwargs)
+            return response
+
+        with patch(
+            "scraper_transport.requests.request",
+            side_effect=fake_requests_request,
+        ), patch("scraper_transport.ensure_safe_url"):
+            body, pagecount = _fetch_keyword_listing_html(
+                "edital", 1, stats={"errors": 0},
+            )
+
+        assert (body, pagecount) == ("", 1)
+        headers = captured["headers"]
+        assert isinstance(headers, dict)
+        assert headers["X-Requested-With"] == "XMLHttpRequest"
+        assert headers["Accept"].startswith("application/json")
+
+    def test_default_fetch_attempts_are_bounded(self) -> None:
+        import discover_sema_rs_candidates as module
+
+        assert module.SEMA_RS_FETCH_MAX_ATTEMPTS <= 2
+
+    def test_transient_failure_retries_only_to_bound(self) -> None:
+        from discover_sema_rs_candidates import (
+            SEMA_RS_FETCH_MAX_ATTEMPTS,
+            _fetch_keyword_listing_html,
+        )
+
+        calls: list[dict[str, object]] = []
+
+        def fake_request(**kwargs: object) -> MagicMock:
+            calls.append(kwargs)
+            raise requests.Timeout("slow endpoint")
+
+        stats = {"errors": 0}
+        with patch(
+            "scraper_transport.request_with_safe_redirects",
+            side_effect=fake_request,
+        ):
+            result = _fetch_keyword_listing_html("edital", 1, stats=stats)
+
+        assert result is None
+        assert stats["errors"] == 1
+        assert len(calls) == SEMA_RS_FETCH_MAX_ATTEMPTS == 2
+
+    def test_listing_deadline_stops_before_any_request(self) -> None:
+        from discover_sema_rs_candidates import _paginate_keyword
+
+        stats = {"errors": 0}
+        with patch(
+            "scraper_transport.request_with_safe_redirects",
+        ) as mock_request:
+            yielded = _paginate_keyword(
+                "edital",
+                seen_detail_urls=set(),
+                detail_urls_out=[],
+                stats=stats,
+                deadline=time.monotonic() - 1,
+            )
+
+        assert yielded is False
+        assert stats["errors"] == 0
+        assert mock_request.call_count == 0
+
+
+class TestChallengeHandling:
+    """A challenge/denial aborts the sweep instead of sustaining the block."""
+
+    def test_challenge_is_not_retried_and_counts_one_error(self) -> None:
+        from discover_sema_rs_candidates import (
+            _fetch_keyword_listing_html,
+            _ListingAccessBlocked,
+        )
+
+        calls: list[dict[str, object]] = []
+
+        def fake_request(**kwargs: object) -> MagicMock:
+            calls.append(kwargs)
+            return _make_challenge_response()
+
+        stats = {"errors": 0}
+        with patch(
+            "scraper_transport.request_with_safe_redirects",
+            side_effect=fake_request,
+        ):
+            with pytest.raises(_ListingAccessBlocked):
+                _fetch_keyword_listing_html("edital", 1, stats=stats)
+
+        assert len(calls) == 1
+        assert stats["errors"] == 1
+
+    def test_http_403_aborts_without_retry(self) -> None:
+        from discover_sema_rs_candidates import (
+            _fetch_keyword_listing_html,
+            _ListingAccessBlocked,
+        )
+
+        calls: list[dict[str, object]] = []
+
+        def fake_request(**kwargs: object) -> MagicMock:
+            calls.append(kwargs)
+            return make_response("", status_code=403)
+
+        stats = {"errors": 0}
+        with patch(
+            "scraper_transport.request_with_safe_redirects",
+            side_effect=fake_request,
+        ):
+            with pytest.raises(_ListingAccessBlocked):
+                _fetch_keyword_listing_html("edital", 1, stats=stats)
+
+        assert len(calls) == 1
+        assert stats["errors"] == 1
+
+    def test_discover_candidates_aborts_keyword_sweep_on_challenge(self) -> None:
+        from discover_sema_rs_candidates import discover_candidates
+
+        requested: list[str] = []
+
+        def fake_request(
+            *, method: str, url: str, timeout: int, **_: object,
+        ) -> MagicMock:
+            requested.append(url)
+            if "lista-data-table" in url:
+                return _make_challenge_response()
+            return make_response("<html></html>")
+
+        with patch_request_with_safe_redirects(fake_request):
+            stats, candidates = discover_candidates()
+
+        listing_requests = [url for url in requested if "lista-data-table" in url]
+        assert len(listing_requests) == 1
+        assert "edital" in listing_requests[0]
+        # One honest error, no retry storm, and the static page still works.
+        assert stats["errors"] == 1
+        assert stats["listings_fetched"] == 0
+        assert stats["details_fetched"] == 1
+        assert candidates == []
+        assert len(requested) == 2
+
+    def test_detail_fetch_failure_is_not_counted_as_fetched(self) -> None:
+        from discover_sema_rs_candidates import discover_candidates
+
+        responses: dict[str, object] = {
+            EDITAL_URL_TEMPLATE.format(current_page=1, keyword="edital"): (
+                _make_json_listing_response(
+                    _read_fixture(LISTING_BODY_FIXTURE), pagecount=1,
+                )
+            ),
+            EDITAL_URL_TEMPLATE.format(current_page=1, keyword="chamada"): (
+                _make_json_listing_response("<html><body></body></html>", pagecount=1)
+            ),
+            "https://www.sema.rs.gov.br/edital-01-de-2024-delta-do-jacui": (
+                requests.ConnectionError("down")
+            ),
+            "https://www.sema.rs.gov.br/inscricoes-abertas-edital-002-de-2022-voluntariado-pe-tainhas": (
+                requests.ConnectionError("down")
+            ),
+            "https://www.sema.rs.gov.br/governo-do-rs-lanca-chamada-publica-para-municipios-que-queiram-valorizar-residuos-organicos": (
+                requests.ConnectionError("down")
+            ),
+            "https://www.sema.rs.gov.br/residuos-solidos": (
+                make_response("<html></html>")
+            ),
+        }
+
+        with patch_request_with_safe_redirects(responses):
+            stats, candidates = discover_candidates()
+
+        assert candidates == []
+        # Three detail pages failed; only the successful static page counts.
+        assert stats["details_fetched"] == 1
+        assert stats["errors"] == 3
 
 
 class TestYearFolderExtraction:

@@ -265,8 +265,23 @@ def test_failures_and_caps_are_explicit(monkeypatch):
     )
     assert stats["publication_cap_reached"] == 1
     assert stats["wordpress_lookup_cap_reached"] == 1
-    assert stats["inventory_parse_failed"] == 1
+    # A throughput cap is not a parser failure: the orchestrator maps it to
+    # cap-reached warning telemetry, while inventory_parse_failed escalates the
+    # whole run to failed.
+    assert stats.get("inventory_parse_failed", 0) == 0
     assert len(opportunities) == 1
+
+
+def test_post_act_vocabulary_covers_corrections_and_convocations():
+    """A 30-day sweep found these leaking through as opportunities."""
+    for title in (
+        "COMUNICACAO 01/2026 - CORRECAO DA DATA DE ABERTURA",
+        "CONVOCACAO PARA APRESENTACAO DE DOCUMENTOS - PROCESSO 04/2026",
+        "JULGAMENTO DE RECURSOS - CHAMAMENTO PUBLICO 02/2026",
+        "LISTA DE CLASSIFICADOS - EDITAL 12/2026",
+        "NOMEACAO DOS CANDIDATOS APROVADOS - CONCURSO 01/2026",
+    ):
+        assert canoas._policy_reason(title) == "post_act", title
 
 
 def test_orchestrator_registers_canoas_but_keeps_submission_opt_in():

@@ -11,11 +11,15 @@ download / OCR / submit.
 MSGOV is the only Phase 4 source that needs Playwright as the
 **primary** path because the listing (``editaisms.prosas.com.br``) is
 JS-rendered via a ``prosas-listagem-editais`` web component and detail
-pages contain a dropdown that lazy-loads anexos. A few ``.doc`` annexes
-leak through discovery; the cronjob relies on the magic-byte check in
-``pncp_http.validate_pdf`` (which checks both the ``b"%PDF"`` header
-and ``application/pdf`` MIME via ``python-magic``) to reject them at
-download time, so no manual classification is needed here.
+pages contain a dropdown that lazy-loads anexos. Office/archive annexes
+(roughly three quarters of all annex links) are dropped at discovery by
+``_is_pdf_candidate_href``. Anything that still slips through (for example
+an extensionless object) is rejected at download time by the magic-byte
+check in ``pncp_http.validate_pdf`` (``b"%PDF"`` header plus
+``application/pdf`` MIME via ``python-magic``). Neither path consumes the
+per-run PDF budget: ``record_pdf_download`` is only called for a candidate
+that downloaded *and* was OCR'd successfully. The budget itself is the
+registry ``pdf_limit`` for msgov in ``config/source_schedule.json``.
 
 The discoverer has two Playwright stages:
 
@@ -527,10 +531,11 @@ def discover_candidates() -> tuple[dict[str, int], list[dict[str, Any]]]:
     """Discover MSGOV edital PDF candidates.
 
     Returns ``(stats, candidates)``. The MSGOV source is pure
-    Playwright because the listing is JS-rendered; ``.doc`` annexes
-    that leak through discovery are filtered by the magic-byte
-    check in ``pipeline_core.process_candidate`` (via
-    ``download_pncp_pdf`` → ``validate_pdf``).
+    Playwright because the listing is JS-rendered; explicit non-PDF
+    annexes (``.doc``/``.xls``/...) are filtered before capping, and any
+    that still leak are rejected by the magic-byte check in
+    ``pipeline_core.process_candidate`` (via ``download_pncp_pdf`` →
+    ``validate_pdf``) without consuming the PDF budget.
     """
     stats: dict[str, int] = {
         "listings_fetched": 0,

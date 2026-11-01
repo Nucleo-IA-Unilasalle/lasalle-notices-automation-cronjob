@@ -231,7 +231,7 @@
       "module": "discover_kfw_candidates",
       "submission_contract": "candidate",
       "group": "c",
-      "browser_required": true,
+      "browser_required": false,
       "rollout_mode": "ingest",
       "schedule_owner": "pipeline-discovery-group-c.yml",
       "interval_minutes": 60,
@@ -252,7 +252,8 @@
       "filter_policy": "default",
       "detail_limit": 20,
       "page_limit": 5,
-      "attachment_limit": 25
+      "attachment_limit": 25,
+      "pdf_limit": 24
     },
     {
       "source_key": "unep",

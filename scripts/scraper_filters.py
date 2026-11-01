@@ -27,10 +27,17 @@ EDITAL_INCLUSION_PATTERNS = [
     r"financiamento", r"fomento", r"bolsas?", r"auxilio", r"proposta",
 ]
 EDITAL_EXCLUSION_PATTERNS = [
-    r"relatorio", r"resultado", r"lista.?de", r"manual", r"instrucao",
+    # Word-bounded "lista de": the previous unanchored ``lista.?de`` also matched
+    # "anaLISTA-DE" filenames (e.g. IIS-Rio's TDR-Analista-de-BI), silently
+    # dropping genuine notice documents.
+    r"\blista[\s_-]de\b", r"relatorio", r"resultado", r"manual", r"instrucao",
     r"modelo.?de", r"formulario", r"termo.?de.?referencia", r"ata.?de",
     r"retificacao", r"errata",
     r"credenciamento.?(de.?(fornecedor|jornalista|banco))",
+    # Site-wide chrome, not a notice document: several listing pages link the
+    # institutional privacy-policy PDF from the footer, which otherwise passes
+    # as an edital and inflates policy_rejected/prefilter counters.
+    r"politica.?(de.?)?privacidade",
 ]
 TDR_PATTERN = r"termo.?de.?referencia"
 

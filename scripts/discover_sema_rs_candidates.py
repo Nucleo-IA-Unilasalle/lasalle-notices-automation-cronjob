@@ -46,7 +46,6 @@ endpoint can ingest it unchanged.
 
 from __future__ import annotations
 
-import json
 import logging
 import os
 import re
@@ -62,7 +61,8 @@ import pipeline_core
 import scraper_transport
 from scraper_filters import FilterPolicy, is_likely_edital
 from scraper_transport import (
-    DEFAULT_HEADERS,
+    SourceAccessDeniedError,
+    SourceChallengeError,
     discover_pdf_urls_on_page,
     log_source_failure,
     looks_like_pdf_url,
@@ -82,6 +82,13 @@ SEMA_RS_LISTING_URL_TEMPLATE = (
 SEMA_RS_STATIC_SERVICE_PAGES: tuple[str, ...] = (
     "https://www.sema.rs.gov.br/residuos-solidos",
 )
+# The datatable AJAX call also carries the page that hosts it. Without
+# this Referer the F5 ASM challenge is served even to XHR callers
+# (verified live 2026-10-31: Referer -> 200 application/json
+# recordcount=251; no Referer -> 200 text/html challenge).
+SEMA_RS_LISTING_REQUEST_HEADERS: dict[str, str] = {
+    "Referer": "https://www.sema.rs.gov.br/busca",
+}
 
 SEMA_RS_KEYWORDS: tuple[str, ...] = ("edital", "chamada")
 SEMA_RS_MAX_PAGES_PER_KEYWORD = 200
@@ -91,9 +98,22 @@ SEMA_RS_MIN_NOTICE_YEAR = int(os.environ.get("SEMA_RS_MIN_NOTICE_YEAR", "2026"))
 
 SEMA_RS_MAX_CANDIDATES_PER_RUN = int(os.environ.get("SEMA_RS_MAX_CANDIDATES_PER_RUN", "50"))
 SEMA_RS_MAX_DETAILS_PER_RUN = int(os.environ.get("SEMA_RS_MAX_DETAILS_PER_RUN", "40"))
-SEMA_RS_FETCH_MAX_ATTEMPTS = int(os.environ.get("SEMA_RS_FETCH_MAX_ATTEMPTS", "3"))
+# The listing endpoint is WAF-fronted: a tight retry ladder sustains the
+# F5 ASM challenge (it once produced a ~600 s run). Two attempts per page
+# plus one clean abort on a challenge keeps the sweep bounded.
+SEMA_RS_FETCH_MAX_ATTEMPTS = int(os.environ.get("SEMA_RS_FETCH_MAX_ATTEMPTS", "2"))
 SEMA_RS_FETCH_BACKOFF_SECONDS = float(os.environ.get("SEMA_RS_FETCH_BACKOFF_SECONDS", "2"))
 SEMA_RS_FETCH_TIMEOUT_SECONDS = int(os.environ.get("SEMA_RS_FETCH_TIMEOUT_SECONDS", "30"))
+# Inter-page pacing; the endpoint answers JSON reliably at 2-3 s spacing
+# and escalates to the challenge when hammered.
+SEMA_RS_LISTING_DELAY_SECONDS = float(
+    os.environ.get("SEMA_RS_LISTING_DELAY_SECONDS", "2"),
+)
+# Hard wall-clock budget for the AJAX listing sweep (both keywords). One
+# in-flight request may still finish, so the worst case is budget + timeout.
+SEMA_RS_LISTING_MAX_SECONDS = float(
+    os.environ.get("SEMA_RS_LISTING_MAX_SECONDS", "180"),
+)
 
 
 # Matches a 4-digit year token bounded by non-digit boundaries.
@@ -330,57 +350,118 @@ def build_candidate(
     return {"url": url, "kind": "pdf", "metadata": metadata}
 
 
+class _ListingAccessBlocked(Exception):
+    """The AJAX listing endpoint answered with a WAF challenge / denial.
+
+    Raised after the transport has already fingerprinted the response so
+    the paginator can stop the sweep instead of retrying into the block.
+    """
+
+    def __init__(self, cause: Exception) -> None:
+        self.cause = cause
+        super().__init__(str(cause))
+
+
+def _pace_listing_pages() -> None:
+    """Sleep between listing requests so the WAF score stays compliant."""
+    if SEMA_RS_LISTING_DELAY_SECONDS > 0:
+        time.sleep(SEMA_RS_LISTING_DELAY_SECONDS)
+
+
 def _fetch_keyword_listing_html(
     keyword: str, current_page: int, *, stats: dict[str, int],
 ) -> tuple[str, int | None] | None:
     """Fetch a SEMA-RS JSON listing page for ``keyword``.
 
-    Returns ``(body_html, pagecount)`` where ``pagecount`` is the
-    server-reported total page count (or ``None`` when absent), or
-    ``None`` if every retry attempt fails (caller is expected to count
-    failures).
+    Uses the transport's AJAX/JSON request mode (``request_mode="json"``
+    plus ``decode_json_response``), which sends
+    ``X-Requested-With: XMLHttpRequest``, a JSON ``Accept`` and the
+    datatable ``Referer``, and refuses to hand a 200 HTML challenge page
+    to a JSON decoder. Returns ``(body_html, pagecount)``, or ``None``
+    when the bounded retry budget is exhausted (caller counts the page as
+    a failure). A challenge or access denial raises
+    :class:`_ListingAccessBlocked` immediately, after counting exactly one
+    error, so pagination aborts instead of storming the WAF.
     """
     url = SEMA_RS_LISTING_URL_TEMPLATE.format(current_page=current_page, keyword=keyword)
-    last_error: Exception | None = None
-    for attempt in range(SEMA_RS_FETCH_MAX_ATTEMPTS):
+    for attempt in range(1, SEMA_RS_FETCH_MAX_ATTEMPTS + 1):
         try:
             response = scraper_transport.request_with_safe_redirects(
                 method="GET",
                 url=url,
                 timeout=SEMA_RS_FETCH_TIMEOUT_SECONDS,
+                request_mode="json",
+                extra_headers=SEMA_RS_LISTING_REQUEST_HEADERS,
             )
             response.raise_for_status()
-            payload = response.json()
-            body = payload.get("body", "") if isinstance(payload, dict) else ""
-            raw_pagecount = payload.get("pagecount") if isinstance(payload, dict) else None
-            pagecount = raw_pagecount if isinstance(raw_pagecount, int) else None
-            return (body if isinstance(body, str) else "", pagecount)
+            payload = scraper_transport.decode_json_response(response, url=url)
+        except (SourceChallengeError, SourceAccessDeniedError) as exc:
+            stats["errors"] = stats.get("errors", 0) + 1
+            logger.warning(
+                "SEMA-RS listing for keyword '%s' page %s is WAF/access blocked; "
+                "aborting the AJAX sweep instead of retrying: %s",
+                keyword,
+                current_page,
+                exc,
+            )
+            raise _ListingAccessBlocked(exc) from exc
+        except (
+            scraper_transport.SourceContentTypeMismatchError,
+            scraper_transport.SourceJsonDecodeError,
+        ) as exc:
+            # 200 HTML / undecodable JSON is a site or parser change;
+            # retrying the same request cannot fix it.
+            stats["errors"] = stats.get("errors", 0) + 1
+            log_source_failure(
+                "SEMA-RS listing for keyword '%s' page %s returned an "
+                "unexpected payload: %s",
+                keyword,
+                current_page,
+                exc,
+                exc=exc,
+            )
+            return None
         except Exception as exc:
-            last_error = exc
-            if attempt < SEMA_RS_FETCH_MAX_ATTEMPTS - 1:
-                wait = SEMA_RS_FETCH_BACKOFF_SECONDS ** attempt
-                logger.warning(
-                    "Retrying SEMA-RS page %s for keyword '%s' in %ss (attempt %s/%s): %s",
-                    current_page,
-                    keyword,
-                    wait,
-                    attempt + 1,
-                    SEMA_RS_FETCH_MAX_ATTEMPTS,
-                    exc,
-                )
-                time.sleep(wait)
-            else:
-                log_source_failure(
-                    "Error while paginating SEMA-RS listings for keyword '%s' at page %s after %s attempts: %s",
-                    keyword,
-                    current_page,
-                    SEMA_RS_FETCH_MAX_ATTEMPTS,
-                    exc,
-                    exc=exc,
-                )
+            status_code = scraper_transport.extract_status_code_from_exception(exc)
+            if status_code in (401, 403):
                 stats["errors"] = stats.get("errors", 0) + 1
-    _ = last_error
-    return None
+                logger.warning(
+                    "SEMA-RS listing for keyword '%s' page %s was denied "
+                    "(HTTP %s); aborting the AJAX sweep",
+                    keyword,
+                    current_page,
+                    status_code,
+                )
+                raise _ListingAccessBlocked(exc) from exc
+            if status_code == 429:
+                stats["errors"] = stats.get("errors", 0) + 1
+                logger.warning(
+                    "SEMA-RS listing for keyword '%s' page %s was rate "
+                    "limited (HTTP 429); aborting the AJAX sweep",
+                    keyword,
+                    current_page,
+                )
+                raise _ListingAccessBlocked(exc) from exc
+            if attempt < SEMA_RS_FETCH_MAX_ATTEMPTS:
+                time.sleep(SEMA_RS_FETCH_BACKOFF_SECONDS * attempt)
+                continue
+            stats["errors"] = stats.get("errors", 0) + 1
+            log_source_failure(
+                "Error while paginating SEMA-RS listings for keyword '%s' at page %s after %s attempts: %s",
+                keyword,
+                current_page,
+                SEMA_RS_FETCH_MAX_ATTEMPTS,
+                exc,
+                exc=exc,
+            )
+            return None
+
+        body = payload.get("body", "") if isinstance(payload, dict) else ""
+        raw_pagecount = payload.get("pagecount") if isinstance(payload, dict) else None
+        pagecount = raw_pagecount if isinstance(raw_pagecount, int) else None
+        return (body if isinstance(body, str) else "", pagecount)
+
+    return None  # pragma: no cover - loop always returns or raises
 
 
 def _paginate_keyword(
@@ -389,6 +470,8 @@ def _paginate_keyword(
     seen_detail_urls: set[str],
     detail_urls_out: list[str],
     stats: dict[str, int],
+    blocked_out: list[bool] | None = None,
+    deadline: float | None = None,
 ) -> bool:
     """Paginate the SEMA-RS listing for ``keyword``.
 
@@ -398,8 +481,12 @@ def _paginate_keyword(
     contain the signal tokens, so an empty extraction is not the end of
     the listing. Stops when the server-reported ``pagecount`` is
     exhausted, when a page carries no article items at all, on stale
-    pages, on consecutive failures, or when
+    pages, on consecutive failures, on a WAF/access block, on the
+    wall-clock listing deadline, or when
     ``SEMA_RS_MAX_PAGES_PER_KEYWORD`` is reached.
+
+    ``blocked_out`` is set to ``True`` when the source answered with a
+    challenge/denial so the caller can stop the remaining keyword sweep.
     """
     current_page = 1
     stale_pages = 0
@@ -416,8 +503,22 @@ def _paginate_keyword(
             break
         if known_pagecount is not None and current_page > known_pagecount:
             break
+        if deadline is not None and time.monotonic() >= deadline:
+            logger.warning(
+                "Stopping SEMA-RS pagination after the %.0fs listing deadline",
+                SEMA_RS_LISTING_MAX_SECONDS,
+            )
+            break
 
-        fetched = _fetch_keyword_listing_html(keyword, current_page, stats=stats)
+        if current_page > 1:
+            _pace_listing_pages()
+
+        try:
+            fetched = _fetch_keyword_listing_html(keyword, current_page, stats=stats)
+        except _ListingAccessBlocked:
+            if blocked_out is not None:
+                blocked_out[0] = True
+            break
         if fetched is None:
             consecutive_failures += 1
             if consecutive_failures >= 3:
@@ -523,16 +624,29 @@ def discover_candidates(
     seen_pdfs: set[str] = set()
     seen_detail_urls: set[str] = set()
     all_detail_urls: list[str] = []
+    listing_blocked = [False]
+    listing_deadline = time.monotonic() + SEMA_RS_LISTING_MAX_SECONDS
 
-    for keyword in SEMA_RS_KEYWORDS:
+    for keyword_index, keyword in enumerate(SEMA_RS_KEYWORDS):
+        if keyword_index:
+            _pace_listing_pages()
         yielded = _paginate_keyword(
             keyword,
             seen_detail_urls=seen_detail_urls,
             detail_urls_out=all_detail_urls,
             stats=stats,
+            blocked_out=listing_blocked,
+            deadline=listing_deadline,
         )
         if yielded:
             stats["listings_fetched"] += 1
+        if listing_blocked[0]:
+            # The WAF is already challenging this client; firing the next
+            # keyword immediately would extend the block.
+            logger.warning(
+                "Stopping SEMA-RS AJAX keyword sweep after a WAF/access block",
+            )
+            break
 
     details_fetched = 0
     for detail_url in all_detail_urls:
@@ -542,6 +656,7 @@ def discover_candidates(
                 file=sys.stderr,
             )
             break
+        errors_before = stats.get("errors", 0)
         try:
             detail_pdfs = discover_pdf_urls_on_page(detail_url, stats=stats)
         except Exception as exc:
@@ -552,6 +667,10 @@ def discover_candidates(
                 exc=exc,
             )
             stats["errors"] = stats.get("errors", 0) + 1
+            continue
+        if stats.get("errors", 0) > errors_before:
+            # discover_pdf_urls_on_page counts and swallows transport
+            # failures; do not report the detail page as fetched.
             continue
         details_fetched += 1
         stats["details_fetched"] += 1
@@ -576,6 +695,7 @@ def discover_candidates(
             return stats, candidates
 
     for static_page_url in SEMA_RS_STATIC_SERVICE_PAGES:
+        errors_before = stats.get("errors", 0)
         try:
             static_pdfs = discover_pdf_urls_on_page(
                 static_page_url,
@@ -590,6 +710,9 @@ def discover_candidates(
                 exc=exc,
             )
             stats["errors"] = stats.get("errors", 0) + 1
+            continue
+        if stats.get("errors", 0) > errors_before:
+            # Transport already counted and swallowed the failure.
             continue
         stats["details_fetched"] += 1
         _ingest_pdfs(

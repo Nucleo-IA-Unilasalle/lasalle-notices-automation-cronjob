@@ -339,18 +339,26 @@ class TestParseFunbioOpportunity:
 
     def test_deadline_uses_brasilia_timezone(self) -> None:
         """23h59 Brasília (UTC-3) becomes 02:59Z the next calendar day."""
-        from datetime import datetime, timezone
+        from datetime import datetime, timedelta, timezone
 
         from discover_funbio_candidates import parse_funbio_opportunity
 
+        # parse_funbio_opportunity derives ``authoritative_status`` from the
+        # wall clock (not from ``snapshot_at``), so the fixture deadline must
+        # be relative to today or the test rots once the date passes.
+        deadline_day = (datetime.now(timezone.utc) + timedelta(days=60)).date()
+        html = self.DETAIL_HTML.replace(
+            "25/09/2026", deadline_day.strftime("%d/%m/%Y"),
+        )
         record = parse_funbio_opportunity(
-            DETAIL_URL, self.DETAIL_HTML,
+            DETAIL_URL, html,
             snapshot_at=datetime(2026, 9, 14, 12, 0, tzinfo=timezone.utc),
         )
         assert record is not None
         assert record["authoritative_status"] == "open"
-        # 25/09/2026 23:59 America/Sao_Paulo == 26/09/2026 02:59 UTC
-        assert record["application_deadline"] == "2026-09-26T02:59:00+00:00"
+        # <day> 23:59 America/Sao_Paulo (UTC-3) == next calendar day 02:59 UTC
+        next_day = deadline_day + timedelta(days=1)
+        assert record["application_deadline"] == f"{next_day.isoformat()}T02:59:00+00:00"
 
     def test_html_regulamento_route_is_not_claimed_as_pdf(self) -> None:
         from datetime import datetime, timezone

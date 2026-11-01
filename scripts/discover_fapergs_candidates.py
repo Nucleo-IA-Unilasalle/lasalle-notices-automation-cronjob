@@ -16,8 +16,10 @@ FAPERGS exposes two ways to enumerate edital URLs:
 2. An AJAX endpoint at
    ``https://fapergs.rs.gov.br/_service/conteudo/pagedlistfilho?id=2042&currentPage=1&pageSize=50``
    that returns a JSON ``body`` HTML fragment with additional detail
-   anchors. The AJAX call is best-effort: a failure is logged at
-   DEBUG and the discoverer falls back to the static listing.
+   anchors. This endpoint is the authoritative open-notice list: the
+   static page only carries closed "Avisos" sidebar links. Its failure
+   is therefore counted in ``stats["errors"]`` (never swallowed at
+   DEBUG), and its notice count is reported as ``inventory_seen``.
 
 Detail pages are fetched via ``scraper_transport.discover_pdf_urls_on_page``
 to enumerate PDF anchors.
@@ -53,6 +55,8 @@ from scraper_filters import FilterPolicy, is_likely_edital
 from scraper_transport import (
     DEFAULT_HEADERS,
     discover_pdf_urls_on_page,
+    fetch_html_with_retry,
+    fetch_json_with_retry,
     log_source_failure,
     looks_like_pdf_url,
 )
@@ -245,31 +249,42 @@ def _merge_detail_urls(static_urls: list[str], ajax_urls: list[str]) -> list[str
 def _fetch_ajax_detail_urls(stats: dict[str, int]) -> list[str]:
     """Fetch the FAPERGS AJAX endpoint and extract detail URLs.
 
-    Failures are logged at DEBUG and return ``[]``; the discoverer
-    falls back to the static listing only.
+    The AJAX channel is the only channel that lists open notices, so a
+    failure here is real inventory loss, not best-effort noise: it is
+    logged at WARNING and counted in ``stats["errors"]``. Returning a
+    silent ``[]`` would let the orchestrator report a healthy run with
+    inventory 0 while the open list was never enumerated.
+
+    Uses ``fetch_json_with_retry`` so the request carries
+    ``X-Requested-With: XMLHttpRequest`` and an HTML/challenge body is
+    rejected instead of being handed to ``.json()``.
     """
-    from scraper_transport import request_with_safe_redirects
     try:
-        response = request_with_safe_redirects(
-            method="GET",
-            url=FAPERGS_AJAX_URL,
+        payload = fetch_json_with_retry(
+            FAPERGS_AJAX_URL,
             timeout=FAPERGS_FETCH_TIMEOUT_SECONDS,
-            extra_headers={
-                "X-Requested-With": "XMLHttpRequest",
-                "Referer": FAPERGS_LISTING_URL,
-            },
+            max_attempts=FAPERGS_FETCH_MAX_ATTEMPTS,
+            backoff_seconds=FAPERGS_FETCH_BACKOFF_SECONDS,
         )
     except Exception as exc:
-        logger.debug("FAPERGS AJAX endpoint failed: %s", exc, exc_info=True)
+        log_source_failure(
+            "Failed to fetch FAPERGS AJAX listing %s: %s",
+            FAPERGS_AJAX_URL,
+            exc,
+            exc=exc,
+        )
+        stats["errors"] = stats.get("errors", 0) + 1
         return []
-    try:
-        response.raise_for_status()
-        payload = response.json()
-    except Exception as exc:
-        logger.debug("FAPERGS AJAX decode failed: %s", exc, exc_info=True)
+    if not isinstance(payload, dict):
+        logger.warning(
+            "FAPERGS AJAX listing %s returned an unexpected payload type %s",
+            FAPERGS_AJAX_URL,
+            type(payload).__name__,
+        )
+        stats["errors"] = stats.get("errors", 0) + 1
         return []
     body = payload.get("body", "")
-    if not body:
+    if not isinstance(body, str) or not body:
         return []
     return extract_fapergs_detail_urls(body, FAPERGS_LISTING_URL)
 
@@ -291,22 +306,21 @@ def discover_candidates(
         "prefilter_rejected": 0,
         "year_rejected": 0,
         "errors": 0,
+        "inventory_seen": 0,
         "candidate_cap_reached": 0,
     }
     candidates: list[dict[str, Any]] = []
     seen_pdfs: set[str] = set()
     details_fetched = 0
 
-    from scraper_transport import request_with_safe_redirects
-
     try:
-        response = request_with_safe_redirects(
-            method="GET",
-            url=FAPERGS_LISTING_URL,
+        listing_html = fetch_html_with_retry(
+            FAPERGS_LISTING_URL,
             timeout=FAPERGS_FETCH_TIMEOUT_SECONDS,
+            max_attempts=FAPERGS_FETCH_MAX_ATTEMPTS,
+            backoff_seconds=FAPERGS_FETCH_BACKOFF_SECONDS,
         )
-        response.raise_for_status()
-        static_urls = extract_fapergs_detail_urls(response.text, FAPERGS_LISTING_URL)
+        static_urls = extract_fapergs_detail_urls(listing_html, FAPERGS_LISTING_URL)
         stats["listings_fetched"] += 1
     except Exception as exc:
         log_source_failure(
@@ -319,6 +333,11 @@ def discover_candidates(
         static_urls = []
 
     ajax_urls = _fetch_ajax_detail_urls(stats)
+    # The AJAX endpoint is the authoritative open-notice list; the static
+    # page contributes only closed "Avisos" sidebar links. Reporting its
+    # notice count lets the dashboard show "1 open, 0 submittable" instead
+    # of "0/0".
+    stats["inventory_seen"] = len(ajax_urls)
     detail_urls = _merge_detail_urls(static_urls, ajax_urls)
 
     for detail_url in detail_urls:

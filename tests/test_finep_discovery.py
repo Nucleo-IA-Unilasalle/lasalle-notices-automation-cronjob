@@ -106,3 +106,74 @@ def test_duplicate_page_boundary_records_are_deduped():
     ]
     ids = [item["source_record_id"] for item in opportunities]
     assert len(ids) == len(set(ids))
+
+
+# --- Deadline gate, canonical URL and full-catalogue enumeration ------------
+
+
+def _record(record_id="900001", prazo="2026-12-01T23:59:59Z", situacao="Aberta"):
+    return {
+        "id": record_id,
+        "titulo": f"Chamada publica {record_id}",
+        "situacao": {"key": situacao, "name": situacao.title()},
+        "dataDePublicacao": "2026-06-01T10:00:00Z",
+        "prazoProposto": prazo,
+        "descricao": "",
+    }
+
+
+def test_canonical_url_uses_the_live_versioned_route():
+    opportunity = finep.record_to_opportunity(
+        _record(), snapshot_at=datetime(2026, 7, 23, tzinfo=timezone.utc)
+    )
+    assert opportunity["canonical_url"] == (
+        "https://www.finep.gov.br/e/chamada-publica/222684/900001"
+    )
+
+
+def test_expired_aberta_record_is_never_emitted_as_open():
+    # Finep keeps expired calls flagged "Aberta"; the deadline is authoritative.
+    page = {
+        "items": [_record("900001", prazo="2026-01-10T23:59:59Z")],
+        "lastPage": 1,
+    }
+    stats, opportunities = finep.discover_opportunities(
+        fetch_json=lambda _url: page,
+        now=datetime(2026, 7, 23, tzinfo=timezone.utc),
+    )
+    assert opportunities == []
+    assert stats["expired_rejected"] == 1
+    assert stats["opportunities"] == 0
+
+
+def test_future_deadline_is_kept():
+    page = {
+        "items": [_record("900002", prazo="2026-09-01T23:59:59Z")],
+        "lastPage": 1,
+    }
+    stats, opportunities = finep.discover_opportunities(
+        fetch_json=lambda _url: page,
+        now=datetime(2026, 7, 23, tzinfo=timezone.utc),
+    )
+    assert [item["source_record_id"] for item in opportunities] == ["900002"]
+    assert stats["expired_rejected"] == 0
+
+
+def test_default_caps_enumerate_the_whole_catalogue():
+    # The live catalogue is ~24 pages / ~479 records; a smaller default made
+    # every run "capped" and kept last_complete_collection_at NULL forever.
+    assert finep.FINEP_MAX_PAGES_PER_RUN >= 30
+    assert finep.FINEP_MAX_OPPORTUNITIES_PER_RUN >= 40
+
+    def fetch_json(url: str):
+        page = int(url.rsplit("page=", 1)[1])
+        return {"items": [_record(f"90{page:04d}")], "lastPage": 24}
+
+    stats, opportunities = finep.discover_opportunities(
+        fetch_json=fetch_json,
+        now=datetime(2026, 7, 23, tzinfo=timezone.utc),
+    )
+    assert stats["finep_pages_completed"] == list(range(1, 25))
+    assert stats["page_cap_reached"] == 0
+    assert stats["candidate_cap_reached"] == 0
+    assert stats["opportunities"] == 24

@@ -522,3 +522,203 @@ class TestListingPagination:
                 "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/x/o/edital-1003.pdf",
             ],
         )
+
+
+# --- Per-source PDF budget -------------------------------------------------
+# Diagnosis (2026-10-30): 14 open editais expose 74 annex links, of which 18
+# are PDFs and 56 are .doc/.docx/.xls/.xlsx. Under the shared 5-PDF cap every
+# run was capped and 10 of 14 editais starved. The registry now carries a
+# msgov-specific ``pdf_limit``.
+
+MSGOV_LIVE_PDF_INVENTORY = 18  # PDF candidates measured live on 2026-10-30
+
+
+def _msgov_entry(registry: dict[str, Any]) -> dict[str, Any]:
+    return next(e for e in registry["sources"] if e["source_key"] == "msgov")
+
+
+class TestRegistryPdfBudget:
+    def test_registry_with_msgov_pdf_limit_passes_validation(self) -> None:
+        import build_source_matrix as builder
+
+        registry = builder.load_registry()
+        entry = _msgov_entry(registry)
+        assert "pdf_limit" in entry, "msgov must not fall back to the shared 5"
+        # Raises SystemExit on any registry error.
+        validated = {e["source_key"]: e for e in builder.validate_registry(registry)}
+        assert validated["msgov"]["pdf_limit"] == entry["pdf_limit"]
+
+    def test_limit_covers_the_measured_inventory_with_headroom(self) -> None:
+        import build_source_matrix as builder
+
+        registry = builder.load_registry()
+        limit = _msgov_entry(registry)["pdf_limit"]
+        assert limit > MSGOV_LIVE_PDF_INVENTORY, "no headroom for new editais"
+        assert limit > registry["defaults"]["pdf_limit"]
+
+    def test_limit_fits_the_application_budget_and_drain_floor(self) -> None:
+        import build_source_matrix as builder
+        import durable_source_work as durable
+
+        registry = builder.load_registry()
+        limit = _msgov_entry(registry)["pdf_limit"]
+        application = registry["defaults"]["application_budget_seconds"]
+        # Planning figures: discovery (listing + 14 detail pages with networkidle
+        # waits) plus 5 PDFs was observed at ~180 s end to end, i.e. well under
+        # 14 s per PDF; budget a pessimistic 20 s per PDF (download + OCR +
+        # submit) and 180 s for discovery. The drain refuses to take new work
+        # once less than DRAIN_MIN_SECONDS remain.
+        discovery_seconds = 180
+        per_pdf_seconds = 20
+        drain_window = application - durable.DRAIN_MIN_SECONDS - discovery_seconds
+        assert limit * per_pdf_seconds <= drain_window
+
+    def test_managed_runner_resolves_the_msgov_limit(self) -> None:
+        import build_source_matrix as builder
+        import run_managed_source as managed
+
+        registry = builder.load_registry()
+        entry = _msgov_entry(registry)
+        assert managed.source_pdf_limit(entry, registry["defaults"]) == entry["pdf_limit"]
+
+    def test_group_c_matrix_carries_the_msgov_limit(self) -> None:
+        import build_source_matrix as builder
+
+        registry = builder.load_registry()
+        matrix = builder.build_matrix(registry, "c", admitted_sources={"msgov"})
+        limits = {item["source"]: item["pdf_limit"] for item in matrix["includes"]}
+        assert limits["msgov"] == _msgov_entry(registry)["pdf_limit"]
+
+    def test_invalid_msgov_limit_is_rejected_by_the_registry(self) -> None:
+        import build_source_matrix as builder
+
+        registry = builder.load_registry()
+        _msgov_entry(registry)["pdf_limit"] = 0
+        with pytest.raises(SystemExit):
+            builder.validate_registry(registry)
+
+
+class TestNonPdfAnnexesDoNotBurnTheBudget:
+    def _discover(self, detail_pdfs: dict[str, list[str]]) -> tuple[dict, list]:
+        import types
+
+        import discover_msgov_candidates as dmc
+
+        listing = [f"/edital?id={url.rsplit('=', 1)[1]}" for url in detail_pdfs]
+        fake_pw, _page = _build_fake_pw(listing, detail_pdfs)
+        fake_async_api = types.ModuleType("playwright.async_api")
+        fake_async_api.async_playwright = fake_pw  # type: ignore[attr-defined]
+        fake_playwright = types.ModuleType("playwright")
+        fake_playwright.async_api = fake_async_api  # type: ignore[attr-defined]
+        with patch.dict(
+            sys.modules,
+            {"playwright": fake_playwright, "playwright.async_api": fake_async_api},
+        ):
+            with patch.object(dmc.asyncio, "run", side_effect=_patched_asyncio_run):
+                return dmc.discover_candidates()
+
+    def _live_shaped_pages(self) -> tuple[dict[str, list[str]], set[str]]:
+        """14 editais, 74 annex links: 18 PDF, 54 Word, 2 Excel (live census)."""
+        host = "https://prosas-prod-files.s3.sa-east-1.amazonaws.com/arquivos"
+        pages: dict[str, list[str]] = {}
+        pdfs: set[str] = set()
+        pdf_total, word_total, excel_total = 18, 54, 2
+        for index in range(14):
+            urls: list[str] = []
+            # Word annexes first so a naive cap would be spent on them.
+            for n in range(word_total // 14 + (1 if index < word_total % 14 else 0)):
+                ext = "docx" if n % 2 else "doc"
+                urls.append(f"{host}/{index}/anexo-{n}.{ext}?X-Amz-Signature=s{n}")
+            if index < excel_total:
+                urls.append(f"{host}/{index}/planilha.xlsx")
+            for n in range(pdf_total // 14 + (1 if index < pdf_total % 14 else 0)):
+                pdf = f"{host}/{index}/edital-{n}.pdf"
+                urls.append(pdf)
+                pdfs.add(pdf)
+            pages[f"{LISTING_URL}/edital?id={index:04d}"] = urls
+        assert len(pdfs) == 18
+        assert sum(len(v) for v in pages.values()) == 74
+        return pages, pdfs
+
+    @staticmethod
+    def _ok(candidate: dict[str, Any], **_: Any) -> dict[str, Any]:
+        return {**candidate, "worker_result": {"ok": True}}
+
+    def test_only_the_pdfs_of_a_word_heavy_inventory_become_candidates(self) -> None:
+        pages, pdfs = self._live_shaped_pages()
+        stats, candidates = self._discover(pages)
+
+        assert stats["errors"] == 0
+        assert stats["candidate_cap_reached"] == 0
+        assert {c["url"] for c in candidates} == pdfs
+        assert len(candidates) == MSGOV_LIVE_PDF_INVENTORY
+
+    def test_msgov_budget_processes_every_pdf_without_a_cap_warning(self) -> None:
+        import build_source_matrix as builder
+        import discover_all_candidates as dac
+        import pipeline_core
+
+        limit = _msgov_entry(builder.load_registry())["pdf_limit"]
+        pages, pdfs = self._live_shaped_pages()
+        _stats, candidates = self._discover(pages)
+
+        run_stats: dict[str, int] = {}
+        with patch.object(pipeline_core, "SCRAPE_MAX_PDFS_PER_RUN", limit):
+            with patch.object(pipeline_core, "process_candidate", side_effect=self._ok):
+                processed = dac.process_source_candidates(
+                    candidates, extractor=MagicMock(), stats=run_stats
+                )
+
+        assert {p["url"] for p in processed} == pdfs
+        assert run_stats["pdfs_downloaded"] == MSGOV_LIVE_PDF_INVENTORY
+        assert not run_stats.get("pdf_download_cap_reached")
+
+    def test_shared_default_cap_would_have_starved_the_tail(self) -> None:
+        """Documents why the registry override exists: the old budget of 5."""
+        import build_source_matrix as builder
+        import discover_all_candidates as dac
+        import pipeline_core
+
+        default = builder.load_registry()["defaults"]["pdf_limit"]
+        pages, _pdfs = self._live_shaped_pages()
+        _stats, candidates = self._discover(pages)
+
+        run_stats: dict[str, int] = {}
+        with patch.object(pipeline_core, "SCRAPE_MAX_PDFS_PER_RUN", default):
+            with patch.object(pipeline_core, "process_candidate", side_effect=self._ok):
+                processed = dac.process_source_candidates(
+                    candidates, extractor=MagicMock(), stats=run_stats
+                )
+
+        assert len(processed) == default < MSGOV_LIVE_PDF_INVENTORY
+        assert run_stats["pdf_download_cap_reached"] == 1
+
+    def test_a_leaked_non_pdf_is_rejected_without_consuming_the_budget(self) -> None:
+        """Extensionless objects can still slip past the suffix filter; the
+        magic-byte rejection must not count against ``pdfs_downloaded``."""
+        import discover_all_candidates as dac
+        import pipeline_core
+
+        leaked = {"url": "https://x.s3.amazonaws.com/arquivos/blob-word", "kind": "pdf",
+                  "metadata": {"source": "msgov"}}
+        good = [
+            {"url": f"https://x.s3.amazonaws.com/arquivos/e{n}.pdf", "kind": "pdf",
+             "metadata": {"source": "msgov"}}
+            for n in range(2)
+        ]
+
+        def _process(candidate: dict[str, Any], **_: Any) -> dict[str, Any]:
+            if candidate["url"] == leaked["url"]:
+                return {**candidate, "error": "download: File is not a valid PDF document"}
+            return {**candidate, "worker_result": {"ok": True}}
+
+        run_stats: dict[str, int] = {}
+        with patch.object(pipeline_core, "SCRAPE_MAX_PDFS_PER_RUN", 2):
+            with patch.object(pipeline_core, "process_candidate", side_effect=_process):
+                processed = dac.process_source_candidates(
+                    [leaked, *good], extractor=MagicMock(), stats=run_stats
+                )
+
+        assert len(processed) == 3
+        assert run_stats["pdfs_downloaded"] == 2
+        assert not run_stats.get("pdf_download_cap_reached")

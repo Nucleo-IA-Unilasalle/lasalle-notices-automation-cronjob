@@ -4,8 +4,8 @@ Ports the KfW source from
 ``lasalle-notices-automation/app/services/scraper/playwright/kfw.py``
 into the cronjob, locking the discovery contract before Phase 4 ships.
 Tests exercise the ``extract_kfw_pdf_urls`` helper plus the two-stage
-discovery (BS4 primary path, Playwright fallback when the BS4 path
-returns nothing) and the ``process_candidate`` / ``submit_candidates``
+discovery (BS4 primary path, Playwright fallback only when the static
+listing fetch fails; a fetched page with no call is an empty inventory) and the ``process_candidate`` / ``submit_candidates``
 handoff.
 
 KfW hosts the listing on ``kfw-entwicklungsbank.de`` (subpaths
@@ -40,6 +40,37 @@ LISTING_URL = (
     "https://www.kfw-entwicklungsbank.de/Service/Procurement-Regulations/"
 )
 
+_LIBRARY_DIR = "/PDF/Download-Center/PDF-Dokumente-Richtlinien/"
+
+# The 15 PDF anchors served by the live Procurement-Regulations page
+# (captured 2026-10-30): guidelines in 4 languages x 3 editions plus the
+# Sustainability Guideline. None is an open call.
+LIVE_LIBRARY_PDFS = [
+    "FZ-Vergaberichtlinien-V-2021-EN.pdf",
+    "FZ-Vergaberichtlinien-V-2021-FR.pdf",
+    "FZ-Vergaberichtlinien-V-2021-ES.pdf",
+    "FZ-Vergaberichtlinien-V-2021-PT.pdf",
+    "FC-Guidelines-for-Procurement-2023.pdf",
+    "CF-Directives-pour-la-Passation-de-March%C3%A9s-2023-FR.pdf",
+    "CF-Directrices-para-la-Contrataci%C3%B3n-2023-ES.pdf",
+    "CF-Diretrizes-para-Contrata%C3%A7%C3%A3o-2023-PT.pdf",
+    "FC-Guidelines-for-the-Procurement-2021.pdf",
+    "CF-Directives-pour-la-Passation-2021.pdf",
+    "CF-Directrices-para-la-Contrataci%C3%B3n-2021.pdf",
+    "CF-Diretrizes-para-Contrata%C3%A7%C3%A3o-2021.pdf",
+    "Nachhaltigkeitsrichtlinie_EN.pdf",
+    "Nachhaltigkeitsrichtlinie_FR.pdf",
+    "Nachhaltigkeitsrichtlinie_ES.pdf",
+]
+
+
+def _live_library_html() -> str:
+    anchors = "\n".join(
+        f'<a href="{_LIBRARY_DIR}{name}">English (PDF, 801 KB, non-accessible)</a>'
+        for name in LIVE_LIBRARY_PDFS
+    )
+    return f"<html><body>{anchors}</body></html>"
+
 
 def _read_fixture(path: Path) -> str:
     return path.read_text(encoding="utf-8")
@@ -48,25 +79,135 @@ def _read_fixture(path: Path) -> str:
 class TestExtractKfwPdfUrls:
     """The discovery helper is a verbatim port of the FastAPI version."""
 
-    def test_listing_yields_signal_pdf_urls(self) -> None:
+    def test_guidelines_are_not_candidates(self) -> None:
+        """Procurement guidelines / regulations are reference documents.
+
+        Both fixture PDFs carry ``procurement`` in the filename, which used
+        to be enough to emit them as editais.
+        """
         from bs4 import BeautifulSoup
 
         from discover_kfw_candidates import extract_kfw_pdf_urls
 
         soup = BeautifulSoup(_read_fixture(LISTING_FIXTURE), "html.parser")
-        discovered = extract_kfw_pdf_urls(soup, LISTING_URL)
+        assert extract_kfw_pdf_urls(soup, LISTING_URL) == []
 
-        # The fixture has 6 anchors:
-        # - /service/procurement-regulations/KfW-Development-Bank-Procurement-Regulations.pdf -> signal
-        # - https://www.kfw-entwicklungsbank.de/.../KfW-Consultant-Guidelines-Procurement.pdf?download=1 -> signal
-        # - duplicate fragment -> deduped
-        # - /service/reports/Annual-Report-2026.pdf -> no signal
-        # - https://example.org/... -> external host, dropped
-        # - /newsroom/latest-news/feature-story -> non-PDF, dropped
-        assert discovered == [
-            "https://www.kfw-entwicklungsbank.de/service/procurement-regulations/KfW-Development-Bank-Procurement-Regulations.pdf",
-            "https://www.kfw-entwicklungsbank.de/service/procurement-regulations/KfW-Consultant-Guidelines-Procurement.pdf?download=1",
+    def test_live_library_page_yields_no_candidates(self) -> None:
+        from discover_kfw_candidates import extract_kfw_pdf_urls
+
+        assert extract_kfw_pdf_urls(_live_library_html(), LISTING_URL) == []
+
+    def test_generic_procurement_filename_is_not_a_signal(self) -> None:
+        from discover_kfw_candidates import extract_kfw_pdf_urls
+
+        html = """
+        <html><body>
+          <a href="/service/procurement-regulations/Procurement-Plan.pdf">Plan</a>
+        </body></html>
+        """
+        assert extract_kfw_pdf_urls(html, LISTING_URL) == []
+
+    def test_real_tender_document_is_still_emitted(self) -> None:
+        from discover_kfw_candidates import extract_kfw_pdf_urls
+
+        html = _live_library_html().replace(
+            "</body>",
+            f'<a href="{_LIBRARY_DIR}Call-for-Proposals-Consulting-Services-2026.pdf">'
+            "Call for Proposals - Consulting Services</a>"
+            '<a href="/service/procurement-regulations/Invitation-to-Tender-Works-2026.pdf">'
+            "Invitation to Tender</a>"
+            "</body>",
+        )
+        assert extract_kfw_pdf_urls(html, LISTING_URL) == [
+            "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/Call-for-Proposals-Consulting-Services-2026.pdf",
+            "https://www.kfw-entwicklungsbank.de/service/procurement-regulations/Invitation-to-Tender-Works-2026.pdf",
         ]
+
+    def test_guideline_with_call_vocabulary_is_rejected(self) -> None:
+        from discover_kfw_candidates import extract_kfw_pdf_urls
+
+        html = """
+        <html><body>
+          <a href="/service/procurement-regulations/Call-for-Proposals-Guidelines.pdf">Guidelines</a>
+          <a href="/service/procurement-regulations/eoi-2026.pdf">Procurement Guidelines for EOI</a>
+        </body></html>
+        """
+        assert extract_kfw_pdf_urls(html, LISTING_URL) == []
+
+    @pytest.mark.parametrize("name", LIVE_LIBRARY_PDFS)
+    def test_reference_pattern_rejects_every_live_library_title_on_its_own(
+        self, name: str,
+    ) -> None:
+        """The live library files carry no call vocabulary, so the extractor
+        never reaches the reference filter for them; pin the filter itself."""
+        from discover_kfw_candidates import _KFW_REFERENCE_DOCUMENT_PATTERN
+
+        assert _KFW_REFERENCE_DOCUMENT_PATTERN.search(name)
+
+    @pytest.mark.parametrize(
+        "filename, link_text",
+        [
+            ("Call-for-Proposals-Sustainability-Project.pdf",
+             "Call for proposals: sustainability project"),
+            ("Call-for-Proposals-Nachhaltigkeit-Studie.pdf",
+             "Call for Proposals - Nachhaltigkeit im Wohnungsbau"),
+            ("RFP-Contratacao-de-Consultoria.pdf",
+             "Request for Proposals - Contratação de consultoria"),
+            ("Request-for-Proposals-Contratacion-de-Servicios.pdf",
+             "Request for Proposals - Contratación de servicios"),
+            ("Call-for-Proposals-Passation-de-Marches.pdf",
+             "Call for Proposals - Passation de marchés au Mali"),
+            ("Call-for-Proposals-Operations-Manual-Drafting.pdf",
+             "Call for Proposals: drafting an operations manual"),
+            ("Call-for-Tenders-Regulations-Compliance-Study.pdf",
+             "Call for Tenders - study on energy regulations"),
+            ("Call-for-Proposals-Template-Library.pdf",
+             "Call for Proposals - template library development"),
+            ("EOI-Handbook-Translation.pdf",
+             "Expression of Interest - handbook translation"),
+            ("Call-for-Proposals-Tourist-Guide.pdf",
+             "Call for Proposals - tourist guide for the Amazon"),
+            ("Call-for-Proposals-Directive-Implementation.pdf",
+             "Call for Proposals - implementation of the EU directive"),
+        ],
+    )
+    def test_genuine_call_with_a_subject_word_is_not_rejected(
+        self, filename: str, link_text: str,
+    ) -> None:
+        from discover_kfw_candidates import extract_kfw_pdf_urls
+
+        html = (
+            f'<html><body><a href="{_LIBRARY_DIR}{filename}">{link_text}</a>'
+            "</body></html>"
+        )
+        assert extract_kfw_pdf_urls(html, LISTING_URL) == [
+            f"https://www.kfw-entwicklungsbank.de{_LIBRARY_DIR}{filename}",
+        ]
+
+    @pytest.mark.parametrize(
+        "filename, link_text",
+        [
+            ("Call-for-Proposals-Sustainability-Guideline.pdf", "Sustainability Guideline"),
+            ("Call-for-Proposals-Nachhaltigkeitsrichtlinie.pdf", "Nachhaltigkeitsrichtlinie"),
+            ("EOI-Procurement-Regulations.pdf", "Procurement Regulations"),
+            ("EOI-Procurement-Manual.pdf", "Procurement Manual"),
+            ("Invitation-to-Tender-Standard-Bidding-Documents.pdf", "Standard Bidding Documents"),
+            ("Call-for-Proposals-Proposal-Template.pdf", "Proposal Template"),
+            ("EOI-Model-Contract.pdf", "Model Contract"),
+            ("RFP-Guide.pdf", "Request for proposals guide for borrowers"),
+            ("EOI-Directives-pour-la-Passation.pdf", "Directives pour la Passation de Marchés"),
+        ],
+    )
+    def test_reference_document_titles_with_call_vocabulary_stay_rejected(
+        self, filename: str, link_text: str,
+    ) -> None:
+        from discover_kfw_candidates import extract_kfw_pdf_urls
+
+        html = (
+            f'<html><body><a href="{_LIBRARY_DIR}{filename}">{link_text}</a>'
+            "</body></html>"
+        )
+        assert extract_kfw_pdf_urls(html, LISTING_URL) == []
 
     def test_rejects_external_hosts(self) -> None:
         from bs4 import BeautifulSoup
@@ -75,13 +216,13 @@ class TestExtractKfwPdfUrls:
 
         html = """
         <html><body>
-          <a href="https://external.example.org/procurement.pdf">Externo</a>
-          <a href="https://www.kfw.de/procurement.pdf">Valido</a>
+          <a href="https://external.example.org/call-for-proposals.pdf">Externo</a>
+          <a href="https://www.kfw.de/call-for-proposals.pdf">Valido</a>
         </body></html>
         """
         soup = BeautifulSoup(html, "html.parser")
         assert extract_kfw_pdf_urls(soup, LISTING_URL) == [
-            "https://www.kfw.de/procurement.pdf",
+            "https://www.kfw.de/call-for-proposals.pdf",
         ]
 
     def test_rejects_non_pdf_anchors(self) -> None:
@@ -91,7 +232,7 @@ class TestExtractKfwPdfUrls:
 
         html = """
         <html><body>
-          <a href="/resources/report/procurement.docx">DOCX</a>
+          <a href="/resources/report/call-for-proposals.docx">DOCX</a>
           <a href="/resources/page/eoi">Sem extensao</a>
           <a href="/service/procurement-regulations/eoi-2026.pdf">PDF</a>
         </body></html>
@@ -111,7 +252,7 @@ class TestExtractKfwPdfUrls:
 
         html = """
         <html><body>
-          <a href="https://www.kfw-entwicklungsbank.de/about-us/procurement-2026.pdf">Wrong path</a>
+          <a href="https://www.kfw-entwicklungsbank.de/about-us/eoi-2026.pdf">Wrong path</a>
           <a href="https://www.kfw-entwicklungsbank.de/document-center/eoi-2026.pdf">Document center</a>
           <a href="https://www.kfw-entwicklungsbank.de/document-center/call-for-proposals.pdf">Document center signal</a>
         </body></html>
@@ -149,24 +290,47 @@ class TestListingUrl:
 
 
 class TestDiscoverCandidates:
-    def test_listing_yields_signal_pdf_candidates_via_bs4(self) -> None:
+    def test_live_library_page_is_a_clean_empty_inventory(self) -> None:
+        """The static document library has no open call: 0 candidates,
+        0 errors, and no browser is started."""
         from discover_kfw_candidates import discover_candidates
+        import discover_kfw_candidates as dkc
 
         with patch_request_with_safe_redirects(
-            {LISTING_URL: make_response(_read_fixture(LISTING_FIXTURE))},
+            {LISTING_URL: make_response(_live_library_html())},
         ):
-            stats, candidates = discover_candidates()
+            with patch.object(dkc, "_run_playwright_fallback") as mock_pw:
+                stats, candidates = discover_candidates()
 
-        assert stats["candidates"] == 2
+        assert candidates == []
+        assert stats["candidates"] == 0
         assert stats["listings_fetched"] == 1
+        assert stats["errors"] == 0
         assert stats["playwright_fallback_used"] == 0
+        mock_pw.assert_not_called()
 
-        urls = [c["url"] for c in candidates]
-        assert (
-            "https://www.kfw-entwicklungsbank.de/service/procurement-regulations/KfW-Development-Bank-Procurement-Regulations.pdf"
-        ) in urls
+    def test_tender_document_is_emitted_via_bs4_without_browser(self) -> None:
+        from discover_kfw_candidates import discover_candidates
+        import discover_kfw_candidates as dkc
 
-    def test_playwright_fallback_used_when_bs4_yields_nothing(self) -> None:
+        html = _live_library_html().replace(
+            "</body>",
+            f'<a href="{_LIBRARY_DIR}Call-for-Proposals-2026.pdf">Call for Proposals</a></body>',
+        )
+        with patch_request_with_safe_redirects(
+            {LISTING_URL: make_response(html)},
+        ):
+            with patch.object(dkc, "_run_playwright_fallback") as mock_pw:
+                stats, candidates = discover_candidates()
+
+        assert [c["url"] for c in candidates] == [
+            "https://www.kfw-entwicklungsbank.de/PDF/Download-Center/PDF-Dokumente-Richtlinien/Call-for-Proposals-2026.pdf",
+        ]
+        assert stats["candidates"] == 1
+        assert stats["playwright_fallback_used"] == 0
+        mock_pw.assert_not_called()
+
+    def test_playwright_fallback_not_used_when_page_has_no_pdfs(self) -> None:
         from discover_kfw_candidates import discover_candidates
         import discover_kfw_candidates as dkc
 
@@ -174,34 +338,14 @@ class TestDiscoverCandidates:
             {LISTING_URL: make_response("<html><body>No PDFs here</body></html>")},
         ):
             with patch.object(dkc, "_run_playwright_fallback") as mock_pw:
-                mock_pw.return_value = [
-                    "https://www.kfw-entwicklungsbank.de/service/procurement-regulations/call-for-proposals-2026.pdf",
-                ]
                 stats, candidates = discover_candidates()
 
-        assert stats["candidates"] == 1
-        assert stats["playwright_fallback_used"] == 1
-        urls = [c["url"] for c in candidates]
-        assert (
-            "https://www.kfw-entwicklungsbank.de/service/procurement-regulations/call-for-proposals-2026.pdf"
-        ) in urls
-
-    def test_playwright_fallback_not_used_when_bs4_yields_results(self) -> None:
-        from discover_kfw_candidates import discover_candidates
-        import discover_kfw_candidates as dkc
-
-        with patch_request_with_safe_redirects(
-            {LISTING_URL: make_response(_read_fixture(LISTING_FIXTURE))},
-        ):
-            with patch.object(dkc, "_run_playwright_fallback") as mock_pw:
-                mock_pw.return_value = []
-                stats, candidates = discover_candidates()
-
-        assert stats["candidates"] == 2
+        assert stats["candidates"] == 0
+        assert stats["errors"] == 0
         assert stats["playwright_fallback_used"] == 0
         mock_pw.assert_not_called()
 
-    def test_listing_html_is_not_fetched_twice_for_bs4_results(self) -> None:
+    def test_listing_html_is_not_fetched_twice(self) -> None:
         from discover_kfw_candidates import discover_candidates
         import discover_kfw_candidates as dkc
 
@@ -211,14 +355,12 @@ class TestDiscoverCandidates:
             calls.append(url)
             if len(calls) > 1:
                 raise requests.ConnectionError("second fetch should not happen")
-            return make_response(_read_fixture(LISTING_FIXTURE))
+            return make_response(_live_library_html())
 
         with patch_request_with_safe_redirects(fake_request):
             with patch.object(dkc, "_run_playwright_fallback") as mock_pw:
-                mock_pw.return_value = []
                 stats, candidates = discover_candidates()
 
-        assert stats["candidates"] == 2
         assert stats["errors"] == 0
         assert stats["playwright_fallback_used"] == 0
         assert calls == [LISTING_URL]
@@ -425,3 +567,15 @@ class TestSubmitHandoff:
                 },
             ):
                 assert dkc.main() == 0
+
+
+class TestRegistryEntry:
+    def test_kfw_does_not_require_a_browser(self) -> None:
+        import json
+
+        registry_path = (
+            Path(__file__).resolve().parent.parent / "config" / "source_schedule.json"
+        )
+        registry = json.loads(registry_path.read_text(encoding="utf-8"))
+        entry = next(e for e in registry["sources"] if e["source_key"] == "kfw")
+        assert entry["browser_required"] is False
