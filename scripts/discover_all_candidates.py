@@ -35,6 +35,7 @@ from typing import Any
 
 import audit_source_fidelity
 import pipeline_core
+import scraper_transport
 from scraper_filters import FilterPolicy, VALID_FILTER_POLICIES
 from source_control import AdmissionConflict
 from source_run_reporting import SourceRunReporter
@@ -380,6 +381,88 @@ def normalize_discovery_errors(stats: dict[str, Any]) -> int:
         # A malformed error counter is itself an untrusted discovery result.
         return 1
 
+
+# Discoverers may declare denied access explicitly instead of folding it into
+# ``errors``. Keep the accepted aliases local to the orchestrator so source
+# modules stay free to emit the simplest counter.
+ACCESS_DENIED_STAT_KEYS = ("access_denied", "http_access_denied", "access_denied_failures")
+
+
+def normalize_access_denied(stats: dict[str, Any]) -> int:
+    """Return the number of access-denied failures a discoverer declared."""
+    total = 0
+    for key in ACCESS_DENIED_STAT_KEYS:
+        try:
+            total += max(0, int(stats.get(key, 0) or 0))
+        except (TypeError, ValueError):
+            total += 1
+    return total
+
+
+def normalize_fetch_coverage(stats: dict[str, Any]) -> int:
+    """Return how many listing/detail requests a discoverer completed.
+
+    Used to tell "the source answered but has nothing open" apart from
+    "the source was unreachable". Discoverers already report these keys.
+    """
+    total = 0
+    for key in ("listings_fetched", "pages_fetched", "details_fetched"):
+        try:
+            total += max(0, int(stats.get(key, 0) or 0))
+        except (TypeError, ValueError):
+            continue
+    return total
+
+
+def classify_discovery_outcome(
+    stats: dict[str, Any],
+    *,
+    record_count: int,
+    transport_error_code: str | None,
+) -> tuple[str | None, str | None]:
+    """Classify a discovery result into ``(terminal_status, error_code)``.
+
+    The orchestrator must not collapse every failure mode into
+    ``scraping_failed``:
+
+    * access denial (403/429/WAF challenge) is ``http_access_denied``;
+    * transport timeouts/5xx are ``network_error``;
+    * a reachable source that legitimately produced zero candidates is
+      not a failure;
+    * ``scraping_failed`` remains the last-resort generic code.
+
+    ``terminal_status`` is ``None`` when no failure was observed (the
+    reporter then derives success). Zero candidates after a completed
+    listing/detail fetch is a warning only when an error was actually
+    counted; a clean empty inventory stays success.
+    """
+    errors = normalize_discovery_errors(stats)
+    explicit_access_denied = bool(normalize_access_denied(stats))
+    error_code = (
+        "http_access_denied"
+        if explicit_access_denied
+        else transport_error_code
+    )
+    if not errors and error_code is None:
+        return None, None
+    if not errors and record_count > 0 and not explicit_access_denied:
+        # Ledger-only transport noise alongside a successful inventory is not
+        # enough evidence to degrade the run.
+        return None, None
+    if error_code is None:
+        error_code = "scraping_failed"
+    if record_count > 0:
+        return "warning", error_code
+    if normalize_fetch_coverage(stats) > 0:
+        # The source answered; zero candidates is a legitimate inventory.
+        return "warning", error_code
+    if error_code == "http_access_denied":
+        # An upstream block is an infrastructure condition, reported as a
+        # warning with its own code instead of a generic scrape failure.
+        return "warning", error_code
+    return "failed", error_code
+
+
 # Cap flags are the only shared-run state allowed to leak into a source's
 # telemetry: the PDF/processing caps are enforced once for the whole run, so a
 # later source legitimately reports cap_reached. All other counters
@@ -615,6 +698,9 @@ def main() -> int:
                     continue
 
                 try:
+                    # Transport failures are recorded in a process-wide ledger;
+                    # reset it so each source is classified from its own requests.
+                    scraper_transport.reset_failure_ledger()
                     has_structured_only_contract = (
                         source in STRUCTURED_ONLY_SOURCES
                         or (
@@ -688,7 +774,13 @@ def main() -> int:
                     )
                     per_source_stats[source] = {"errors": 1}
                     exit_code = 1
-                    reporter.record_error("scraping_failed")
+                    transport_error_code = scraper_transport.drain_failure_error_code()
+                    error_code = (
+                        scraper_transport.error_code_for_exception(exc)
+                        or transport_error_code
+                        or "scraping_failed"
+                    )
+                    reporter.record_error(error_code)
                     reporter.complete(status="failed")
                     continue
 
@@ -701,16 +793,34 @@ def main() -> int:
                 elif audit_only:
                     write_candidate_audit(source, source_stats, candidates)
                 discovery_errors = normalize_discovery_errors(source_stats)
-                discovery_error_status = None
-                if discovery_errors:
-                    discovered_records = opportunities if opportunities is not None else candidates
-                    discovery_error_status = "warning" if discovered_records else "failed"
-                    print(
-                        f"error: discovery reported {discovery_errors} error(s) for {source!r}; "
-                        "inventory is partial",
-                        file=sys.stderr,
-                    )
-                    reporter.record_error("scraping_failed")
+                discovered_records = opportunities if opportunities is not None else candidates
+                transport_error_code = scraper_transport.drain_failure_error_code()
+                discovery_error_status, discovery_error_code = classify_discovery_outcome(
+                    source_stats,
+                    record_count=len(discovered_records or []),
+                    transport_error_code=transport_error_code,
+                )
+                if discovery_error_status:
+                    if discovery_errors:
+                        print(
+                            f"error: discovery reported {discovery_errors} error(s) for {source!r}; "
+                            f"classified as {discovery_error_code}; inventory is partial",
+                            file=sys.stderr,
+                        )
+                    else:
+                        # Transport-only failure (for example a swallowed AJAX
+                        # error): the discoverer's counters stayed clean, but the
+                        # source was not fully readable.
+                        print(
+                            f"warning: transport reported {discovery_error_code} for {source!r}; "
+                            "inventory may be partial",
+                            file=sys.stderr,
+                        )
+                        reporter.metrics.stats["partial_inventory"] = True
+                    # Preserve the reported error count instead of collapsing a
+                    # retry ladder into a single error.
+                    for _ in range(discovery_errors or 1):
+                        reporter.record_error(discovery_error_code)
                     exit_code = 1
                 print(
                     f"{source}: discovered "
