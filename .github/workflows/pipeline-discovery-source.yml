@@ -63,7 +63,9 @@ concurrency:
 
 jobs:
   discover-source:
-    runs-on: ubuntu-latest
+    # Pinned to 24.04: the default runner image now resolves to Ubuntu 26.04,
+    # unsupported by the pinned Playwright 1.52 (chromium install fails at setup).
+    runs-on: ubuntu-24.04
     timeout-minutes: ${{ inputs.run_timeout_minutes || 20 }}
     # Per-source lock, independent of workflow/ref/run id. The scheduled group
     # writer and any manual fallback of the same source serialize here.

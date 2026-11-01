@@ -13,7 +13,9 @@ concurrency:
 
 jobs:
   discover-kfw:
-    runs-on: ubuntu-latest
+    # Pinned to 24.04: the default runner image now resolves to Ubuntu 26.04,
+    # unsupported by the pinned Playwright 1.52 (chromium install fails at setup).
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - name: Checkout scheduler repository
