@@ -26,6 +26,12 @@ from discover_pncp_candidates import (
 from pncp_http import DownloadResult, DownloadError, download_pncp_pdf
 
 
+@pytest.fixture(autouse=True)
+def _no_page_delay(monkeypatch) -> None:
+    """The inter-page pause is real-time sleeping; none of these tests need it."""
+    monkeypatch.setattr("discover_pncp_candidates.PNCP_PAGE_DELAY_SECONDS", 0.0)
+
+
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------

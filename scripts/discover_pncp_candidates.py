@@ -90,6 +90,23 @@ except (TypeError, ValueError):
     PNCP_FETCH_BACKOFF_SECONDS = 2.0
 PNCP_FETCH_TIMEOUT_SECONDS = _positive_env_int("PNCP_FETCH_TIMEOUT_SECONDS", 20)
 PNCP_SEARCH_BUDGET_SECONDS = _positive_env_int("PNCP_SEARCH_BUDGET_SECONDS", 480)
+# Durable sweep only: pages fetched per run (the legacy per-query cap does not
+# truncate a sweep) and the pause between consecutive page requests.
+PNCP_MAX_PAGES_PER_RUN = _positive_env_int("PNCP_MAX_PAGES_PER_RUN", 40)
+try:
+    PNCP_PAGE_DELAY_SECONDS = max(
+        0.0, float(os.environ.get("PNCP_PAGE_DELAY_SECONDS", "0.3"))
+    )
+except (TypeError, ValueError):
+    PNCP_PAGE_DELAY_SECONDS = 0.3
+PNCP_RETRY_AFTER_CAP_SECONDS = 60
+PNCP_SWEEP_VERSION = 1
+PNCP_SWEEP_MAX_AGE = timedelta(days=7)
+PNCP_SWEEP_PAGE_FAILURE_LIMIT = 3
+# A 5xx or timeout may be a PNCP outage, and a skip forfeits the whole sweep:
+# hold about 6 h (two runs per hour) before treating it as a bad page.
+PNCP_SWEEP_OUTAGE_FAILURE_LIMIT = 12
+PNCP_SWEEP_OVERLAP = timedelta(hours=1)
 PNCP_OPPORTUNITY_V2_ENABLED = (
     os.environ.get("PNCP_OPPORTUNITY_V2_ENABLED", "false").lower() == "true"
 )
@@ -113,9 +130,14 @@ def fetch_json(url: str, *, timeout: int | None = None) -> Any:
                         sleep_seconds = float(retry_after) if retry_after else PNCP_FETCH_BACKOFF_SECONDS * attempt
                     except (TypeError, ValueError):
                         sleep_seconds = PNCP_FETCH_BACKOFF_SECONDS * attempt
-                    time.sleep(sleep_seconds)
+                    # A server-provided delay must not outlast the search budget.
+                    time.sleep(min(sleep_seconds, PNCP_RETRY_AFTER_CAP_SECONDS))
                     continue
             response.raise_for_status()
+            if response.status_code == 204:
+                # PNCP answers an empty window with 204 and no body: that is
+                # "no records", not an unparseable payload to retry and fail.
+                return {"data": [], "totalRegistros": 0, "totalPaginas": 0}
             return response.json()
         except (requests.Timeout, requests.ConnectionError, ValueError):
             if attempt >= PNCP_FETCH_MAX_ATTEMPTS:
@@ -140,6 +162,8 @@ def fetch_pncp_search_pages(
         if search_deadline is not None and time.monotonic() >= search_deadline:
             _mark_search_budget_exhausted(stats)
             break
+        if page > 1 and PNCP_PAGE_DELAY_SECONDS > 0:
+            time.sleep(PNCP_PAGE_DELAY_SECONDS)
         params = {**base_params, "pagina": page, "tamanhoPagina": PNCP_PAGE_SIZE}
         url = f"{base_url}?{urlencode(params)}"
         if stats is not None:
@@ -328,6 +352,91 @@ def _save_update_checkpoint(checkpoint_dt: datetime) -> None:
     with open(tmp_path, "w", encoding="utf-8") as handle:
         json.dump(payload, handle, indent=2)
     os.replace(tmp_path, PNCP_UPDATE_CHECKPOINT_PATH)
+
+
+_PNCP_COUNTER_FIELDS = (
+    "records_enumerated", "records_registered", "document_lookups_completed",
+    "documents_selected", "search_pages_completed",
+)
+
+
+def _load_stored_cursor() -> dict[str, Any]:
+    """Raw stored PNCP collection cursor (durable mode); {} when absent."""
+    import durable_source_work
+    from source_control import SourceControl
+    cursor = SourceControl("pncp").work(
+        "checkpoint", scope=durable_source_work.PNCP_SCOPE
+    ).get("cursor") or {}
+    return cursor if isinstance(cursor, dict) else {}
+
+
+def _stored_complete_watermark(cursor: dict[str, Any]) -> str | None:
+    """Raw last complete watermark in a stored cursor, or None.
+
+    Same rule as ``_load_update_checkpoint``: a versioned PNCP cursor only
+    vouches for ``last_successful_update`` when ``complete`` is true (a sweep in
+    progress keeps the prior complete watermark in ``last_complete_update``);
+    a legacy bare watermark is honoured as a time watermark.
+    """
+    import durable_source_work
+    versioned, adapter, scope = durable_source_work.parse_collection_cursor(cursor)
+    if versioned and adapter == "pncp" and scope == durable_source_work.PNCP_SCOPE:
+        raw = (
+            cursor.get("last_successful_update")
+            if cursor.get("complete") is True
+            else cursor.get("last_complete_update")
+        )
+    else:
+        raw = cursor.get("last_successful_update")
+    if isinstance(raw, str) and parse_pncp_datetime(raw) is not None:
+        return raw
+    return None
+
+
+def _is_plain_int(value: Any, minimum: int) -> bool:
+    return isinstance(value, int) and not isinstance(value, bool) and value >= minimum
+
+
+def _load_sweep_state(cursor: dict[str, Any], *, now: datetime) -> dict[str, Any] | None:
+    """Sweep position stored in an incomplete cursor, or None to start afresh.
+
+    A cursor without a well-formed ``sweep`` (legacy, complete, or written by a
+    worker that predates sweeps) and a sweep older than ``PNCP_SWEEP_MAX_AGE``
+    are both ignored.
+    """
+    import durable_source_work
+    versioned, adapter, scope = durable_source_work.parse_collection_cursor(cursor)
+    if not (versioned and adapter == "pncp" and scope == durable_source_work.PNCP_SCOPE):
+        return None
+    if cursor.get("complete") is not False:
+        return None
+    sweep = cursor.get("sweep")
+    if not isinstance(sweep, dict) or sweep.get("version") != PNCP_SWEEP_VERSION:
+        return None
+    started = parse_pncp_datetime(sweep.get("started_at"))
+    if started is None or now - _normalize_to_utc(started) > PNCP_SWEEP_MAX_AGE:
+        return None
+    for key in ("window_start", "window_end"):
+        value = sweep.get(key)
+        if not (isinstance(value, str) and len(value) == 8 and value.isdigit()):
+            return None
+    if not (
+        _is_plain_int(sweep.get("stream_index"), 0)
+        and _is_plain_int(sweep.get("next_page"), 1)
+        and _is_plain_int(sweep.get("page_failures"), 0)
+        and _is_plain_int(sweep.get("streams"), 1)
+        and isinstance(sweep.get("skipped_records"), bool)
+    ):
+        return None
+    return dict(sweep)
+
+
+def _watermark_key(value: Any) -> tuple[int, str]:
+    """Ordering REPO_A applies to cursor watermarks (ISO strings, else raw)."""
+    try:
+        return (0, datetime.fromisoformat(value).isoformat())
+    except (TypeError, ValueError):
+        return (1, str(value))
 
 
 def _deduplicate_records(raw_records: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -737,7 +846,415 @@ def _main_opportunities() -> int:
     return 0
 
 
+PNCP_MODALITY_IDS = frozenset(int(code) for code in PNCP_DEFAULT_MODALITY_CODES)
+_SWEEP_STAMP_FIELDS = ("dataAtualizacaoGlobal", "dataAtualizacao", "dataPublicacaoPncp")
+
+
+def _brasilia_date(value: datetime):
+    return _normalize_to_utc(value).astimezone(BRASILIA_OFFSET).date()
+
+
+def _sweep_date(value: str):
+    return datetime.strptime(value, "%Y%m%d").date()
+
+
+def _new_sweep(now_utc: datetime, prior_complete: str | None) -> dict[str, Any]:
+    """Freeze the window of a new sweep.
+
+    Backfill (no complete watermark) reads the whole lookback; an incremental
+    sweep reads from one day before the prior complete watermark.
+    """
+    today = _brasilia_date(now_utc)
+    if prior_complete is not None:
+        start = _brasilia_date(parse_pncp_datetime(prior_complete)) - timedelta(
+            days=_ATUALIZACAO_OVERLAP_DAYS
+        )
+        start = min(start, today)
+    else:
+        start = today - timedelta(days=PNCP_LOOKBACK_DAYS)
+    return {
+        "version": PNCP_SWEEP_VERSION,
+        "started_at": now_utc.isoformat(),
+        "window_start": start.strftime("%Y%m%d"),
+        "window_end": today.strftime("%Y%m%d"),
+        "stream_index": 0,
+        "next_page": 1,
+        "skipped_records": False,
+        "page_failures": 0,
+    }
+
+
+def _sweep_streams(
+    sweep: dict[str, Any], *, incremental: bool
+) -> list[tuple[str, dict[str, str | int]]]:
+    """Deterministic (url, params) list for a frozen window.
+
+    ``stream_index`` only means something between runs because this list is a
+    pure function of the window, the mode and the scope constants.
+    """
+    start, end = sweep["window_start"], sweep["window_end"]
+    scopes: list[dict[str, str | int]] = [{"uf": UF_FILTER} if UF_FILTER else {}]
+    scopes.extend({"cnpj": cnpj} for cnpj in FEDERAL_CNPJS)
+    if incremental:
+        update_start = start
+    else:
+        update_start = (
+            _sweep_date(end) - timedelta(days=_ATUALIZACAO_INITIAL_LOOKBACK_DAYS)
+        ).strftime("%Y%m%d")
+    proposal_end = (
+        _sweep_date(end) + timedelta(days=PNCP_PROPOSTA_FORWARD_DAYS)
+    ).strftime("%Y%m%d")
+    streams: list[tuple[str, dict[str, str | int]]] = []
+    for scope in scopes:
+        if not incremental:
+            streams.append(
+                (PNCP_PROPOSTA_URL, {**scope, "dataInicial": end, "dataFinal": proposal_end})
+            )
+        for modality_code in PNCP_DEFAULT_MODALITY_CODES:
+            streams.append((PNCP_API_URL, {
+                **scope,
+                "dataInicial": start,
+                "dataFinal": end,
+                "codigoModalidadeContratacao": modality_code,
+            }))
+            streams.append((PNCP_ATUALIZACAO_URL, {
+                **scope,
+                "dataInicial": update_start,
+                "dataFinal": end,
+                "codigoModalidadeContratacao": modality_code,
+            }))
+    return streams
+
+
+def _record_is_stale(record: dict[str, Any], cutoff: datetime) -> bool:
+    """True when every timestamp the record carries predates ``cutoff``."""
+    stamps = [
+        parse_pncp_datetime(str(record[field]))
+        for field in _SWEEP_STAMP_FIELDS
+        if record.get(field)
+    ]
+    stamps = [stamp for stamp in stamps if stamp is not None]
+    if not stamps:
+        return False
+    return max(_normalize_to_utc(stamp) for stamp in stamps) < cutoff
+
+
+def _sweep_collect_page(
+    page_records: list[Any],
+    *,
+    stats: dict[str, Any],
+    candidates: list[dict[str, Any]],
+    seen_urls: set[str],
+    seen_controls: set[str],
+    cutoff: datetime | None,
+) -> bool:
+    """Look up the attachments of one page; True when any lookup failed."""
+    page_failed = False
+    consecutive_failures = 0
+    for record in page_records:
+        if not isinstance(record, dict) or record.get("modalidadeId") not in PNCP_MODALITY_IDS:
+            continue
+        control = str(record.get("numeroControlePNCP") or "")
+        if not control or control in seen_controls:
+            continue
+        if cutoff is not None and _record_is_stale(record, cutoff):
+            stats["pncp_overlap_skipped"] += 1
+            continue
+        if not is_pncp_record_actionable(record, drop_expired=DROP_EXPIRED):
+            continue
+        seen_controls.add(control)
+        stats["records"] += 1
+        if not validate_pncp_record_for_download(record):
+            stats["pre_download_rejected"] += 1
+            continue
+
+        documents, failed = fetch_pncp_documents(record)
+        stats["document_lookups"] += 1
+        if failed:
+            stats["document_failures"] += 1
+            page_failed = True
+            consecutive_failures += 1
+            if consecutive_failures >= PNCP_MAX_CONSECUTIVE_DOCUMENT_FAILURES:
+                print("warning: stopping page after consecutive PNCP document failures", file=sys.stderr)
+                break
+        else:
+            consecutive_failures = 0
+
+        for document in select_pncp_documents(documents):
+            candidate = build_candidate(record, document)
+            if candidate is None:
+                continue
+            url = str(candidate["url"])
+            if url in seen_urls:
+                print(f"Skipping duplicate PNCP PDF URL: {url}", file=sys.stderr)
+                continue
+            seen_urls.add(url)
+            candidates.append(candidate)
+    return page_failed
+
+
+def _pncp_page_count(payload: Any) -> int | None:
+    """``totalPaginas`` of a search envelope, or None when it is not usable."""
+    if not isinstance(payload, dict):
+        return None
+    value = payload.get("totalPaginas")
+    if isinstance(value, str) and value.isdigit():
+        value = int(value)
+    return value if _is_plain_int(value, 0) else None
+
+
+def _sweep_search_page_failed(
+    sweep: dict[str, Any], stats: dict[str, Any], *, index: int, page: int, limit: int
+) -> int:
+    """Count a failed search page; the page to resume at (next one once skipped)."""
+    failures = sweep["page_failures"] + 1
+    if failures < limit:
+        sweep["page_failures"] = failures
+        return page
+    print(
+        f"warning: skipping PNCP search page {page} of stream {index} after {failures} failed runs",
+        file=sys.stderr,
+    )
+    sweep["page_failures"] = 0
+    sweep["skipped_records"] = True
+    stats["pncp_pages_skipped"] += 1
+    return page + 1
+
+
+def _discover_candidates_sweep() -> tuple[dict[str, Any], list[dict[str, Any]], datetime]:
+    """One bounded run of the windowed, resumable PNCP sweep (durable mode).
+
+    The position (``stream_index``, ``next_page``) only moves past a page whose
+    records were all looked up, and is handed to the caller in
+    ``stats["pncp_sweep"]``; the caller persists it after registering the
+    descriptors. Caps are soft at page granularity: the current page is
+    finished, then the run stops if work remains.
+    """
+    stats: dict[str, Any] = {
+        "records": 0,
+        "pre_download_rejected": 0,
+        "document_lookups": 0,
+        "candidates": 0,
+        "document_failures": 0,
+        "search_failures": 0,
+        "candidate_cap_reached": 0,
+        "pncp_pages_attempted": 0,
+        "pncp_pages_completed": 0,
+        "pncp_pages_skipped": 0,
+        "pncp_overlap_skipped": 0,
+        "pncp_page_rewinds": 0,
+    }
+    now_utc = datetime.now(timezone.utc)
+    stored = _load_stored_cursor()
+    prior = _stored_complete_watermark(stored)
+    incremental = prior is not None
+
+    sweep = _load_sweep_state(stored, now=now_utc)
+    streams = _sweep_streams(sweep, incremental=incremental) if sweep else []
+    if (
+        sweep is None
+        or sweep["streams"] != len(streams)
+        or sweep["stream_index"] >= len(streams)
+    ):
+        sweep = _new_sweep(now_utc, prior)
+        streams = _sweep_streams(sweep, incremental=incremental)
+        sweep["streams"] = len(streams)
+    resumed = (
+        sweep["stream_index"], sweep["next_page"],
+        sweep["page_failures"], sweep["skipped_records"],
+    )
+    cutoff = (
+        _normalize_to_utc(parse_pncp_datetime(prior)) - PNCP_SWEEP_OVERLAP
+        if prior is not None
+        else None
+    )
+
+    candidates: list[dict[str, Any]] = []
+    seen_urls: set[str] = set()
+    seen_controls: set[str] = set()
+    search_deadline = time.monotonic() + PNCP_SEARCH_BUDGET_SECONDS
+    index, page = sweep["stream_index"], sweep["next_page"]
+    pages_run = 0
+    done = False
+
+    while True:
+        if index >= len(streams):
+            done = True
+            break
+        if time.monotonic() >= search_deadline:
+            # A run bound, not a failure: the position is kept and work remains.
+            stats["search_budget_exhausted"] = 1
+            stats["page_cap_reached"] = stats["pncp_page_cap_reached"] = 1
+            print("warning: PNCP search budget exhausted; sweep resumes next run", file=sys.stderr)
+            break
+        if stats["pncp_pages_attempted"] and PNCP_PAGE_DELAY_SECONDS > 0:
+            time.sleep(PNCP_PAGE_DELAY_SECONDS)
+
+        base_url, base_params = streams[index]
+        params = {**base_params, "pagina": page, "tamanhoPagina": PNCP_PAGE_SIZE}
+        stats["pncp_pages_attempted"] += 1
+        try:
+            payload = fetch_json(f"{base_url}?{urlencode(params)}")
+        except Exception as exc:
+            print(f"warning: PNCP sweep page {page} of stream {index} failed: {exc}", file=sys.stderr)
+            stats["search_failures"] += 1
+            status = exc.response.status_code if isinstance(exc, requests.HTTPError) and exc.response is not None else None
+            if status == 429:
+                # Rate limiting says nothing about the page: never skip it.
+                stats["rate_limited"] = 1
+            else:
+                rejected = status is not None and 400 <= status < 500
+                page = _sweep_search_page_failed(
+                    sweep, stats, index=index, page=page,
+                    limit=PNCP_SWEEP_PAGE_FAILURE_LIMIT if rejected else PNCP_SWEEP_OUTAGE_FAILURE_LIMIT,
+                )
+            break
+        # Fail closed: an error body or a truncated envelope served with HTTP 200
+        # must not read as an empty page, or the sweep would claim coverage. A
+        # real empty window is the explicit envelope fetch_json builds for 204.
+        page_records = payload.get("data") if isinstance(payload, dict) else None
+        total_pages = _pncp_page_count(payload)
+        if not isinstance(page_records, list) or total_pages is None:
+            print(f"warning: PNCP sweep page {page} of stream {index} returned an invalid payload", file=sys.stderr)
+            stats["search_failures"] += 1
+            page = _sweep_search_page_failed(
+                sweep, stats, index=index, page=page, limit=PNCP_SWEEP_PAGE_FAILURE_LIMIT,
+            )
+            break
+
+        # A window that shrank moved later rows onto pages already visited, so
+        # step back far enough to read them. Growth only repeats known rows.
+        stream_total = payload.get("totalRegistros")
+        known_total = sweep.get("stream_total")
+        if _is_plain_int(stream_total, 0):
+            sweep["stream_total"] = stream_total
+            if page > 1 and _is_plain_int(known_total, 0) and stream_total < known_total:
+                stats["pncp_page_rewinds"] += 1
+                page = max(1, page - -(-(known_total - stream_total) // PNCP_PAGE_SIZE))
+                # Failures were counted against the page we are leaving.
+                sweep["page_failures"] = 0
+                continue
+
+        page_failed = _sweep_collect_page(
+            page_records, stats=stats, candidates=candidates, seen_urls=seen_urls,
+            seen_controls=seen_controls, cutoff=cutoff,
+        )
+        if page_failed:
+            failures = sweep["page_failures"] + 1
+            if failures < PNCP_SWEEP_PAGE_FAILURE_LIMIT:
+                # Hold the position: this page is retried next run.
+                sweep["page_failures"] = failures
+                break
+            print(
+                f"warning: skipping PNCP page {page} of stream {index} after {failures} failed runs",
+                file=sys.stderr,
+            )
+            sweep["skipped_records"] = True
+            stats["pncp_pages_skipped"] += 1
+        sweep["page_failures"] = 0
+        stats["pncp_pages_completed"] += 1
+        pages_run += 1
+
+        if page >= total_pages:
+            index, page = index + 1, 1
+            sweep.pop("stream_total", None)
+        else:
+            page += 1
+        if index >= len(streams):
+            done = True
+            break
+
+        # Work remains: report the cap that stopped this run.
+        if len(candidates) >= PNCP_MAX_CANDIDATES_PER_RUN:
+            stats["candidate_cap_reached"] = 1
+            print(f"Stopping after candidate cap {PNCP_MAX_CANDIDATES_PER_RUN}", file=sys.stderr)
+        if stats["document_lookups"] >= PNCP_MAX_DOCUMENT_LOOKUPS_PER_RUN:
+            stats["detail_cap_reached"] = 1
+            print(f"warning: stopping after document lookup cap {PNCP_MAX_DOCUMENT_LOOKUPS_PER_RUN}", file=sys.stderr)
+        if pages_run >= PNCP_MAX_PAGES_PER_RUN:
+            stats["page_cap_reached"] = stats["pncp_page_cap_reached"] = 1
+            print(f"Stopping after page cap {PNCP_MAX_PAGES_PER_RUN}", file=sys.stderr)
+        if (stats["candidate_cap_reached"] or stats.get("detail_cap_reached")
+                or stats.get("page_cap_reached")):
+            break
+
+    sweep["stream_index"], sweep["next_page"] = index, page
+    if sweep["skipped_records"]:
+        # A sweep that skipped records can never be recorded as complete.
+        stats["partial_inventory"] = 1
+    stats["candidates"] = len(candidates)
+    stats["pncp_records_enumerated"] = stats["records"]
+    versioned_stored = _stored_is_pncp_cursor(stored)
+    stats["pncp_sweep"] = {
+        "started_at": sweep["started_at"],
+        "state": None if done else sweep,
+        "done": done,
+        "skipped_records": sweep["skipped_records"],
+        "last_complete_update": prior,
+        "stored_last_successful_update": (
+            stored.get("last_successful_update")
+            if isinstance(stored.get("last_successful_update"), str) else None
+        ),
+        "stored_counters": {
+            field: stored[field] for field in _PNCP_COUNTER_FIELDS
+            if versioned_stored and _is_plain_int(stored.get(field), 0)
+        },
+        "dirty": (index, page, sweep["page_failures"], sweep["skipped_records"]) != resumed,
+    }
+    return stats, candidates, now_utc
+
+
+def _stored_is_pncp_cursor(cursor: dict[str, Any]) -> bool:
+    import durable_source_work
+    versioned, adapter, scope = durable_source_work.parse_collection_cursor(cursor)
+    return versioned and adapter == "pncp" and scope == durable_source_work.PNCP_SCOPE
+
+
+def _sweep_cursor(
+    stats: dict[str, Any], sweep: dict[str, Any], registered: int, *, complete: bool
+) -> dict[str, Any]:
+    """PNCP cursor for one sweep run: progress while incomplete, else final.
+
+    ``last_successful_update`` is the sweep start and never regresses, for
+    progress and complete cursors alike. An incomplete cursor vouches for nothing
+    (the prior watermark lives in ``last_complete_update``), and the complete one
+    carrying the start means changes made during the sweep are re-read by the
+    next incremental sweep. Counters are floored at the stored ones whenever the
+    watermark is unchanged, which REPO_A requires; since each sweep moves the
+    watermark, that floor lasts at most ``PNCP_SWEEP_MAX_AGE``, well inside the
+    30 days after which REPO_A prunes the rows ``records_registered`` is
+    checked against.
+    """
+    import durable_source_work
+    started = sweep["started_at"]
+    stored = sweep.get("stored_last_successful_update")
+    watermark = stored if stored and _watermark_key(stored) > _watermark_key(started) else started
+    values = {
+        "records_enumerated": int(stats.get("records", 0) or 0),
+        "records_registered": registered,
+        "document_lookups_completed": int(stats.get("document_lookups", 0) or 0),
+        "documents_selected": registered,
+        "search_pages_completed": int(stats.get("pncp_pages_completed", 0) or 0),
+    }
+    if stored and _watermark_key(watermark) == _watermark_key(stored):
+        for field, floor in (sweep.get("stored_counters") or {}).items():
+            values[field] = max(values[field], floor)
+    extra: dict[str, Any] = {}
+    if not complete:
+        extra = {"sweep": sweep["state"], "last_complete_update": sweep["last_complete_update"]}
+    return durable_source_work.build_pncp_cursor(
+        last_successful_update=watermark,
+        search_truncated=not complete,
+        complete=complete,
+        **values,
+        **extra,
+    )
+
+
 def discover_candidates() -> tuple[dict[str, int], list[dict[str, Any]], datetime]:
+    import durable_source_work
+    if durable_source_work.enabled():
+        return _discover_candidates_sweep()
     stats = {
         "records": 0,
         "pre_download_rejected": 0,
@@ -870,6 +1387,14 @@ def _main_impl(reporter: SourceRunReporter | None = None) -> int:
         )
         if reporter is not None:
             reporter.metrics.stats["partial_inventory"] = True
+            # Pages advanced before the failure stay advanced.
+            sweep = stats.get("pncp_sweep")
+            if sweep and sweep["dirty"]:
+                import durable_source_work
+                durable_source_work.register_collection(
+                    "pncp", "candidate", [], stats, scope=durable_source_work.PNCP_SCOPE,
+                    progress_cursor=_sweep_cursor(stats, sweep, 0, complete=False),
+                )
         return 1
 
     import durable_source_work
@@ -881,12 +1406,20 @@ def _main_impl(reporter: SourceRunReporter | None = None) -> int:
         lookups = int(stats.get("document_lookups", 0) or 0)
         pages_completed = int(stats.get("pncp_pages_completed", 0) or 0)
         truncated = bool(stats.get("page_cap_reached") or stats.get("search_failures"))
+        sweep = stats.get("pncp_sweep")
+        progress = (
+            _sweep_cursor(stats, sweep, len(candidates), complete=False)
+            if sweep and (sweep["dirty"] or sweep["skipped_records"])
+            else None
+        )
 
         def _pncp_cursor(prefix, complete):
             # Descriptors are durable independently. Only a fully registered,
             # uncapped scan may replace the last successful update watermark.
             if not complete:
                 return None
+            if sweep:
+                return _sweep_cursor(stats, sweep, prefix, complete=True)
             return durable_source_work.build_pncp_cursor(
                 last_successful_update=watermark,
                 records_enumerated=enumerated,
@@ -900,7 +1433,7 @@ def _main_impl(reporter: SourceRunReporter | None = None) -> int:
 
         complete = durable_source_work.register_collection(
             "pncp", "candidate", candidates, stats, scope=durable_source_work.PNCP_SCOPE,
-            cursor_builder=_pncp_cursor,
+            cursor_builder=_pncp_cursor, progress_cursor=progress,
         )
         if not complete:
             reporter.metrics.stats["partial_inventory"] = True
@@ -1025,7 +1558,7 @@ def main() -> int:
         with reporter:
             result = _main_impl(reporter)
             if result != 0:
-                reporter.record_error("discovery_failed")
+                reporter.record_error("scraping_failed")
                 reporter.complete("failed")
     except Exception:
         reporter.record_error("scraping_failed")

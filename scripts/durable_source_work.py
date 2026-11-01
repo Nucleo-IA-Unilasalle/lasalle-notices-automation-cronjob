@@ -7,6 +7,9 @@ Cursor coverage (versioned, scope-bound; ``cursor_version=1``):
   (enumerated vs registered), and attachment position (document lookups
   completed, documents selected). The update watermark advances only after
   complete enumeration and registration; partial scans leave it unchanged.
+  A capped PNCP scan resumes by position: its incomplete cursor
+  (``complete=False``) carries a ``sweep`` stream/page position and the prior
+  ``last_complete_update``, and ``last_successful_update`` never regresses.
 - Finep scope ``finep-pages-v1``: paginated API position (pages completed,
   last page, page size) plus enumerated/registered counts.
 - Every other adapter uses no cursor (no checkpoint claim) or the generic
@@ -17,9 +20,9 @@ Remaining gaps (honest): only PNCP and Finep report adapter-aware
 positions. All other adapters re-enumerate from the start each cycle and
 rely on stable-identity dedup; their cursors, where present, are
 watermarks, not proof that every record was enumerated. PNCP streams
-seven query windows (proposta plus publicacao/atualizacao per modality);
-partial scans replay from the last complete watermark, not persisted
-per-stream offsets. Finep records only complete page coverage and rescans
+seven query windows (proposta plus publicacao/atualizacao per modality)
+across five scopes; the sweep persists a stream index and next page, and
+a sweep with skipped records is never recorded as complete. Finep records only complete page coverage and rescans
 from page 1 because new calls can shift publication order. The server
 additionally bounds ``records_registered`` against the spool row count, a
 coarse prefix guard, not per-identity proof.
@@ -58,9 +61,15 @@ def enabled():
 def build_pncp_cursor(*, last_successful_update, records_enumerated=0,
                       records_registered=0, document_lookups_completed=0,
                       documents_selected=0, search_pages_completed=0,
-                      search_truncated=False, complete=False):
-    """Versioned PNCP pagination/record/attachment position."""
-    return {
+                      search_truncated=False, complete=False,
+                      sweep=None, last_complete_update=None):
+    """Versioned PNCP pagination/record/attachment position.
+
+    ``sweep`` and ``last_complete_update`` are written only for a sweep in
+    progress (``complete=False``): the resumable stream/page position and the
+    prior complete watermark. They are extra fields the backend ignores.
+    """
+    cursor = {
         "cursor_version": CURSOR_VERSION,
         "adapter": "pncp",
         "scope": PNCP_SCOPE,
@@ -73,6 +82,11 @@ def build_pncp_cursor(*, last_successful_update, records_enumerated=0,
         "search_truncated": bool(search_truncated),
         "complete": bool(complete),
     }
+    if not complete and (sweep is not None or last_complete_update is not None):
+        cursor["last_complete_update"] = last_complete_update
+        if sweep is not None:
+            cursor["sweep"] = sweep
+    return cursor
 
 
 def build_finep_cursor(*, pages_completed, last_page=None, page_size=0,
@@ -403,7 +417,14 @@ def drain(source, reporter, stats):
 
 
 def register_collection(source, contract, records, stats, scope="default", cursor=None,
-                        cursor_builder=None):
+                        cursor_builder=None, progress_cursor=None):
+    """Register descriptors, then advance the cursor; True only when complete.
+
+    ``progress_cursor`` lets a capped scan that is resumable by position (the
+    PNCP sweep) persist that position: it is written only for a partial scan
+    whose descriptors were all acknowledged, and the scan still reports
+    incomplete (no success marker).
+    """
     client = SourceControl(source)
     partial = any(stats.get(key) for key in (
         "section_parse_failed", "inventory_parse_failed", "detail_parse_failures", "detail_parse_failed",
@@ -426,6 +447,13 @@ def register_collection(source, contract, records, stats, scope="default", curso
     except Exception:
         return False
     if partial:
+        if progress_cursor is not None and acked == len(records):
+            try:
+                _advance_cursor(client, contract, scope, progress_cursor)
+            except Exception:
+                # The position simply lags; the next run repeats this window
+                # and dedups by stable identity.
+                pass
         return False
     final = cursor_builder(acked, True) if cursor_builder is not None else cursor
     if final is None and scope == FINEP_SCOPE:

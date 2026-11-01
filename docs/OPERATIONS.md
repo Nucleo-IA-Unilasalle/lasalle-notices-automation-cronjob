@@ -148,7 +148,7 @@ adds the fingerprint/scope/purpose columns in ordered migrations.
   `PIPELINE_SECRET`, 512 KiB body limit; actions
   `register`/`take`/`finish`/`checkpoint`/`retry_quarantined`): mutations
   require an `active` source and the current lease token. Queue contract:
-  256 KiB/item, 1000 items/source, 32 MiB aggregate JSON payload, 16 KiB cursor,
+  256 KiB/item, 1000 unfinished items/source, 32 MiB aggregate JSON payload, 16 KiB cursor,
   at-most-3 attempts with 5-minute doubling backoff (max 60 min) then
   quarantine, fenced finish by claim generation + revision, accepted items
   pruned only after 30 days unseen, unchanged accepted snapshots rechecked
@@ -176,6 +176,27 @@ adds the fingerprint/scope/purpose columns in ordered migrations.
   enumeration. PNCP queue identity uses
   `numeroControlePNCP`/`sequencialDocumento` (legacy `pncp_control_number`/
   `pncp_document_sequence` accepted).
+- **PNCP windowed sweep (durable mode only):** a capped PNCP scan resumes by
+  position instead of restarting at page 1. While a sweep is in progress the
+  `pncp-updates-v1` cursor has `complete=false`, a `sweep` object
+  (`version`, `started_at`, frozen `window_start`/`window_end`, `stream_index`,
+  `next_page`, `skipped_records`, `page_failures`, `streams`) and
+  `last_complete_update` (the prior complete watermark or null). Its
+  `last_successful_update` never regresses (prior stored value, else
+  `started_at`); `_load_update_checkpoint()` still returns None for it. The
+  position only moves past a page whose records were all looked up; a 429/5xx/
+  invalid payload ends the run keeping the position. A page whose lookups fail
+  on 3 consecutive runs is skipped and sets sticky `skipped_records`, which
+  forbids `complete=true` (the next sweep restarts from the same prior
+  watermark and the run stays a warning). The final page of the final stream,
+  with no flag and every descriptor acknowledged, writes `complete=true` with
+  `last_successful_update = sweep.started_at` and sets the success marker.
+  With no complete watermark the sweep is a backfill (7 queries x 5 scopes,
+  window frozen at sweep start); with one it is incremental (only
+  `/publicacao` and `/atualizacao`, from watermark date - 1 day, records older
+  than watermark - 1 h dropped client-side). A sweep older than 7 days, or a
+  cursor with no `sweep` field, starts a fresh sweep. The non-durable
+  file-checkpoint path and `SOURCE_DRAIN_ONLY` are unchanged.
 - **Drain-only recovery:** `SOURCE_DRAIN_ONLY=true` together with
   `SOURCE_WORK_ENABLED=true` skips discovery and drains the existing spool one
   item at a time with a 420 s preflight and lazy OCR init. It rejects the
@@ -395,16 +416,18 @@ gh variable set SOURCE_RUN_REPORTING_ENABLED --body false --repo Nucleo-IA-Unila
 | `SOURCE_RUN_REPORTING_ENABLED` | `false` | GitHub repository variable enabling source-run callbacks in PNCP and unified discovery workflows |
 | `PNCP_UPDATE_CHECKPOINT_PATH` | `.cache/pncp-last-successful-update.json` | Checkpoint file path |
 | `PNCP_MIN_NOTICE_YEAR` | `2026` | Earliest `anoCompra` eligible for processing |
-| `PNCP_MAX_CANDIDATES_PER_RUN` | `50` | Maximum candidates discovered in one Actions run |
+| `PNCP_MAX_CANDIDATES_PER_RUN` | `50` | Maximum candidates discovered in one Actions run (sweep: soft, the current page is finished) |
 | `PNCP_MAX_PROCESSED_CANDIDATES_PER_RUN` | `20` | Maximum download/OCR attempts in one Actions run |
 | `PNCP_MAX_SUBMITTABLE_CANDIDATES_PER_RUN` | `5` | Maximum valid candidates prepared for submission in one Actions run |
-| `PNCP_FETCH_MAX_ATTEMPTS` | `2` | Maximum PNCP API attempts for transient connection failures in the scheduled workflow |
+| `PNCP_FETCH_MAX_ATTEMPTS` | `3` | Maximum PNCP API attempts for transient connection failures in the scheduled workflow (an honoured `Retry-After` is capped at 60 s) |
 | `PNCP_FETCH_BACKOFF_SECONDS` | `2` | Base sleep seconds between PNCP API retry attempts |
 | `PNCP_FETCH_TIMEOUT_SECONDS` | `15` | PNCP request timeout in seconds |
-| `PNCP_SEARCH_BUDGET_SECONDS` | `480` | Maximum time spent on PNCP search queries |
+| `PNCP_SEARCH_BUDGET_SECONDS` | `240` | Maximum time spent on PNCP search queries (scheduled workflow; code default 480). Leaves room for the 420 s drain floor |
+| `PNCP_MAX_PAGES_PER_RUN` | `40` | Durable sweep only: maximum search pages fetched per run |
+| `PNCP_PAGE_DELAY_SECONDS` | `0.3` | Pause between consecutive PNCP search pages |
 | `PNCP_LOOKBACK_DAYS` | `30` | Update-feed lookback when the checkpoint is absent or reset |
 | `PNCP_PAGE_SIZE` | `50` | Records requested per PNCP page |
-| `PNCP_MAX_PAGES_PER_QUERY` | `20` | Maximum pages per PNCP query |
+| `PNCP_MAX_PAGES_PER_QUERY` | `20` | Maximum pages per PNCP query (legacy non-durable path; the sweep is bounded by `PNCP_MAX_PAGES_PER_RUN`) |
 | `PNCP_MAX_DOCUMENT_LOOKUPS_PER_RUN` | `100` | Maximum attachment-list lookups per run |
 | `PNCP_MAX_CONSECUTIVE_DOCUMENT_FAILURES` | `10` | Consecutive document failures before enumeration stops |
 | `PNCP_PROPOSTA_FORWARD_DAYS` | `60` | Forward window for open proposal records |

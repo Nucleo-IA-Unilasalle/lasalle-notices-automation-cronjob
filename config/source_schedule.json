@@ -352,7 +352,8 @@
       "filter_policy": "default",
       "detail_limit": 20,
       "page_limit": 5,
-      "attachment_limit": 25
+      "attachment_limit": 25,
+      "pdf_limit": 10
     }
   ],
   "pncp": {
