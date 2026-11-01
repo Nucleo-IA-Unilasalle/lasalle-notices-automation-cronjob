@@ -139,6 +139,15 @@ def validate_registry(registry: dict[str, Any]) -> list[dict[str, Any]]:
             limit_value = entry.get(limit_key)
             if not isinstance(limit_value, int) or limit_value <= 0:
                 _fail(errors, f"{limit_key} for {key} must be a positive integer")
+        # Optional per-source PDF budget. An opportunity can exceed the shared
+        # run-wide cap on its own (DOPA matter 628977: 12 PDFs), and then the
+        # whole run's budget goes to one item. An explicit override must be a
+        # positive integer; malformed values fail closed instead of silently
+        # restoring the shared default.
+        if "pdf_limit" in entry:
+            pdf_limit = entry.get("pdf_limit")
+            if isinstance(pdf_limit, bool) or not isinstance(pdf_limit, int) or pdf_limit <= 0:
+                _fail(errors, f"pdf_limit for {key} must be a positive integer")
 
         interval = entry.get("interval_minutes", defaults.get("interval_minutes"))
         if interval != 60:
@@ -233,7 +242,7 @@ def build_matrix(
                 "attachment_limit": entry.get("attachment_limit"),
                 "run_timeout_minutes": defaults["run_timeout_minutes"],
                 "application_budget_seconds": defaults["application_budget_seconds"],
-                "pdf_limit": defaults["pdf_limit"],
+                "pdf_limit": entry.get("pdf_limit", defaults["pdf_limit"]),
             }
         )
     return {"group": group, "includes": includes, "paused": paused}

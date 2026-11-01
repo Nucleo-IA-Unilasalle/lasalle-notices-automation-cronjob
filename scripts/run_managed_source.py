@@ -20,6 +20,23 @@ def remaining_budget(now, job_started, job_minutes=20, application_seconds=1080)
     return max(0, min(application_seconds, job_minutes * 60 - (now - job_started) - 120))
 
 
+def source_pdf_limit(entry, defaults):
+    """Per-source PDF budget, defaulting to the registry-wide ``pdf_limit``.
+
+    The registry entry owns the source-specific budget because one opportunity
+    (for example DOPA matter 628977 with 12 PDFs) can exceed the shared 5-PDF
+    cap on its own and then be deferred, never reaching the opportunities
+    queued behind it. A malformed override fails closed instead of silently
+    restoring the shared cap.
+    """
+    value = entry.get("pdf_limit", defaults["pdf_limit"])
+    if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
+        raise ValueError(
+            f"pdf_limit for {entry.get('source_key')!r} must be a positive integer"
+        )
+    return value
+
+
 def stop_process_tree(process):
     if process is None:
         return
@@ -64,6 +81,11 @@ def main(argv=None):
     if entry["rollout_mode"] in {"paused", "audit"} and not audit:
         parser.error("Registry holds this source outside ingestion; use audit mode")
     defaults = registry["defaults"]
+    try:
+        pdf_limit = source_pdf_limit(entry, defaults)
+    except ValueError as exc:
+        print(f"Invalid registry configuration: {exc}", file=sys.stderr)
+        return 2
     start = time.time()
     budget = remaining_budget(start, float(os.environ.get("SOURCE_JOB_STARTED_AT", start)),
                               int(os.environ.get("SOURCE_JOB_TIMEOUT_MINUTES", defaults["run_timeout_minutes"])),
@@ -97,7 +119,7 @@ def main(argv=None):
                        SOURCE_DEADLINE_EPOCH=str(time.time() + max(0, deadline - time.monotonic())),
                        SOURCE_COLLECTION_COMPLETE_FILE=str(completion), SOURCE_WORK_ENABLED="true")
             env.update(SOURCES=args.source, SUBMISSION_CONTRACT=entry["submission_contract"],
-                       SCRAPE_MAX_PDFS_PER_RUN=str(defaults["pdf_limit"]), FILTER_POLICY=entry["filter_policy"])
+                       SCRAPE_MAX_PDFS_PER_RUN=str(pdf_limit), FILTER_POLICY=entry["filter_policy"])
             process = subprocess.Popen([sys.executable, args.script], env=env,
                                        start_new_session=os.name != "nt")
             next_renew = time.monotonic() + 60

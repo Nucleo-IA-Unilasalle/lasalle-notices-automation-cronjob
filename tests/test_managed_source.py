@@ -1117,3 +1117,50 @@ def test_candidate_drain_deadline_preflight_is_unchanged(monkeypatch):
     client.work.assert_not_called()
     extractor.assert_not_called()
     assert reporter.metrics.stats["cap_reached"] is True
+
+
+# --- Per-source PDF budget -------------------------------------------------
+# One opportunity can exceed the shared run-wide cap on its own (DOPA matter
+# 628977 has 12 PDFs against a 5-PDF default), so that run's entire budget goes
+# to the head item and everything behind it starves. The registry entry may
+# carry its own ``pdf_limit``; the managed runner must honor it and must fail
+# closed on a malformed value instead of silently restoring the shared cap.
+
+
+def test_pdf_limit_defaults_to_the_registry_wide_value():
+    assert managed.source_pdf_limit({"source_key": "dopa"}, {"pdf_limit": 5}) == 5
+
+
+def test_pdf_limit_honors_a_per_source_override():
+    entry = {"source_key": "dopa", "pdf_limit": 8}
+    assert managed.source_pdf_limit(entry, {"pdf_limit": 5}) == 8
+
+
+@pytest.mark.parametrize("bad", [0, -1, "8", True, 8.0, None])
+def test_pdf_limit_rejects_a_malformed_override(bad):
+    entry = {"source_key": "dopa", "pdf_limit": bad}
+    with pytest.raises(ValueError, match="positive integer"):
+        managed.source_pdf_limit(entry, {"pdf_limit": 5})
+
+
+def test_source_matrix_carries_the_per_source_pdf_limit():
+    import build_source_matrix as builder
+
+    registry = builder.load_registry()
+    matrix = builder.build_matrix(
+        registry, "b", admitted_sources={"tnc", "dopa", "sema_rs"}
+    )
+    limits = {item["source"]: item["pdf_limit"] for item in matrix["includes"]}
+    assert limits["dopa"] == 8, "a source with a registry override keeps it"
+    assert limits["sema_rs"] == registry["defaults"]["pdf_limit"]
+
+
+def test_registry_entry_pdf_limit_must_be_a_positive_integer(monkeypatch):
+    import build_source_matrix as builder
+
+    registry = builder.load_registry()
+    target = next(e for e in registry["sources"] if e["source_key"] == "dopa")
+    target["pdf_limit"] = 0
+    with pytest.raises(SystemExit):
+        builder.validate_registry(registry)
+

@@ -208,7 +208,8 @@
       "filter_policy": "default",
       "detail_limit": 20,
       "page_limit": 5,
-      "attachment_limit": 25
+      "attachment_limit": 25,
+      "pdf_limit": 12
     },
     {
       "source_key": "dopa",
@@ -222,7 +223,8 @@
       "filter_policy": "default",
       "detail_limit": 20,
       "page_limit": 5,
-      "attachment_limit": 25
+      "attachment_limit": 25,
+      "pdf_limit": 8
     },
     {
       "source_key": "kfw",
@@ -334,7 +336,8 @@
       "filter_policy": "default",
       "detail_limit": 20,
       "page_limit": 5,
-      "attachment_limit": 25
+      "attachment_limit": 25,
+      "pdf_limit": 12
     },
     {
       "source_key": "pncp",
