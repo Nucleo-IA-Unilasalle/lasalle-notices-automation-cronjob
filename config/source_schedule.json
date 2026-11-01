@@ -107,7 +107,7 @@
       "rollout_mode": "ingest",
       "schedule_owner": "pipeline-discovery-group-a.yml",
       "interval_minutes": 60,
-      "filter_policy": "default",
+      "filter_policy": "include_tdr",
       "detail_limit": 20,
       "page_limit": 5,
       "attachment_limit": 25
